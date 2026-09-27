@@ -30,13 +30,13 @@ Distribute lawful locators, not restricted source papers or font files. Keep sou
 
 Use the screening decisions from [core problems](core-problems.md). Do not create a competing status taxonomy or require a fixed number of Problems, references or recent papers.
 
-## Selection and discovery in 1.7.0
+## Selection and discovery
 
 ## Evidence that discovers rather than only verifies
 
 Follow `core-problems.md` before freezing the bibliography. Distinguish `discovery_search`, `followup_search` and `source_read` in the existing record. Record the actual query, findings, date and local evidence, linking bibliographic identities. A URL alone certifies no search. Keep unsuccessful searches with limitations, then refine rather than infer absence.
 
-The existing reader review contains `survey_selection`: questions, answer-gap contrasts, shared core, discovery coverage, rejected results, located text bindings and source-first observations. Frozen examples never supply default candidates. See `records-and-delivery.md` for migration.
+The existing reader review contains `survey_selection`: questions, answer-gap contrasts, shared core, discovery coverage, rejected results, located text bindings and source-first observations. Frozen examples never supply default candidates. See `records-and-delivery.md` for the current record formats.
 
 
 A theorem-only read can miss the source's qualifying corollary or generic case. When contrasting a positive result with a counterexample, inspect the adjoining scope discussion and compare the positive and negative parameter regimes before writing the remaining frontier.

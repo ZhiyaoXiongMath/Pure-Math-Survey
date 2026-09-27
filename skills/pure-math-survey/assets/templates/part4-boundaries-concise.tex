@@ -1,82 +1,85 @@
-% Problem-first: reconstruct definitions; consider natural variations before fixing data.
-% Separate intrinsic data, classes, representatives, unknowns and gauges.
-% Put selected variation domains and question quantifiers before principal answers.
-% Local analytic freezing does not narrow the global problem.
-% Edition check: concise; total-page review limit 5, including references.
-% Reader task: Locate the organizing problem, strongest relevant progress and precise boundary before local refinements.
-% Select one complete thread; remove genuine side branches before drafting.
-% In the Introduction state every selected principal conclusion, not only names.
-% Review body-to-introduction reverse coverage after changing any result or scope.
-% Style: delete trivial transitions; retain useful self-contained repetition;
-% use itemize/enumerate; put secondary consequences afterward, as corollaries when useful.
-% An introduction consisting of definitions and theorems is valid:
-% definitions and theorems are valid without a narrative roadmap.
-% Two slots illustrate wiring, not a theorem-count requirement. Remove unused slots.
+% Pure Math Survey 1.8.1; concise edition.
+% Advisory reading-review threshold: 5 total pages; REVIEW_NEEDED is non-blocking.
+% Only an explicit user max_pages sets a page-count limit; preserve necessary mathematics.
+% Reader task: Separate established ranges, counterexamples, method limitations, and authenticated remaining targets.
+% Compress proof interiors, not the selected definitions, statements, or necessary lemmas.
+% Reconstruct definitions and natural variation domains before selecting answers.
+% Distinguish intrinsic data, representatives, unknowns, and gauges.
+% Put the question's ordered quantifiers before its principal answers.
+% Discover source-based frontier candidates beyond the initial bibliography.
+% Map each substantive body task: local definitions -> usable result -> proof/import -> use.
+% These slots illustrate roles, not a number, proportion, or section requirement.
+% Delete or move an inapplicable slot; never invent a result to fill it.
+% Keep important hypotheses and conclusion formulas inside statements.
+% Nearby long definitions and standard terms may be referenced; avoid needless repetition.
+% A formula reference may aid navigation, not replace a material condition or conclusion.
+% A separately placed proof needs forward/backward locators, not duplicated results.
+% A printed proof sketch must not be recorded as a full proof.
 \documentclass[12pt,reqno]{amsart}
 \usepackage{math-review}
 \title{[INSERT: Topic]: Boundaries and Problems}
 \author{}
 \date{[INSERT: Checked literature cutoff]}
 \newcommand{\PrincipalStatement}{%
-\placeholder{Specify objects, all necessary hypotheses, quantifiers and ranges.}
-\begin{itemize}
-\item \placeholder{A necessary condition; omit this list if there is no real list.}
-\item \placeholder{A second independent condition, only when needed.}
-\end{itemize}
-\placeholder{State the actual mathematical conclusion and exact source/status.}
+\placeholder{Specify the objects, quantified domains, and necessary hypotheses.}
+% Use an itemized list only for genuinely independent substantial assumptions.
+\placeholder{Write the decisive criterion and conclusion formulas here, with the exact source or status.}
 }
-\newcommand{\SecondStatement}{%
-\placeholder{State another selected principal answer with its own data, necessary conditions and actual conclusion; remove this slot when outside scope.}
-}
-% Optional unresolved-core slot, not a Problem quota. Remove it when the scope
-% has no selected unresolved question; explain any settled organizing question instead.
-\newcommand{\CoreProblemStatement}{%
-\placeholder{State the core unresolved target with its objects, assumptions, quantifiers and exact conclusion to prove. Use the sourced formulation, not a vague research direction.}
-}
+% For a useful distant recall, reuse this body and the original number:
+% \begin{theoremrecall}{thm:principal}\PrincipalStatement\end{theoremrecall}
+% Do not print an immediate duplicate or an automatic second principal theorem.
 \begin{document}
-% Before drafting: discover the domain's own frontier beyond the selected bibliography. Compare the established answer with the remaining structural or effective gap. Select results by their role in the question, not by technical difficulty. Complete the existing selection evidence; concise and standard share the core. This prompt is not reader prose.
-
+% Before drafting: complete problem_formulation and survey_selection in the
+% existing reader evidence. Review every principal answer in both directions.
 \begin{abstract}
-\placeholder{Give the question and selected answers or boundary in two or three sentences. The abstract does not replace the main statements below.}
+\placeholder{State the selected question and actual answer or boundary.}
 \end{abstract}
 \maketitle
 
 \section{Introduction}\label{sec:introduction}
-\placeholder{Understand the definitions before adopting source hypotheses. State which objects may vary, their natural admissible domains and why other changes are fixed or excluded. Distinguish representatives from gauge choices. Pose the selected quantified question(s) before giving answers; do not assume equivalence or repair the scope only in a later corollary.}
-\placeholder{Define the minimum necessary notation. State fixed data, unknowns and branch conditions before using them. Give actual answers with quantifiers, parameter ranges and source/status qualifications. Delete transitions that merely announce what follows.}
+\begin{definition}\label{def:question-data}
+\placeholder{Define indispensable objects and notation; distinguish fixed data, admissible variations, and unknowns.}
+\end{definition}
+\placeholder{Pose the selected question with its ordered quantifiers. Justify a substantive restriction or relationship; omit trivial transitions.}
 \begin{theorem}\label{thm:principal}
 \PrincipalStatement
 \end{theorem}
-\begin{theorem}\label{thm:second}
-\SecondStatement
+% Change the environment to match its logical role. Add other principal answers
+% only when selected by the question. Put secondary consequences after the result.
+\placeholder{Locate the proof or give the controlling primary source and theorem locator. A citation does not replace the statement above.}
+
+% Activate a Problem only after authenticating its formulation and status.
+% \begin{problem}\label{prob:target}
+% [State objects, hypotheses, quantifiers, and the exact target conclusion.]
+% \end{problem}
+% Give its primary source, checked status, known range, and remaining range.
+% Delete the discussion and references with an unused Problem slot.
+
+\section{[INSERT: The established range]}\label{sec:range}
+\begin{definition}\label{def:range}
+\placeholder{Define the parameter or regularity boundary and the solution concept used to describe it.}
+\end{definition}
+\begin{theorem}\label{thm:range}
+\placeholder{State the selected established boundary result with all material range, strictness, and regularity conditions and its actual conclusion.}
 \end{theorem}
-\begin{problem}\label{prob:core-target}
-\CoreProblemStatement
-\end{problem}
-\placeholder{Keep a precise remaining question or negative boundary here when it is a principal commitment. Change theorem to proposition, sourced claim or Problem as mathematically appropriate. No invented optional titles.}
+\paragraph{Source and use.}
+\placeholder{Give its controlling source and theorem locator. Explain exactly which portion of the organizing question it resolves.}
+\placeholder{Explain the decisive hypothesis only as needed to read the boundary; quote an exact technical input rather than an unnamed technique.}
 
-\section{Progress, boundaries and the remaining target}\label{sec:mechanism}
-\begin{theoremrecall}{thm:principal}
-\PrincipalStatement
-\end{theoremrecall}
-\placeholder{Give the exact solved range, counterexample or obstruction; then formulate the unresolved target with objects and quantifiers. Separate a method obstruction from nonexistence. Check current status. A recall is optional if it adds backtracking rather than removing it. Reuse the canonical body whenever a full repetition is retained.}
-
-\section{The second answer and the boundary}\label{sec:boundary}
-\begin{theoremrecall}{thm:second}
-\SecondStatement
-\end{theoremrecall}
-\placeholder{Use a mathematical heading. Explain the second answer or boundary without bundling secondary consequences into its main statement. Define a precise sourced Problem only if the selected scope needs one. Do not manufacture a fixed number of Problems.}
-
-\placeholder{For Problem~\ref{prob:core-target}, give its primary source, checked cutoff status, strongest relevant solved range and exact remaining range. Do not infer openness from a failed search. Remove this paragraph with the optional Problem slot when it is outside the selected scope.}
-
-% Replace, relocate or delete this structural model according to actual mathematics.
-% Do not leave core body results hidden inside the preceding explanatory paragraphs.
-\begin{lemma}\label{lem:body-input}
-\placeholder{State a necessary supporting input with local hypotheses and a usable output. No fixed lemma quota is imposed.}
-\end{lemma}
-\begin{proof}[Proof sketch]\label{prf:body-input}
-\placeholder{Separate the argument from the statement; give a decisive step and cite any imported estimate precisely. Standard deepens this proof, not the number of wrappers.}
+\section{[INSERT: The obstruction or failed extension]}\label{sec:obstruction}
+\begin{proposition}\label{prop:obstruction}
+\placeholder{Specify a counterexample or obstruction, with its hypotheses and exact negative conclusion. Do not equate failure of a method with nonexistence.}
+\end{proposition}
+\begin{proof}\label{prf:obstruction}
+\placeholder{Compute or cite precisely the obstruction and conclude only the asserted failure. Preserve the solution concept.}
 \end{proof}
+% Delete the slot if no independent negative result is selected. A context-only
+% status discussion needs no artificial lemma, theorem, or counterexample.
+
+\section{[INSERT: The precisely remaining range]}\label{sec:remaining}
+\placeholder{Contrast the proved range with the authenticated target using explicit quantifiers. State source-qualified status; an unsuccessful search does not prove openness.}
+% Omit this section when the selected scope is settled, or explain that settled
+% scope directly. Do not invent a Problem, application, or unresolved claim.
 
 \templatereferences
 \end{document}

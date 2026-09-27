@@ -92,7 +92,7 @@ def validate_selection(root:Path,manifest:dict,expanded:dict,stage='release'):
  cores={}
  for doc in docs:
   name=doc.get('tex_file','');review_path=local_file(root,doc.get('structure_review',''))
-  try:review=json.loads(review_path.read_text()) if review_path else {}
+  try:review=json.loads(review_path.read_text(encoding="utf-8-sig")) if review_path else {}
   except (OSError,ValueError) as exc:errors.append(f'{name}: invalid structure review: {exc}');continue
   model=review.get('survey_selection')
   if not isinstance(model,dict) or model.get('schema_version')!='1.0.0':errors.append(f'{name}: missing survey_selection in existing reader evidence');continue
@@ -178,7 +178,7 @@ def main()->int:
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('project',type=Path);p.add_argument('--stage',choices=['plan','release'],default='release');a=p.parse_args()
  from validate_project import expand_tex
  try:
-  root=a.project.resolve();manifest=json.loads((root/'project-manifest.json').read_text());errors=[];expanded={}
+  root=a.project.resolve();manifest=json.loads((root/'project-manifest.json').read_text(encoding="utf-8-sig"));errors=[];expanded={}
   if a.stage=='release':
    for doc in manifest.get('documents',[]):
     tex=local_file(root,doc.get('tex_file',''))

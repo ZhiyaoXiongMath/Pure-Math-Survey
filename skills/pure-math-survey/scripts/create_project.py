@@ -3,6 +3,7 @@
 from __future__ import annotations
 import argparse
 import csv
+import importlib.util
 import json
 import re
 import shutil
@@ -10,6 +11,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 STEMS = {1: 'foundations', 2: 'results', 3: 'methods', 4: 'boundaries', 5: 'integrated'}
+
+
+def length_settings():
+    spec = importlib.util.spec_from_file_location("pms_length_settings", ROOT / "scripts/check_reading_budget.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def parse_selection(value: str) -> list[tuple[int, str]]:
@@ -34,7 +42,11 @@ def main() -> int:
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--topic', required=True)
     parser.add_argument('--documents', default='5:concise', help='Default 5:concise; suite gives I–V concise; all explicitly gives ten.')
+    parser.add_argument('--max-pages', type=int, help='Explicit user maximum for each selected PDF, including references; no maximum is set by default.')
     args = parser.parse_args()
+    if args.max_pages is not None and args.max_pages < 1:
+        parser.error('--max-pages must be positive')
+    lengths = length_settings()
     if not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', args.topic):
         parser.error('Topic must be a lowercase alphanumeric filename slug separated by hyphens.')
     try:
@@ -52,18 +64,21 @@ def main() -> int:
         name = f'part{part}-{STEMS[part]}-{edition}'
         stem = f'{args.topic}-{name}'
         shutil.copy2(ROOT / 'assets/templates' / (name + '.tex'), out / (stem + '.tex'))
-        documents.append({'part': part, 'edition': edition, 'tex_file': stem + '.tex', 'pdf_file': stem + '.pdf', 'page_review_limit': ({1:5,2:6,3:6,4:5,5:10} if edition == 'concise' else {1:8,2:10,3:10,4:8,5:16})[part]})
+        documents.append({'part': part, 'edition': edition, 'tex_file': stem + '.tex', 'pdf_file': stem + '.pdf', 'page_review_threshold': (lengths.CONCISE if edition == 'concise' else lengths.STANDARD)[part]})
+    if args.max_pages is not None:
+        for doc in documents:
+            doc['max_pages'] = args.max_pages
     (out / 'evidence').mkdir()
     for doc in documents:
         review_path = 'evidence/' + Path(doc['tex_file']).stem + '-structure-review.json'
         doc['structure_review'] = review_path
-        (out / review_path).write_text(json.dumps({'schema_version':'1.0.0', 'tex_file':doc['tex_file'], 'source_sha256':'PENDING', 'reviewer_mode':'PENDING', 'reviewed_on':'PENDING', 'sections':[], 'results':[], 'problem_formulation':json.loads((ROOT/'assets/problem-formulation-template.json').read_text()), 'survey_selection':json.loads((ROOT/'assets/survey-selection-template.json').read_text())}, indent=2) + '\n')
+        (out / review_path).write_text(json.dumps({'schema_version':'1.1.0', 'tex_file':doc['tex_file'], 'source_sha256':'PENDING', 'reviewer_mode':'PENDING', 'reviewed_on':'PENDING', 'sections':[], 'results':[], 'problem_formulation':json.loads((ROOT/'assets/problem-formulation-template.json').read_text(encoding="utf-8-sig")), 'survey_selection':json.loads((ROOT/'assets/survey-selection-template.json').read_text(encoding="utf-8-sig"))}, indent=2) + '\n', encoding="utf-8")
     shutil.copy2(ROOT / 'assets/templates/math-review.sty', out / 'math-review.sty')
-    manifest = {'schema_version': '1.0.0', 'skill_version': '1.7.1', 'language': 'en', 'topic': args.topic,
+    manifest = {'schema_version': '1.0.0', 'skill_version': '1.8.1', 'language': 'en', 'topic': args.topic,
                 'literature_cutoff': '[Set from actual source verification]',
                 'requested_documents': [{'part': p, 'edition': e} for p, e in selection],
                 'documents': documents}
-    (out / 'project-manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
+    (out / 'project-manifest.json').write_text(json.dumps(manifest, indent=2) + '\n', encoding="utf-8")
     names = ['bibliographic-identity', 'proof-mechanism-registry', 'publication-map']
     if any(p in (4, 5) for p, _ in selection):
         names += ['frontier-claim-registry', 'frontier-reverse-search']
@@ -83,17 +98,20 @@ def main() -> int:
         'Discover domain-native frontier candidates before freezing the bibliography; challenge omissions from primary sources.\n'
         'Classify results by question-relative importance; record roles and consumers in the publication map.\n'
         'Complete survey_selection in the same reader evidence; distinguish actual searches from source reads.\n'
-        'Set the page budget; remove side branches before drafting; do not omit selected core results.\n'
+        'Review the advisory reading-length threshold; set max_pages only for an explicit user limit. Retain core results and necessary proof inputs.\n'
         'Map each principal body result to its substantive Introduction statement.\n'
         'Record Introduction-only reading, hypothesis consistency and actual verification.\n'
-        'Plan explicit body results and key lemmas before prose; then perform statement-only and dependency readings.\n'
+        'Draft each body task as local definitions, usable results, necessary inputs, and proof/source treatment before prose.\n'
+        'In each section record expected_result_labels, self_containment_reading, and unstructured_claims_reading.\n'
+        'Review body-result reference_review entries for actual reader access, not a ban on references.\n'
+        'Read the entire body statement-only and then by proof dependencies; do not treat a build as writing approval.\n'
         'Concise retains that structure; standard deepens proof interiors. Evidence starts pending.\n'
-        'These are pending tasks, not completed research or PASS evidence.\n')
+        'These are pending tasks, not completed research or PASS evidence.\n', encoding="utf-8")
     (out / 'README.md').write_text(
         '# Unverified survey scaffold\n\nReplace all insertion text and metadata with actual mathematics.\n'
         'No research, PDF, source sample or completed verification is supplied.\n'
         'The Introduction must state the actual main conclusions, not a roadmap.\n'
-        'Read the skill validation contract before publishing.\n')
+        'Read the skill validation contract before publishing.\n', encoding="utf-8")
     print(f'Created {len(documents)} unverified template source(s): {out}')
     return 0
 

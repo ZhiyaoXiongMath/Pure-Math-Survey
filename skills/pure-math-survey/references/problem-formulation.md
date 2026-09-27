@@ -36,7 +36,7 @@ Concise and standard keep the same selected variable domains, quantifier order, 
 
 At release, the same record adds bounded, exact source bindings. Opening bindings must precede the designated principal answer; answer bindings must occur inside that result; local-scope bindings locate actual qualifications. Quantifier tokens must match their ordered record and all required user/input commitments need destinations. A changed source digest or a changed model invalidates the corresponding review. Plan-time selection and release-time writing must be read by a mathematical reviewer; a hash is not a proof of thought, chronology, correctness or semantic completeness.
 
-Perform three readings: problem-only (definitions, ranges, questions); statement-only (answers and key lemmas); dependency reading (inputs, outputs, closure and constant dependence). Do not accept generic PASS prose. Record what can actually be recovered and where. Deliberate regression cases must include a late-only scope repair, a silent parameter freeze, reversed quantifiers, unrestricted broadening, missing user commitments and an unjustified claim of uniformity.
+Perform three readings: problem-only (definitions, ranges, questions); statement-only (answers and key lemmas); dependency reading (inputs, outputs, closure and constant dependence). Do not accept generic PASS prose. Record what can actually be recovered and where. Challenge the formulation against a late-only scope repair, a silent parameter freeze, reversed quantifiers, unrestricted broadening, missing user commitments and an unjustified claim of uniformity.
 
 ## A generic comparison, not a prescribed answer
 

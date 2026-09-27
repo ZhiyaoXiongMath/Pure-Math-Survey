@@ -5,6 +5,7 @@ import argparse
 import hashlib
 import json
 import re
+from datetime import date
 from pathlib import Path
 
 IDENTITY_FIELDS = ('key', 'author', 'title', 'year', 'arxiv', 'version', 'doi', 'url', 'locator')
@@ -30,6 +31,9 @@ def validate_records(records: object, *, require_review: bool = True) -> list[di
         if r['key'] in keys:
             raise ValueError(f'Duplicate citation key: {r["key"]}')
         keys.add(r['key'])
+        for field in IDENTITY_FIELDS + ('journal', 'volume', 'number', 'pages', 'note', 'display_author'):
+            if field in r and not isinstance(r[field], str):
+                raise ValueError(f'Bibliography field {field} must be text: {r["key"]}')
         arxiv = r.get('arxiv', '')
         if arxiv and not re.fullmatch(r'(?:\d{4}\.\d{4,5}|[a-z.-]+/\d{7})v\d+', arxiv):
             raise ValueError(f'Pin an exact arXiv version: {r["key"]}')
@@ -37,7 +41,14 @@ def validate_records(records: object, *, require_review: bool = True) -> list[di
             raise ValueError(f'Inconsistent arXiv version: {r["key"]}')
         if require_review:
             review = r.get('verification', {})
-            if not r.get('locator') or not review.get('date') or not review.get('scope'):
+            if not isinstance(review, dict):
+                raise ValueError(f'Source verification must be an object: {r["key"]}')
+            try:
+                if date.fromisoformat(review.get('date', '')).isoformat() != review.get('date'):
+                    raise ValueError('non-ISO date')
+            except (ValueError, TypeError):
+                raise ValueError(f'Source review needs an actual ISO date: {r["key"]}')
+            if not r.get('locator') or not isinstance(review.get('scope'), str) or not review['scope'].strip():
                 raise ValueError(f'Missing source-review locator/date/scope: {r["key"]}')
             if review.get('fingerprint') != review_fingerprint(r):
                 raise ValueError(f'Source review is stale: {r["key"]}; recheck identity/version/locator')
@@ -65,9 +76,9 @@ def generate(project: Path, *, require_review: bool = True) -> dict[str, str]:
         else:
             item += ' Preprint ('+r['year']+').'
         if r.get('arxiv'):
-            item += r' \href{https://arxiv.org/abs/'+r['arxiv']+'}{arXiv:'+r['arxiv']+'}.'
+            item += r' \href{https://arxiv.org/abs/'+r['arxiv']+'}{\\nolinkurl{arXiv:'+r['arxiv']+'}}.'
         elif r.get('doi'):
-            item += r' \href{https://doi.org/'+r['doi']+'}{doi:'+r['doi']+'}.'
+            item += r' \href{https://doi.org/'+r['doi']+'}{\\nolinkurl{doi:'+r['doi']+'}}.'
         elif r.get('url'):
             item += r' \href{'+r['url']+'}{Source}.'
         if r.get('note'): item += ' '+r['note']

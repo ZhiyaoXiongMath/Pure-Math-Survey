@@ -10,7 +10,7 @@ An introduction may consist of definitions followed by precise results. It does 
 
 ## Compact and self-contained statements
 
-State the objects, quantifiers, ranges, hypotheses and essential conclusion. A theorem is self-contained when its symbols and applicability can be recovered from the local text; it need not repeat half a page of adjacent definitions. Restore essential data in a distant restatement.
+State the objects, quantifiers, ranges, hypotheses and essential conclusion. Put material assumptions, key inequalities or equivalence conditions, and the conclusion formulas directly in the statement. “Under (2.4), (2.7) implies (2.9)” makes the reader reconstruct the result and is not an adequate statement. Formula numbers may supplement the visible mathematics. Standard terminology and a nearby long definition can be referenced when restating them would obscure the result. Judge the actual backtracking needed; neither banning all references nor repeating all background is appropriate. Restore essential data in a distant restatement.
 
 Use `itemize` for genuinely independent substantial assumptions and `enumerate` for logically numbered alternatives or conclusions. A pair of short conditions may fit better in a sentence or display. Lists are tools, not a required visual quota.
 
@@ -18,7 +18,7 @@ Do not bundle an existence criterion, a secondary corollary, a history paragraph
 
 ## Body results and proof boundaries
 
-Organize the body before drafting its prose. Identify the independent results, necessary definitions, key proof inputs and their consumers. A result must be recognizable without reconstructing its hypotheses and conclusion from a surrounding argument. Equation numbering and section headings cannot substitute for this structure.
+Organize the body by mathematical tasks before drafting its prose. First formulate the necessary definitions, independently usable results, key proof inputs, and consumers. Draft their hypotheses and output formulas separately from the argument. Then attach a proof, proof sketch, or explicit source-and-use paragraph to each result. A whole-paper reader should be able to follow this dependency chain without reconstructing statements from explanations. A result must be recognizable without reconstructing its hypotheses and conclusion from a surrounding argument. Equation numbering and section headings cannot substitute for this structure.
 
 Use the environment that matches the logical role:
 
@@ -34,7 +34,7 @@ Place indispensable local notation before a statement. Keep one mathematical tas
 
 Do not repair a paragraph-heavy draft merely by enclosing its whole argument in `proposition`. First extract the assumptions and usable conclusion, then separate the proof and source input. Remove rhetorical transitions, not the definitions, labels and dependencies that make the result navigable.
 
-Two readings are mandatory. In the **statement-only reading**, skip proofs: identify what holds, under what assumptions and with what regularity/branch. In the **dependency reading**, identify which result each important step uses, what it produces and how it closes the argument. Located reviewer answers, not counts or generic PASS labels, belong in the existing reader/depth evidence; see [validation](validation.md).
+Two readings are mandatory. In the **statement-only reading**, skip proofs: identify what holds, under what assumptions and with what regularity/branch. In the **dependency reading**, identify which result each important step uses, what it produces and how it closes the argument. Located reviewer answers, not counts or generic PASS labels, belong in the existing reader/depth evidence; see [validation](validation.md). Inventory the claims in every body section before comparing them with the TeX environments. Record a missing independent result even when other theorems remain; record why genuinely contextual material needs no result. Do not let the environment inventory define which mathematics is worth recovering.
 
 ## Useful repetition and canonical reuse
 

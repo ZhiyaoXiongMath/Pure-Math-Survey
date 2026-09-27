@@ -8,6 +8,7 @@ import argparse
 import hashlib
 import stat
 import sys
+import tempfile
 import zipfile
 from pathlib import Path, PurePosixPath
 
@@ -16,6 +17,116 @@ FONT_SUFFIXES = {".otf", ".ttf", ".ttc", ".woff", ".woff2", ".pfa", ".pfb"}
 IGNORED_DIRS = {".git", "__pycache__", ".pytest_cache", ".DS_Store"}
 GENERATED_SUFFIXES = {".pyc", ".aux", ".log", ".toc", ".out", ".fls", ".fdb_latexmk", ".synctex.gz"}
 CHECKSUM_NAME = "artifact-checksums.txt"
+ROOT_FILES = {"SKILL.md", "README.md", CHECKSUM_NAME}
+SCRIPT_NAMES = {
+    "bibliography.py", "build_checks.py", "check_mathematical_structure.py",
+    "check_problem_formulation.py", "check_reading_budget.py", "check_survey_selection.py",
+    "compare_pdf.py", "create_project.py", "package_release.py", "validate_assets.py",
+    "validate_project.py",
+}
+TEMPLATE_STEMS = {
+    1: "foundations", 2: "results", 3: "methods", 4: "boundaries", 5: "integrated",
+}
+TEMPLATE_NAMES = {f"part{p}-{s}-{e}.tex" for p, s in TEMPLATE_STEMS.items()
+                  for e in ("concise", "standard")} | {"math-review.sty"}
+EXAMPLE_FILES = {
+    "assets/exposition-examples/README.md",
+    "assets/exposition-examples/exposition-smoke.tex",
+    "assets/exposition-examples/gradient-body.tex",
+    "assets/exposition-examples/quadratic-body.tex",
+    "assets/reference-samples/dhym-compact/README.md",
+    "assets/reference-samples/dhym-compact/dhym-surface-compact.tex",
+    "assets/reference-samples/dhym-compact/dhym-surface-compact.pdf",
+    "assets/reference-samples/dhym-compact/math-review.sty",
+    "assets/reference-samples/dhym-v6/README.md",
+    "assets/reference-samples/dhym-v6/dhym-survey-polished-v6.tex",
+    "assets/reference-samples/dhym-v6/dhym-survey-polished-v6.pdf",
+    "assets/reference-samples/dhym-v6/provenance.toml",
+}
+REFERENCE_NAMES = {
+    'architecture.md',
+    'core-problems.md',
+    'editions.md',
+    'exposition-examples.md',
+    'introduction.md',
+    'layout-and-build.md',
+    'length-and-selection.md',
+    'part-v-benchmark.md',
+    'problem-formulation.md',
+    'proofs-and-boundaries.md',
+    'records-and-delivery.md',
+    'research-and-evidence.md',
+    'template-maintenance.md',
+    'validation.md',
+    'writing-style.md',
+}
+REGISTRY_NAMES = {
+    'bibliographic-identity-template.csv',
+    'canonical-crosswalk-template.csv',
+    'canonical-theorem-registry-template.csv',
+    'canonical-theorem-registry-template.jsonl',
+    'concept-registry-template.jsonl',
+    'convention-registry-template.csv',
+    'coordinate-vocabulary-template.csv',
+    'corpus-regression-template.csv',
+    'estimate-and-dependency-audit-template.csv',
+    'formula-layout-audit-template.csv',
+    'formula-salience-registry-template.csv',
+    'frontier-claim-registry-template.csv',
+    'frontier-reverse-search-template.csv',
+    'historical-milestone-registry-template.jsonl',
+    'historical-relation-registry-template.csv',
+    'holdout-registry-template.csv',
+    'identity-conflicts-template.csv',
+    'insertion-test-template.csv',
+    'master-theorem-matrix-template.csv',
+    'mathematical-survey-audit-template.csv',
+    'narrative-quality-audit-template.csv',
+    'navigation-qa-template.csv',
+    'page-density-audit-template.csv',
+    'prior-corpus-registry-template.csv',
+    'prior-theorem-node-registry-template.csv',
+    'proof-mechanism-provenance-template.csv',
+    'proof-mechanism-registry-template.csv',
+    'publication-map-template.csv',
+    'release-audit-template.csv',
+    'screening-decisions-template.csv',
+    'search-log-template.csv',
+    'source-manifest-template.csv',
+    'theorem-node-regression-template.csv',
+    'theory-edge-registry-template.csv',
+    'theory-node-registry-template.csv',
+    'version-decisions-template.csv',
+}
+REQUIRED_FILES = {"SKILL.md", "README.md", "agents/openai.yaml"} | {
+    "scripts/" + name for name in SCRIPT_NAMES
+} | {"assets/templates/" + name for name in TEMPLATE_NAMES} | EXAMPLE_FILES | {
+    "assets/project-manifest-template.json", "assets/problem-formulation-template.json",
+    "assets/survey-selection-template.json",
+} | {"references/" + name for name in REFERENCE_NAMES} | {"assets/registries/" + name for name in REGISTRY_NAMES}
+
+
+def runtime_member(name: str) -> bool:
+    """Recognize supported resources; unknown files need an explicit decision.
+
+    This is a path/content-role boundary, not a history or mathematical grader.
+    Human review must still inspect current prose and the actual member list.
+    """
+    parts = PurePosixPath(name).parts
+    if name in ROOT_FILES or name in EXAMPLE_FILES or name == "agents/openai.yaml":
+        return True
+    if len(parts) == 2 and parts[0] == "scripts":
+        return parts[1] in SCRIPT_NAMES
+    if len(parts) == 2 and parts[0] == "references":
+        return parts[1] in REFERENCE_NAMES
+    if len(parts) == 3 and parts[:2] == ("assets", "templates"):
+        return parts[2] in TEMPLATE_NAMES
+    if len(parts) == 3 and parts[:2] == ("assets", "registries"):
+        return parts[2] in REGISTRY_NAMES
+    return name in {
+        "assets/project-manifest-template.json", "assets/problem-formulation-template.json",
+        "assets/survey-selection-template.json",
+    }
 
 
 def safe_name(name: str) -> bool:
@@ -42,7 +153,12 @@ def selected_files(root: Path) -> dict[str, bytes]:
             raise ValueError(f"Font file must not be shared: {rel}")
         if p.suffix in GENERATED_SUFFIXES or p.name.endswith(".synctex.gz") or p.name == CHECKSUM_NAME:
             continue
+        if not runtime_member(rel.as_posix()):
+            raise ValueError(f"Unsupported file in skill tree; review before packaging: {rel}")
         selected[rel.as_posix()] = p.read_bytes()
+    missing = REQUIRED_FILES - set(selected)
+    if missing:
+        raise ValueError(f"Missing required resources: {sorted(missing)}")
     return selected
 
 
@@ -76,6 +192,10 @@ def verify_archive(path: Path) -> dict:
         actual = {n[len(prefix):] for n in names if n != checksum_path}
         if set(expected) != actual:
             raise ValueError("Archive members and checksum list disagree")
+        if REQUIRED_FILES - actual:
+            raise ValueError("Archive lacks required skill resources")
+        if any(not runtime_member(name) for name in actual):
+            raise ValueError("Unsupported resource in archive")
         for relative, digest in expected.items():
             if hashlib.sha256(archive.read(prefix + relative)).hexdigest() != digest:
                 raise ValueError(f"Checksum mismatch: {relative}")
@@ -89,17 +209,19 @@ def package(root: Path, output: Path, force: bool = False) -> dict:
     root = root.resolve(); output = output.resolve()
     if output.is_relative_to(root):
         raise ValueError("Archive must be outside the source skill tree")
-    if output.exists() and not force:
+    checksum_output = output.with_suffix(output.suffix + ".sha256")
+    if (output.exists() or checksum_output.exists()) and not force:
         raise FileExistsError("Archive exists; use --force for an intentional rebuild")
     selected = selected_files(root)
     checksums = ''.join(f"{hashlib.sha256(data).hexdigest()}  {rel}\n" for rel, data in selected.items())
     selected[CHECKSUM_NAME] = checksums.encode("utf-8")
     output.parent.mkdir(parents=True, exist_ok=True)
-    temporary = output.with_suffix(output.suffix + ".tmp")
+    with tempfile.NamedTemporaryFile(prefix="." + output.name + ".", suffix=".tmp", dir=output.parent, delete=False) as handle:
+        temporary = Path(handle.name)
     try:
         with zipfile.ZipFile(temporary, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
             for relative, data in sorted(selected.items()):
-                info = zipfile.ZipInfo("pure-math-survey/" + relative, date_time=(2026, 9, 24, 0, 0, 0))
+                info = zipfile.ZipInfo("pure-math-survey/" + relative, date_time=(2026, 9, 27, 0, 0, 0))
                 info.compress_type = zipfile.ZIP_DEFLATED
                 info.create_system = 3
                 info.external_attr = (stat.S_IFREG | 0o644) << 16
@@ -109,7 +231,7 @@ def package(root: Path, output: Path, force: bool = False) -> dict:
     finally:
         if temporary.exists():
             temporary.unlink()
-    output.with_suffix(output.suffix + ".sha256").write_text(
+    checksum_output.write_text(
         report["archive_sha256"] + "  " + output.name + "\n", encoding="ascii")
     return report
 

@@ -1,6 +1,6 @@
 # Pure Math Survey
 
-**Version 1.7.1.** A skill for source-grounded English mathematical surveys and substantive revisions, delivered as rebuildable TeX and inspected PDFs.
+**Version 1.8.1.** A skill for source-grounded English mathematical surveys and substantive revisions, delivered as rebuildable TeX and inspected PDFs.
 
 Default to Part V concise. An explicitly requested series selects Parts I–V concise; any nonempty part/edition selection is supported. Both concise and standard preserve core statements and key lemmas. Concise compresses proof interiors and routine calculations; standard develops the same mathematical routes more fully.
 
@@ -14,7 +14,7 @@ Default to Part V concise. An explicitly requested series selects Parts I–V co
 
 ## Install
 
-Download [pure-math-survey-1.7.1.zip](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/download/v1.7.1/pure-math-survey-1.7.1.zip) from the [latest release](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/latest). Extract it and copy the `pure-math-survey` folder into your local skills directory.
+Download [pure-math-survey-1.8.1.zip](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/download/v1.8.1/pure-math-survey-1.8.1.zip) from the [latest release](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/latest). Extract it and copy the `pure-math-survey` folder into your local skills directory.
 
 Alternatively, copy [skills/pure-math-survey](skills/pure-math-survey/) from this repository.
 

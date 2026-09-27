@@ -1,34 +1,21 @@
-# Template maintenance
+# Templates and example builds
 
-## Distinct roles and bounded evidence
+The ten templates are instructional scaffolds. Their insertion text is not finished exposition and their slots are not quotas. Use the pair for the selected Part: the mathematical tasks stay the same, while standard expands the decisive proof interiors. Titles and dates use inline insertion text; never put the paragraph-producing `\placeholder` macro inside `\title` or `\date`. Drafting instructions belong in comments, not before the abstract.
 
-The ten templates are instructional scaffolds, not completed articles or a theorem quota. The elementary fixture checks typesetting. Frozen examples preserve old evidence; current-style targets check current dependencies. One dHYM adaptation does not validate all topics.
+## Review template behavior
 
-## What every general template must demonstrate
+Read each template by its Part's purpose. Check first definitions, principal answers, body results, necessary proof inputs, consumers, and visible proof/import boundaries. Inspect actual conditions and conclusion formulas when filling the template. An immediately repeated introduction theorem, a detached lemma, or an appended generic depth chapter does not demonstrate a mathematical body.
 
-A template must allow actual principal statements, optional canonical recalls and locally understood notation. Its insertion text is never publishable. Part V starts with one illustrative statement slot; copy or remove slots according to the selected answers. Unverified Problems and their references are commented out together. Test one and three principal statements, not a mandatory count of two.
+Compare each concise/standard pair for the same question, material assumptions, selected results and essential mechanisms. Change depth at the point of use. Permit a legitimate model account without a separate lemma, a context-only section with a reason, and a settled account without a Problem. No section, result, proof or length ratio is prescribed.
 
-## Required maintenance sequence
+## Build the supplied material
 
-Run `python scripts/validate_assets.py`, then `python scripts/build_checks.py --output /absolute/empty/directory`. Outputs must be outside the skill and existing evidence must not be overwritten. Inspect rendered pages separately; build success is not visual or mathematical approval.
+Run `python scripts/validate_assets.py`, then `python scripts/build_checks.py --output /absolute/empty/directory`. The output is external to the skill. The runner compiles the ten templates, the elementary example, the v6 source with its original preamble and with the current shared style, and the compact example in current and frozen style modes. It reports compilation and source-shape findings separately; it neither completes the reader review nor certifies examples.
 
-The standard sample has two targets:
+`stage_compact_sample` selects explicit dependencies. The `compact-current` target uses `assets/templates/math-review.sty`; `compact-frozen` uses the style next to the retained compact source. The report records the mode and style hash. Modify and build copies, not the retained originals. Render the outputs and inspect pages separately.
 
-- `dhym-standard-current`: current `assets/templates/math-review.sty`, classified as shared-style regression.
-- `dhym-standard-frozen`: the bundled historical style, classified as frozen reproduction.
+For script or template changes, use external development tests to cover dependency isolation, literal input expansion, canonical recalls, optional Problems, stale source evidence, missing/misattached proofs, imported-result locators, principal-answer coverage, and legitimate result-free sections. These tests are not needed to use an installed skill. Normal project creation, building, validation and archive verification depend only on files supplied here and the documented tools.
 
-`stage_standard_sample` is the preparation function used by the real `run_checks`. Mutation tests give the styles distinct contents, change only the shared dependency and check which staged target changes. Integration checks inspect the real staging path, not an unused helper. Each report names the dependency mode and style hash.
+## Evidence limits
 
-## Carried-forward 1.4.0 behavior
-
-When maintaining a development test suite, cover a zero-Problem Part V build, one/three principal statements, canonical recalls after a condition change, current/frozen dependency propagation, source-version fingerprint invalidation and recursive template JSON classification. The source fingerprint detects stale review metadata; it cannot judge changed mathematical hypotheses.
-
-Asset JSON roles are explicit: recursively match `*-template.json` as templates; completed `references.json` lists follow bibliography rules. Do not classify all JSON as the project-manifest schema or stop recursion to avoid sample bibliographies.
-
-Historical verification files, when retained separately, remain historical. New reports must identify the actual release version and execution date. Preserve original samples unchanged; a new concise adaptation belongs in its own project. External-topic validation remains a separate, unperformed generalization test unless actually run.
-
-## Version 1.5.0 body-structure regressions
-
-Both V templates must demonstrate active body result and proof/outline boundaries, while leaving the actual number and logical roles to the mathematics. The standard prompt expands the same decisive estimates and construction; it does not merely add topics. Newly created projects carry the current skill version and pending located reading records. The agent default prompt must agree with these rules.
-
-Test the old introduction-only result pattern, removal of a key lemma while other results remain, equal-count label substitutions, missing or misattached proof blocks, stale visible-source fingerprints, imported results without locators, and generic PASS text in place of actual readings. Comments and unused preamble macros do not count as results. Permit genuinely context-only sections with stated reasons, rather than imposing theorem quotas. These checks inspect syntax and evidence linkage, never the truth of reviewer answers.
+`--inventory` reports actual environments, reference sites and the source digest. It is not an approval. Content-first reading must identify mathematical claims that the syntax inventory misses. A wrapper around an unchanged essay can satisfy superficial syntax and still fail that reading. Review all affected pages after repairs. Source verification, author rereading, independent review, compilation and reproduction are distinct activities.

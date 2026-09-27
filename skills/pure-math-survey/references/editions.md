@@ -7,7 +7,7 @@ Both editions are English mathematical articles. The user's requested part/editi
 
 ## Invariants of common content
 
-Keep the same source identity, controlling version, cutoff, notation, conventions and truth status. Every common full statement uses the same body-only component and preserves objects, hypotheses, quantifiers, exceptional cases, range, conclusion and qualifications. Keep material uncertainty and citations with the claim. A narrower corollary or stronger theorem is a separate result with a justified relationship, not an editorial paraphrase.
+Keep the same source identity, controlling version, cutoff, notation, conventions and truth status. Every genuinely repeated or shared full statement uses the same body-only component and preserves objects, hypotheses, quantifiers, exceptional cases, range, conclusion and qualifications. Keep material uncertainty and citations with the claim. A narrower corollary or stronger theorem is a separate result with a justified relationship, not an editorial paraphrase.
 
 A correct common component does not validate surrounding prose. Check comparisons, historical judgments, failed converses, prose consequences and Problem status separately. Different labels and numbering across documents are acceptable; meanings and sources must agree.
 
@@ -31,13 +31,13 @@ Standard adds understanding before breadth. For a substantial addition, identify
 
 For example, V concise can explain what a construction produces and how it supports a main result, while leaving a technical sublemma to a precisely located source; V standard can clarify why a key hypothesis is needed through a checked comparison. By contrast, copying every technical branch into concise and adding an unrelated bibliography tour to standard does not serve either edition. A short decisive derivation belongs in concise when omitting it would break the chosen explanation.
 
-Record the main selection decisions and locations of added understanding briefly in the existing architecture/edition note. Do not make a new per-paragraph ledger, score, section quota or fixed length ratio. Use the compact total-page review limits in length-and-selection.md; record scope decisions in the existing architecture note. For a single requested edition, apply only its own test; do not create a counterpart.
+Record the main selection decisions and locations of added understanding briefly in the existing architecture/edition note. Do not make a new per-paragraph ledger, score, section quota or fixed length ratio. Use the non-blocking reading-length guidance in length-and-selection.md; record scope decisions in the existing architecture note. For a single requested edition, apply only its own test; do not create a counterpart.
 
 ## Coverage and placement
 
 The [publication-map definition](records-and-delivery.md#mathematical-ownership-and-placements) is authoritative for fields and treatment rules. `FULL_STATEMENT` imports the canonical body at least once at its mapped primary location; useful local recalls may reuse that same body. Canonical identity is not a ban on repetition. `REFERENCE_ONLY` is a located explanation with usable local conditions and a reason for reduced treatment. `OMITTED_WITH_REASON` has empty file/label fields and a substantive reason; no component may still be imported at that omitted placement.
 
-I–IV standard placements require full statements. Concise placements and both V editions may select among the three treatments within their own contracts. Standard-only supplements need not be forced into concise. Likewise, a technical III node need not be forced into V standard. V core main results or Problems may not be hidden through convenient omission or delegated to absent volumes. A reference must preserve the assumptions needed to use it within this document. Every map node has at least one requested full or referenced location; a completely unused node does not belong in the publication map.
+I–IV standard placements require full statements. Concise placements and both V editions may select among the three treatments within their own contracts. This placement choice cannot erase a selected principal answer or an essential lemma: keep its usable statement in the article, even when the proof is quoted or sketched. A referenced supplementary result is different from an unstated indispensable input. Standard-only supplements need not be forced into concise. Likewise, a technical III node need not be forced into V standard. V core main results or Problems may not be hidden through convenient omission or delegated to absent volumes. A reference must preserve the assumptions needed to use it within this document. Every map node has at least one requested full or referenced location; a completely unused node does not belong in the publication map.
 
 An unrequested document uses `NOT_REQUESTED` and empty coordinates, separately for each owner or V edition. This is not a treatment for skipping content inside a requested document. A V-only selection can use I–IV-owned nodes without creating those volumes.
 
@@ -57,8 +57,12 @@ Both V editions use [the Part V guide](part-v-benchmark.md). Concise selects wit
 
 Use the identical [layout profile](layout-and-build.md) across concise and standard and all five parts. Different pagination follows from real selection and exposition, never a reduced font, compressed line spacing or smaller margins. Recheck introduction/body coverage after edition-specific cuts. A single requested edition has its own complete review; do not invent a paired manuscript.
 
-## Selection and discovery in 1.7.0
+## Selection and discovery
 
 Record common question IDs, result IDs, mechanism IDs and frontier IDs in survey_selection. Paired editions agree on these including scope/status, not merely bibliography. Their depth and local organization may differ. Standard does not automatically restore an alternative method. An unrequested standard article is not a completed paired test.
 
 Every mapped principal answer belongs to `core_result_ids`; agreeing on an incomplete declaration is not shared-core agreement. The checker enforces this already declared role, not its mathematical importance. A standard-only secondary supplement is allowed when it does not replace or change the common questions, principal answers or decisive mechanisms.
+
+## Applying the paired templates
+
+The two templates for a Part demonstrate the same mathematical tasks. Replace their provisional headings with mathematical ones and delete inapplicable slots. Part I builds a model and its bridge; II compares precise formulations; III develops a construction and closure; IV separates established range, obstruction and authenticated remainder; V integrates selected reductions and mechanisms. Standard develops the same model calculation, comparison, decisive input, or obstruction at the point of use. It has no compulsory extra chapter, and concise has no license to turn the shared core into prose.

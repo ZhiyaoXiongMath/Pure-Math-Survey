@@ -39,7 +39,7 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error -file-line-error main.tex
 
 Record the actual command and engine, including bibliography steps. Without `latexmk`, run `pdflatex` until auxiliary references and the contents stabilize; two runs may be insufficient. Use no shell escape for untrusted source, and inspect inputs before executing external commands. Compile all requested manuscripts, not unrequested companions.
 
-The log must not retain undefined references/citations, duplicate labels or destinations, missing glyphs, missing inputs, fatal TeX errors or unresolved substantive overflows. Review underfull-box and font-substitution warnings in context; warnings and failures are not interchangeable. A successful command does not establish a readable PDF.
+The log must not retain undefined references/citations, duplicate labels or destinations, missing glyphs, missing inputs, fatal TeX errors or unresolved substantive overflows. The build report preserves exact non-blocking log lines in `nonblocking_log_warnings`. Review underfull-box and font-substitution warnings in context; warnings and failures are not interchangeable. A successful command does not establish a readable PDF.
 
 ## Render and inspect
 
@@ -64,8 +64,9 @@ python scripts/compare_pdf.py \
   --output /absolute/path/to/checks/reference-comparison
 ```
 
-The build runner uses pdfLaTeX with no shell escape, checks stabilization and logs, and leaves sources unchanged. It compiles ten instructional scaffolds, the two-result fixture, the original-preamble sample and the shared-style sample. The scaffolds deliberately retain insertion text and are not publication deliverables. The sample's mathematical content and date are preserved.
+The build runner uses pdfLaTeX with no shell escape, checks stabilization and logs, and leaves sources unchanged. It compiles ten instructional scaffolds, the elementary example, the v6 example with original and shared preambles, and the compact example with current and frozen styles. The scaffolds deliberately retain insertion text and are not publication deliverables. The sample's mathematical content and date are preserved.
 
-Development tests are maintained separately; PDF-related tests additionally use PyMuPDF. Real builds require a TeX distribution with AMS packages, `mathtools`, `geometry`, `enumitem`, `needspace` and `hyperref`; STIX2/Latin Modern and microtype are optional. The PDF comparator additionally requires PyMuPDF and Pillow and must report a missing dependency rather than pretend it rendered pages.
+Real builds require a TeX distribution with AMS packages, `mathtools`, `geometry`, `enumitem`, `needspace` and `hyperref`; STIX2/Latin Modern and microtype are optional. The PDF comparator additionally requires PyMuPDF and Pillow and must report a missing dependency rather than pretend it rendered pages.
 
-A style regression, source-structural test, full-page visual inspection, source-based mathematical review, independent review and new-topic generation evaluation are different activities. Report exactly which were executed. Do not call scaffold builds new research surveys or claim automatic v6-quality certification.
+A style regression, source-structural test, full-page visual inspection, source-based mathematical review, independent review and new-topic generation evaluation are different activities. Report exactly which were executed. Do not call scaffold builds new research surveys or claim automatic writing-quality certification.
+For bibliography identifiers that otherwise form unbreakable text, use a breakable URL display (for example, `\href{URL}{\nolinkurl{identifier}}`). Repair the local link layout rather than hiding warnings or shrinking the document. The bibliography generator applies this to arXiv and DOI displays.

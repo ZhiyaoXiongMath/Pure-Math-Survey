@@ -9,7 +9,7 @@ Identify principal answers from the organizing question and promised reading out
 
 ## State the answers
 
-An introduction must directly state every selected principal mathematical conclusion. Give the objects, material hypotheses, quantifiers, branch or parameter ranges, actual conclusions and source/status qualifications. Define specialized notation locally. A name, citation, theme list or body reference cannot carry indispensable content. Narrative and roadmaps are optional; principal-result content is not.
+An introduction must directly state every selected principal mathematical conclusion. Give the objects, material hypotheses, quantifiers, branch or parameter ranges, actual conclusions and source/status qualifications. Define specialized notation locally. A name, citation, theme list or body reference cannot carry indispensable content. Put the decisive condition and conclusion formulas inside the principal statement, with necessary nearby definitions; a chain of external equation references is not a substitute. Narrative and roadmaps are optional; principal-result content is not.
 
 A compact full statement is usually best. An explicitly restricted special case is permissible only when it does not conceal a material part of the agreed question. Important negative conclusions or limits may be stated in prose or formulas; they need not be forced into theorem environments. Supporting technical inputs can wait until their use in the body. Necessary definitions precede their use; derivations supply the structure needed for each inference.
 
@@ -29,6 +29,6 @@ Explain the result in the body rather than immediately printing the same theorem
 
 Principal-answer coverage is only one reading test. It does not authorize an essay-only body. Supporting propositions and key lemmas belong where their inputs are available and their outputs are used; they need not all be promoted into the introduction. Use the body-structure procedure in [writing style](writing-style.md), avoiding both introduction-only statements and a disconnected theorem catalog.
 
-## Selection and discovery in 1.7.0
+## Selection and discovery
 
 Before selecting principal results, complete question-relative selection and domain-native discovery. The opening is not a catalog of impressive results. Give a mathematically informative account of the selected frontier in Part V, without promising unverified equivalences; precise later definitions may carry the full formulation.

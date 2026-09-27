@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compile maintenance scaffolds and the frozen v6; not a survey-quality grader.
+"""Compile supplied templates and retained examples; not a survey-quality grader.
 
 Requires pdfLaTeX and its document packages. Uses no shell escape, works only on
 copied inputs, and reports final log problems separately from PDF rendering.
@@ -29,6 +29,16 @@ def log_issues(text: str) -> dict[str, list[str]]:
     return {kind: [line for line in text.splitlines() if re.search(pattern, line)]
             for kind, pattern in BLOCKING_PATTERNS.items()
             if any(re.search(pattern, line) for line in text.splitlines())}
+
+def log_warnings(text: str) -> dict[str, list[str]]:
+    patterns = {
+        'underfull_box': r'Underfull \\[hv]box',
+        'font_substitution': r'Font Warning|Font shape .+not available|Some font shapes were not available|size substitutions',
+        'package_warning': r'(?:LaTeX|Package \S+) Warning',
+    }
+    return {kind: found for kind, pattern in patterns.items()
+            if (found := [line for line in text.splitlines() if re.search(pattern, line)])}
+
 
 def shared_style_source(source: str) -> str:
     """Replace only the frozen sample's known preamble, or fail closed.
@@ -97,19 +107,21 @@ def compile_one(folder: Path, entrypoint: str, engine: str, timeout: int = 120) 
             "pages_from_log": int(pages.group(1)) if pages else None,
             "pdf": str(pdf), "pdf_sha256": hashlib.sha256(pdf.read_bytes()).hexdigest() if pdf.exists() else None,
             "blocking_log_issues": issues,
+            "nonblocking_log_warnings": log_warnings(log),
+            "warning_disposition": "REQUIRES_CONTEXTUAL_REVIEW" if log_warnings(log) else "NONE_REPORTED",
             "font_fallback": "STIX2 unavailable" in log,
             "underfull_box_count": len(re.findall(r"Underfull \\[hv]box", log)),
             "recall_counters": recalls,
             "status": "PASS" if not issues else "FAIL"}
 
-def stage_standard_sample(root: Path, destination: Path, *, mode: Literal["current", "frozen"]) -> Path:
+def stage_compact_sample(root: Path, destination: Path, *, mode: Literal["current", "frozen"]) -> Path:
     """Stage explicit dependencies; do not confuse regression with reproduction."""
     if mode not in ("current", "frozen"):
         raise ValueError(f"Unsupported style mode: {mode}")
-    sample = root / "assets/reference-samples/dhym-standard"
+    sample = root / "assets/reference-samples/dhym-compact"
     style = (root / "assets/templates/math-review.sty" if mode == "current"
              else sample / "math-review.sty")
-    inputs = [sample / "dhym-standard.tex", sample / "references.bbl", style]
+    inputs = [sample / "dhym-surface-compact.tex", style]
     for source in inputs:
         if not source.is_file():
             raise FileNotFoundError(source)
@@ -118,7 +130,7 @@ def stage_standard_sample(root: Path, destination: Path, *, mode: Literal["curre
     destination.mkdir(parents=True, exist_ok=True)
     for source in inputs:
         shutil.copy2(source, destination / source.name)
-    return destination / "dhym-standard.tex"
+    return destination / "dhym-surface-compact.tex"
 
 def run_checks(output: Path, engine: str = "pdflatex") -> dict:
     engine_path = shutil.which(engine)
@@ -157,15 +169,9 @@ def run_checks(output: Path, engine: str = "pdflatex") -> dict:
         (folder / (name + ".tex")).write_text(content, encoding="utf-8")
         shutil.copy2(style, folder / style.name)
         tasks.append((folder, name + ".tex"))
-    folder = output / "dhym-compact"
-    folder.mkdir()
-    compact = ROOT / "assets/reference-samples/dhym-compact/dhym-surface-compact.tex"
-    shutil.copy2(compact, folder / compact.name)
-    shutil.copy2(style, folder / style.name)
-    tasks.append((folder, compact.name))
     for mode in ("current", "frozen"):
-        folder = output / f"dhym-standard-{mode}"
-        entry = stage_standard_sample(ROOT, folder, mode=mode)
+        folder = output / f"compact-{mode}"
+        entry = stage_compact_sample(ROOT, folder, mode=mode)
         tasks.append((folder, entry.name))
     for folder, entry in tasks:
         print(f"Building {entry}", flush=True)
@@ -174,15 +180,36 @@ def run_checks(output: Path, engine: str = "pdflatex") -> dict:
         except (OSError, ValueError, subprocess.SubprocessError, RuntimeError) as exc:
             result = {"entrypoint": entry, "status": "FAIL", "error": str(exc)}
         result["artifact_kind"] = ("instructional_scaffold" if entry.startswith("part") else
-                                   "elementary_maintenance_fixture" if entry.startswith("exposition") else
-                                   "compact_reference_adaptation" if entry.startswith("dhym-surface") else
-                                   "shared_style_regression" if folder.name == "dhym-standard-current" else
-                                   "frozen_sample_reproduction" if folder.name == "dhym-standard-frozen" else
-                                   "frozen_reference_rebuild")
+                                   "elementary_example" if entry.startswith("exposition") else
+                                   "shared_style_regression" if folder.name in {"compact-current", "v6-shared-style"} else
+                                   "frozen_sample_reproduction")
         result["target"] = folder.name
-        if entry == "dhym-standard.tex":
+        if entry == "dhym-surface-compact.tex":
             result["style_mode"] = folder.name.rsplit("-", 1)[-1]
             result["style_sha256"] = hashlib.sha256((folder / "math-review.sty").read_bytes()).hexdigest()
+        # Findings are reader-review pointers, not a mathematical build verdict.
+        # Use the same literal-input expansion path as project validation.
+        try:
+            import importlib.util
+            def sibling(name):
+                spec = importlib.util.spec_from_file_location(name, Path(__file__).with_name(name + ".py"))
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module)
+                return module
+            validator = sibling("validate_project")
+            structure = sibling("check_mathematical_structure")
+            input_errors = []
+            expanded, _ = validator.expand_tex(folder / entry, folder, input_errors)
+            inv = structure.inventory(expanded)
+            result["source_structure_screen"] = {
+                "scope": "syntax and reference sites only; whole-body reader review remains necessary",
+                "input_errors": input_errors,
+                "findings": structure.shape_issues(inv),
+                "statement_reference_sites": inv["statement_reference_sites"],
+                "source_sha256": inv["source_sha256"],
+            }
+        except (OSError, ValueError, TypeError) as exc:
+            result["source_structure_screen"] = {"error": str(exc)}
         report["builds"].append(result)
         (output / "build-report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     report["status"] = "PASS" if all(x["status"] == "PASS" for x in report["builds"]) else "FAIL"

@@ -1,23 +1,25 @@
 # Project format, records and delivery
 
-For skill versions 1.6.0 and later, use `problem_formulation` inside each document's existing structure-review JSON. Its object/variation/question model is completed at planning; source bindings, reader answers and a model digest are completed at release. `scripts/check_problem_formulation.py` defines the exact schema. Do not create parallel scope registries. The manifest's existing `structure_review` pointer is reused.
+Use `problem_formulation` inside each document's existing structure-review JSON. Its object/variation/question model is completed at planning; source bindings, reader answers and a model digest are completed at release. `scripts/check_problem_formulation.py` defines the exact schema. Do not create parallel scope registries. The manifest's existing `structure_review` pointer is reused.
 
 
 ## Manifest and source layout
 
-The skill release is `1.7.1`; the unchanged shared style release is `1.2.0`. The project/record schema remains `1.0.0`. Historical project records remain readable; new 1.5+ scaffolds additionally require source-bound, located body-structure reviews as described below. Set `schema_version` to `"1.0.0"` in the manifest and JSONL records. Skill release and data-schema version are distinct. `project-manifest.json` has `language: "en"` and a `documents` array whose records contain integer `part` 1–5, `edition` (`concise` or `standard`), `tex_file` and `pdf_file`. Paths are safe project-relative POSIX paths.
+The skill and current shared style version are `1.8.1`. The manifest and registry schema is `1.0.0`; the current structure-review schema is `1.1.0`. Skill versions and schema versions have different roles. `project-manifest.json` has `language: "en"`, `skill_version: "1.8.1"`, and a `documents` array containing integer `part` 1--5, `edition` (`concise` or `standard`), `tex_file`, `pdf_file`, and `structure_review`. Paths are safe project-relative POSIX paths and maintained text files are UTF-8. `page_review_threshold` is optional non-blocking guidance; `max_pages` is an optional explicit user maximum, never inferred from defaults. See [reading-length behavior](length-and-selection.md).
 
 Without `requested_documents`, the schema requires all ten part/edition combinations. Otherwise that field is a nonempty list of unique objects with exactly `part` and `edition`; `documents` must match it exactly. Record the user's selection before drafting, never infer it from finished files. Preserve the actual scope of an update. A V-only standard manifest is:
 
 ```json
 {
   "schema_version": "1.0.0",
+  "skill_version": "1.8.1",
   "language": "en",
   "requested_documents": [{"part": 5, "edition": "standard"}],
   "documents": [
     {"part": 5, "edition": "standard",
      "tex_file": "topic-part5-integrated-standard.tex",
-     "pdf_file": "topic-part5-integrated-standard.pdf"}
+     "pdf_file": "topic-part5-integrated-standard.pdf",
+     "structure_review": "evidence/topic-part5-integrated-standard-structure-review.json"}
   ]
 }
 ```
@@ -91,24 +93,24 @@ Extend the existing architecture note, not the schema: identify each selected pr
 
 When an optional example is used, record its purpose and inspected passages in the existing architecture/release evidence. No sample reading is mandatory beyond the generic Part V guide. The frozen sample is not a newly verified source and does not change the manuscript's literature cutoff. The sample itself is a standalone historical deliverable, not a claim that its original package follows this project's manifest schema.
 
-The project schema remains `1.0.0` in skill `1.7.1`. Existing records remain readable; the 1.7 selection/discovery contract below adds fields and separates knowledge status from editorial disposition. Historical evidence is preserved rather than silently certified under the new contract. The structural validator supports literal braced TeX inputs, including explicit `.bbl` inputs. For a standalone export using inline canonical macros, retain the source project with its mapped components and validate that source project; then build and visually check the exported entrypoint too. Do not pretend that a literal-input parser validates arbitrary macro expansion.
+The project manifest schema is `1.0.0`; new projects declare skill version `1.8.1`. Existing manifest contracts remain readable, but source and reader evidence must be reviewed rather than inherited as current approval. The structural validator supports literal braced TeX inputs, including explicit `.bbl` inputs. For a macro-expanded standalone export, validate its source project and then build and visually inspect the exported entrypoint. A literal-input parser is not a general TeX interpreter.
 
-## Located body-structure evidence (1.5+)
+## Located body-structure evidence
 
-The manifest keeps its existing schema and adds `skill_version` and `documents[].structure_review`. Each review file is a JSON object with `schema_version: "1.0.0"`, `tex_file`, `source_sha256` (SHA-256 of comment-stripped, literal-input-expanded TeX), `reviewer_mode`, `reviewed_on`, `sections`, and `results`. New scaffolds start with empty records and a pending fingerprint.
+The manifest declares `skill_version` and `documents[].structure_review` in its current schema. Each review file is a JSON object with `schema_version: "1.1.0"`, `tex_file`, `source_sha256` (SHA-256 of comment-stripped, literal-input-expanded TeX), `reviewer_mode`, `reviewed_on`, `sections`, and `results`. New scaffolds start with empty records and a pending fingerprint.
 
-Each section record has `label`, `role` (`introduction`, `results-and-mechanisms`, or `context-only`), `statement_reading`, `dependency_reading`, and, for context-only, `result_free_reason`. Reading fields contain located substantive answers, not booleans or PASS. Every actual numbered section is covered.
+Each section record has `label`, `role` (`introduction`, `results-and-mechanisms`, `proof-only`, or `context-only`), `statement_reading`, `dependency_reading`, and, for context-only, `result_free_reason`. Reading fields contain located substantive answers, not booleans or PASS. Every literal author-written section is covered, numbered or starred; each has a semantic label. Bibliography or other headings generated by TeX macros are outside the literal parser and remain part of the page review. Each current section also records `expected_result_labels` (the distinct formal results the content-first reading expects there), `self_containment_reading`, and `unstructured_claims_reading` (what remains in prose and why). The expected labels must match the actual result labels in that section. A `proof-only` section has `result_free_reason`, `proof_label`, and `proved_result_labels`; its located proof must refer to those visible results and the section contains no new independent result.
 
-Each body result record has `label`, `environment`, `logical_role`, `local_context` (a list of existing labels), `hypotheses`, `conclusion`, `consumer` (an existing label), `treatment` (`full-proof`, `proof-sketch`, or `quoted-input`), `proof_label` (required for local proofs/sketches), `source_keys`, and `source_locator` (required for quoted inputs). It also records `statement_reading` and `dependency_reading`. These are reviewer observations. The tool does not understand whether a mathematical hypothesis is true or sufficient. A quoted result may have an explanatory proof block, but that block must be labelled as an outline, not represented as a full proof.
+Each body result record has `label`, `environment`, `logical_role`, `local_context` (a list of existing labels), `hypotheses`, `conclusion`, `consumer` (an existing label), `treatment` (`full-proof`, `proof-sketch`, or `quoted-input`), `proof_label` (required for local proofs/sketches), `source_keys`, and `source_locator` (required for quoted inputs). It also records `statement_reading`, `dependency_reading`, and `self_containment_reading`. The `reference_review` list has one object for each distinct literal statement reference: `target`, `role` (`nearby-definition`, `standard-notation`, `prior-result`, `navigation`, or `formula-repeated`), and a substantive `reason` explaining reader access to the needed content. An empty list is correct when no literal reference occurs. These fields document judgments; matching them does not establish self-containment. These are reviewer observations. The tool does not understand whether a mathematical hypothesis is true or sufficient. A quoted result may have an explanatory proof block, but that block must be labelled as an outline, not represented as a full proof. A local sketch must also be printed as a sketch or outline. For a proof intentionally placed elsewhere, set `proof_location: "deferred"`, give `proof_location_reason`, reference that proof or section immediately after the result, and reference the proved result inside the located proof. The default is `adjacent`; unrelated later proofs cannot satisfy it. A shared later proof may name multiple results explicitly.
 
 The checker prints the source digest and inventory with `--inventory`; this does not issue a completed review. Review the actual source/PDF before writing the matching digest. Ordinary comments are excluded from the digest; changes to visible formulas, statements, proofs, or included bibliography invalidate it. Typography and PDF inspection retain their separate checks.
 
-## 1.7 selection and discovery contract
+## Selection and discovery records
 
-The manifest skill_version is the release contract, not a label to bypass checks. New releases use 1.7.1; historical releases retain their version. Add survey_selection to existing structure_review JSON, not a second ledger. Its questions contain statement, scope, current_answer, desired_answer, gap and priority_reason. Record core_result_ids, core_mechanism_ids and core_frontier_ids shared across requested editions.
+The manifest `skill_version` selects its validation contract, not a label to bypass checks. New projects use `1.8.1`. Add survey_selection to existing structure_review JSON, not a second ledger. Its questions contain statement, scope, current_answer, desired_answer, gap and priority_reason. Record core_result_ids, core_mechanism_ids and core_frontier_ids shared across requested editions.
 
 Append result_role, question_ids, selection_reason and consumer_ids to publication-map.csv. Append formulation_kind, known_range, remaining_target, importance, editorial_disposition, editorial_reason, source_ids and body_binding_ids to frontier-claim-registry.csv. Append activity, source_ids and finding to frontier-reverse-search.csv. See core-problems.md and architecture.md for meanings. Discovery has scope, starting_points, search_ids, candidate_ids, omission_challenge, stop_reason and limitations; zero candidates requires a substantive no_candidate_reason.
 
 Bind each included/context frontier to actual unique label-delimited source spans with exact quotations, why and SHA256. Review question_priority, result_importance, frontier_coverage, edition_core and limitations with specific observations. Plan and source hashes detect changes, not understanding or honesty. The checker cannot discover an unrecorded mathematical omission.
 
-Legacy OUT_OF_SCOPE is ambiguous. Preserve original evidence; use STATUS_UNVERIFIED until actual verification and independently select disposition. Reclassify old URL-only reverse searches as source_read; never invent past queries or dates. New fields begin pending. Frozen samples are not rewritten. Run check_survey_selection.py at plan/release stages. Canonical bodies are required for shared/repeated statements; a once-used mapped statement may be inline.
+Use explicit mathematical status and an independent editorial disposition. A source read is not a performed search query. Unfinished fields remain pending. Run `check_survey_selection.py` at plan/release stages. Canonical bodies serve shared or repeated statements; a once-used mapped statement may be inline.

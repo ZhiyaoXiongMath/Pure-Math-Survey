@@ -103,7 +103,7 @@ This is useful repetition, not a second theorem with a new mathematical identity
 
 Bad introduction: “We discuss minimization and gradient descent; see the main results below.” Names and section pointers provide no usable answer.
 
-For the fixture's declared task, two independent conclusions are required: the unique point minimizing the positive-definite quadratic and the convergence of the iteration that constructs it. After local definitions, the first statement gives `x_*=A^{-1}b`. The second gives, for symmetric positive-definite `A`, arbitrary `x_0` and `0<\tau<2/\lambda_{\max}(A)`,
+For the example's declared task, two independent conclusions are required: the unique point minimizing the positive-definite quadratic and the convergence of the iteration that constructs it. After local definitions, the first statement gives `x_*=A^{-1}b`. The second gives, for symmetric positive-definite `A`, arbitrary `x_0` and `0<\tau<2/\lambda_{\max}(A)`,
 
 ```latex
 x_{j+1}=x_j-\tau(Ax_j-b),\qquad
@@ -111,7 +111,7 @@ x_{j+1}=x_j-\tau(Ax_j-b),\qquad
 q=\max_{\lambda\in\operatorname{Spec}(A)}|1-\tau\lambda|<1.
 ```
 
-See the complete assumptions, separate theorem bodies and proofs in [the fixture](../assets/exposition-examples/exposition-smoke.tex). Naming both theorems fails; fully stating only the minimizer also fails this two-output scope. A genuinely one-result article can pass without inventing a second result. Copying the fixture's number of theorems into every survey is not the rule.
+See the complete assumptions, separate theorem bodies and proofs in [the elementary example](../assets/exposition-examples/exposition-smoke.tex). Naming both theorems fails; fully stating only the minimizer also fails this two-output scope. A genuinely one-result article can pass without inventing a second result. Copying the example's number of theorems into every survey is not the rule.
 
 ## Structural identity before the equation
 

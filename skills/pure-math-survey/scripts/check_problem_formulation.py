@@ -263,7 +263,7 @@ def main() -> int:
     args = parser.parse_args(); root = args.project.resolve()
     errors, reports = [], []
     try:
-        manifest = json.loads((root / 'project-manifest.json').read_text())
+        manifest = json.loads((root / 'project-manifest.json').read_text(encoding="utf-8-sig"))
         docs = manifest['documents']
         if not isinstance(docs, list) or not docs:
             raise ValueError('manifest documents must be a nonempty list')

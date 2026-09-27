@@ -1,38 +1,25 @@
-# Part V guide: answers, mechanisms and bounded examples
+# Part V: results and their mechanisms
 
-First audit definitions and natural parameter variations using [problem formulation](problem-formulation.md). An integrated survey must choose and explain the question rather than inherit every fixed object from its sources. Keep global parameter domains separate from a local analytic freeze. This applies equally to concise and standard.
+Read [problem formulation](problem-formulation.md) before selecting answers. An integrated survey explains one mathematical question with its natural variation domains and ordered quantifiers, rather than inheriting every fixed choice from its sources. A local analytic freeze does not redefine the global question.
 
+## From the question to the body
 
-## Required guide; optional samples
+Select the principal answers and essential interfaces in the existing architecture note. Put the actual principal statements in the introduction. Then draft the body as mathematics: indispensable definitions, independently usable reductions or characterizations, necessary technical inputs, and their proofs or clearly attributed imports. Write the assumptions and conclusion before the explanation. A citation or equation label cannot replace visible material content.
 
-For every Part V request, read this guide before drafting. Sample use is purpose-specific, not edition-specific. All samples are optional for both editions. When a sample guides exposition, read its introduction, one relevant body passage and the corresponding rendered pages. A README alone is not an exposition sample. No sample supplies a default outline, theorem count, Problem quota, topic breadth or page allocation.
+Use the Part V template as an editable dependency pattern, not a mandatory outline. Add, merge, move, or delete its slots according to the mathematics. Not every section needs a theorem; a once-used essential lemma still needs its statement. Concise retains these interfaces and short decisive derivations. Standard expands the same bottlenecks rather than adding a generic methods chapter or a bibliography tour.
 
-## Select the promised answers
+The [introduction](introduction.md), [writing style](writing-style.md), and [proofs and boundaries](proofs-and-boundaries.md) guides govern their respective reading tests. Part V owes its own integrated explanation, not the unrequested Part III proof inventory.
 
-Record the mathematical objects, organizing question, principal answers promised to the reader and explicit exclusions in the existing architecture note. A page budget may change supporting results, proof detail and ancillary comparisons; it must not silently replace a general question by a special case. Select principal answers before drafting. A supporting theorem does not automatically become another principal answer, but an advertised answer cannot be demoted after drafting merely to fit the introduction.
+## Optional exposition references
 
-The introduction gives the principal answers mathematically: material hypotheses, quantifiers, branch or parameter ranges, actual conclusions and source/status qualifications. The body states the independent reductions and key technical inputs and explains why they hold. Its mathematics must not become unstructured prose simply because the introduction already contains the principal theorems. Use the introduction-only and reverse-coverage checks in [validation](validation.md); do not duplicate that protocol here. Avoid adjacent full restatements. A distant recall that genuinely prevents backtracking uses the same canonical body and original label.
+The [dHYM v6 article](../assets/reference-samples/dhym-v6/README.md) offers selected local exposition and layout. The [compact surface article](../assets/reference-samples/dhym-compact/README.md) illustrates a narrow two-way reduction. The [elementary examples](exposition-examples.md) illustrate explicit conditions, useful recalls and proof boundaries. These are optional for either edition. Their source dates and mathematical scope remain attached to them; retention is not a new source certification.
 
-## Explain the decisive interfaces
+No example supplies the default scope, outline, theorem count, number of Problems or page allocation. When borrowing a local writing device, read its actual passage and rendered page. Judge its usefulness under the current rules, not an old approval label. Do not infer whole-article quality from one successful passage.
 
-For each selected mechanism, give its input, the transformation or construction, the output and the way the next step uses it. Where the argument would otherwise break, supply the missing estimate, compatibility, choice of branch, construction or closure. Standard puts depth at that bottleneck, not in a compulsory appended section. A proof sketch may import a technical result, but must identify its hypotheses, controlling source and exact role. It need not recursively prove every external theorem or activate Part III's full route inventory.
+Before recommending a new complete manuscript as an example, inspect its entire final source and PDF. Read every substantive body section first for recoverable claims and then for proof dependencies; resolve hidden hypotheses, unmarked imports, mixed statement/proof paragraphs and missing essential inputs. Perform source checking, compilation and page inspection separately. Record this work outside the installed examples; keep only the example and its necessary provenance and scope with the skill. A build result never grants example status.
 
-Related material belongs when it defines a needed object, supplies an input, explains a decisive mechanism or establishes a boundary of a claimed relationship. Historical importance or shared vocabulary alone is not a reason to create a parallel main thread. Omitted topics are not implicitly settled. Investigate the selected frontier, but do not turn an unauthenticated candidate question into a claim of present openness.
+## Boundaries and acceptance
 
-## Roles and their evidence
+Discover the selected frontier beyond the initial bibliography using [core problems](core-problems.md). Keep mathematical status distinct from editorial disposition. A neighboring celebrated problem may warrant concise sourced context without a new theory chapter. Do not turn a failed search into a claim of openness.
 
-A writing scaffold demonstrates usable syntax and prompts, not completed exposition. A historical reference preserves an earlier article. A topical example illustrates a deliberately limited mathematical task. A layout regression sample tests a style against real content. A qualified completed example supplies evidence only for its declared scope, date and review depth. A work may have several roles, but none of these roles substitutes for the others.
-
-The [frozen dHYM v6](../assets/reference-samples/dhym-v6/README.md) is historical and usable for selected local exposition and layout, not a whole-article norm. The [compact surface example](../assets/reference-samples/dhym-compact/README.md) demonstrates a narrow two-way reduction, not a default dHYM or general Part V scope. Neither is newly source-certified by being retained. The [checked standard successor](../assets/reference-samples/dhym-standard/README.md) is a qualified completed example within its recorded scope and author-review limitations; its final manuscript was checked before registration.
-
-Registration of a successor requires the final TeX/PDF, source and mathematical review of the claims actually used, compilation, all-page inspection and a disclosure of independent-review status. Register only after these checks, not when a plan or draft is created. The example is not a claim that every future output automatically matches it or that the skill generalizes empirically across topics.
-
-## Presentation and acceptance
-
-Use [layout and build](layout-and-build.md), [length and selection](length-and-selection.md) and the existing release evidence. `reader_outcomes` covers answers and mechanism interfaces; `edition_depth` covers the located explanatory gain; source, statement, frontier, build and visual checks retain their own meanings. A missing promised mechanism, material hypothesis, essential lemma statement or recognizable proof boundary requires repair. Statement-only and dependency readings must both succeed; environment counts alone cannot supply either verdict. A separately disclosed limitation of reviewer independence does not become an independent review through an author PASS.
-
-Preserve immutable originals. Style regression is performed on copies and is not mathematical certification. Do not introduce another acceptance registry, fixed number of theorems or required subject-specific chapters.
-
-## Selection and discovery in 1.7.0
-
-Before consulting a sample outline, discover this topic's frontier and assess candidates against its question. A sample's flow, boundary theorem, conjecture or chapter proportions are not default requirements. Preserve principal answers and essential interfaces; compress proof interiors. Distinguish the solved criterion from a still missing structural or effective interpretation.
+Use the existing reader/depth evidence for the whole-body review, including the expected results and substantive claims left in prose. The structural checker checks syntax, bindings and source freshness, not truth or readability. Missing promised mechanisms or material conditions require repair. Disclose author rereading versus independent review. Neither a successful sample nor an environment count establishes general reliability across topics.

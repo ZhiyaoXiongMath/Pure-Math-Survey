@@ -1,82 +1,89 @@
-% Problem-first: reconstruct definitions; consider natural variations before fixing data.
-% Separate intrinsic data, classes, representatives, unknowns and gauges.
-% Put selected variation domains and question quantifiers before principal answers.
-% Local analytic freezing does not narrow the global problem.
-% Edition check: standard; total-page review limit 16, including references.
-% Reader task: Answer one coherent thematic question in an independently readable account, not a concatenation of Parts I–IV.
-% Develop the selected thread with deeper derivations and comparisons; do not add filler or automatically restore every omitted side branch.
-% In the Introduction state every selected principal conclusion, not only names.
-% Review body-to-introduction reverse coverage after changing any result or scope.
-% Style: delete trivial transitions; retain useful self-contained repetition;
-% use itemize/enumerate; put secondary consequences afterward, as corollaries when useful.
-% An introduction consisting of definitions and theorems is valid:
-% definitions and theorems are valid without a narrative roadmap.
-% One slot illustrates wiring, not a theorem-count requirement. Add or remove slots as needed.
+% Pure Math Survey 1.8.1; standard edition.
+% Advisory reading-review threshold: 16 total pages; REVIEW_NEEDED is non-blocking.
+% Only an explicit user max_pages sets a page-count limit; preserve necessary mathematics.
+% Reader task: Answer one coherent question through its results and mechanisms; do not concatenate Parts I--IV.
+% Develop the same mathematical core at its bottlenecks; do not add a generic depth appendix.
+% Reconstruct definitions and natural variation domains before selecting answers.
+% Distinguish intrinsic data, representatives, unknowns, and gauges.
+% Put the question's ordered quantifiers before its principal answers.
+% Discover source-based frontier candidates beyond the initial bibliography.
+% Map each substantive body task: local definitions -> usable result -> proof/import -> use.
+% These slots illustrate roles, not a number, proportion, or section requirement.
+% Delete or move an inapplicable slot; never invent a result to fill it.
+% Keep important hypotheses and conclusion formulas inside statements.
+% Nearby long definitions and standard terms may be referenced; avoid needless repetition.
+% A formula reference may aid navigation, not replace a material condition or conclusion.
+% A separately placed proof needs forward/backward locators, not duplicated results.
+% A printed proof sketch must not be recorded as a full proof.
 \documentclass[12pt,reqno]{amsart}
 \usepackage{math-review}
 \title{[INSERT: Topic]: A Thematic Review}
 \author{}
 \date{[INSERT: Checked literature cutoff]}
 \newcommand{\PrincipalStatement}{%
-\placeholder{Specify objects, all necessary hypotheses, quantifiers and ranges.}
-\begin{itemize}
-\item \placeholder{A necessary condition; omit this list if there is no real list.}
-\item \placeholder{A second independent condition, only when needed.}
-\end{itemize}
-\placeholder{State the actual mathematical conclusion and exact source/status.}
+\placeholder{Specify the objects, quantified domains, and necessary hypotheses.}
+% Use an itemized list only for genuinely independent substantial assumptions.
+\placeholder{Write the decisive criterion and conclusion formulas here, with the exact source or status.}
 }
-% Optional unresolved-core slot, not a Problem quota. Remove it when the scope
-% has no selected unresolved question; explain any settled organizing question instead.
-\newcommand{\CoreProblemStatement}{%
-\placeholder{State the core unresolved target with its objects, assumptions, quantifiers and exact conclusion to prove. Use the sourced formulation, not a vague research direction.}
-}
+% For a useful distant recall, reuse this body and the original number:
+% \begin{theoremrecall}{thm:principal}\PrincipalStatement\end{theoremrecall}
+% Do not print an immediate duplicate or an automatic second principal theorem.
 \begin{document}
-% Before drafting: discover the domain's own frontier beyond the selected bibliography. Compare the established answer with the remaining structural or effective gap. Select results by their role in the question, not by technical difficulty. Complete the existing selection evidence; concise and standard share the core. This prompt is not reader prose.
-
+% Before drafting: complete problem_formulation and survey_selection in the
+% existing reader evidence. Review every principal answer in both directions.
 \begin{abstract}
-\placeholder{Give the question and selected answers or boundary in two or three sentences. The abstract does not replace the main statements below.}
+\placeholder{State the selected question and actual answer or boundary.}
 \end{abstract}
 \maketitle
 
 \section{Introduction}\label{sec:introduction}
-\placeholder{Understand the definitions before adopting source hypotheses. State which objects may vary, their natural admissible domains and why other changes are fixed or excluded. Distinguish representatives from gauge choices. Pose the selected quantified question(s) before giving answers; do not assume equivalence or repair the scope only in a later corollary.}
-\placeholder{Define the minimum necessary notation. State fixed data, unknowns and branch conditions before using them. Give actual answers with quantifiers, parameter ranges and source/status qualifications. Delete transitions that merely announce what follows.}
-% One illustrative slot, not a fixed result count. Add or remove slots as needed.
+\begin{definition}\label{def:question-data}
+\placeholder{Define indispensable objects and notation; distinguish fixed data, admissible variations, and unknowns.}
+\end{definition}
+\placeholder{Pose the selected question with its ordered quantifiers. Justify a substantive restriction or relationship; omit trivial transitions.}
 \begin{theorem}\label{thm:principal}
 \PrincipalStatement
 \end{theorem}
-% Optional, not printed by default; first authenticate formulation and status.
-% \begin{problem}\label{prob:core-target}
-% \CoreProblemStatement
-% \end{problem}
-\placeholder{Keep a precise remaining question or negative boundary here when it is a principal commitment. Change theorem to proposition, sourced claim or Problem as mathematically appropriate. No invented optional titles.}
+% Change the environment to match its logical role. Add other principal answers
+% only when selected by the question. Put secondary consequences after the result.
+\placeholder{Locate the proof or give the controlling primary source and theorem locator. A citation does not replace the statement above.}
 
-\section{Results through their mechanisms}\label{sec:mechanism}
-\placeholder{Define local notation and the object constructed or estimated before the result. Select genuine claims; these active slots demonstrate structure, not a result quota.}
-\begin{lemma}\label{lem:technical-input}
-\placeholder{Give the key input's exact hypotheses and usable conclusion. For an imported result give its source, version and theorem locator.}
-\end{lemma}
-\begin{proof}[Proof sketch]\label{prf:technical-input}
-\placeholder{At the decisive bottleneck, expand the same mechanism retained in concise: give the test quantity or construction, derive the controlling inequality, explain where each nontrivial hypothesis enters, and close the next step. Separate a quoted input from a locally supplied derivation. Omit no indispensable lemma; omit routine arithmetic only when the reader can reconstruct it.}
-\end{proof}
+\section{[INSERT: The first mathematical reduction]}\label{sec:reduction}
+\begin{definition}\label{def:reduction}
+\placeholder{Define the local object and any indispensable long notation before the reduction.}
+\end{definition}
 \begin{proposition}\label{prop:reduction}
-\placeholder{State the independent reduction or intermediate conclusion, with local assumptions. It must be understandable without reading its proof.}
+\placeholder{State the independently usable reduction or characterization. Put its important hypotheses, both sides of the criterion, and conclusion formulas here.}
 \end{proposition}
 \begin{proof}\label{prf:reduction}
-\placeholder{Use Lemma~\ref{lem:technical-input}: identify its output and develop the next construction, parameter choices, limiting step and closure. Include a short checked comparison or failed converse when it explains a hypothesis. Replace the environment title by Proof sketch if substantial steps remain imported; standard is fuller, not a claim to reprove every cited paper.}
+\placeholder{Develop the same reduction in both directions. Derive the decisive identities, verify the converse and all branch or regularity restrictions, and separate any imported existence theorem from this calculation.}
 \end{proof}
-% A useful distant full recall may reuse the principal body and original number.
-% Do not force a corollary, example, Problem or a fixed count of any environment.
 
-\section{Further answers and boundaries}\label{sec:boundary}
-% Optional distant recall; enable only to reduce genuine backtracking.
-\placeholder{Use a mathematical heading and define the boundary parameter or solution concept locally.}
-\begin{proposition}\label{prop:boundary}
-\placeholder{State a selected sourced boundary result with its actual hypotheses, regularity and conclusion. Delete this slot if no such independent result is in scope.}
+\section{[INSERT: The decisive input and its consequence]}\label{sec:mechanism}
+\begin{lemma}\label{lem:technical-input}
+\placeholder{State the necessary technical input with its assumptions, quantitative output, and relevant dependence. Define any new local symbols first.}
+\end{lemma}
+\begin{proof}[Proof sketch]\label{prf:technical-input}
+\placeholder{Expand the same key input: construct the test object, derive the controlling estimate, track the nontrivial hypotheses, and identify any genuinely imported remainder.}
+\end{proof}
+% For a wholly imported input, replace the proof by Source and use with its
+% exact version/locator. An explanation of use is not an independent proof.
+\begin{proposition}\label{prop:closure}
+\placeholder{State the independent conclusion enabled by the input; make the needed hypotheses and output visible without reading the proof.}
 \end{proposition}
-\placeholder{Give the exact source and explain how its conclusion differs from the main theorem. A quoted result is not independently proved by this explanation.}
+\begin{proof}\label{prf:closure}
+\placeholder{Develop the same closure: verify compatibility, parameter choices, compactness or limiting arguments, and the exact use of each input. Keep imported results distinct from the supplied proof.}
+\end{proof}
+% Repeat or reorganize this pattern only for actual selected mechanisms.
 
-% \placeholder{For Problem~\ref{prob:core-target}, give its primary source, checked cutoff status, strongest relevant solved range and exact remaining range. Do not infer openness from a failed search. Remove this paragraph with the optional Problem slot when it is outside the selected scope.}
+\section{[INSERT: The boundary of the conclusion]}\label{sec:boundary}
+\begin{theorem}\label{thm:boundary}
+\placeholder{When a selected sourced boundary is needed, state its precise assumptions and conclusion, with attribution. Delete the slot when not applicable.}
+\end{theorem}
+\paragraph{Source and use.}
+\placeholder{Give the controlling version and locator. Explain the changed hypothesis and exact relationship to the main answer; no unearned proof claim.}
+% Any selected authenticated Problem is stated separately with its own objects,
+% quantifiers, sources, and status. There is no Problem quota or mandatory topic.
 
 \templatereferences
 \end{document}

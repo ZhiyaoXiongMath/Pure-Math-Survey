@@ -23,7 +23,7 @@ Reorganize the body at the same time. A section can open directly with a definit
 | I | Why the objects and questions matter; what a model reveals | The necessary language enables a model, whose structure leads to the general question |
 | II | How known conclusions answer the central question; which distinctions matter | Result groups organized by implication, comparison, difference or improvement |
 | III | Which large proof ideas resolve which difficulties | Method families divide the work; local bridges serve a route; the outputs close the target |
-| IV | Where the theory applies, where it is limited, and what gaps define the frontier | Applications and boundaries lead to Problem groups; progress changes their remaining scope |
+| IV | Where the theory applies, where it is limited, and what gaps define the frontier | Applications and boundaries lead to selected Problems or precisely delimited directions; progress changes their remaining scope |
 | V | What is known overall, why the methods help, and what deserves further study | Necessary language supports selected results and their relationships; method ideas and Problems complete the thematic account |
 
 ## I: Foundations and Models
@@ -40,7 +40,7 @@ Explain each promised core proof family's target, main issue, decisive idea, int
 
 ## IV: Applications, Boundaries and Problems
 
-Use the theory through meaningful constructions or applications with checked hypotheses and a derived conclusion. Distinguish failure of an assumption, failure of a method and failure of a conclusion. A counterexample is appropriate only when established, not as a required category. Organize the agreed core frontier through explicit Problem statements, then discuss verified progress, remaining ranges, importance and evidenced relationships. Standard adds depth to these applications and discussions; concise retains the core Problems, not merely a promise that they appear elsewhere.
+Use the theory through meaningful constructions or applications with checked hypotheses and a derived conclusion. Distinguish failure of an assumption, failure of a method and failure of a conclusion. A counterexample is appropriate only when established, not as a required category. When the agreed core frontier contains authenticated precise questions, give explicit Problem statements, then discuss verified progress, remaining ranges, importance and evidenced relationships. Keep a direction or a refuted formulation distinct; no Problem is compulsory when none is justified. Standard adds depth to these applications and discussions; concise retains the core Problems, not merely a promise that they appear elsewhere.
 
 ## V: An independently organized thematic review
 
@@ -52,7 +52,7 @@ For concise, select principal results and necessary support, merge repeated expl
 
 Standard deepens background relationships, comparisons, key method ideas and the meaning and progress of the same core Problems. Useful short derivations or examples may be added, but detailed proof obligations arise only from the actual request and declared promises, not V's part number.
 
-The two V templates place local definitions and actual principal-statement slots in the Introduction, then use original-number recalls in the developed results/mechanism sections before boundary and Problem discussion. These are functional prompts, not a fixed section taxonomy. Replace them with mathematical titles and, where clearer, interweave results and method ideas. Each template allows a definition-and-theorem introduction without compulsory transitions or a section roadmap. Explain only the relationships needed to interpret the selected results. Concise includes its own selection and merging decisions; standard specifies where deeper understanding is added.
+The two V templates place necessary definitions and principal statements in the introduction, then develop an independently useful reduction, a technical input, closure and a relevant boundary. Recall wrappers are optional, not immediate duplicates or substitutes for body results. These are removable task prompts, not a fixed section taxonomy. Replace them with mathematical titles and, where clearer, interweave results and method ideas. Each template allows a definition-and-theorem introduction without compulsory transitions or a section roadmap. Explain only the relationships needed to interpret the selected results. Concise includes its own selection and merging decisions; standard specifies where deeper understanding is added.
 
 Give V one abstract, introduction, notation system, contents, numbering and bibliography. Reuse one canonical body per shared or repeated full statement; useful local restatements may input that same body with a valid recall wrapper. Reuse, compress, rewrite or reorganize prose freely. A reference to an unproduced companion must not carry necessary assumptions. Reuse does not certify integration quality, imply a generation order or reveal token consumption.
 
@@ -74,7 +74,7 @@ I introduces the knowledge obtained from its chosen model or construction; it do
 
 For V, use [the Part V guide](part-v-benchmark.md). No historical or topical example supplies a binding whole-article organization. Choose samples only for a stated local purpose.
 
-## Selection and discovery in 1.7.0
+## Selection and discovery
 
 ## Result importance relative to the selected question
 

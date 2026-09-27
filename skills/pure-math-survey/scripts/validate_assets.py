@@ -7,6 +7,8 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 
 def validate_asset_json(assets: Path) -> dict:
+    if not assets.is_dir():
+        raise ValueError(f"Assets directory does not exist: {assets}")
     templates=[];bibliographies=[]
     for path in sorted(assets.rglob('*-template.json')):
         value=json.loads(path.read_text(encoding='utf-8'))
@@ -24,6 +26,8 @@ def validate_asset_json(assets: Path) -> dict:
             keys.append(r['key'])
         if len(keys)!=len(set(keys)): raise ValueError(f'Duplicate sample citation key: {path}')
         bibliographies.append(path.relative_to(assets).as_posix())
+    if not templates and not bibliographies:
+        raise ValueError('No supported JSON assets found; nothing was validated')
     return {'status':'PASS','scope':'JSON shape/role only','templates':templates,'bibliographies':bibliographies}
 
 def main() -> int:

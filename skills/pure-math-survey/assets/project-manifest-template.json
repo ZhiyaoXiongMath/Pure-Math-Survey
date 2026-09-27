@@ -9,70 +9,80 @@
       "edition": "concise",
       "tex_file": "[topic]-part1-foundations-concise.tex",
       "pdf_file": "[topic]-part1-foundations-concise.pdf",
-      "structure_review": "evidence/[topic]-part1-foundations-concise-structure-review.json"
+      "structure_review": "evidence/[topic]-part1-foundations-concise-structure-review.json",
+      "page_review_threshold": 5
     },
     {
       "part": 1,
       "edition": "standard",
       "tex_file": "[topic]-part1-foundations-standard.tex",
       "pdf_file": "[topic]-part1-foundations-standard.pdf",
-      "structure_review": "evidence/[topic]-part1-foundations-standard-structure-review.json"
+      "structure_review": "evidence/[topic]-part1-foundations-standard-structure-review.json",
+      "page_review_threshold": 8
     },
     {
       "part": 2,
       "edition": "concise",
       "tex_file": "[topic]-part2-results-concise.tex",
       "pdf_file": "[topic]-part2-results-concise.pdf",
-      "structure_review": "evidence/[topic]-part2-results-concise-structure-review.json"
+      "structure_review": "evidence/[topic]-part2-results-concise-structure-review.json",
+      "page_review_threshold": 6
     },
     {
       "part": 2,
       "edition": "standard",
       "tex_file": "[topic]-part2-results-standard.tex",
       "pdf_file": "[topic]-part2-results-standard.pdf",
-      "structure_review": "evidence/[topic]-part2-results-standard-structure-review.json"
+      "structure_review": "evidence/[topic]-part2-results-standard-structure-review.json",
+      "page_review_threshold": 10
     },
     {
       "part": 3,
       "edition": "concise",
       "tex_file": "[topic]-part3-methods-concise.tex",
       "pdf_file": "[topic]-part3-methods-concise.pdf",
-      "structure_review": "evidence/[topic]-part3-methods-concise-structure-review.json"
+      "structure_review": "evidence/[topic]-part3-methods-concise-structure-review.json",
+      "page_review_threshold": 6
     },
     {
       "part": 3,
       "edition": "standard",
       "tex_file": "[topic]-part3-methods-standard.tex",
       "pdf_file": "[topic]-part3-methods-standard.pdf",
-      "structure_review": "evidence/[topic]-part3-methods-standard-structure-review.json"
+      "structure_review": "evidence/[topic]-part3-methods-standard-structure-review.json",
+      "page_review_threshold": 10
     },
     {
       "part": 4,
       "edition": "concise",
       "tex_file": "[topic]-part4-boundaries-concise.tex",
       "pdf_file": "[topic]-part4-boundaries-concise.pdf",
-      "structure_review": "evidence/[topic]-part4-boundaries-concise-structure-review.json"
+      "structure_review": "evidence/[topic]-part4-boundaries-concise-structure-review.json",
+      "page_review_threshold": 5
     },
     {
       "part": 4,
       "edition": "standard",
       "tex_file": "[topic]-part4-boundaries-standard.tex",
       "pdf_file": "[topic]-part4-boundaries-standard.pdf",
-      "structure_review": "evidence/[topic]-part4-boundaries-standard-structure-review.json"
+      "structure_review": "evidence/[topic]-part4-boundaries-standard-structure-review.json",
+      "page_review_threshold": 8
     },
     {
       "part": 5,
       "edition": "concise",
       "tex_file": "[topic]-part5-integrated-concise.tex",
       "pdf_file": "[topic]-part5-integrated-concise.pdf",
-      "structure_review": "evidence/[topic]-part5-integrated-concise-structure-review.json"
+      "structure_review": "evidence/[topic]-part5-integrated-concise-structure-review.json",
+      "page_review_threshold": 10
     },
     {
       "part": 5,
       "edition": "standard",
       "tex_file": "[topic]-part5-integrated-standard.tex",
       "pdf_file": "[topic]-part5-integrated-standard.pdf",
-      "structure_review": "evidence/[topic]-part5-integrated-standard-structure-review.json"
+      "structure_review": "evidence/[topic]-part5-integrated-standard-structure-review.json",
+      "page_review_threshold": 16
     }
   ],
   "requested_documents": [
@@ -117,6 +127,6 @@
       "edition": "standard"
     }
   ],
-  "_template_note": "Explicit all-ten catalog. Runtime default is V concise; suite is I\u2013V concise. Use create_project.py.",
-  "skill_version": "1.7.1"
+  "_template_note": "Explicit all-ten catalog. Runtime default is V concise; suite is I–V concise. Reading thresholds are advisory. Set max_pages only for an explicit user limit. Use create_project.py.",
+  "skill_version": "1.8.1"
 }

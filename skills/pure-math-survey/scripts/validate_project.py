@@ -56,7 +56,7 @@ AUDIT_FIELD_RE = re.compile(
 
 def safe_relative(value: str) -> bool:
     """Use one portable POSIX spelling; reject Windows drive/ADS and traversal."""
-    if not value or "\\" in value or ":" in value or "\x00" in value:
+    if not isinstance(value, str) or not value or "\\" in value or ":" in value or "\x00" in value:
         return False
     p = PurePosixPath(value)
     return not p.is_absolute() and all(x not in {"", ".", ".."} for x in value.split("/"))
@@ -288,9 +288,12 @@ def validate(root: Path, template_mode: bool = False) -> tuple[list[str], list[s
     structure_spec.loader.exec_module(structure)
     skill_version = str(manifest.get("skill_version", ""))
     vmatch = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)", skill_version)
+    if 'skill_version' in manifest and not vmatch:
+        return errors + ['skill_version must be an explicit semantic version X.Y.Z'], notes
     new_contract = bool(vmatch and tuple(map(int, vmatch.groups())) >= (1, 5, 0))
     scope_contract = bool(vmatch and tuple(map(int, vmatch.groups())) >= (1, 6, 0))
     selection_contract = bool(vmatch and tuple(map(int, vmatch.groups())) >= (1, 7, 0))
+    body_contract = bool(vmatch and tuple(map(int, vmatch.groups())) >= (1, 8, 0))
     if scope_contract:
         scope_spec = importlib.util.spec_from_file_location("problem_scope_check", Path(__file__).with_name("check_problem_formulation.py"))
         scope_check = importlib.util.module_from_spec(scope_spec)
@@ -304,7 +307,8 @@ def validate(root: Path, template_mode: bool = False) -> tuple[list[str], list[s
         expanded = expanded_by_file[name][0]
         try:
             if new_contract:
-                found, _ = structure.validate_document(root, name, expanded, str(doc.get("structure_review", "")))
+                found, _ = structure.validate_document(root, name, expanded, str(doc.get("structure_review", "")),
+                                                       require_schema="1.1.0" if body_contract else None)
             else:
                 found = structure.shape_issues(structure.inventory(expanded))
             if scope_contract:
@@ -318,6 +322,22 @@ def validate(root: Path, template_mode: bool = False) -> tuple[list[str], list[s
                     else "the default ten part/edition combinations")
         errors.append(f"documents must match {contract} exactly; "
                       f"missing={sorted(requested - seen)}, extra={sorted(seen - requested)}")
+
+    length_contract = bool(vmatch and tuple(map(int, vmatch.groups())) >= (1, 8, 1))
+    if length_contract:
+        length_spec = importlib.util.spec_from_file_location("reading_length_check", Path(__file__).with_name("check_reading_budget.py"))
+        length_check = importlib.util.module_from_spec(length_spec)
+        length_spec.loader.exec_module(length_check)
+        try:
+            length_report = length_check.check(root)
+            for row in length_report['documents']:
+                if row['blocking']:
+                    errors.append(f"{row['pdf']}: PAGE_LIMIT_EXCEEDED: {row['pages']} pages exceeds explicit user max_pages={row['max_pages']}")
+                elif row['review_needed']:
+                    notes.append(f"{row['pdf']}: REVIEW_NEEDED: {row['pages']} pages exceeds advisory threshold {row['page_review_threshold']}; not a release failure. Record the content-first reread without deleting necessary mathematics.")
+                notes.extend(f"{row['pdf']}: {warning}" for warning in row['warnings'])
+        except (OSError, ValueError, TypeError, KeyError, ImportError, RuntimeError) as exc:
+            (notes if template_mode else errors).append(f"reading-length measurement unavailable: {exc}")
 
     source_rows = read_csv(root / "bibliographic-identity.csv", {"source_id"}, errors)
     proof_rows = read_csv(root / "proof-mechanism-registry.csv", {"proof_id"}, errors)

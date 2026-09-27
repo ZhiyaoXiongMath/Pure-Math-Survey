@@ -12,7 +12,7 @@ Read the argument without relying on method names. Can the reader identify what 
 
 ## Imported inputs and explanation targets
 
-A precise cited interface is legitimate: give its objects, assumptions, conclusion, controlling version and theorem locator. Do not state an existence theorem with stronger scope than the source or silently replace an estimate depending on a gradient bound by a uniform one.
+A precise cited interface is legitimate: state its objects, assumptions and usable conclusion in a theorem, proposition or lemma when it is an essential input. Give the controlling version and theorem locator beside it. A separate Source and use paragraph identifies its consumer; it is not a local proof. A proof of a deduction may use a cited theorem without pretending to reprove that theorem. Do not state an existence theorem with stronger scope than the source or silently replace an estimate depending on a gradient bound by a uniform one.
 
 Concise may compress the interior of a difficult construction while retaining its key lemma statement, assumptions, output and later use. Merely mentioning a construction in prose is not this interface. Standard should expose more of the construction, not copy every preliminary proof. If the abstract promises a mechanism, merely citing its name does not discharge that promise.
 
@@ -41,3 +41,7 @@ The introduction exposes the selected main answers; supporting proof inputs need
 Preserve core statements; compress proof interiors. Preserve key lemmas; omit routine calculations. Preserve necessary local context; delete empty transitions. This principle applies to every part, not only Part V. Standard offers a more detailed learning path through the same dependencies. It does not reserve the theorem/lemma architecture for itself or require concise readers to borrow its definitions.
 
 For every selected difficult bridge, decide which assertion is imported, which local deduction is supplied, and which result consumes the output. Keep a supporting lemma visible even when its full proof is omitted. A source-first reread must check the statement independently from its proof sketch.
+
+## Whole-body closure
+
+Read each mathematical section from its definitions through its last use. A proposition states a usable output, not the entire derivation leading to it. Place a necessary lemma before or at its use, not in a detached structural appendix. Concise may shorten the interior of the proof; both editions keep the same selected input/output interfaces. Standard expands those same difficult steps. A proof-only section is legitimate when it proves an already visible statement and contains no independently useful hidden result; record that reading instead of manufacturing a lemma.
