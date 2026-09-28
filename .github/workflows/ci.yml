@@ -1,0 +1,38 @@
+name: Survey validation
+
+on:
+  push:
+    branches: [main, 'release/**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10', '3.12']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install TeX and PDF tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended lmodern poppler-utils
+      - name: Run behavior tests, including real symlink rejection
+        run: python -m unittest discover -s tests -v
+      - name: Validate installed resources and create archive
+        run: |
+          python skills/pure-math-survey/scripts/validate_assets.py --json
+          python skills/pure-math-survey/scripts/package_release.py --output "$RUNNER_TEMP/pure-math-survey-2.0.2.zip"
+      - name: Verify clean isolated installation
+        run: python tools/verify_release.py "$RUNNER_TEMP/pure-math-survey-2.0.2.zip" --no-build --report "$RUNNER_TEMP/clean-install.json"

@@ -175,6 +175,11 @@ def validate_selection(root:Path,manifest:dict,expanded:dict,stage='release'):
  return errors,notes
 
 def main()->int:
+ import sys
+ sys.path.insert(0, str(Path(__file__).resolve().parent))
+ from survey_core.adapters import dispatch
+ native = dispatch('check_survey_selection.py', sys.argv[1:])
+ if native is not None: return native
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('project',type=Path);p.add_argument('--stage',choices=['plan','release'],default='release');a=p.parse_args()
  from validate_project import expand_tex
  try:

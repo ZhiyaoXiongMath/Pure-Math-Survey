@@ -508,6 +508,11 @@ def validate(root: Path, template_mode: bool = False) -> tuple[list[str], list[s
 
 
 def main() -> int:
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from survey_core.adapters import dispatch
+    native = dispatch('validate_project.py', sys.argv[1:])
+    if native is not None: return native
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("project", type=Path)
     parser.add_argument("--template-mode", action="store_true", help="Allow template placeholders; never a publication-ready verdict")

@@ -38,6 +38,8 @@ def parse_selection(value: str) -> list[tuple[int, str]]:
 
 
 def main() -> int:
+    import sys
+    print('Legacy v1 project creator. For knowledge-only v2 use survey.py init.', file=sys.stderr)
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--topic', required=True)

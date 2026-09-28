@@ -316,6 +316,11 @@ def public_inventory(inv: dict) -> dict:
 
 
 def main()->int:
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from survey_core.adapters import dispatch
+    native = dispatch('check_mathematical_structure.py', sys.argv[1:])
+    if native is not None: return native
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('project',type=Path)
     parser.add_argument('--tex',required=True)

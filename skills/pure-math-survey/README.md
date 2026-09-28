@@ -1,35 +1,42 @@
-# Pure Math Survey 1.8.1
+# Pure Math Survey 2.0.2
 
-Develop source-grounded English mathematical surveys with five selectable Parts and concise/standard editions. The default single-topic document is Part V concise.
+Knowledge first: scope → primary-source reading → readable nodes/relations/evidence → coverage/readiness → immutable snapshot → output plan → writing → actual checks/build/page inspection → delivery.
 
-## Changes
+**The core CLI uses only Python's standard library (Python 3.10+).** This is a file-based skill and deterministic tooling, not an autonomous theorem prover or an unattended survey-writing service. An agent/author performs source reading and mathematical writing; the CLI checks contracts, dependencies, fixed bytes and declared evidence. No server, vector database, multi-agent scheduler or Studio bridge.
 
-Reading-length guidance is non-blocking: a default overrun produces `REVIEW_NEEDED`, not a failed command. An explicit user `max_pages` remains a strict limit. Project validation applies the same distinction and checks that current PDFs are readable. Missing resources, corrupt PDFs and malformed input produce actionable errors rather than an empty success or traceback.
+## 2.0.2
 
-Body review covers author-written numbered and starred sections. A separately placed proof is supported through explicit forward and backward locators; printed proof-sketch labels must agree with the review. Important hypotheses, criteria, conclusion formulas, principal-answer coverage, natural variations, frontier discovery and the common concise/standard core remain intact. All ten templates use the same reading-length semantics.
+Generated authoring materials now undergo exact snapshot/member checks before structure validation, building and release. Explicit reprepare restores disposable copies and keeps manuscript/outline edits. UTF-8 scope migration and isolated legacy entry points work on Windows and Python 3.10. Data schema remains 2.0.0.
 
-Text files use explicit UTF-8; bibliography identifiers permit natural line breaks. Build reports retain located non-blocking warnings separately from failures. Archive creation uses private temporary files and preserves unrelated files.
+## 2.0.1 integration
 
-The optional examples are the dHYM v6 article, the compact surface article, and the elementary quadratic/gradient examples. Their mathematical files and dated scope are retained; they are not current source authorities or automatic quality certificates.
+Body-aware canonical checks, seven explicit whole-manuscript reading checks, real proof/principal locations, immutable build/render history and explicit B-format v2 imports are documented in [integration-2.0.1](references/integration-2.0.1.md). Runtime 2.0.2 preserves data schema 2.0.0 and old snapshot identities. Historical accepted records never automatically satisfy new review requirements.
 
-## Install and use
+## Install and run
 
-Extract the ZIP. Place its `pure-math-survey` directory in the skills directory supported by your agent, then select `pure-math-survey` in that agent. The package does not install itself. Read [SKILL.md](SKILL.md) for the workflow. When replacing an existing installation, replace the directory rather than overlaying files, so removed resources cannot survive the update. Keep personal projects outside that directory.
-
-From the extracted directory:
+Extract `pure-math-survey-2.0.2.zip` and copy its single `pure-math-survey/` folder to the skill directory used by your host application. Or run its scripts directly without installing any pip package:
 
 ```sh
-python scripts/validate_assets.py
-python scripts/create_project.py --output /absolute/new/project --topic my-topic --documents 5:concise
-python scripts/check_problem_formulation.py /absolute/new/project --stage plan
-python scripts/check_survey_selection.py /absolute/new/project --stage plan
-python scripts/check_mathematical_structure.py /absolute/new/project --tex my-topic-part5-integrated-concise.tex --inventory
-python scripts/check_reading_budget.py /absolute/new/project
-python scripts/validate_project.py /absolute/new/project
+python pure-math-survey/scripts/survey.py --version --json
+python pure-math-survey/scripts/validate_assets.py --json
+python pure-math-survey/scripts/survey.py init --output my-topic --topic my-topic --scope my-scope.md --json
+python pure-math-survey/scripts/survey.py kb validate my-topic --json
 ```
 
-A new scaffold is deliberately pending. Research, replacement of insertion text, substantive reading, compilation and page inspection are necessary before delivery; project validation must not approve the untouched scaffold. Select any nonempty combination such as `1:concise,3:standard`; `suite` selects I--V concise, and `all` explicitly selects all ten.
+Write a real mathematical scope in my-scope.md first. Initialization is knowledge-only and creates no outputs. Native projects use `project.json` with schema 2.0.0. Build requires pdfLaTeX, BibTeX and the packages loaded by math-review.sty; actual page counting/rendering uses Poppler pdfinfo/pdftoppm. `bibtex.original`/`bibtex8` are recorded fallbacks when present. See references/layout-and-build.md for dependencies. No network access is required by the deterministic core; source discovery is performed through the agent's available tools and documented honestly.
 
-Python 3.10+ is required. Builds need pdfLaTeX and the packages in `assets/templates/math-review.sty`. STIX2 is preferred, with a reported installed-font fallback. Reading-length diagnostics and current-project PDF validation use PyMuPDF; pixel comparison also uses PyMuPDF and Pillow. Font files and restricted source papers are not supplied.
+## Three profiles, one knowledge authority
 
-Use [layout and build](references/layout-and-build.md) for article builds, [templates and examples](references/template-maintenance.md) for supplied-material builds, and [validation](references/validation.md) for reading evidence and limitations. `scripts/package_release.py` creates and reopens a checked skill archive without installing it or changing the source tree.
+`minimal` gives exact core answers with essential mechanism/boundary; `thematic` organizes related results and their supported relations; `lecture` develops declared prerequisite steps and calculations. Default requested output is **minimal + integrated**. A knowledge/update-only request has no implicit manuscript. PDF is not a fourth profile. Part I–IV are overlapping foundations/results/methods/boundaries views, not required separate volumes. Only an explicit user max_pages is a length gate.
+
+Edit canonical mathematics only in knowledge nodes. Freeze with `kb freeze`. Create an explicit plan with `output plan ... --snapshot KB-...`. Refine audience, selections and proof steps; review scoped readiness before formal preparation. `output prepare` emits exact snapshot fragments and an incomplete writing scaffold; it does not invent a finished mathematical text. `--draft` permits unverified internal preparation but prevents formal release. Existing authored main.tex is preserved on reprepare; review it before adopting a changed snapshot.
+
+`kb diff` reports changed/added/removed knowledge and affected consumers. Old snapshots and outputs remain rebuildable. Checks compare actual files, not cached PASS labels. Rendering produces images, not a completed visual review. Read every final page before accepting visual evidence.
+
+## Compatibility and maintenance
+
+`create_project.py` keeps v1 creation behavior. Legacy checkers dispatch native v2 projects explicitly; both root manifests together fail. `survey.py migrate --from OLD --output NEW` preserves source bytes and imports unassessed candidates; old audits do not become new reviews. Read references/migration.md.
+
+The public repository carries runtime source, behavioral tests and clean-install verification. A complete new-topic example and current validation summary accompany the release; earlier development baselines remain historical evidence. The installation ZIP contains only supported runtime resources, including all survey_core modules, profiles and rebuild tools. It deliberately excludes repository demonstrations, original source archives and Studio reference code. See SKILL.md for the operative workflow and references/contracts.md for schemas/CLI.
+
+No independent review or general mathematical correctness follows from a software test. Acceptance evidence records the actual scoped author rereads and limitations; source hashes, builds and PDF inspections are separate evidence.

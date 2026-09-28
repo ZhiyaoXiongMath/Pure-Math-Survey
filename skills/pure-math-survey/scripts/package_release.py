@@ -22,7 +22,7 @@ SCRIPT_NAMES = {
     "bibliography.py", "build_checks.py", "check_mathematical_structure.py",
     "check_problem_formulation.py", "check_reading_budget.py", "check_survey_selection.py",
     "compare_pdf.py", "create_project.py", "package_release.py", "validate_assets.py",
-    "validate_project.py",
+    "validate_project.py", "survey.py",
 }
 TEMPLATE_STEMS = {
     1: "foundations", 2: "results", 3: "methods", 4: "boundaries", 5: "integrated",
@@ -106,12 +106,21 @@ REQUIRED_FILES = {"SKILL.md", "README.md", "agents/openai.yaml"} | {
 } | {"references/" + name for name in REFERENCE_NAMES} | {"assets/registries/" + name for name in REGISTRY_NAMES}
 
 
+# Native 2.0.0 explicit nested-resource contract.
+V2_FILES = {'references/legacy/core-problems.md', 'assets/v2/empty-project/knowledge/coverage.json', 'assets/v2/empty-project/knowledge/discovery.md', 'scripts/survey_core/knowledge.py', 'scripts/survey_core/models.py', 'references/legacy/editions.md', 'assets/templates/profile-minimal.tex', 'scripts/survey_core/__init__.py', 'references/legacy/research-and-evidence.md', 'references/legacy/problem-formulation.md', 'references/legacy/records-and-delivery.md', 'scripts/survey_core/reviews.py', 'references/legacy/architecture.md', 'scripts/survey_core/adapters.py', 'scripts/survey_core/plans.py', 'scripts/survey_core/readiness.py', 'scripts/survey_core/migration.py', 'assets/v2/empty-project/knowledge/overview.md', 'scripts/survey_core/cli.py', 'references/legacy/template-maintenance.md', 'scripts/survey_core/build.py', 'references/legacy/validation.md', 'references/legacy/part-v-benchmark.md', 'scripts/survey_core/exports.py', 'scripts/survey_core/dependencies.py', 'scripts/survey_core/release.py', 'assets/v2/empty-project/project.json', 'references/legacy/writing-style.md', 'references/legacy/layout-and-build.md', 'references/legacy/exposition-examples.md', 'references/legacy/proofs-and-boundaries.md', 'assets/templates/profile-lecture.tex', 'references/legacy/introduction.md', 'assets/v2/empty-project/knowledge/conventions.tex', 'scripts/survey_core/common.py', 'assets/rebuild/rebuild.py', 'scripts/survey_core/snapshots.py', 'assets/v2/empty-project/scope.md', 'assets/templates/profile-thematic.tex', 'references/legacy/length-and-selection.md'}
+V2_FILES |= {'references/contracts.md', 'references/migration.md'}
+V2_FILES |= {'scripts/survey_core/tex.py','scripts/survey_core/history.py','scripts/survey_core/compatibility.py','references/integration-2.0.1.md'}
+REQUIRED_FILES |= V2_FILES
+
+
 def runtime_member(name: str) -> bool:
     """Recognize supported resources; unknown files need an explicit decision.
 
     This is a path/content-role boundary, not a history or mathematical grader.
     Human review must still inspect current prose and the actual member list.
     """
+    if name in V2_FILES:
+        return True
     parts = PurePosixPath(name).parts
     if name in ROOT_FILES or name in EXAMPLE_FILES or name == "agents/openai.yaml":
         return True

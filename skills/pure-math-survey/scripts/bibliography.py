@@ -89,6 +89,11 @@ def generate(project: Path, *, require_review: bool = True) -> dict[str, str]:
     return result
 
 def main() -> int:
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from survey_core.adapters import dispatch
+    native = dispatch('bibliography.py', sys.argv[1:])
+    if native is not None: return native
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('project',type=Path)
     p.add_argument('--check',action='store_true',help='Validate fingerprints without writing companions')
