@@ -8,7 +8,7 @@ dHYM solvability and stability, or its [TeX source](dhym-survey-revised.tex).
 The TeX, PDF, original style, BibTeX database and supplied bibliography output
 are preserved byte for byte. [provenance.json](provenance.json) records their
 identities. The separate
-[article download](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/download/v2.0.3/dHYM_survey_balanced_source.zip)
+[article example directory](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/tree/main/examples/dhym-balanced)
 contains exactly a standalone TeX and the unchanged PDF. The standalone export
 includes the style and bibliography in its TeX without changing the mathematical
 text. Project manifests, editorial records and compilation logs are excluded.
@@ -52,5 +52,5 @@ both bibliography files. These are reproduction/style checks on copies.
 The article's mathematical scope, literature date, preprint qualifications and
 review limitations remain attached to it. Inclusion does not claim a new
 independent mathematical review or complete current-frontier verification.
-The separate Schur-complement release example demonstrates the
+The separate [Schur-complement example](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/tree/main/examples/schur-complement) demonstrates the
 knowledge/snapshot/output workflow.

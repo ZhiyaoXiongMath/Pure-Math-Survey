@@ -6,9 +6,9 @@ Knowledge first: scope → primary-source reading → readable nodes/relations/e
 
 ## Writing and workflow examples
 
-The [balanced dHYM manuscript](assets/reference-samples/dhym-balanced/README.md), supplied by the user after multiple rounds of polishing, is the principal writing and layout reference. Its TeX, PDF, style and bibliography are preserved byte for byte. Its six pages and section/result counts are not output requirements. The separate [Schur-complement example](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/tag/v2.0.3) remains the knowledge-to-output workflow demonstration. Data schema remains 2.0.0.
+The [balanced dHYM manuscript](assets/reference-samples/dhym-balanced/README.md), supplied by the user after multiple rounds of polishing, is the principal writing and layout reference. Its TeX, PDF, style and bibliography are preserved byte for byte. Its six pages and section/result counts are not output requirements. The separate [Schur-complement example](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/tree/main/examples/schur-complement) demonstrates the knowledge-to-output workflow. Data schema remains 2.0.0.
 
-The [article download](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/download/v2.0.3/dHYM_survey_balanced_source.zip) contains only a standalone TeX and the original PDF. The TeX includes the required style and bibliography; the mathematical text is unchanged.
+The [article example directory](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/tree/main/examples/dhym-balanced) contains only a standalone TeX and the original PDF. The TeX includes the required style and bibliography; the mathematical text is unchanged. Examples are stored in the repository; Release attachments contain the installation archive and checksums.
 
 ## Install and run
 
