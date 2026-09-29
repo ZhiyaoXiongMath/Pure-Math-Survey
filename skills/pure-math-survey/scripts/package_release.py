@@ -18,6 +18,7 @@ IGNORED_DIRS = {".git", "__pycache__", ".pytest_cache", ".DS_Store"}
 GENERATED_SUFFIXES = {".pyc", ".aux", ".log", ".toc", ".out", ".fls", ".fdb_latexmk", ".synctex.gz"}
 CHECKSUM_NAME = "artifact-checksums.txt"
 REQUIRED_FILES = {
+    'LICENSE',
     'README.md',
     'SKILL.md',
     'agents/openai.yaml',

@@ -6,4 +6,6 @@ The repeatedly polished balanced dHYM manuscript is the principal writing and la
 
 The repository README offers Simplified Chinese and English versions.
 
+The skill instructions, scripts, templates and documentation use the MIT License. Mathematical example materials are excluded as specified in the README. The installation archive includes the license and its scope statement.
+
 The executable version is 2.0.3; the current data contract is schema 2.0.0. Source reading, semantic review, compilation and visual inspection remain distinct checks.

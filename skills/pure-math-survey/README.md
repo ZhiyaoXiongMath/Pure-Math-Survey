@@ -36,3 +36,9 @@ Edit canonical mathematics only in knowledge nodes. Freeze with `kb freeze`. Cre
 The installation ZIP contains supported runtime resources, including survey_core modules, profiles, writing references and rebuild tools. Repository tests, development logs and the supplied manuscript's editorial records are excluded. See SKILL.md for the workflow and references/contracts.md for schemas and commands. Only the current project and review contracts are supported.
 
 No independent review or general mathematical correctness follows from a software test. Acceptance evidence records the actual scoped author rereads and limitations; source hashes, builds and PDF inspections are separate evidence.
+
+## License
+
+The skill instructions, scripts, templates and documentation are licensed under the [MIT License](LICENSE), with `Copyright (c) 2026 ZhiyaoXiongMath`.
+
+The bundled mathematical reference materials under `assets/reference-samples/dhym-balanced/` are excluded from this MIT grant, including their TeX, PDF, bibliography and supplied style. The separate repository `examples/` directory is likewise excluded. No additional reuse permission is granted for these materials, and existing third-party rights remain unchanged.
