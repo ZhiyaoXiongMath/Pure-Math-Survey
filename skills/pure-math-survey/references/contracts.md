@@ -1,6 +1,6 @@
 # Native file fields and reproducible operations
 
-Data `schema_version` strings remain exactly `2.0.0`; the software runtime is `2.0.3`. See [output review](output-review.md) for whole-manuscript checks, actual body locations and build history. JSON has no duplicate keys or nonfinite numbers. Stable IDs use letters/digits/dot/underscore/hyphen, with N- and S- prefixes for nodes and sources; each filename equals its ID. All project-relative paths are POSIX, contain no traversal/absolute prefix and cross no symbolic links.
+Data `schema_version` strings remain exactly `2.0.0`; the software runtime is `2.0.4`. See [output review](output-review.md) for whole-manuscript checks, actual body locations and build history. JSON has no duplicate keys or nonfinite numbers. Stable IDs use letters/digits/dot/underscore/hyphen, with N- and S- prefixes for nodes and sources; each filename equals its ID. All project-relative paths are POSIX, contain no traversal/absolute prefix and cross no symbolic links.
 
 ## Project and knowledge
 

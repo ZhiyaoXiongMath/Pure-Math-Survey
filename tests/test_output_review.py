@@ -160,7 +160,7 @@ class OutputReview(unittest.TestCase):
         new=freeze_snapshot(self.root)['artifacts']['snapshot_id'];r=diff_snapshots(self.root,old,new)
         locations=r['artifacts']['affected_outputs'][0]['authored_locations'];self.assertIn('manuscript/sections/answer.tex',{x['path'] for x in locations})
     def test_U29_schema_stable_runtime_patch_version(self):
-        self.assertEqual(VERSION,'2.0.0');self.assertEqual(SOFTWARE_VERSION,'2.0.3')
+        self.assertEqual(VERSION,'2.0.0');self.assertEqual(SOFTWARE_VERSION,'2.0.4')
         sid=load_plan(self.out/'plan.json')['snapshot_id'];self.assertEqual(verify_snapshot(self.root,sid)['status'],'VERIFIED')
     def test_U30_python_310_grammar(self):
         for p in (SKILL/'scripts').rglob('*.py'):ast.parse(p.read_text(encoding='utf-8'),filename=str(p),feature_version=(3,10))

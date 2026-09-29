@@ -20,6 +20,7 @@ CHECKSUM_NAME = "artifact-checksums.txt"
 REQUIRED_FILES = {
     'LICENSE',
     'README.md',
+    'README.zh-CN.md',
     'SKILL.md',
     'agents/openai.yaml',
     'assets/exposition-examples/README.md',

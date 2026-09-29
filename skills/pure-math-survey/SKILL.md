@@ -5,7 +5,7 @@ description: Build and maintain source-grounded mathematical knowledge, then wri
 
 # Pure Math Survey
 
-**Software version: 2.0.3; data schema: 2.0.0.** Local files, one writer, Python 3.10+. Mathematics and manuscripts are English; discussion follows the user's language.
+**Software version: 2.0.4; data schema: 2.0.0.** Local files, one writer, Python 3.10+. Mathematics and manuscripts are English; discussion follows the user's language.
 
 ## Identify the task and project
 

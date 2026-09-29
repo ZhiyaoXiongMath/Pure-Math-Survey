@@ -12,7 +12,7 @@ from typing import Any, Iterator
 
 # VERSION is the stable on-disk contract, not the executable release.
 VERSION = '2.0.0'
-SOFTWARE_VERSION = '2.0.3'
+SOFTWARE_VERSION = '2.0.4'
 SKILL_ROOT = Path(__file__).resolve().parents[2]
 FONT_SUFFIXES = {'.ttf', '.otf', '.ttc', '.woff', '.woff2', '.pfb', '.pfa'}
 

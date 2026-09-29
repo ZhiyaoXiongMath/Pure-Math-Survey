@@ -202,7 +202,7 @@ class Contracts(unittest.TestCase):
         for name,record in provenance['files'].items():
             self.assertEqual(hashlib.sha256((sample/name).read_bytes()).hexdigest(),record['sha256'])
         entry=dest/'pure-math-survey/scripts/survey.py'
-        p=subprocess.run([sys.executable,'-I',str(entry),'--json','--version'],capture_output=True,text=True,cwd=self.base);self.assertEqual(p.returncode,0,p.stderr);self.assertEqual(json.loads(p.stdout)['artifacts']['version'],'2.0.3')
+        p=subprocess.run([sys.executable,'-I',str(entry),'--json','--version'],capture_output=True,text=True,cwd=self.base);self.assertEqual(p.returncode,0,p.stderr);self.assertEqual(json.loads(p.stdout)['artifacts']['version'],'2.0.4')
         p=subprocess.run([sys.executable,'-I',str(entry.parent/'validate_assets.py'),'--json'],capture_output=True,text=True,cwd=self.base);self.assertEqual(p.returncode,0,p.stdout+p.stderr);self.assertEqual(json.loads(p.stdout)['profile_preparations_executed'],['minimal','thematic','lecture'])
     def test_T22_actual_current_and_frozen_style_builds(self):
         from build_checks import stage_balanced_sample,compile_one

@@ -2,7 +2,7 @@
 
 **简体中文** | [English](README.en.md)
 
-**版本 2.0.3。** 先建立有原始文献依据的数学知识库，再从固定的知识快照撰写所需的英文综述或讲义。
+**版本 2.0.4。** 先建立有原始文献依据的数学知识库，再从固定的知识快照撰写所需的英文综述或讲义。
 
 知识项目保存明确的问题、定义、结论、证明机制、结果之间的关系、例子、适用边界及对应的文献证据。它可以独立维护，不必生成文章。作者或代理负责数学阅读与写作；工具负责检查文件约定、固定输入、证据关联和实际编译。
 
@@ -16,13 +16,13 @@
 
 ## 安装
 
-从 [v2.0.3 Release](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/tag/v2.0.3) 下载
-[pure-math-survey-2.0.3.zip](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/download/v2.0.3/pure-math-survey-2.0.3.zip)
+从 [v2.0.4 Release](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/tag/v2.0.4) 下载
+[pure-math-survey-2.0.4.zip](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/download/v2.0.4/pure-math-survey-2.0.4.zip)
 及校验文件。解压后，将其中完整的 `pure-math-survey` 文件夹放入宿主应用的 skills 目录。
 也可以直接复制本仓库的 [skills/pure-math-survey](skills/pure-math-survey/) 文件夹。
 
 Release 附件只提供安装包和校验文件；下方示例保存在仓库中，无需单独下载示例即可使用 skill。
-软件版本为 2.0.3，当前数据格式的 schema 编号为 2.0.0；该编号不是旧版软件兼容入口。
+软件版本为 2.0.4，当前数据格式的 schema 编号为 2.0.0；该编号不是旧版软件兼容入口。
 
 ## 使用
 
@@ -55,7 +55,24 @@ Release 附件只提供安装包和校验文件；下方示例保存在仓库中
 
 ### Schur 补：知识库到文章的流程示例
 
-[下载 Schur 补示例](examples/schur-complement/pure-math-survey-2.0.3-schur-example.zip)。它包含九个知识节点、实际的文献阅读记录、固定的知识快照，以及两页 minimal 综述和三页 lecture 讲义，用于演示完整工作流程。记录的审阅方式是作者自查，未声称独立数学审阅；原始文献 PDF 不随示例分发。
+[下载 Schur 补示例](examples/schur-complement/pure-math-survey-2.0.4-schur-example.zip)。它包含九个知识节点、实际的文献阅读记录、固定的知识快照，以及两页 minimal 综述和三页 lecture 讲义，用于演示完整工作流程。记录的审阅方式是作者自查，未声称独立数学审阅；原始文献 PDF 不随示例分发。
+
+### 输入输出示例：Schur 补
+
+**输入：**
+
+```text
+使用 $pure-math-survey，研究有限维实对称分块矩阵在左上块可逆时的严格正定判据。
+先建立知识库并审阅原始来源，再从同一快照分别写 minimal 英文综述和 lecture 英文讲义，
+说明严格不等式的边界，并排除奇异主块的一般推广。
+```
+
+**对应输出：** 仓库中的 Schur 补示例提供 `project/` 知识项目、固定快照、
+`pdf/schur-minimal.pdf`（两页）和 `pdf/schur-lecture.pdf`（三页），以及各自的 TeX 正文和审阅记录。
+这些是该示例已经完成的成果；新主题需要实际阅读、写作与核查，初始化命令只建立项目，不会自动生成文章。
+
+公开示例已移除旧构建历史、临时编译文件和原始命令日志；构建与渲染记录中的机器路径已脱敏，
+数学内容、知识快照、PDF 和页面图片保持不变，并重新绑定了实际页面检查记录。
 
 ## 环境要求与开发
 
@@ -64,8 +81,8 @@ Release 附件只提供安装包和校验文件；下方示例保存在仓库中
 ```sh
 python -m unittest discover -s tests -v
 python skills/pure-math-survey/scripts/validate_assets.py --json
-python skills/pure-math-survey/scripts/package_release.py --output ../pure-math-survey-2.0.3.zip
-python tools/verify_release.py ../pure-math-survey-2.0.3.zip --no-build
+python skills/pure-math-survey/scripts/package_release.py --output ../pure-math-survey-2.0.4.zip
+python tools/verify_release.py ../pure-math-survey-2.0.4.zip --no-build
 ```
 
 测试覆盖快照与材料完整性、范围明确的审阅、TeX 正文检查、历史记录和打包，并包含实际 TeX 编译。测试中人工构造的审阅记录仅用于软件测试。Linux CI 使用 Python 3.10 和 3.12；Windows 若无创建符号链接的权限，会明确跳过对应的一项测试。

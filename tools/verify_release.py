@@ -42,7 +42,7 @@ def main()->int:
             env=os.environ.copy();env.pop('PYTHONPATH',None);env.pop('PYTHONHOME',None)
             skill=dest/'pure-math-survey';entry=skill/'scripts/survey.py'
             v=check([str(exe),'-I',str(entry),'--json','--version'],base,env)
-            if v['artifacts']['version']!='2.0.3':raise AssertionError('Wrong installed version')
+            if v['artifacts']['version']!='2.0.4':raise AssertionError('Wrong installed version')
             code="import importlib,json,pkgutil,sys;sys.path.insert(0,"+repr(str(skill/'scripts'))+");import survey_core;mods={m.name:importlib.import_module('survey_core.'+m.name).__file__ for m in pkgutil.iter_modules(survey_core.__path__)};print(json.dumps({'prefix':sys.prefix,'modules':mods}))"
             loaded=check([str(exe),'-I','-c',code],base,env)
             if not loaded['modules'] or any(not Path(f).is_relative_to(skill) for f in loaded['modules'].values()):raise AssertionError('Imported source-tree module instead of installed one')
