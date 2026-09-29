@@ -2,15 +2,16 @@
 
 The user supplied this manuscript after multiple rounds of deliberate polishing.
 It is the principal writing and layout reference introduced in Survey 2.0.3.
-Its source is not attributed to a particular skill version: bookkeeping fields
-in the supplied archive do not establish the article's generation history.
 
 Read [dhym-survey-revised.pdf](dhym-survey-revised.pdf), a six-page account of
 dHYM solvability and stability, or its [TeX source](dhym-survey-revised.tex).
 The TeX, PDF, original style, BibTeX database and supplied bibliography output
 are preserved byte for byte. [provenance.json](provenance.json) records their
-identities and the hash of the
-[original supplied archive](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/download/v2.0.3/dHYM_survey_balanced_source.zip).
+identities. The separate
+[article download](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/download/v2.0.3/dHYM_survey_balanced_source.zip)
+contains exactly a standalone TeX and the unchanged PDF. The standalone export
+includes the style and bibliography in its TeX without changing the mathematical
+text. Project manifests, editorial records and compilation logs are excluded.
 
 ## What to learn from it
 
@@ -51,10 +52,5 @@ both bibliography files. These are reproduction/style checks on copies.
 The article's mathematical scope, literature date, preprint qualifications and
 review limitations remain attached to it. Inclusion does not claim a new
 independent mathematical review or complete current-frontier verification.
-The original archive retains its editorial records; they are not new v2
-knowledge approvals. The separate Schur-complement release example demonstrates
-the native knowledge/snapshot/output workflow. A writing reference need not
-be retroactively presented as a product of that workflow.
-
-The former compact and v6 dHYM examples are retired from the current installation
-and remain available in Git history and the v2.0.2 release.
+The separate Schur-complement release example demonstrates the
+knowledge/snapshot/output workflow.

@@ -4,17 +4,11 @@ Knowledge first: scope → primary-source reading → readable nodes/relations/e
 
 **The core CLI uses only Python's standard library (Python 3.10+).** This is a file-based skill and deterministic tooling, not an autonomous theorem prover or an unattended survey-writing service. An agent/author performs source reading and mathematical writing; the CLI checks contracts, dependencies, fixed bytes and declared evidence. No server, vector database, multi-agent scheduler or Studio bridge.
 
-## 2.0.3
+## Writing and workflow examples
 
-The [balanced dHYM manuscript](assets/reference-samples/dhym-balanced/README.md), supplied by the user after multiple rounds of polishing, replaces the former compact/v6 samples as the principal writing and layout reference. Its TeX, PDF, style and bibliography are preserved byte for byte. Its six pages and section/result counts are not output requirements. The separate [Schur-complement example](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/tag/v2.0.2) remains the knowledge-to-output workflow demonstration. Data schema remains 2.0.0.
+The [balanced dHYM manuscript](assets/reference-samples/dhym-balanced/README.md), supplied by the user after multiple rounds of polishing, is the principal writing and layout reference. Its TeX, PDF, style and bibliography are preserved byte for byte. Its six pages and section/result counts are not output requirements. The separate [Schur-complement example](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/tag/v2.0.3) remains the knowledge-to-output workflow demonstration. Data schema remains 2.0.0.
 
-## 2.0.2
-
-Generated authoring materials now undergo exact snapshot/member checks before structure validation, building and release. Explicit reprepare restores disposable copies and keeps manuscript/outline edits. UTF-8 scope migration and isolated legacy entry points work on Windows and Python 3.10. Data schema remains 2.0.0.
-
-## 2.0.1 integration
-
-Body-aware canonical checks, seven explicit whole-manuscript reading checks, real proof/principal locations, immutable build/render history and explicit B-format v2 imports are documented in [integration-2.0.1](references/integration-2.0.1.md). Runtime 2.0.3 preserves data schema 2.0.0 and old snapshot identities. Historical accepted records never automatically satisfy new review requirements.
+The [article download](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/download/v2.0.3/dHYM_survey_balanced_source.zip) contains only a standalone TeX and the original PDF. The TeX includes the required style and bibliography; the mathematical text is unchanged.
 
 ## Install and run
 
@@ -37,10 +31,8 @@ Edit canonical mathematics only in knowledge nodes. Freeze with `kb freeze`. Cre
 
 `kb diff` reports changed/added/removed knowledge and affected consumers. Old snapshots and outputs remain rebuildable. Checks compare actual files, not cached PASS labels. Rendering produces images, not a completed visual review. Read every final page before accepting visual evidence.
 
-## Compatibility and maintenance
+## Package contents
 
-`create_project.py` keeps v1 creation behavior. Legacy checkers dispatch native v2 projects explicitly; both root manifests together fail. `survey.py migrate --from OLD --output NEW` preserves source bytes and imports unassessed candidates; old audits do not become new reviews. Read references/migration.md.
-
-The public repository carries runtime source, behavioral tests and clean-install verification. A complete new-topic example and current validation summary accompany the release; earlier development baselines remain historical evidence. The installation ZIP contains only supported runtime resources, including all survey_core modules, profiles and rebuild tools. It deliberately excludes repository demonstrations, original source archives and Studio reference code. See SKILL.md for the operative workflow and references/contracts.md for schemas/CLI.
+The installation ZIP contains supported runtime resources, including survey_core modules, profiles, writing references and rebuild tools. Repository tests, development logs and the supplied manuscript's editorial records are excluded. See SKILL.md for the workflow and references/contracts.md for schemas and commands. Only the current project and review contracts are supported.
 
 No independent review or general mathematical correctness follows from a software test. Acceptance evidence records the actual scoped author rereads and limitations; source hashes, builds and PDF inspections are separate evidence.

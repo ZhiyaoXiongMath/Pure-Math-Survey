@@ -2,14 +2,9 @@
   "reference_id": "dhym-balanced",
   "role": "principal-writing-and-layout-reference",
   "origin": "User-supplied manuscript after multiple rounds of deliberate polishing; supplied by the user for this release.",
-  "generation_provenance": "No generation tool/version is inferred from the source archive metadata.",
   "frozen": true,
   "introduced_in": "2.0.3",
   "pages": 6,
-  "source_archive": {
-    "release_asset": "dHYM_survey_balanced_source.zip",
-    "sha256": "bc1774d3640124341a6bfd24fd4991588db7331ce6cc908ffc7025d41a99e776"
-  },
   "review_scope": "Writing, layout and reproduction reference. Original mathematical scope, source dates and qualifications are preserved; no new independent mathematical review or complete frontier search is claimed.",
   "files": {
     "dhym-survey-revised.tex": {

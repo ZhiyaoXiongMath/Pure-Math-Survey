@@ -11,5 +11,3 @@ The supported profiles are `minimal`, `thematic`, `lecture`. PDF is a format. De
 Views are integrated/foundations/results/methods/boundaries, independent of depth. Four facets/Parts I–IV do not request four files. `output plan` creates a draft selection for editorial refinement; `output prepare` produces profile-specific writing materials and an incomplete scaffold, not certified mathematical prose. Readability and mathematical adequacy require actual agent/author writing and review.
 
 Only an explicitly requested same-main-line comparison sets `comparison_group`. Then snapshot, questions, principal answers and decisive boundaries must agree. Different topical subsets need not have the same principal answers. Any shared node always uses identical canonical bytes. Numbering and explanatory order can differ.
-
-Legacy mapping: V concise → minimal/integrated; V standard → thematic/integrated; I–IV → thematic with corresponding view and preserved old depth obligations. Lecture is a new explicit plan, not a silent reinterpretation. [Old edition contract](legacy/editions.md).

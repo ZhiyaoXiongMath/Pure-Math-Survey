@@ -3,7 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 import re
-from .common import VERSION, decode, read_json, require, relative, identifier, valid_date
+import json
+from .common import VERSION, decode, read_json, require, relative, identifier, valid_date, safe
 
 FACETS = {'foundations', 'results', 'methods', 'boundaries'}
 KINDS = {'question', 'definition', 'result', 'relation', 'mechanism', 'example', 'application', 'frontier'}
@@ -32,12 +33,21 @@ class Node:
     def id(self) -> str:
         return self.meta['id']
 
+def node_bytes(meta:dict,body:str)->bytes:
+    return ('---\n'+json.dumps(meta,ensure_ascii=False,indent=2)+'\n---\n\n'+body.rstrip()+'\n').encode('utf-8')
+
+
 def load_project(root: Path) -> dict:
-    require(not (root / 'project-manifest.json').exists(), 'MANIFEST_CONFLICT', 'Native v2 and legacy manifest cannot share a root', 'project-manifest.json')
-    from .compatibility import identify_contract
-    contract=identify_contract(root)['contract']
-    require(contract not in {'v2-b','mixed-review-contracts'},'FORMAT_MIGRATION_REQUIRED',
-            'Foreign 2.0.0 review contract; use import-v2 --from SOURCE --output NEW, not an in-place status conversion', 'project.json')
+    require(not (root / 'project-manifest.json').exists(), 'SCHEMA_UNSUPPORTED',
+            'Only the current project.json contract is supported', 'project-manifest.json')
+    candidates = list((root / 'evidence/reviews').glob('*.json'))
+    candidates += list((root / 'outputs').glob('*/evidence/reviews/*.json'))
+    candidates += list((root / 'outputs').glob('*/evidence/*review*.json'))
+    for path in candidates:
+        review = read_json(safe(root, path.relative_to(root).as_posix(), True))
+        if isinstance(review, dict) and 'review_id' in review:
+            require(isinstance(review.get('scope'), dict), 'REVIEW_FORMAT_UNSUPPORTED',
+                    'Reviews must use the current scoped evidence contract', str(path.relative_to(root)))
     obj = read_json(root / 'project.json')
     fields(obj, {'schema_version': str, 'project_id': str, 'title': str, 'language': str, 'scope_file': str, 'knowledge_root': str}, 'project.json')
     require(identifier(obj['project_id']), 'CONTRACT_INVALID', 'Invalid stable project ID', 'project.json')

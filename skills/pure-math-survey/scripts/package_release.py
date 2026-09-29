@@ -17,124 +17,76 @@ FONT_SUFFIXES = {".otf", ".ttf", ".ttc", ".woff", ".woff2", ".pfa", ".pfb"}
 IGNORED_DIRS = {".git", "__pycache__", ".pytest_cache", ".DS_Store"}
 GENERATED_SUFFIXES = {".pyc", ".aux", ".log", ".toc", ".out", ".fls", ".fdb_latexmk", ".synctex.gz"}
 CHECKSUM_NAME = "artifact-checksums.txt"
-ROOT_FILES = {"SKILL.md", "README.md", CHECKSUM_NAME}
-SCRIPT_NAMES = {
-    "bibliography.py", "build_checks.py", "check_mathematical_structure.py",
-    "check_problem_formulation.py", "check_reading_budget.py", "check_survey_selection.py",
-    "compare_pdf.py", "create_project.py", "package_release.py", "validate_assets.py",
-    "validate_project.py", "survey.py",
+REQUIRED_FILES = {
+    'README.md',
+    'SKILL.md',
+    'agents/openai.yaml',
+    'assets/exposition-examples/README.md',
+    'assets/exposition-examples/exposition-smoke.tex',
+    'assets/exposition-examples/gradient-body.tex',
+    'assets/exposition-examples/quadratic-body.tex',
+    'assets/rebuild/rebuild.py',
+    'assets/reference-samples/dhym-balanced/README.md',
+    'assets/reference-samples/dhym-balanced/dhym-survey-revised.bbl',
+    'assets/reference-samples/dhym-balanced/dhym-survey-revised.pdf',
+    'assets/reference-samples/dhym-balanced/dhym-survey-revised.tex',
+    'assets/reference-samples/dhym-balanced/math-review.sty',
+    'assets/reference-samples/dhym-balanced/provenance.json',
+    'assets/reference-samples/dhym-balanced/references.bib',
+    'assets/templates/math-review.sty',
+    'assets/templates/profile-lecture.tex',
+    'assets/templates/profile-minimal.tex',
+    'assets/templates/profile-thematic.tex',
+    'assets/v2/empty-project/knowledge/conventions.tex',
+    'assets/v2/empty-project/knowledge/coverage.json',
+    'assets/v2/empty-project/knowledge/discovery.md',
+    'assets/v2/empty-project/knowledge/overview.md',
+    'assets/v2/empty-project/project.json',
+    'assets/v2/empty-project/scope.md',
+    'references/architecture.md',
+    'references/contracts.md',
+    'references/core-problems.md',
+    'references/editions.md',
+    'references/exposition-examples.md',
+    'references/introduction.md',
+    'references/layout-and-build.md',
+    'references/length-and-selection.md',
+    'references/output-review.md',
+    'references/part-v-benchmark.md',
+    'references/problem-formulation.md',
+    'references/proofs-and-boundaries.md',
+    'references/records-and-delivery.md',
+    'references/research-and-evidence.md',
+    'references/template-maintenance.md',
+    'references/validation.md',
+    'references/writing-style.md',
+    'scripts/build_checks.py',
+    'scripts/compare_pdf.py',
+    'scripts/package_release.py',
+    'scripts/survey.py',
+    'scripts/survey_core/__init__.py',
+    'scripts/survey_core/build.py',
+    'scripts/survey_core/cli.py',
+    'scripts/survey_core/common.py',
+    'scripts/survey_core/dependencies.py',
+    'scripts/survey_core/exports.py',
+    'scripts/survey_core/history.py',
+    'scripts/survey_core/knowledge.py',
+    'scripts/survey_core/models.py',
+    'scripts/survey_core/plans.py',
+    'scripts/survey_core/readiness.py',
+    'scripts/survey_core/release.py',
+    'scripts/survey_core/reviews.py',
+    'scripts/survey_core/snapshots.py',
+    'scripts/survey_core/structure.py',
+    'scripts/survey_core/tex.py',
+    'scripts/validate_assets.py',
 }
-TEMPLATE_STEMS = {
-    1: "foundations", 2: "results", 3: "methods", 4: "boundaries", 5: "integrated",
-}
-TEMPLATE_NAMES = {f"part{p}-{s}-{e}.tex" for p, s in TEMPLATE_STEMS.items()
-                  for e in ("concise", "standard")} | {"math-review.sty"}
-EXAMPLE_FILES = {
-    "assets/exposition-examples/README.md",
-    "assets/exposition-examples/exposition-smoke.tex",
-    "assets/exposition-examples/gradient-body.tex",
-    "assets/exposition-examples/quadratic-body.tex",
-    "assets/reference-samples/dhym-balanced/README.md",
-    "assets/reference-samples/dhym-balanced/dhym-survey-revised.tex",
-    "assets/reference-samples/dhym-balanced/dhym-survey-revised.pdf",
-    "assets/reference-samples/dhym-balanced/dhym-survey-revised.bbl",
-    "assets/reference-samples/dhym-balanced/references.bib",
-    "assets/reference-samples/dhym-balanced/math-review.sty",
-    "assets/reference-samples/dhym-balanced/provenance.json",
-}
-REFERENCE_NAMES = {
-    'architecture.md',
-    'core-problems.md',
-    'editions.md',
-    'exposition-examples.md',
-    'introduction.md',
-    'layout-and-build.md',
-    'length-and-selection.md',
-    'part-v-benchmark.md',
-    'problem-formulation.md',
-    'proofs-and-boundaries.md',
-    'records-and-delivery.md',
-    'research-and-evidence.md',
-    'template-maintenance.md',
-    'validation.md',
-    'writing-style.md',
-}
-REGISTRY_NAMES = {
-    'bibliographic-identity-template.csv',
-    'canonical-crosswalk-template.csv',
-    'canonical-theorem-registry-template.csv',
-    'canonical-theorem-registry-template.jsonl',
-    'concept-registry-template.jsonl',
-    'convention-registry-template.csv',
-    'coordinate-vocabulary-template.csv',
-    'corpus-regression-template.csv',
-    'estimate-and-dependency-audit-template.csv',
-    'formula-layout-audit-template.csv',
-    'formula-salience-registry-template.csv',
-    'frontier-claim-registry-template.csv',
-    'frontier-reverse-search-template.csv',
-    'historical-milestone-registry-template.jsonl',
-    'historical-relation-registry-template.csv',
-    'holdout-registry-template.csv',
-    'identity-conflicts-template.csv',
-    'insertion-test-template.csv',
-    'master-theorem-matrix-template.csv',
-    'mathematical-survey-audit-template.csv',
-    'narrative-quality-audit-template.csv',
-    'navigation-qa-template.csv',
-    'page-density-audit-template.csv',
-    'prior-corpus-registry-template.csv',
-    'prior-theorem-node-registry-template.csv',
-    'proof-mechanism-provenance-template.csv',
-    'proof-mechanism-registry-template.csv',
-    'publication-map-template.csv',
-    'release-audit-template.csv',
-    'screening-decisions-template.csv',
-    'search-log-template.csv',
-    'source-manifest-template.csv',
-    'theorem-node-regression-template.csv',
-    'theory-edge-registry-template.csv',
-    'theory-node-registry-template.csv',
-    'version-decisions-template.csv',
-}
-REQUIRED_FILES = {"SKILL.md", "README.md", "agents/openai.yaml"} | {
-    "scripts/" + name for name in SCRIPT_NAMES
-} | {"assets/templates/" + name for name in TEMPLATE_NAMES} | EXAMPLE_FILES | {
-    "assets/project-manifest-template.json", "assets/problem-formulation-template.json",
-    "assets/survey-selection-template.json",
-} | {"references/" + name for name in REFERENCE_NAMES} | {"assets/registries/" + name for name in REGISTRY_NAMES}
-
-
-# Native 2.0.0 explicit nested-resource contract.
-V2_FILES = {'references/legacy/core-problems.md', 'assets/v2/empty-project/knowledge/coverage.json', 'assets/v2/empty-project/knowledge/discovery.md', 'scripts/survey_core/knowledge.py', 'scripts/survey_core/models.py', 'references/legacy/editions.md', 'assets/templates/profile-minimal.tex', 'scripts/survey_core/__init__.py', 'references/legacy/research-and-evidence.md', 'references/legacy/problem-formulation.md', 'references/legacy/records-and-delivery.md', 'scripts/survey_core/reviews.py', 'references/legacy/architecture.md', 'scripts/survey_core/adapters.py', 'scripts/survey_core/plans.py', 'scripts/survey_core/readiness.py', 'scripts/survey_core/migration.py', 'assets/v2/empty-project/knowledge/overview.md', 'scripts/survey_core/cli.py', 'references/legacy/template-maintenance.md', 'scripts/survey_core/build.py', 'references/legacy/validation.md', 'references/legacy/part-v-benchmark.md', 'scripts/survey_core/exports.py', 'scripts/survey_core/dependencies.py', 'scripts/survey_core/release.py', 'assets/v2/empty-project/project.json', 'references/legacy/writing-style.md', 'references/legacy/layout-and-build.md', 'references/legacy/exposition-examples.md', 'references/legacy/proofs-and-boundaries.md', 'assets/templates/profile-lecture.tex', 'references/legacy/introduction.md', 'assets/v2/empty-project/knowledge/conventions.tex', 'scripts/survey_core/common.py', 'assets/rebuild/rebuild.py', 'scripts/survey_core/snapshots.py', 'assets/v2/empty-project/scope.md', 'assets/templates/profile-thematic.tex', 'references/legacy/length-and-selection.md'}
-V2_FILES |= {'references/contracts.md', 'references/migration.md'}
-V2_FILES |= {'scripts/survey_core/tex.py','scripts/survey_core/history.py','scripts/survey_core/compatibility.py','references/integration-2.0.1.md'}
-REQUIRED_FILES |= V2_FILES
 
 
 def runtime_member(name: str) -> bool:
-    """Recognize supported resources; unknown files need an explicit decision.
-
-    This is a path/content-role boundary, not a history or mathematical grader.
-    Human review must still inspect current prose and the actual member list.
-    """
-    if name in V2_FILES:
-        return True
-    parts = PurePosixPath(name).parts
-    if name in ROOT_FILES or name in EXAMPLE_FILES or name == "agents/openai.yaml":
-        return True
-    if len(parts) == 2 and parts[0] == "scripts":
-        return parts[1] in SCRIPT_NAMES
-    if len(parts) == 2 and parts[0] == "references":
-        return parts[1] in REFERENCE_NAMES
-    if len(parts) == 3 and parts[:2] == ("assets", "templates"):
-        return parts[2] in TEMPLATE_NAMES
-    if len(parts) == 3 and parts[:2] == ("assets", "registries"):
-        return parts[2] in REGISTRY_NAMES
-    return name in {
-        "assets/project-manifest-template.json", "assets/problem-formulation-template.json",
-        "assets/survey-selection-template.json",
-    }
+    """Only explicitly supported current runtime resources are distributable."""
+    return name in REQUIRED_FILES or name == CHECKSUM_NAME
 
 
 def safe_name(name: str) -> bool:

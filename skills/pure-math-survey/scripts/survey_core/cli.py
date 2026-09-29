@@ -15,7 +15,7 @@ def parser()->Parser:
     sub=p.add_subparsers(dest='command')
     i=sub.add_parser('init');i.add_argument('--output',type=Path,required=True);i.add_argument('--topic',required=True);i.add_argument('--scope',type=Path,required=True);i.add_argument('--title');i.add_argument('--language',default='en')
     k=sub.add_parser('kb');ks=k.add_subparsers(dest='action',required=True)
-    for name in ('validate','index','freeze','verify','readiness','diff','format'):
+    for name in ('validate','index','freeze','verify','readiness','diff'):
         x=ks.add_parser(name);x.add_argument('project',type=Path)
         if name=='verify':x.add_argument('--snapshot',required=True)
         if name=='readiness':x.add_argument('--plan',required=True)
@@ -33,8 +33,6 @@ def parser()->Parser:
         if name=='package':x.add_argument('--to',type=Path,required=True)
         if name=='review-template':x.add_argument('--kind',choices=['output_semantic','visual'],required=True);x.add_argument('--to')
     r=sub.add_parser('review');rs=r.add_subparsers(dest='action',required=True);x=rs.add_parser('template');x.add_argument('project',type=Path);x.add_argument('--kind',choices=['source','mathematical','coverage'],required=True);x.add_argument('--id',action='append',required=True);x.add_argument('--to')
-    m=sub.add_parser('migrate');m.add_argument('--from',dest='old',type=Path,required=True);m.add_argument('--output',type=Path,required=True)
-    m=sub.add_parser('import-v2');m.add_argument('--from',dest='old',type=Path,required=True);m.add_argument('--output',type=Path,required=True)
     return p
 
 def execute(a)->dict:
@@ -42,17 +40,8 @@ def execute(a)->dict:
     if a.command=='init':
         from .knowledge import init_project
         return init_project(a.output,a.topic,a.scope,a.title,a.language)
-    if a.command=='migrate':
-        from .migration import migrate_v1
-        return migrate_v1(a.old,a.output)
-    if a.command=='import-v2':
-        from .compatibility import import_v2_b
-        return import_v2_b(a.old,a.output)
     root=a.project.absolute()
     if a.command=='kb':
-        if a.action=='format':
-            from .compatibility import identify_contract
-            return result('kb.format','INSPECTED',identify_contract(root))
         from .knowledge import validate_knowledge,index_knowledge
         from .snapshots import freeze_snapshot,verify_snapshot,diff_snapshots
         from .readiness import assess_readiness

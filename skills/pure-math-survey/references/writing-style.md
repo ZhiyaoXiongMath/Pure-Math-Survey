@@ -7,5 +7,3 @@ No trivial transitions, inflated roadmaps or prose quotas. Introduce a definitio
 Read the selected profile independently. A compact output may compress proof interiors but not phase branches, strictness, regularity, boundary hypotheses or status. A lecture must supply the intermediate calculations it promised and say exactly which theorem remains imported. A thematic survey compares actual ranges through supported relations, not adjectives or a bibliography tour.
 
 The [balanced dHYM reference](../assets/reference-samples/dhym-balanced/README.md) illustrates focused principal answers, definitions placed near their consumers, short substantive derivations and a concrete boundary example. Consult it for these local choices, not a fixed length or outline. Avoid repeating a complete statement immediately after its first appearance unless the repetition serves a distinct reading need.
-
-[Legacy style document](legacy/writing-style.md) is retained as historical input; its format assumptions cannot override native v2.

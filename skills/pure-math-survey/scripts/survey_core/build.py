@@ -37,7 +37,7 @@ def build_output(root:Path,output_id:str)->dict:
     sources=file_inventory(out,sorted(output_inputs(out)))
     engine=executable(['pdflatex']);bib=executable(['bibtex','bibtex.original','bibtex8'])
     with writer(root):
-        archive_current(out, 'legacy-build')
+        archive_current(out, 'previous-build')
         stage=Path(tempfile.mkdtemp(prefix='.tex-build-',dir=out));compiled=stage/'compiled';compiled.mkdir()
         report={'built_at':now(),'output_id':output_id,'snapshot_id':plan['snapshot_id'],'source_inputs':sources,
                 'commands':[],'tools':{},'status':'FAILED','stability_reached':False,'warnings':[]}

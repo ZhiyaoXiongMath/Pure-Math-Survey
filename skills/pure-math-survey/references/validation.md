@@ -18,4 +18,4 @@ Source reviews bind source records and reading notes/materials. Mathematical rev
 
 CLI envelopes are `{operation,status,errors,warnings,artifacts}` under `--json`. Exit codes: 0 completed operation; 2 invalid contract/input; 3 unmet readiness/release; 4 tool/I/O failure. Diagnostics carry consistent code/path/node_id/message. Use `kb readiness` and `output validate --stage release` for individual blocking findings; preparation/package cannot turn failures into PASS.
 
-Literal TeX scanning cannot evaluate arbitrary macro conditionals or prove a theorem. Source texts/TeX must be trusted: disabled shell escape is not an operating-system sandbox. Build and review reports are transparent local assertions, not signed independent attestations. [Legacy validation](legacy/validation.md) is only for v1.
+Literal TeX scanning cannot evaluate arbitrary macro conditionals or prove a theorem. Source texts/TeX must be trusted: disabled shell escape is not an operating-system sandbox. Build and review reports are transparent local assertions, not signed independent attestations.

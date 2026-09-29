@@ -141,7 +141,7 @@ def output_inputs(out:Path)->set[str]:
     return paths
 
 def expand_tex(out:Path,path:Path,active:tuple[Path,...]=())->tuple[str,set[str]]:
-    """Compatibility wrapper for the now shared, compiler-relative inspector."""
+    """Inspect the actual entry point with compiler-relative input resolution."""
     from .tex import inspect_tex
     require(path.resolve() == (out/'manuscript/main.tex').resolve(), 'TEX_INPUT_UNSUPPORTED', 'Inspect from the actual entry point')
     scan = inspect_tex(out)
@@ -151,10 +151,9 @@ def validate_structure(root:Path,output_id:str)->dict:
     out=safe(root,'outputs/'+output_id);plan=load_plan(out/'plan.json');verify_generated(root,plan)
     from .tex import inspect_tex
     scan=inspect_tex(out);text=scan.text;used=scan.inputs
-    from check_mathematical_structure import inventory as tex_inventory,public_inventory
+    from .structure import inventory as tex_inventory,public_inventory
     inv=tex_inventory(text);errors=list(scan.errors);warnings=[]
-    # v1 treats ordinary 'pending' prose as a scaffold. v2 must allow honest
-    # boundary statements about unreviewed work without allowing explicit markers.
+    # Ordinary boundary prose is allowed; explicit unfinished scaffold markers are not.
     inv['has_placeholder']=bool(re.search(r'\\placeholder\b|\b(?:TODO|TBD)\b|\[INSERT',text,re.I) or re.search(r'\bPENDING\b',text))
     labels=inv['labels']
     if len(labels)!=len(set(labels)):errors.append(diagnostic('DUPLICATE_LABEL','Repeated TeX labels','manuscript/main.tex'))

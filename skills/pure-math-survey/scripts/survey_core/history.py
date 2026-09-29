@@ -30,7 +30,7 @@ def verify_record(folder: Path) -> dict:
 
 def save_record(out: Path, kind: str, data: dict[str, bytes]) -> dict:
     """Caller holds the project writer lock. Never overwrite an existing record."""
-    require(kind in {'build', 'render', 'legacy-build'}, 'CONTRACT_INVALID', 'Invalid history kind')
+    require(kind in {'build', 'render', 'previous-build'}, 'CONTRACT_INVALID', 'Invalid history kind')
     rows = [{'path': p, 'sha256': sha(b), 'bytes': len(b)} for p, b in sorted(data.items())]
     payload = {'format': 'survey-artifact-history-1', 'kind': kind, 'files': rows}
     identity = 'H-' + sha(canonical(payload))
@@ -56,7 +56,7 @@ def save_record(out: Path, kind: str, data: dict[str, bytes]) -> dict:
 
 
 def archive_current(out: Path, kind: str) -> dict | None:
-    prefixes = ('build', 'evidence') if kind == 'legacy-build' else ('evidence/pages',)
+    prefixes = ('build', 'evidence') if kind == 'previous-build' else ('evidence/pages',)
     paths = {p for prefix in prefixes for p in all_files(out, prefix)}
     if kind == 'render' and (out / 'evidence/render-manifest.json').is_file():
         paths.add('evidence/render-manifest.json')

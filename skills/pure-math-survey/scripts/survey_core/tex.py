@@ -45,7 +45,7 @@ def _blank(text: str) -> str:
 
 def visible_source(text: str) -> str:
     """Mask known nonexecuted literal material while preserving line numbers."""
-    from check_mathematical_structure import strip_comments
+    from .structure import strip_comments
     text = strip_comments(text)
     text = BLOCK.sub(lambda m: _blank(m[0]), text)
     # Nested conditionals inside a literal false branch are not visible.

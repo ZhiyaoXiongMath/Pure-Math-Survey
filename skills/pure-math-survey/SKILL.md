@@ -11,7 +11,7 @@ description: Build and maintain source-grounded mathematical knowledge, then wri
 
 Recover the user's mathematical scope, actual materials, reader assumptions and requested outputs. A knowledge-only or update-only request ends with knowledge, evidence and optional snapshots: do not generate a manuscript or PDF. Otherwise default to **minimal + integrated**, and generate only the requested output. PDF is a delivery format, not a profile. Read [profiles](references/editions.md) and [records](references/records-and-delivery.md).
 
-Use `python scripts/survey.py init --output PROJECT --topic SLUG --scope SCOPE.md` for a new knowledge project. An existing `project.json` must satisfy the native scope-based schema 2.0.0 contract. Use `kb format` for unknown v2 projects; foreign B/mixed review contracts are not silently accepted. A `project-manifest.json` selects legacy v1; read [migration](references/migration.md). Both root manifests together are an error. Never reinterpret historical PASS as v2 verification. `create_project.py` remains an explicitly v1 creator.
+Use `python scripts/survey.py init --output PROJECT --topic SLUG --scope SCOPE.md` for a new knowledge project. Existing projects must satisfy the current `project.json` and scoped-evidence contracts. Unsupported manifests or review formats are rejected; no conversion or compatibility commands are provided.
 
 Do not require user approval for routine bookkeeping. Ask only about substantive unresolved scope or user choices. Maintain the records on the user's behalf. Script templates remain pending until the described reading has actually occurred.
 
@@ -79,6 +79,6 @@ Read [template maintenance](references/template-maintenance.md). Run executable 
 
 This is Survey, not Research Studio. Preserve stable IDs, exact content, source versions, dependencies, snapshots and review status. Do not create Studio native markers, receipts, research phases, schedulers or a bridge skill. Ordinary Survey folders are not claimed to be natively importable by Studio.
 
-## 2.0.1: body, evidence scope, history and contract identity
+## Manuscript review and build history
 
-Read `references/integration-2.0.1.md` before releasing or importing a project. Require literal canonical inputs in the actual document body, seven explicit whole-manuscript reading checks and real structured proof/principal locations. A template never grants acceptance. Preserve every old review and build attempt; a failed new build must not destroy or silently reuse the last successful build. Use `kb format` and explicit `import-v2` for foreign B-format 2.0.0 projects; do not translate historical PASS into acceptance. Runtime 2.0.3 retains schema 2.0.0 for immutable snapshot identity. No new source/semantic/visual approval follows from running a test or converter.
+Read [output review](references/output-review.md) before release. Require canonical inputs in the actual document body, seven explicit whole-manuscript reading checks and real proof/principal locations. A template never grants acceptance. Preserve review and build attempts; a failed new build must not destroy or silently reuse the last successful build. Source, semantic and visual approval each require the actual recorded work.

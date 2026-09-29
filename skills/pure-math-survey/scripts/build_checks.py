@@ -132,12 +132,6 @@ def run_checks(output: Path, engine: str = "pdflatex") -> dict:
               "visual_review": "NOT_PERFORMED_BY_THIS_SCRIPT", "builds": []}
     style = ROOT / "assets/templates/math-review.sty"
     tasks: list[tuple[Path, str]] = []
-    for template in sorted((ROOT / "assets/templates").glob("part*.tex")):
-        folder = output / template.stem
-        folder.mkdir()
-        shutil.copy2(template, folder / template.name)
-        shutil.copy2(style, folder / style.name)
-        tasks.append((folder, template.name))
     folder = output / "exposition-smoke"
     folder.mkdir()
     for fixture in (ROOT / "assets/exposition-examples").glob("*.tex"):
@@ -154,8 +148,7 @@ def run_checks(output: Path, engine: str = "pdflatex") -> dict:
             result = compile_one(folder, entry, engine_path)
         except (OSError, ValueError, subprocess.SubprocessError, RuntimeError) as exc:
             result = {"entrypoint": entry, "status": "FAIL", "error": str(exc)}
-        result["artifact_kind"] = ("instructional_scaffold" if entry.startswith("part") else
-                                   "elementary_example" if entry.startswith("exposition") else
+        result["artifact_kind"] = ("elementary_example" if entry.startswith("exposition") else
                                    "shared_style_regression" if folder.name == "balanced-current" else
                                    "frozen_sample_reproduction")
         result["target"] = folder.name
@@ -165,16 +158,9 @@ def run_checks(output: Path, engine: str = "pdflatex") -> dict:
         # Findings are reader-review pointers, not a mathematical build verdict.
         # Use the same literal-input expansion path as project validation.
         try:
-            import importlib.util
-            def sibling(name):
-                spec = importlib.util.spec_from_file_location(name, Path(__file__).with_name(name + ".py"))
-                module = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(module)
-                return module
-            validator = sibling("validate_project")
-            structure = sibling("check_mathematical_structure")
+            from survey_core import structure
             input_errors = []
-            expanded, _ = validator.expand_tex(folder / entry, folder, input_errors)
+            expanded, _ = structure.expand_tex(folder / entry, folder, input_errors)
             inv = structure.inventory(expanded)
             result["source_structure_screen"] = {
                 "scope": "syntax and reference sites only; whole-body reader review remains necessary",

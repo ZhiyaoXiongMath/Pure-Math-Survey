@@ -16,7 +16,7 @@ from survey_core.snapshots import freeze_snapshot
 from survey_core.plans import create_plan
 from survey_core.exports import prepare_output,verify_generated
 from survey_core.models import load_plan
-from survey_core.migration import node_bytes
+from survey_core.models import node_bytes
 ROOT=Path(__file__).resolve().parents[1]
 
 def check()->dict:

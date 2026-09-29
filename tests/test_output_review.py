@@ -23,13 +23,12 @@ from survey_core.readiness import assess_readiness
 from survey_core.snapshots import freeze_snapshot, diff_snapshots, verify_snapshot
 from survey_core.history import save_record, verify_record, verify_history
 from survey_core.build import build_output, render_output
-from survey_core.compatibility import identify_contract, import_v2_b
 from survey_core.knowledge import validate_knowledge
 from package_release import package, verify_archive
 
 CHECKS=['whole_manuscript','canonical_use','conditions_quantifiers','selection','attribution','proof_obligations','readability']
 
-class Integration201(unittest.TestCase):
+class OutputReview(unittest.TestCase):
     def setUp(self):
         self.tmp=tempfile.TemporaryDirectory(); self.base=Path(self.tmp.name)
         self.root=fixture(self.base/'project',True);plan(self.root,draft=False);authored_toy(self.root)
@@ -43,7 +42,7 @@ class Integration201(unittest.TestCase):
         return {'path':'manuscript/main.tex','line_start':n,'line_end':n}
     def semantic(self):
         r=review_template(self.out,'output_semantic',['mini'],output_inputs(self.out))
-        r.update(review_id='SYNTHETIC201',reviewer_mode='author_reread',reviewed_at=now(),
+        r.update(review_id='SYNTHETIC-REVIEW',reviewer_mode='author_reread',reviewed_at=now(),
                  disposition='accepted',unchecked_items=[],findings=['Synthetic gate input only; no real mathematical review is asserted.'])
         r['scope']={'output_ids':['mini'],'profile':'minimal','node_ids':['N-q','N-main','N-def'],
             'whole_manuscript':True,'checks':CHECKS.copy(),'principal_locations':{'N-main':[self.principal_location()]},'proof_locations':{},'proof_steps':{}}
@@ -96,12 +95,12 @@ class Integration201(unittest.TestCase):
         self.assertTrue(semantic_scope_errors(self.out,p,['N-main'],r))
         r['scope']['proof_locations']['N-main']=[{'path':'manuscript/main.tex','line_start':10,'line_end':10}]
         self.assertEqual(semantic_scope_errors(self.out,p,['N-main'],r),[])
-    def test_U13_valid_new_record_supersedes_legacy_scope(self):
+    def test_U13_valid_new_record_supersedes_incomplete_scope(self):
         old=self.semantic();old['scope']['principal_locations']={'N-main':'unvalidated prose'}
         write_json(self.out/'evidence/a-old-review.json',old)
-        newer=self.semantic();newer['review_id']='SYNTHETIC201-new';write_json(self.out/'evidence/z-new-review.json',newer)
+        newer=self.semantic();newer['review_id']='SYNTHETIC-REVIEW-new';write_json(self.out/'evidence/z-new-review.json',newer)
         r=assess_release(self.root,'mini')
-        self.assertIn('SYNTHETIC201-new',r['artifacts']['used_output_review_ids'])
+        self.assertIn('SYNTHETIC-REVIEW-new',r['artifacts']['used_output_review_ids'])
         self.assertNotIn('OUTPUT_SEMANTIC_REVIEW_PENDING',{x['code'] for x in r['errors']})
     def test_U14_future_year_rejected(self):self.assertFalse(valid_date('2999-01-01'))
     def test_U15_future_timestamp_rejected(self):self.assertFalse(valid_date((datetime.now(timezone.utc)+timedelta(hours=1)).isoformat()))
@@ -144,21 +143,11 @@ class Integration201(unittest.TestCase):
         write_json(p,{'review_id':'FOREIGN-SYNTHETIC','checks':{},'disposition':'accepted','limitations':[]})
         return root
     def test_U23_foreign_contract_detected_not_silently_loaded(self):
-        root=self.foreign();self.assertEqual(identify_contract(root)['contract'],'v2-b')
-        self.failcode('FORMAT_MIGRATION_REQUIRED',load_project,root)
-    def test_U24_import_preserves_body_and_original_archive(self):
-        root=self.foreign();raw=(root/'knowledge/nodes/N-main.md').read_bytes();oldnode=load_node(root/'knowledge/nodes/N-main.md')
-        new=self.base/'imported';r=import_v2_b(root,new);self.assertEqual(r['status'],'IMPORTED_UNVERIFIED')
-        node=load_node(new/'knowledge/nodes/N-main.md');self.assertEqual(oldnode.body,node.body);self.assertEqual(oldnode.statement,node.statement)
-        self.assertEqual(node.meta['mathematical_status'],'unassessed');self.assertFalse((new/'outputs').exists());self.assertFalse((new/'evidence/reviews').exists())
-        with zipfile.ZipFile(new/'legacy/v2-b/original.zip') as z:self.assertEqual(z.read('knowledge/nodes/N-main.md'),raw)
-        self.assertEqual(validate_knowledge(new)['status'],'VALID')
-    def test_U25_import_destination_not_overwritten(self):
-        root=self.foreign();self.failcode('DESTINATION_EXISTS',import_v2_b,root,self.root)
+        root=self.foreign()
+        self.failcode('REVIEW_FORMAT_UNSUPPORTED',load_project,root)
     def test_U26_mixed_review_contract_refused(self):
         root=self.foreign();write_json(root/'evidence/reviews/native.json',self.semantic())
-        self.assertEqual(identify_contract(root)['contract'],'mixed-review-contracts')
-        self.failcode('FORMAT_MIGRATION_REQUIRED',load_project,root)
+        self.failcode('REVIEW_FORMAT_UNSUPPORTED',load_project,root)
     def test_U27_review_only_change_has_scoped_impact(self):
         old=load_plan(self.out/'plan.json')['snapshot_id'];p=self.root/'evidence/reviews/mathematical-N-main.json';v=read_json(p);v['findings'].append('Changed synthetic review conclusion for an impact regression.');write_json(p,v)
         new=freeze_snapshot(self.root)['artifacts']['snapshot_id'];r=diff_snapshots(self.root,old,new)
@@ -180,6 +169,6 @@ class Integration201(unittest.TestCase):
         unpacked=self.base/'installed'
         with zipfile.ZipFile(destination) as z:z.extractall(unpacked)
         skill=unpacked/'pure-math-survey'
-        code="import sys,json;sys.path.insert(0,"+repr(str(skill/'scripts'))+");from survey_core import tex,history,compatibility;print(json.dumps([tex.__file__,history.__file__,compatibility.__file__]))"
+        code="import sys,json;sys.path.insert(0,"+repr(str(skill/'scripts'))+");from survey_core import tex,history,structure;print(json.dumps([tex.__file__,history.__file__,structure.__file__]))"
         p=subprocess.run([sys.executable,'-I','-c',code],capture_output=True,text=True,cwd=self.base)
         self.assertEqual(p.returncode,0,p.stderr);self.assertTrue(all(Path(f).is_relative_to(skill) for f in json.loads(p.stdout)))

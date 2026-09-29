@@ -6,7 +6,6 @@ from test_v2 import fixture, plan, authored_toy, read_json, SurveyError, SCRIPTS
 from survey_core.exports import prepare_output, verify_generated, validate_structure
 from survey_core.build import build_output
 from survey_core.release import package_output
-from survey_core.migration import migrate_v1
 
 
 class AuthoringMaterials(unittest.TestCase):
@@ -91,20 +90,4 @@ class AuthoringMaterials(unittest.TestCase):
         notes=self.out/'author-notes.md';notes.write_text('Ideas still to check.\n',encoding='utf-8')
         self.verify()
 
-    def test_M11_unicode_legacy_scope_is_preserved(self):
-        old=self.base/'旧项目';old.mkdir()
-        text='# Scope\n\n范围：比较 α 与 β；保留原始假设。\n'
-        (old/'scope.md').write_text(text,encoding='utf-8')
-        (old/'main.tex').write_text(r'\begin{theorem}$0=0$.\end{theorem}',encoding='utf-8')
-        new=self.base/'迁移'
-        migrate_v1(old,new)
-        self.assertEqual((new/'legacy/original/scope.md').read_text(encoding='utf-8'),text)
-        self.assertIn(text,(new/'scope.md').read_text(encoding='utf-8'))
 
-    def test_M12_legacy_entry_points_bootstrap_under_isolated_python(self):
-        import subprocess, sys
-        for name in ['validate_project.py','check_problem_formulation.py','check_survey_selection.py',
-                     'check_mathematical_structure.py','check_reading_budget.py','bibliography.py']:
-            with self.subTest(entry=name):
-                p=subprocess.run([sys.executable,'-I',str(SCRIPTS/name),'--help'],capture_output=True,text=True)
-                self.assertEqual(p.returncode,0,p.stderr)

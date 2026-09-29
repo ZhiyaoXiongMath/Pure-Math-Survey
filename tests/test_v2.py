@@ -24,7 +24,7 @@ from survey_core.plans import create_plan,validate_plan,consumption
 from survey_core.exports import prepare_output,verify_generated,validate_structure
 from survey_core.readiness import assess_readiness
 from survey_core.reviews import source_inputs,mathematical_inputs,coverage_inputs,review_template,load_review
-from survey_core.migration import migrate_v1,node_bytes
+from survey_core.models import node_bytes
 from survey_core.release import package_output,assess_release
 from survey_core.build import build_output,render_output,reading_budget
 from package_release import package,verify_archive
@@ -114,6 +114,20 @@ class Contracts(unittest.TestCase):
     def code(self,code,func,*a,**kw):
         with self.assertRaises(SurveyError) as cm:func(*a,**kw)
         self.assertEqual(cm.exception.diagnostic['code'],code)
+    def test_removed_commands_are_unavailable(self):
+        for args in [('migrate',), ('import-v2',), ('kb', 'format', str(self.root))]:
+            p=subprocess.run([sys.executable,str(SCRIPTS/'survey.py'),*args,'--json'],capture_output=True,text=True)
+            self.assertEqual(p.returncode,2,p.stdout)
+            self.assertIn('CLI_ARGUMENT_INVALID',p.stdout)
+
+    def test_installer_excludes_retired_resources(self):
+        archive=self.base/'current.zip';package(SKILL,archive)
+        with zipfile.ZipFile(archive) as z:
+            names=z.namelist()
+        for name in names:
+            self.assertFalse(any(part in name for part in ('/legacy/','/registries/','/migration.py','/compatibility.py','/adapters.py','/create_project.py','/project-manifest-template.json')))
+            self.assertFalse('/templates/part' in name)
+
     def test_T01_zero_outputs(self):
         self.assertEqual(validate_knowledge(self.root)['status'],'VALID');self.assertFalse((self.root/'outputs').exists())
     def test_T02_unused_nodes(self):
@@ -164,13 +178,6 @@ class Contracts(unittest.TestCase):
         p=plan(self.root);authored_toy(self.root,two_pages=True);b=build_output(self.root,'mini');self.assertEqual(b['artifacts']['pages'],2)
         obj=load_plan(p);obj['limits']['page_review_threshold']=1;write_json(p,obj);r=reading_budget(self.root,'mini');self.assertEqual(r['status'],'CHECKED');self.assertTrue(r['warnings']);self.assertFalse(r['errors'])
         obj['limits']['max_pages']=1;write_json(p,obj);r=reading_budget(self.root,'mini');self.assertEqual(r['status'],'NEEDS_WORK')
-    def test_T18_inline_migration_missing_audits(self):
-        old=self.base/'old';old.mkdir();raw=r'\begin{theorem}\label{a}Let $x=0$. Then $x^2=0$.\end{theorem}';(old/'main.tex').write_text(raw)
-        new=self.base/'imported';migrate_v1(old,new);m=read_json(new/'MIGRATION_REPORT.json');self.assertEqual(m['node_candidates'],1);self.assertTrue(m['ambiguities']);self.assertEqual((new/'legacy/original/main.tex').read_text(),raw)
-        self.assertTrue(list((new/'evidence/migration-diffs').glob('*.diff')));self.assertEqual(validate_knowledge(new)['status'],'VALID')
-    def test_T19_legacy_PASS_never_promoted(self):
-        old=self.base/'old';old.mkdir();(old/'main.tex').write_text(r'\begin{theorem}$0=0$.\end{theorem}');(old/'release-audit.csv').write_text('check,status,evidence\nmathematics,PASS,old claim\n')
-        new=self.base/'new';migrate_v1(old,new);self.assertTrue(all(n.meta['mathematical_status']=='unassessed' for n in inventory(new).nodes.values()));self.assertFalse(list((new/'evidence/reviews').glob('*.json')))
     def test_T20_interrupted_snapshot_atomic_retry(self):
         import survey_core.snapshots as mod
         original=mod.atomic_bytes;count=0
@@ -184,7 +191,7 @@ class Contracts(unittest.TestCase):
         self.assertEqual(list((self.root/'snapshots').glob('KB-*')),[]);self.assertEqual(list((self.root/'snapshots').glob('.pending-*')),[])
         self.assertEqual(freeze_snapshot(self.root)['status'],'FROZEN')
     def test_T21_actual_archive_extraction_isolated_entry(self):
-        z=self.base/'skill.zip';package(SKILL,z);self.assertGreater(verify_archive(z)['members'],120)
+        z=self.base/'skill.zip';package(SKILL,z);verify_archive(z)
         dest=self.base/'unpacked'
         with zipfile.ZipFile(z) as archive:
             names=archive.namelist()
@@ -250,9 +257,9 @@ class Contracts(unittest.TestCase):
         pp=plan(self.root);prepare_output(self.root,pp,True);self.assertEqual((pp.parent/'generated/statements/N-main.tex').read_bytes(),n.statement)
     def test_H07_review_template_never_accepts(self):
         inv=inventory(self.root);r=review_template(self.root,'mathematical',['N-main'],mathematical_inputs(inv,'N-main'));self.assertEqual(r['disposition'],'revise');self.assertIsNone(r['reviewed_at']);self.assertEqual(r['reviewer_mode'],'not_performed')
-    def test_H08_legacy_dispatch_and_root_conflict(self):
-        p=subprocess.run([sys.executable,str(SCRIPTS/'validate_project.py'),str(self.root),'--json'],capture_output=True,text=True);self.assertEqual(p.returncode,0,p.stderr);self.assertEqual(json.loads(p.stdout)['status'],'VALID')
-        write_json(self.root/'project-manifest.json',{});p=subprocess.run([sys.executable,str(SCRIPTS/'validate_project.py'),str(self.root),'--json'],capture_output=True,text=True);self.assertEqual(p.returncode,2);self.assertIn('MANIFEST_CONFLICT',p.stdout)
+    def test_H08_unsupported_manifest_rejected(self):
+        p=subprocess.run([sys.executable,str(SCRIPTS/'survey.py'),'kb','validate',str(self.root),'--json'],capture_output=True,text=True);self.assertEqual(p.returncode,0,p.stderr);self.assertEqual(json.loads(p.stdout)['status'],'VALID')
+        write_json(self.root/'project-manifest.json',{});p=subprocess.run([sys.executable,str(SCRIPTS/'survey.py'),'kb','validate',str(self.root),'--json'],capture_output=True,text=True);self.assertEqual(p.returncode,2);self.assertIn('SCHEMA_UNSUPPORTED',p.stdout)
     def test_H09_future_review_date_invalid(self):
         r=fixture(self.base/'reviewed',True);p=r/'evidence/reviews/mathematical-N-main.json';v=read_json(p);v['reviewed_at']='2999-01-01';write_json(p,v);self.code('REVIEW_INVALID',load_review,p)
     def test_H10_foreign_snapshot_not_accepted(self):
@@ -263,12 +270,6 @@ class Contracts(unittest.TestCase):
         p=plan(self.root);authored_toy(self.root);r=assess_release(self.root,'mini');self.assertIn('BUILD_FAILED',{x['code'] for x in r['errors']});self.assertEqual(r['status'],'NEEDS_WORK')
     def test_H13_actual_render_not_visual_review(self):
         p=plan(self.root);authored_toy(self.root);build_output(self.root,'mini');r=render_output(self.root,'mini');self.assertEqual(r['status'],'RENDERED_NOT_REVIEWED');check=assess_release(self.root,'mini');self.assertIn('VISUAL_REVIEW_INCOMPLETE',{x['code'] for x in check['errors']})
-    def test_H14_interrupted_migration_is_atomic(self):
-        old=self.base/'old';old.mkdir();(old/'main.tex').write_text(r'\begin{theorem}$0=0$.\end{theorem}');new=self.base/'new'
-        import survey_core.migration as mod
-        with patch.object(mod,'atomic_bytes',side_effect=OSError('Injected migration interruption')):
-            with self.assertRaises(OSError):migrate_v1(old,new)
-        self.assertFalse(new.exists());self.assertTrue((old/'main.tex').is_file());self.assertEqual(migrate_v1(old,new)['status'],'IMPORTED_UNVERIFIED')
     def test_H15_extra_frozen_file_is_tampering(self):
         sid=freeze_snapshot(self.root)['artifacts']['snapshot_id'];(self.root/f'snapshots/{sid}/files/extra.txt').write_text('x');self.code('SNAPSHOT_TAMPERED',load_snapshot,self.root,sid)
     def test_H16_nullable_source_hash_needs_scoped_evidence(self):
