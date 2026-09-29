@@ -1,0 +1,50 @@
+\providecommand{\bysame}{\leavevmode\hbox to3em{\hrulefill}\thinspace}
+\providecommand{\MR}{\relax\ifhmode\unskip\space\fi MR }
+% \MRhref is called by the amsart/book/proc definition of \MR.
+\providecommand{\MRhref}[2]{%
+  \href{http://www.ams.org/mathscinet-getitem?mr=#1}{#2}
+}
+\providecommand{\href}[2]{#2}
+\begin{thebibliography}{1}
+
+\bibitem{AB}
+Daniele Arcara and Aaron Bertram, \emph{Bridgeland-stable moduli spaces for
+  {$K$}-trivial surfaces}, J. Eur. Math. Soc. \textbf{15} (2013), no.~1, 1--38,
+  With an appendix by Max Lieblich.
+
+\bibitem{CLT}
+Jianchun Chu, Man-Chun Lee, and Ryosuke Takahashi, \emph{A {Nakai--Moishezon}
+  type criterion for supercritical deformed {Hermitian--Yang--Mills} equation},
+  J. Differential Geom. \textbf{126} (2024), no.~2, 583--632,
+  arXiv:2105.10725v3.
+
+\bibitem{CJY}
+Tristan~C. Collins, Adam Jacob, and Shing-Tung Yau, \emph{$(1,1)$ forms with
+  specified {Lagrangian} phase: a priori estimates and algebraic obstructions},
+  Camb. J. Math. \textbf{8} (2020), no.~2, 407--452, arXiv:1508.01934v1.
+
+\bibitem{CS}
+Tristan~C. Collins and Yun Shi, \emph{Stability and the deformed
+  {Hermitian--Yang--Mills} equation}, 2022, arXiv:2004.04831v2.
+
+\bibitem{Fan}
+Yu-Wei Fan, \emph{Notes on the deformed {Hermitian--Yang--Mills} equations and
+  the large scaling limits of stability conditions}, 2026, Preprint,
+  arXiv:2604.22246v1, April 24, 2026.
+
+\bibitem{JY}
+Adam Jacob and Shing-Tung Yau, \emph{A special {Lagrangian} type equation for
+  holomorphic line bundles}, Math. Ann. \textbf{369} (2017), 869--898,
+  arXiv:1411.7457v1.
+
+\bibitem{Makela}
+Anthony M{\"a}kel{\"a}, \emph{Negative effective divisors and {Bridgeland}
+  stability of line bundles on surfaces}, 2026, Preprint, arXiv:2608.26080v1,
+  August 26, 2026.
+
+\bibitem{Yau}
+Shing-Tung Yau, \emph{On the {Ricci} curvature of a compact {K\"ahler} manifold
+  and the complex {Monge--Amp\`ere} equation. {I}}, Comm. Pure Appl. Math.
+  \textbf{31} (1978), no.~3, 339--411.
+
+\end{thebibliography}

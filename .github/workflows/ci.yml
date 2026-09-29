@@ -33,6 +33,6 @@ jobs:
       - name: Validate installed resources and create archive
         run: |
           python skills/pure-math-survey/scripts/validate_assets.py --json
-          python skills/pure-math-survey/scripts/package_release.py --output "$RUNNER_TEMP/pure-math-survey-2.0.2.zip"
+          python skills/pure-math-survey/scripts/package_release.py --output "$RUNNER_TEMP/pure-math-survey-2.0.3.zip"
       - name: Verify clean isolated installation
-        run: python tools/verify_release.py "$RUNNER_TEMP/pure-math-survey-2.0.2.zip" --no-build --report "$RUNNER_TEMP/clean-install.json"
+        run: python tools/verify_release.py "$RUNNER_TEMP/pure-math-survey-2.0.3.zip" --no-build --report "$RUNNER_TEMP/clean-install.json"

@@ -1,0 +1,334 @@
+\documentclass[12pt,reqno]{amsart}
+\usepackage{math-review}
+\newcommand{\ii}{\sqrt{-1}}
+\newcommand{\ddc}{\ii\partial\bar\partial}
+\newcommand{\R}{\mathbb R}
+\newcommand{\NS}{\operatorname{NS}}
+\newcommand{\ch}{\operatorname{ch}}
+\newcommand{\Coh}{\operatorname{Coh}}
+\newcommand{\Rea}{\operatorname{Re}}
+\newcommand{\Ima}{\operatorname{Im}}
+\title{The deformed Hermitian--Yang--Mills equation:\\solvability and stability}
+\date{Literature checked through September 27, 2026}
+\begin{document}
+
+\maketitle
+
+\section{The equation and solvability}\label{sec:intro}
+Let $X$ be a compact connected K\"ahler manifold of dimension $n\ge2$,
+$A\in H^{1,1}(X,\R)$, and $B\in\mathcal K_X$, the K\"ahler cone.
+For a K\"ahler form $\omega\in B$, the dHYM equation seeks a smooth closed
+real $(1,1)$ form $\alpha\in A$ such that
+\[
+ \Theta_\omega(\alpha)
+ =\sum_{j=1}^n\arctan\lambda_j(\omega^{-1}\alpha)
+ =\widehat\theta,
+ \qquad \arctan\lambda_j\in(-\pi/2,\pi/2).
+\]
+The phase $\widehat\theta\in\R$ is \emph{supercritical} when
+$(n-2)\pi/2<\widehat\theta<n\pi/2$, and \emph{compatible} when
+$\int_X(B+\ii A)^n\in e^{\ii\widehat\theta}\R_{>0}$.
+Compatibility determines it only modulo $2\pi$; the equation uses its real lift.
+
+\begin{theorem}[Jacob--Yau \cite{JY}]\label{thm:surface}
+Let $(X,\omega)$ be a compact connected K\"ahler surface, $B=[\omega]$, and $A\in H^{1,1}(X,\R)$. Suppose
+\[
+ 0<\widehat\theta<\pi,\qquad
+ \int_X(B+\ii A)^2\in e^{\ii\widehat\theta}\R_{>0}.
+\]
+There is a smooth closed $\alpha\in A$ with
+$\Theta_\omega(\alpha)=\widehat\theta$ if and only if
+\[
+ A+\cot\widehat\theta\,B\in\mathcal K_X.
+\]
+\end{theorem}
+
+\begin{theorem}\label{thm:subsolution}
+Let $(X,\omega)$ be compact connected K\"ahler of dimension $n\ge2$, and let $A\in H^{1,1}(X,\R)$. Assume
+\[
+ \frac{(n-2)\pi}{2}<\widehat\theta<\frac{n\pi}{2},\qquad
+ \int_X([\omega]+\ii A)^n\in e^{\ii\widehat\theta}\R_{>0}.
+\]
+A smooth solution $\alpha\in A$ of $\Theta_\omega(\alpha)=\widehat\theta$ exists if and only if there is a smooth closed $\underline\alpha\in A$, called a $\mathcal C$-subsolution, satisfying
+\[
+ \sum_{k\ne j}\arctan\lambda_k(\omega^{-1}\underline\alpha)
+ >\widehat\theta-\frac\pi2
+ \quad\text{on }X,\qquad j=1,\ldots,n.
+\]
+\end{theorem}
+
+\Needspace{17\baselineskip}
+\begin{theorem}[Chu--Lee--Takahashi \cite{CLT}]\label{thm:numerical}
+Let $X$ be compact connected K\"ahler of dimension $n\ge2$,
+$A\in H^{1,1}(X,\R)$, and $B\in\mathcal K_X$. Assume
+\[
+ \frac{(n-2)\pi}{2}<\widehat\theta<\frac{n\pi}{2},\qquad
+ \int_X(B+\ii A)^n\in e^{\ii\widehat\theta}\R_{>0}.
+\]
+Put $q=n\pi/2-\widehat\theta\in(0,\pi)$ and
+\[
+ P_p(C,B;q)=\Rea(C+\ii B)^p-\cot q\,\Ima(C+\ii B)^p.
+\]
+The following are equivalent:
+\begin{enumerate}
+\item Some K\"ahler form $\omega\in B$ admits a smooth closed $\alpha\in A$ with $\Theta_\omega(\alpha)=\widehat\theta$.
+\item Every K\"ahler form $\omega\in B$ admits such a form $\alpha=\alpha_\omega$.
+\item For every irreducible analytic $Y\subseteq X$ of dimension $1\le p\le n$ and every $t\ge0$,
+\[
+ \int_Y P_p(A+tB,B;q)\ge0,
+ \qquad\text{strictly if }p<n.
+\]
+\end{enumerate}
+If $X$ is projective, these are also equivalent to
+\[
+ \int_Y P_p(A,B;q)>0
+ \quad\text{for every irreducible }Y\subsetneq X,
+ \quad 1\le p=\dim Y<n.
+\]
+\end{theorem}
+
+\section{The surface reduction and the subsolution criterion}\label{sec:analytic}
+\begin{proof}[Proof of Theorem~\ref{thm:surface}]\label{proof:surface}
+Put $c=\cot\widehat\theta$. The phase equation implies
+\[
+ \alpha^2+2c\alpha\wedge\omega-\omega^2=0,
+ \qquad (\alpha+c\omega)^2=(1+c^2)\omega^2.
+\]
+Since $\lambda_1+\lambda_2>0$ at a solution,
+\[
+ \lambda_j+c=\frac{1+\lambda_j^2}{\lambda_1+\lambda_2}>0.
+\]
+Thus $\alpha+c\omega$ is K\"ahler. Conversely, a K\"ahler form
+$\beta_0\in A+cB$ satisfies
+$\int_X\beta_0^2=(1+c^2)\int_X\omega^2$ by compatibility.
+Yau's theorem \cite{Yau} gives $\beta=\beta_0+\ddc u>0$ with
+$\beta^2=(1+c^2)\omega^2$. For $\alpha=\beta-c\omega$,
+\[
+ \lambda_1+\lambda_2\ge2\sqrt{1+c^2}-2c>0.
+\]
+The polynomial equation therefore has phase in $(0,\pi)$ and yields exactly $\widehat\theta$.
+\end{proof}
+
+\Needspace{9\baselineskip}
+\begin{lemma}\label{lem:positive}
+Fix $q\in(0,\pi)$. If a smooth real $(1,1)$ form $\underline\alpha$ satisfies
+\[
+ \sum_{k\ne j}\operatorname{arccot}\lambda_k(\omega^{-1}\underline\alpha)<q
+ \quad\text{for every }j,
+ \qquad\operatorname{arccot}\lambda\in(0,\pi),
+\]
+then, for $t\ge0$ and $1\le p<n$, the form
+\[
+ \Rea(\underline\alpha+t\omega+\ii\omega)^p
+ -\cot q\,\Ima(\underline\alpha+t\omega+\ii\omega)^p
+\]
+is strictly positive on every complex $p$-plane.
+\end{lemma}
+\begin{proof}\label{proof:positive}
+In a unitary diagonal frame put $\phi_j=\operatorname{arccot}(\lambda_j+t)$.
+Each nonempty proper subset $I\subsetneq\{1,\ldots,n\}$ has $0<\sum_{j\in I}\phi_j<q$.
+Its wedge coefficient, up to a positive factor, is
+\[
+ \begin{aligned}
+ &\Rea\prod_{j\in I}(\lambda_j+t+\ii)
+ -\cot q\,\Ima\prod_{j\in I}(\lambda_j+t+\ii)\\
+ &\qquad=\frac{\prod_{j\in I}\sqrt{1+(\lambda_j+t)^2}}{\sin q}
+   \sin\Bigl(q-\sum_{j\in I}\phi_j\Bigr)>0.
+ \end{aligned}
+\]
+Restriction to any $p$-plane is a nonzero sum of these coefficients with nonnegative squared-minor weights.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:subsolution}]\label{proof:subsolution}
+A solution is a subsolution because $\arctan\lambda_j<\pi/2$.
+Conversely, set $q=n\pi/2-\widehat\theta$. The partial arctangent inequalities are precisely the hypotheses of Lemma~\ref{lem:positive}. All proper-subvariety ray tests in Theorem~\ref{thm:numerical} follow. For the top degree, compatibility and differentiation give
+\[
+ \int_X P_n(A,B;q)=0,\qquad
+ \frac{d}{dt}\int_XP_n(A+tB,B;q)
+ =n\int_XP_{n-1}(\underline\alpha+t\omega,\omega;q)\wedge\omega>0.
+\]
+The remaining ray test follows; Theorem~\ref{thm:numerical} supplies the solution.
+\end{proof}
+This proves sufficiency for the ordinary $\mathcal C$-subsolution inequalities, without an additional pointwise phase hypothesis on $\underline\alpha$.
+The original Collins--Jacob--Yau existence theorem additionally assumed
+$\Theta_\omega(\underline\alpha)>(n-2)\pi/2$ \cite[Theorem 1.2]{CJY}; the argument above is instead a deduction from \cite[Theorem 1.3]{CLT}.
+
+Fix a smooth closed $\alpha_0\in A$. The $\partial\bar\partial$-lemma
+writes every representative as $\alpha_u=\alpha_0+\ddc u$;
+$u\in C^\infty(X,\R)$ is defined modulo constants.
+
+\begin{lemma}\label{lem:unique}
+For a smooth $\alpha_u$, the linearization of $\Theta_\omega$ is
+\[
+ D\Theta_u(v)=\eta^{i\bar j}v_{i\bar j},\qquad
+ \eta=\omega+\alpha_u\omega^{-1}\alpha_u>0.
+\]
+Solutions in the same class with the same real phase have potentials differing by a constant.
+\end{lemma}
+\begin{proof}\label{proof:unique}
+In a diagonal frame the coefficients are $(1+\lambda_j^2)^{-1}>0$.
+For solutions $u,v$, integration along $v+s(u-v)$ gives a linear uniformly elliptic equation for $u-v$ on compact $X$. The strong maximum principle applies.
+\end{proof}
+
+The difficult implication in Theorem~\ref{thm:numerical} is the imported construction of smooth solutions from numerical ray positivity \cite[Sections 3--7]{CLT}.
+Resolution and mass concentration produce local subsolution currents; smoothing and gluing preserve strict phase inequalities; the resulting data close the continuity argument.
+Strict positivity for each subvariety is not a uniform lower bound over all subvarieties. Producing the needed analytic margin is part of that construction.
+
+For projective $X$, the removal of the ray parameter can be seen using a very ample class $\gamma$. With $P_0=1$,
+\[
+ \int_Y P_p(A+t\gamma,B;q)
+ =\sum_{k=0}^p\binom pk t^{p-k}
+       \int_Y P_k(A,B;q)\,\gamma^{p-k}.
+\]
+General complete intersections identify the coefficients with endpoint tests on lower-dimensional cycles. They are positive, except for the zero top-degree constant term on $X$. This verifies a test family; the full test-family theorem gives existence \cite[Section 2, Corollary 1.5]{CLT}.
+The some/every-background equivalence gives separate solutions, not a common potential or estimates uniform over all $\omega\in B$.
+
+\section{Categorical stability and equality walls}\label{sec:stability}
+Let $X$ be a smooth projective surface over $\mathbb C$, with
+$b,B\in\NS(X)_\R$ and $B$ ample. Write $\Coh(X)$ for coherent sheaves,
+$D^b\Coh(X)$ for their bounded derived category, and $\mathcal H^j(E)$
+for the cohomology sheaves of a complex $E$.
+For a nonzero torsion-free sheaf $F$, define
+\[
+ \mu_{b,B}(F)=\frac{(c_1(F)-\operatorname{rk}(F)b)\cdot B}
+ {\operatorname{rk}(F)}.
+\]
+The following full subcategories form a torsion pair in $\Coh(X)$:
+\begin{itemize}
+\item $\mathcal F_{b,B}$ consists of torsion-free sheaves $F$ such that
+$\mu_{b,B}(G)\le0$ for every nonzero subsheaf $G\subseteq F$.
+\item $\mathcal T_{b,B}$ consists of sheaves $T$ such that
+$\mu_{b,B}(Q)>0$ for every nonzero torsion-free quotient $T\twoheadrightarrow Q$.
+\end{itemize}
+Both contain $0$; all torsion sheaves belong to $\mathcal T_{b,B}$.
+The tilted heart is the abelian category
+\[
+ \mathcal A_{b,B}=\left\{E\in D^b\Coh(X):
+ \begin{array}{l}
+ \mathcal H^{-1}(E)\in\mathcal F_{b,B},\quad
+ \mathcal H^0(E)\in\mathcal T_{b,B},\\
+ \mathcal H^j(E)=0\quad(j\ne-1,0)
+ \end{array}\right\}.
+\]
+Here $[m]$ denotes the shift with
+$\mathcal H^j(E[m])=\mathcal H^{j+m}(E)$.
+A sequence $0\to K\to E\to Q\to0$ is exact in $\mathcal A_{b,B}$
+when it comes from a distinguished triangle $K\to E\to Q\to K[1]$
+with $K,E,Q\in\mathcal A_{b,B}$; it need not be a sheaf exact sequence
+\cite[Section 2]{AB}.
+
+Set $\ch^b(E)=e^{-b}\ch(E)$ and
+\[
+ \begin{aligned}
+ Z_{b,B}(E)&=-\int_Xe^{-(b+\ii B)}\ch(E)\\
+ &=\frac{B^2}{2}\ch_0^b(E)-\int_X\ch_2^b(E)
+   +\ii B\cdot\ch_1^b(E).
+ \end{aligned}
+\]
+For $0\ne E\in\mathcal A_{b,B}$, this charge lies in
+$\{z:\Ima z>0\}\cup\R_{<0}$ \cite[Corollary 2.1]{AB}.
+Take $\arg Z_{b,B}(E)\in(0,\pi]$ and define
+$\phi_{b,B}(E)=\pi^{-1}\arg Z_{b,B}(E)\in(0,1]$.
+The pair $\sigma_{b,B}=(Z_{b,B},\mathcal A_{b,B})$ is a Bridgeland
+stability condition \cite[Section 2]{AB}; a nonzero $E\in\mathcal A_{b,B}$
+is stable precisely when
+\[
+ \phi_{b,B}(K)<\phi_{b,B}(E)
+ \quad\text{for every }0\ne K\subsetneq E
+ \text{ in }\mathcal A_{b,B}.
+\]
+Replacing $<$ by $\le$ defines semistability.
+Shifts of stable objects remain stable; their real phases extend by
+$\phi(E[m])=\phi(E)+m$.
+For a line bundle $L$, test stability in the heart on $L$ when
+$(c_1(L)-b)\cdot B>0$, and on $L[1]$ when
+$(c_1(L)-b)\cdot B\le0$ \cite[Section 2.1]{Makela}.
+
+\Needspace{10\baselineskip}
+\begin{theorem}[M\"akel\"a, preprint \cite{Makela}]\label{thm:scaling}
+Let $X$ be a smooth connected projective surface, $L$ a line bundle,
+and $b,B\in\NS(X)_\R$ with $B$ ample. Set $A=c_1(L)-b$ and
+\[
+ \Psi_C(A,B)=(C\cdot B)(B^2-A^2)+2(C\cdot A)(A\cdot B).
+\]
+The following are equivalent:
+\begin{enumerate}
+\item $\Psi_C(A,B)\ge0$ for every integral curve $C\subset X$;
+\item $L^{\otimes k}$ is $\sigma_{kb,kB}$-stable for every integer $k\ge1$;
+\item $L^{\otimes k}$ is $\sigma_{kb,kB}$-stable for all sufficiently large integers $k$.
+\end{enumerate}
+\end{theorem}
+
+For the projective surface data of Theorem~\ref{thm:scaling}, suppose $s=A\cdot B>0$. Then
+\[
+ c=\cot\widehat\theta=\frac{B^2-A^2}{2s},\qquad
+ \Psi_C(A,B)=2s\,(A+cB)\cdot C.
+\]
+Together with $(A+cB)^2=(1+c^2)B^2>0$ and $(A+cB)\cdot B>0$, the surface K\"ahler-cone criterion gives
+\[
+ \text{smooth dHYM solvability}\quad\Longleftrightarrow\quad
+ \Psi_C(A,B)>0\ \text{for every integral curve }C.
+\]
+Joint scaling preserves the equation exactly:
+$\Theta_{k\omega}(k\alpha)=\Theta_\omega(\alpha)$.
+It does not preserve finite-scale phase comparisons with arbitrary subobjects.
+
+\Needspace{10\baselineskip}
+\begin{proposition}\label{prop:correction}
+Let $X,L,b,B,A$ be as in Theorem~\ref{thm:scaling}, with $s=A\cdot B>0$.
+For a fixed nonzero effective divisor $C$, and all sufficiently large integers $k$,
+$L^k(-C)\subset L^k$ is a subobject in $\mathcal A_{kb,kB}$.
+Its strict stability inequality is
+\[
+ \Psi_C(A,B)-\frac{C^2}{k}s>0.
+\]
+\end{proposition}
+\begin{proof}\label{proof:correction}
+For large $k$, the slopes are $k^2s>0$ and $k^2s-kB\cdot C>0$.
+Thus both line bundles belong to $\mathcal T_{kb,kB}$, as does their torsion
+quotient $L^k|_C$. The sheaf exact sequence is therefore also exact in
+$\mathcal A_{kb,kB}$. Put $x=(B^2-A^2)/2$. Their charges are
+\[
+ \begin{aligned}
+ Z_{kb,kB}(L^k)&=k^2(x+\ii s),\\
+ Z_{kb,kB}(L^k(-C))&=k^2(x+\ii s)+kA\cdot C-C^2/2-\ii kB\cdot C.
+ \end{aligned}
+\]
+The two imaginary parts are positive. The condition
+$\Ima\bigl(Z(L^k(-C))\overline{Z(L^k)}\bigr)<0$
+is exactly the stated inequality after division by $k^3/2$.
+\end{proof}
+
+Letting $k\to\infty$ yields only $\Psi_C\ge0$.
+The converse in Theorem~\ref{thm:scaling} uses M\"akel\"a's effective-divisor detection theorem \cite[Theorem 1.1, Corollary 1.5]{Makela}: non-stability is detected by an effective divisor with $C^2<0$. Such a divisor need not be irreducible. The correction above is then strictly positive when $s>0$ and $\Psi_C\ge0$; shifted objects give the analogous argument for $s<0$.
+For $s=0$, $L[1]$ is stable by \cite[Corollary 7.2]{Makela}.
+Theorem~\ref{thm:scaling} is a preprint result, not a published higher-dimensional correspondence.
+
+\Needspace{8\baselineskip}
+\begin{example}[\cite{Fan}, Example 2.11]\label{ex:wall}
+On $X=\operatorname{Bl}_p\mathbb P^2$, let $H$ be the pullback of a line and $E$ the exceptional curve. Set
+\[
+ B=(2H-E)/\sqrt3,\qquad b=0,\qquad L=\mathcal O_X(H).
+\]
+Then $\widehat\theta=\pi/2$ and
+$\Psi_C=4(C\cdot H)/\sqrt3\ge0$, with $\Psi_E=0$.
+Thus every $L^k$ is $\sigma_{0,kB}$-stable, but no smooth dHYM solution exists: $H$ is nef and big, not K\"ahler.
+\end{example}
+
+\begin{problem}\label{prob:categorical}
+For smooth projective $X$ of dimension $n\ge3$, a line bundle $L$,
+$b,B\in\NS(X)_\R$ with $B$ ample, set $A=c_1(L)-b$.
+Assume a compatible supercritical phase $\widehat\theta$ and put
+$q=n\pi/2-\widehat\theta$.
+Determine geometric hypotheses and a family of Bridgeland stability conditions on $D^b\Coh(X)$ whose (possibly asymptotic) stability of $L$ is equivalent to the following inequalities for every irreducible $Y\subsetneq X$:
+\[
+ \int_Y\bigl(\Rea(A+\ii B)^p-\cot q\,\Ima(A+\ii B)^p\bigr)>0
+ \quad(1\le p=\dim Y<n).
+\]
+\end{problem}
+
+Problem~\ref{prob:categorical} refines the categorical dHYM programme, the holomorphic counterpart of Thomas--Yau stability \cite[Conjectures 1.2--1.3]{CS}. In the projective supercritical range, the numerical existence question is already answered by Theorem~\ref{thm:numerical}. What remains is to realize its tests by actual destabilizing objects, with a specified stability theory and a treatment of equality walls. The surface example rules out identifying unqualified all-scale stability with smooth solvability. Away from all walls $\Psi_C=0$, the surface weak and strict criteria agree \cite{Fan,Makela}.
+
+\bibliographystyle{amsplain}
+\bibliography{references}
+\end{document}

@@ -1,8 +1,12 @@
-# Pure Math Survey 2.0.2
+# Pure Math Survey 2.0.3
 
 Knowledge first: scope → primary-source reading → readable nodes/relations/evidence → coverage/readiness → immutable snapshot → output plan → writing → actual checks/build/page inspection → delivery.
 
 **The core CLI uses only Python's standard library (Python 3.10+).** This is a file-based skill and deterministic tooling, not an autonomous theorem prover or an unattended survey-writing service. An agent/author performs source reading and mathematical writing; the CLI checks contracts, dependencies, fixed bytes and declared evidence. No server, vector database, multi-agent scheduler or Studio bridge.
+
+## 2.0.3
+
+The [balanced dHYM manuscript](assets/reference-samples/dhym-balanced/README.md), supplied by the user after multiple rounds of polishing, replaces the former compact/v6 samples as the principal writing and layout reference. Its TeX, PDF, style and bibliography are preserved byte for byte. Its six pages and section/result counts are not output requirements. The separate [Schur-complement example](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/tag/v2.0.2) remains the knowledge-to-output workflow demonstration. Data schema remains 2.0.0.
 
 ## 2.0.2
 
@@ -10,11 +14,11 @@ Generated authoring materials now undergo exact snapshot/member checks before st
 
 ## 2.0.1 integration
 
-Body-aware canonical checks, seven explicit whole-manuscript reading checks, real proof/principal locations, immutable build/render history and explicit B-format v2 imports are documented in [integration-2.0.1](references/integration-2.0.1.md). Runtime 2.0.2 preserves data schema 2.0.0 and old snapshot identities. Historical accepted records never automatically satisfy new review requirements.
+Body-aware canonical checks, seven explicit whole-manuscript reading checks, real proof/principal locations, immutable build/render history and explicit B-format v2 imports are documented in [integration-2.0.1](references/integration-2.0.1.md). Runtime 2.0.3 preserves data schema 2.0.0 and old snapshot identities. Historical accepted records never automatically satisfy new review requirements.
 
 ## Install and run
 
-Extract `pure-math-survey-2.0.2.zip` and copy its single `pure-math-survey/` folder to the skill directory used by your host application. Or run its scripts directly without installing any pip package:
+Extract `pure-math-survey-2.0.3.zip` and copy its single `pure-math-survey/` folder to the skill directory used by your host application. Or run its scripts directly without installing any pip package:
 
 ```sh
 python pure-math-survey/scripts/survey.py --version --json

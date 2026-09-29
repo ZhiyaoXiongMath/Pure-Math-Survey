@@ -14,9 +14,9 @@ Compare each concise/standard pair for the same question, material assumptions, 
 
 ## Build the supplied material
 
-Run `python scripts/validate_assets.py`, then `python scripts/build_checks.py --output /absolute/empty/directory`. The output is external to the skill. The runner compiles the ten templates, the elementary example, the v6 source with its original preamble and with the current shared style, and the compact example in current and frozen style modes. It reports compilation and source-shape findings separately; it neither completes the reader review nor certifies examples.
+Run `python scripts/validate_assets.py`, then `python scripts/build_checks.py --output /absolute/empty/directory`. The output is external to the skill. The runner compiles the ten templates, the elementary example, and the balanced dHYM example in current and frozen style modes. It reports compilation and source-shape findings separately; it neither completes the reader review nor certifies examples.
 
-`stage_compact_sample` selects explicit dependencies. The `compact-current` target uses `assets/templates/math-review.sty`; `compact-frozen` uses the style next to the retained compact source. The report records the mode and style hash. Modify and build copies, not the retained originals. Render the outputs and inspect pages separately.
+`stage_balanced_sample` selects explicit dependencies, including the supplied `.bbl` and `references.bib`. The `balanced-current` target uses `assets/templates/math-review.sty`; `balanced-frozen` uses the style next to the retained balanced source. The report records the mode and style hash. Modify and build copies, not the retained originals. Render the outputs and inspect pages separately.
 
 For script or template changes, use external development tests to cover dependency isolation, literal input expansion, canonical recalls, optional Problems, stale source evidence, missing/misattached proofs, imported-result locators, principal-answer coverage, and legitimate result-free sections. These tests are not needed to use an installed skill. Normal project creation, building, validation and archive verification depend only on files supplied here and the documented tools.
 

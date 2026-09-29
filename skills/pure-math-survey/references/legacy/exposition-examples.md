@@ -119,9 +119,9 @@ See the complete assumptions, separate theorem bodies and proofs in [the element
 
 ## Structural identity before the equation
 
-In the dHYM reference, fixed data and eigenvalues precede the phase identity, which precedes the equation with its unknown. Compatibility then follows from the positive integral. The reference's equations (1.1)–(1.6) demonstrate the dependency; they are not optional prose added after an unexplained equation. Consult [the frozen reference](../../assets/reference-samples/dhym-v6/README.md) for its actual mathematical definitions and source scope; do not transfer its subject-specific notation blindly.
+In the [balanced dHYM reference](../../assets/reference-samples/dhym-balanced/README.md), Section 1 identifies the manifold, cohomology classes, background form and unknown representative together with the equation. It fixes the phase branch and compatibility before stating the principal answers. Section 2 introduces potential notation when the linearization needs it, while Section 3 defines categorical stability before using it. This illustrates local dependency order without front-loading every later definition; do not transfer its subject-specific notation blindly.
 
-A comparison between general Kähler ray conditions and projective endpoint conditions must state the actual implication and the assumptions that make it true. The reference's Section 5 supplies the polynomial expansion and hyperplane-section mechanism. “Projectivity provides a connection” does not explain that mechanism. No fixed paragraph formula is required when the mathematics already orders itself.
+A comparison between general Kähler ray conditions and projective endpoint conditions must state the actual implication and the assumptions that make it true. The balanced reference's Section 2 supplies the polynomial expansion and complete-intersection mechanism and identifies the imported test-family theorem. “Projectivity provides a connection” does not explain that mechanism. No fixed paragraph formula is required when the mathematics already orders itself.
 
 ## Organizing question and limited progress
 

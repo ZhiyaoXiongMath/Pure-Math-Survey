@@ -1,6 +1,6 @@
 # Pure Math Survey
 
-**Version 2.0.2.** Build source-grounded mathematical knowledge first, then write
+**Version 2.0.3.** Build source-grounded mathematical knowledge first, then write
 the requested English survey or lecture from an immutable snapshot.
 
 The knowledge project stores precise questions, definitions, results, proof
@@ -22,14 +22,14 @@ is a hard length constraint.
 
 ## Install
 
-Download [pure-math-survey-2.0.2.zip](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/download/v2.0.2/pure-math-survey-2.0.2.zip)
-and its checksum from the [release](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/tag/v2.0.2).
+Download [pure-math-survey-2.0.3.zip](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/download/v2.0.3/pure-math-survey-2.0.3.zip)
+and its checksum from the [release](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/tag/v2.0.3).
 Extract and copy the single `pure-math-survey` folder to your host's skills
 directory. Replace the complete skill folder rather than mixing releases.
 Alternatively, copy [skills/pure-math-survey](skills/pure-math-survey/) from this repository.
 
 Existing v1 projects are preserved through [explicit migration](docs/MIGRATION.md).
-Software version 2.0.2 continues to use data schema 2.0.0, preserving existing
+Software version 2.0.3 continues to use data schema 2.0.0, preserving existing
 native v2 snapshot identities. The old [v1.8.1 release](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/tag/v1.8.1) remains available.
 
 ## Use
@@ -54,10 +54,20 @@ and a new snapshot. Both generated statements and supplied authoring materials
 are checked against that snapshot. Author self-review is recorded separately
 from independent review; compilation and hashes do not establish correctness.
 
-## Example and verification
+## Examples and verification
+
+The [balanced dHYM survey](skills/pure-math-survey/assets/reference-samples/dhym-balanced/README.md)
+is the principal research-survey writing and layout reference: a six-page manuscript
+supplied by the user after multiple rounds of polishing. It moves from precise
+solvability results to proof mechanisms, local stability definitions and an
+explicit equality-wall example. Its source and PDF are preserved unchanged;
+its length, outline and result counts are not requirements for other surveys.
+Download the [PDF](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/download/v2.0.3/dhym-survey-revised.pdf)
+or the [original supplied source archive](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/download/v2.0.3/dHYM_survey_balanced_source.zip).
+The former compact/v6 dHYM samples remain available in the v2.0.2 tag and release.
 
 The [Schur-complement example](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/download/v2.0.2/pure-math-survey-2.0.2-schur-example.zip)
-contains a new nine-node knowledge project, its actual source-reading notes,
+remains the separate workflow demonstration from 2.0.2. It contains a nine-node knowledge project, its actual source-reading notes,
 knowledge-only update history, a two-page minimal survey, a three-page lecture,
 and review-change impact evidence. The author's source PDF is not redistributed.
 It records author self-review, not independent mathematical review.
@@ -77,8 +87,8 @@ may additionally use PyMuPDF and Pillow.
 ```sh
 python -m unittest discover -s tests -v
 python skills/pure-math-survey/scripts/validate_assets.py --json
-python skills/pure-math-survey/scripts/package_release.py --output ../pure-math-survey-2.0.2.zip
-python tools/verify_release.py ../pure-math-survey-2.0.2.zip --no-build
+python skills/pure-math-survey/scripts/package_release.py --output ../pure-math-survey-2.0.3.zip
+python tools/verify_release.py ../pure-math-survey-2.0.3.zip --no-build
 ```
 
 The test suite includes real TeX builds. Linux CI runs it on Python 3.10 and 3.12,

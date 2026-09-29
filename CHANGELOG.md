@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.0.3
+
+Replace the compact and v6 dHYM examples with the user-supplied, repeatedly polished
+balanced manuscript as the principal writing/layout reference. Preserve the exact
+TeX, PDF, style and bibliography, with file hashes and an explicit source note.
+The source archive's bookkeeping version is not a claim about how the article was
+generated. The original supplied ZIP is available separately with this release.
+
+Keep the Schur-complement example as the knowledge-to-output workflow demonstration.
+Update guidance, packaging and current/frozen style builds to use the balanced
+example and stage its supplied bibliography. Check packaged member hashes, source
+immutability and bibliography dependencies. Remove the former samples from the
+current installation; their original bytes remain in Git history and v2.0.2.
+
+Software version is 2.0.3; data schema and immutable snapshot identities remain
+2.0.0. This sample replacement introduces no new mathematical certification.
+
 ## 2.0.2
 
 The first public v2 release replaces article-first planning with a reusable,

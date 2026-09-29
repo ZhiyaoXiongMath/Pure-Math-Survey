@@ -4,6 +4,7 @@ Actual mathematics and page observations are in the separate release example,
 not this suite.
 """
 from __future__ import annotations
+import hashlib
 import json
 from pathlib import Path
 import shutil
@@ -184,17 +185,38 @@ class Contracts(unittest.TestCase):
         self.assertEqual(freeze_snapshot(self.root)['status'],'FROZEN')
     def test_T21_actual_archive_extraction_isolated_entry(self):
         z=self.base/'skill.zip';package(SKILL,z);self.assertGreater(verify_archive(z)['members'],120)
-        dest=self.base/'unpacked';zipfile.ZipFile(z).extractall(dest);entry=dest/'pure-math-survey/scripts/survey.py'
-        p=subprocess.run([sys.executable,'-I',str(entry),'--json','--version'],capture_output=True,text=True,cwd=self.base);self.assertEqual(p.returncode,0,p.stderr);self.assertEqual(json.loads(p.stdout)['artifacts']['version'],'2.0.2')
+        dest=self.base/'unpacked'
+        with zipfile.ZipFile(z) as archive:
+            names=archive.namelist()
+            self.assertFalse(any('/dhym-v6/' in n or '/dhym-compact/' in n for n in names))
+            archive.extractall(dest)
+        sample=dest/'pure-math-survey/assets/reference-samples/dhym-balanced'
+        provenance=read_json(sample/'provenance.json')
+        for name,record in provenance['files'].items():
+            self.assertEqual(hashlib.sha256((sample/name).read_bytes()).hexdigest(),record['sha256'])
+        entry=dest/'pure-math-survey/scripts/survey.py'
+        p=subprocess.run([sys.executable,'-I',str(entry),'--json','--version'],capture_output=True,text=True,cwd=self.base);self.assertEqual(p.returncode,0,p.stderr);self.assertEqual(json.loads(p.stdout)['artifacts']['version'],'2.0.3')
         p=subprocess.run([sys.executable,'-I',str(entry.parent/'validate_assets.py'),'--json'],capture_output=True,text=True,cwd=self.base);self.assertEqual(p.returncode,0,p.stdout+p.stderr);self.assertEqual(json.loads(p.stdout)['profile_preparations_executed'],['minimal','thematic','lecture'])
     def test_T22_actual_current_and_frozen_style_builds(self):
-        from build_checks import stage_compact_sample,compile_one
-        root=self.base/'styles';(root/'assets/templates').mkdir(parents=True);shutil.copytree(SKILL/'assets/reference-samples/dhym-compact',root/'assets/reference-samples/dhym-compact')
+        from build_checks import stage_balanced_sample,compile_one
+        root=self.base/'styles';(root/'assets/templates').mkdir(parents=True);shutil.copytree(SKILL/'assets/reference-samples/dhym-balanced',root/'assets/reference-samples/dhym-balanced')
+        original={p.name:p.read_bytes() for p in (root/'assets/reference-samples/dhym-balanced').iterdir()}
         current=(SKILL/'assets/templates/math-review.sty').read_bytes()+b'\n\\typeout{PMS-V2-CURRENT-STYLE-ONLY}\n';(root/'assets/templates/math-review.sty').write_bytes(current)
         seen={}
         for mode in ('current','frozen'):
-            d=self.base/mode;entry=stage_compact_sample(root,d,mode=mode);r=compile_one(d,entry.name,shutil.which('pdflatex'));self.assertEqual(r['status'],'PASS',r);seen[mode]=(d/(entry.stem+'.log')).read_text(errors='replace')
+            d=self.base/mode;entry=stage_balanced_sample(root,d,mode=mode);r=compile_one(d,entry.name,shutil.which('pdflatex'));self.assertEqual(r['status'],'PASS',r);seen[mode]=(d/(entry.stem+'.log')).read_text(errors='replace')
+            self.assertEqual((d/'references.bib').read_bytes(),original['references.bib'])
+            self.assertEqual((d/'dhym-survey-revised.bbl').read_bytes(),original['dhym-survey-revised.bbl'])
         self.assertIn('PMS-V2-CURRENT-STYLE-ONLY',seen['current']);self.assertNotIn('PMS-V2-CURRENT-STYLE-ONLY',seen['frozen'])
+        self.assertEqual(original,{p.name:p.read_bytes() for p in (root/'assets/reference-samples/dhym-balanced').iterdir()})
+    def test_balanced_staging_requires_supplied_bibliography(self):
+        from build_checks import stage_balanced_sample
+        root=self.base/'styles';sample=root/'assets/reference-samples/dhym-balanced'
+        shutil.copytree(SKILL/'assets/reference-samples/dhym-balanced',sample)
+        (sample/'dhym-survey-revised.bbl').unlink()
+        destination=self.base/'missing-bibliography'
+        with self.assertRaises(FileNotFoundError):stage_balanced_sample(root,destination,mode='frozen')
+        self.assertFalse(destination.exists())
     def test_T23_draft_package_refused(self):
         p=plan(self.root);authored_toy(self.root);self.code('DRAFT_NOT_RELEASABLE',package_output,self.root,'mini',self.base/'forbidden.zip');self.assertFalse((self.base/'forbidden.zip').exists())
     def test_T24_cache_delete_and_relocation(self):

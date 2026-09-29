@@ -5,7 +5,7 @@ description: Build and maintain source-grounded mathematical knowledge, then wri
 
 # Pure Math Survey
 
-**Software version: 2.0.2; data schema: 2.0.0.** Local files, one writer, Python 3.10+. Mathematics and manuscripts are English; discussion follows the user's language.
+**Software version: 2.0.3; data schema: 2.0.0.** Local files, one writer, Python 3.10+. Mathematics and manuscripts are English; discussion follows the user's language.
 
 ## Identify the task and project
 
@@ -57,6 +57,8 @@ Run `output prepare PROJECT --plan PROJECT/outputs/ID/plan.json`. Formal prepara
 
 Read [introduction](references/introduction.md), [writing style](references/writing-style.md) and the selected [profile](references/editions.md). Insert complete statements through `\input{../generated/statements/N-....tex}`; only the surrounding wrapper/label/number may differ. Never hand-edit generated fragments. Minimal presents the usable question, answer, short mechanism and decisive boundary early. Thematic explains supported relationships and compares routes around its question. Lecture orders prerequisites and actually develops the promised calculations, intermediate lemmas and examples. All three preserve exact shared claims.
 
+For a finished writing/layout reference, consult the [user-polished balanced dHYM manuscript](assets/reference-samples/dhym-balanced/README.md) and [example roles](references/exposition-examples.md). Borrow useful local exposition, not its topic scope, six-page length or counts of sections and results. The separate Schur example demonstrates the knowledge-to-output workflow.
+
 Do not invent decorative theorem or definition names. Author attributions are useful. Use mathematical formulas in place of wordy paraphrases, short clauses or itemized independent hypotheses, and focused conclusions. Put secondary consequences afterward. Omit trivial transitions. Repeat necessary local hypotheses rather than forcing needless backtracking. Examples must calculate, distinguish conditions or expose a boundary; no quotas. Neither page counts nor more words establish lecture quality.
 
 New claims discovered while writing return to the KB for argument, review and a new snapshot before formal use. The surrounding prose must not enlarge a correct imported fragment. Minimal must be independently readable without an unrequested lecture; lecture must not claim full proofs of imported results.
@@ -79,4 +81,4 @@ This is Survey, not Research Studio. Preserve stable IDs, exact content, source 
 
 ## 2.0.1: body, evidence scope, history and contract identity
 
-Read `references/integration-2.0.1.md` before releasing or importing a project. Require literal canonical inputs in the actual document body, seven explicit whole-manuscript reading checks and real structured proof/principal locations. A template never grants acceptance. Preserve every old review and build attempt; a failed new build must not destroy or silently reuse the last successful build. Use `kb format` and explicit `import-v2` for foreign B-format 2.0.0 projects; do not translate historical PASS into acceptance. Runtime 2.0.2 retains schema 2.0.0 for immutable snapshot identity. No new source/semantic/visual approval follows from running a test or converter.
+Read `references/integration-2.0.1.md` before releasing or importing a project. Require literal canonical inputs in the actual document body, seven explicit whole-manuscript reading checks and real structured proof/principal locations. A template never grants acceptance. Preserve every old review and build attempt; a failed new build must not destroy or silently reuse the last successful build. Use `kb format` and explicit `import-v2` for foreign B-format 2.0.0 projects; do not translate historical PASS into acceptance. Runtime 2.0.3 retains schema 2.0.0 for immutable snapshot identity. No new source/semantic/visual approval follows from running a test or converter.

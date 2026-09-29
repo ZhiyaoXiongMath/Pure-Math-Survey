@@ -16,7 +16,7 @@ The [introduction](introduction.md), [writing style](writing-style.md), and [pro
 
 ## Optional exposition references
 
-The [dHYM v6 article](../../assets/reference-samples/dhym-v6/README.md) offers selected local exposition and layout. The [compact surface article](../../assets/reference-samples/dhym-compact/README.md) illustrates a narrow two-way reduction. The [elementary examples](exposition-examples.md) illustrate explicit conditions, useful recalls and proof boundaries. These are optional for either edition. Their source dates and mathematical scope remain attached to them; retention is not a new source certification.
+The [user-polished balanced dHYM article](../../assets/reference-samples/dhym-balanced/README.md) is the current writing/layout reference, replacing the former compact and v6 examples. It illustrates focused principal answers, essential proof steps and local definitions followed by a concrete equality boundary. The [elementary examples](exposition-examples.md) illustrate explicit conditions and proof boundaries. These are optional for either edition. Their source dates and mathematical scope remain attached to them; inclusion is not a new source certification.
 
 No example supplies the default scope, outline, theorem count, number of Problems or page allocation. When borrowing a local writing device, read its actual passage and rendered page. Judge its usefulness under the current rules, not an old approval label. Do not infer whole-article quality from one successful passage.
 

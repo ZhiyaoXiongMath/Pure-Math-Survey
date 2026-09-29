@@ -11,7 +11,7 @@ class Parser(argparse.ArgumentParser):
     def error(self,message):raise SurveyError('CLI_ARGUMENT_INVALID',message)
 
 def parser()->Parser:
-    p=Parser(description='Pure Math Survey 2.0.2: knowledge first, immutable inputs, honest evidence.');p.add_argument('--version',action='store_true')
+    p=Parser(description='Pure Math Survey 2.0.3: knowledge first, immutable inputs, honest evidence.');p.add_argument('--version',action='store_true')
     sub=p.add_subparsers(dest='command')
     i=sub.add_parser('init');i.add_argument('--output',type=Path,required=True);i.add_argument('--topic',required=True);i.add_argument('--scope',type=Path,required=True);i.add_argument('--title');i.add_argument('--language',default='en')
     k=sub.add_parser('kb');ks=k.add_subparsers(dest='action',required=True)

@@ -63,12 +63,12 @@ It uses PyMuPDF and Pillow, renders all pages, checks page boxes and reports exa
 python scripts/validate_assets.py
 python scripts/build_checks.py --output /absolute/path/to/checks
 python scripts/compare_pdf.py \
-  assets/reference-samples/dhym-v6/dhym-survey-polished-v6.pdf \
-  /absolute/path/to/checks/v6-shared-style/v6-shared-style.pdf \
+  assets/reference-samples/dhym-balanced/dhym-survey-revised.pdf \
+  /absolute/path/to/checks/balanced-current/dhym-survey-revised.pdf \
   --output /absolute/path/to/checks/reference-comparison
 ```
 
-The build runner uses pdfLaTeX with no shell escape, checks stabilization and logs, and leaves sources unchanged. It compiles ten instructional scaffolds, the elementary example, the v6 example with original and shared preambles, and the compact example with current and frozen styles. The scaffolds deliberately retain insertion text and are not publication deliverables. The sample's mathematical content and date are preserved.
+The build runner uses pdfLaTeX with no shell escape, checks stabilization and logs, and leaves sources unchanged. It compiles ten instructional scaffolds, the elementary example, and the balanced dHYM example with current and frozen styles. Both sample builds include the supplied bibliography. The scaffolds deliberately retain insertion text and are not publication deliverables. The sample's mathematical content and date are preserved.
 
 Real builds require a TeX distribution with AMS packages, `mathtools`, `geometry`, `enumitem`, `needspace` and `hyperref`; STIX2/Latin Modern and microtype are optional. The PDF comparator additionally requires PyMuPDF and Pillow and must report a missing dependency rather than pretend it rendered pages.
 

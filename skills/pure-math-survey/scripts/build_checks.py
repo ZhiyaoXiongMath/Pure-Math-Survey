@@ -40,24 +40,6 @@ def log_warnings(text: str) -> dict[str, list[str]]:
             if (found := [line for line in text.splitlines() if re.search(pattern, line)])}
 
 
-def shared_style_source(source: str) -> str:
-    """Replace only the frozen sample's known preamble, or fail closed.
-
-The original remains immutable. Metadata and subject macros are preserved. This
-is a fixed-reference adapter, not a generic TeX parser or source transformer.
-"""
-    start = source.find(r"\usepackage[T1]{fontenc}")
-    end = source.find(r"\newcommand{\ddbar}")
-    if start < 0 or end <= start or source.count(r"\newcommand{\ddbar}") != 1:
-        raise ValueError("Reference preamble markers do not match the frozen v6 adapter")
-    preamble = source[start:end]
-    match = re.search(r"\\hypersetup\{(.*?)\}\s*\\linespread", preamble, re.S)
-    if not match:
-        raise ValueError("Reference PDF metadata block is missing")
-    replacement = ("% Maintenance-only shared-style regression; original body unchanged.\n"
-                   "\\usepackage{math-review}\n\\hypersetup{" + match.group(1) + "}\n\n")
-    return source[:start] + replacement + source[end:]
-
 def auxiliary_digest(folder: Path, stem: str) -> str:
     h = hashlib.sha256()
     for suffix in (".aux", ".toc", ".out"):
@@ -114,14 +96,15 @@ def compile_one(folder: Path, entrypoint: str, engine: str, timeout: int = 120) 
             "recall_counters": recalls,
             "status": "PASS" if not issues else "FAIL"}
 
-def stage_compact_sample(root: Path, destination: Path, *, mode: Literal["current", "frozen"]) -> Path:
+def stage_balanced_sample(root: Path, destination: Path, *, mode: Literal["current", "frozen"]) -> Path:
     """Stage explicit dependencies; do not confuse regression with reproduction."""
     if mode not in ("current", "frozen"):
         raise ValueError(f"Unsupported style mode: {mode}")
-    sample = root / "assets/reference-samples/dhym-compact"
+    sample = root / "assets/reference-samples/dhym-balanced"
     style = (root / "assets/templates/math-review.sty" if mode == "current"
              else sample / "math-review.sty")
-    inputs = [sample / "dhym-surface-compact.tex", style]
+    inputs = [sample / "dhym-survey-revised.tex", sample / "dhym-survey-revised.bbl",
+              sample / "references.bib", style]
     for source in inputs:
         if not source.is_file():
             raise FileNotFoundError(source)
@@ -130,7 +113,7 @@ def stage_compact_sample(root: Path, destination: Path, *, mode: Literal["curren
     destination.mkdir(parents=True, exist_ok=True)
     for source in inputs:
         shutil.copy2(source, destination / source.name)
-    return destination / "dhym-surface-compact.tex"
+    return destination / "dhym-survey-revised.tex"
 
 def run_checks(output: Path, engine: str = "pdflatex") -> dict:
     engine_path = shutil.which(engine)
@@ -161,17 +144,9 @@ def run_checks(output: Path, engine: str = "pdflatex") -> dict:
         shutil.copy2(fixture, folder / fixture.name)
     shutil.copy2(style, folder / style.name)
     tasks.append((folder, "exposition-smoke.tex"))
-    reference = ROOT / "assets/reference-samples/dhym-v6/dhym-survey-polished-v6.tex"
-    text = reference.read_text(encoding="utf-8")
-    for name, content in (("v6-original-preamble", text), ("v6-shared-style", shared_style_source(text))):
-        folder = output / name
-        folder.mkdir()
-        (folder / (name + ".tex")).write_text(content, encoding="utf-8")
-        shutil.copy2(style, folder / style.name)
-        tasks.append((folder, name + ".tex"))
     for mode in ("current", "frozen"):
-        folder = output / f"compact-{mode}"
-        entry = stage_compact_sample(ROOT, folder, mode=mode)
+        folder = output / f"balanced-{mode}"
+        entry = stage_balanced_sample(ROOT, folder, mode=mode)
         tasks.append((folder, entry.name))
     for folder, entry in tasks:
         print(f"Building {entry}", flush=True)
@@ -181,10 +156,10 @@ def run_checks(output: Path, engine: str = "pdflatex") -> dict:
             result = {"entrypoint": entry, "status": "FAIL", "error": str(exc)}
         result["artifact_kind"] = ("instructional_scaffold" if entry.startswith("part") else
                                    "elementary_example" if entry.startswith("exposition") else
-                                   "shared_style_regression" if folder.name in {"compact-current", "v6-shared-style"} else
+                                   "shared_style_regression" if folder.name == "balanced-current" else
                                    "frozen_sample_reproduction")
         result["target"] = folder.name
-        if entry == "dhym-surface-compact.tex":
+        if entry == "dhym-survey-revised.tex":
             result["style_mode"] = folder.name.rsplit("-", 1)[-1]
             result["style_sha256"] = hashlib.sha256((folder / "math-review.sty").read_bytes()).hexdigest()
         # Findings are reader-review pointers, not a mathematical build verdict.

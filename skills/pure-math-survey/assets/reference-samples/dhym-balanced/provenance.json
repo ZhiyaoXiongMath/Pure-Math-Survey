@@ -1,0 +1,36 @@
+{
+  "reference_id": "dhym-balanced",
+  "role": "principal-writing-and-layout-reference",
+  "origin": "User-supplied manuscript after multiple rounds of deliberate polishing; supplied by the user for this release.",
+  "generation_provenance": "No generation tool/version is inferred from the source archive metadata.",
+  "frozen": true,
+  "introduced_in": "2.0.3",
+  "pages": 6,
+  "source_archive": {
+    "release_asset": "dHYM_survey_balanced_source.zip",
+    "sha256": "bc1774d3640124341a6bfd24fd4991588db7331ce6cc908ffc7025d41a99e776"
+  },
+  "review_scope": "Writing, layout and reproduction reference. Original mathematical scope, source dates and qualifications are preserved; no new independent mathematical review or complete frontier search is claimed.",
+  "files": {
+    "dhym-survey-revised.tex": {
+      "archive_member": "dhym-balanced/dhym-survey-revised.tex",
+      "sha256": "3e4ef889b88ee2d61e279a125111d2aea156017c316e4c63a8ca1c60671fae69"
+    },
+    "dhym-survey-revised.pdf": {
+      "archive_member": "dhym-balanced/dhym-survey-revised.pdf",
+      "sha256": "8df58ec1cf132ca78469a014c20dee13fd4f794402882bbe5668a15d90543074"
+    },
+    "dhym-survey-revised.bbl": {
+      "archive_member": "dhym-balanced/dhym-survey-revised.bbl",
+      "sha256": "7de6a03d514a798b2b93c59c380029bd5a67db8fff180cf32921c81a984cc48b"
+    },
+    "references.bib": {
+      "archive_member": "dhym-balanced/references.bib",
+      "sha256": "8e3254ae8476559401c5afb9b7038304d6bc13f6757af5d1d960048a178ce17d"
+    },
+    "math-review.sty": {
+      "archive_member": "dhym-balanced/math-review.sty",
+      "sha256": "d0f243dbabb5023647129cee5cbbdde36ba6995b09950ac8671abb341fadaa2c"
+    }
+  }
+}
