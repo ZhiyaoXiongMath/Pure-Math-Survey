@@ -1,13 +1,91 @@
-# Profiles, views and explicit comparisons
+# Four independent publication profiles
 
-The supported profiles are `minimal`, `thematic`, `lecture`. PDF is a format. Default output selection is `minimal` with `view: integrated`; a knowledge/update-only task has no implicit output. Generate no extra profiles unless requested.
+`minimal / thematic / lecture / paper` are mathematical reading tasks, not length tiers.
+`view` remains `integrated / foundations / results / methods / boundaries`. A view never
+waives a profile's responsibilities. Knowledge-only work produces no manuscript or PDF.
+For a requested output without a profile, use minimal/integrated. Generate only the
+requested profiles. PDF is a delivery format, not a fifth profile.
 
-| Profile | Reading task | Actual writing behavior |
-|---|---|---|
-| minimal | Recover exact problem, answer, mechanism, boundary quickly | Present useful definitions and full principals early; show decisive formulas; omit routine interiors, not conditions. |
-| thematic | Understand relationships within a chosen topic | Organize around questions and supported comparison/relation nodes; explain development and applicability rather than summarize each paper. |
-| lecture | Learn the specified definitions and derivations | Use prerequisite order; state imported inputs and work through every promised intermediate calculation; model examples teach the method. |
+## Minimal: Results → Points → Connections
 
-Views are integrated/foundations/results/methods/boundaries, independent of depth. Four facets/Parts I–IV do not request four files. `output plan` creates a draft selection for editorial refinement; `output prepare` produces profile-specific writing materials and an incomplete scaffold, not certified mathematical prose. Readability and mathematical adequacy require actual agent/author writing and review.
+Use exactly three numbered main sections, in this order:
 
-Only an explicitly requested same-main-line comparison sets `comparison_group`. Then snapshot, questions, principal answers and decisive boundaries must agree. Different topical subsets need not have the same principal answers. Any shared node always uses identical canonical bytes. Numbering and explanatory order can differ.
+1. Main Results
+2. Key Mathematical Ingredients
+3. Connecting the Ingredients
+
+References are not a fourth mathematical section. A title and a brief orientation
+sentence are allowed; no long background section precedes the results. Put every
+principal's complete canonical statement in a theorem/proposition/corollary environment
+in the first section. Include decisive caveats locally, not a delayed correction.
+
+Choose only points the third section actually consumes and this reader cannot yet
+reliably use. A point gives the object or precise identity, its input conditions,
+its mathematical output and its consumer. Neither a textbook-sized black box nor
+every algebraic equality is a useful point. The third section actually constructs,
+estimates, substitutes or takes a justified limit; identify conjunctions, alternatives,
+parameters and exact imported theorems. A bare arrow diagram or “standard arguments”
+is not a decisive connection. Routine proof interiors may be compressed; decisive
+steps and hypotheses may not.
+
+Acceptance requires reconstructing the full results and the actual point-to-result
+argument from this article alone. Three correct headings do not establish this.
+
+## Thematic: Questions → Approaches → Synthesis
+
+Organize by precise mathematical questions and mechanisms, not author/year lists.
+State representative full principal results early. Explain the structural obstruction
+using actual unknowns, estimates or failed implications. For each genuine route give
+motivation, mechanism, precise results, decisive proof ideas and limits. A topic with
+one mature route needs no invented competitor. The titles and number of sections adapt
+to the mathematics.
+
+Compare assumptions, unknowns, quantifier order, normalization, regularity, dimension,
+rank and branches on the same footing. Claims of equivalence, strengthening or extension
+need a precise source or a reviewed relation/local derivation in the KB. The synthesis
+must say what really follows and what does not. Remove author names as a test: the
+mathematical organization must remain intelligible.
+
+## Lecture: Motivation → Construction → Proof
+
+Present a complete goal theorem early and a faithful proof strategy. Prepare only
+prerequisites that are actually consumed: assumed, refreshable or bridge-required for
+this reader. Establish an unfamiliar construction with a motivating model or calculation.
+For each promised step show the local problem, mathematical object, actual derivation,
+output and next use. Explain where hypotheses enter, which constants are uniform,
+which topology supports a limit, and why admissibility and regularity persist.
+
+Every promised substantive calculation must be reproducible from the text. Imported
+deep results may remain unproved, with their exact interface and attribution explicitly
+disclosed. A worked model and meaningful failure boundary test usability; exercises
+and a fixed section count are not compulsory. Length and formula density are not
+learning evidence.
+
+## Paper: Contributions → Mechanisms → Rigorous Proofs
+
+This is original research writing, not a renamed lecture or an automated theorem
+invention service. Identify every principal as original, known, conjectural or
+unverified in the plan. For original results bind authorized provenance, closest verified
+prior-result nodes, reviewed comparison relations, the precise difference, full proof
+obligations and caveats. Prior-art searches and source readings must be actual, dated
+and scoped. Software validates records, not novelty.
+
+Use an abstract and an early, self-contained presentation of the new results, compare
+with closest prior work in the same language and explain the new mechanism. The body
+must close every original proof, with exact imported inputs and accurate attribution.
+A short research note and a long article may use different sections. Incomplete proofs,
+unchecked contributions or unresolved essential gaps are `DRAFT_UNVERIFIED` only.
+Creating a Paper plan defaults to this draft state. Removing a visible notice or changing
+a boolean does not satisfy readiness, semantic review, build and publication gates.
+
+## Common obligations and comparisons
+
+All modes preserve identical canonical bytes and locally intelligible principal
+statements. All use short prose and meaningful displays, without a formula or page
+quota. Read [reader calibration](reader-calibration.md), [writing style](writing-style.md),
+[proof obligations](proofs-and-boundaries.md), and [review](output-review.md).
+
+Only an explicitly requested same-spine comparison uses `comparison_group`; then the
+snapshot, questions, principal answers and decisive boundaries agree. Otherwise each
+article may choose its own subset and teaching order. Preparation supplies bounded
+materials and an unfinished scaffold; authors must actually write and review it.

@@ -10,7 +10,7 @@ FACETS = {'foundations', 'results', 'methods', 'boundaries'}
 KINDS = {'question', 'definition', 'result', 'relation', 'mechanism', 'example', 'application', 'frontier'}
 STATUSES = {'unassessed', 'established', 'conjectural', 'open', 'refuted', 'not_applicable'}
 RELATIONS = {'uses_definition', 'proof_input', 'explained_by', 'explains', 'compares_with', 'refutes', 'specializes'}
-PROFILES = {'minimal', 'thematic', 'lecture'}
+from .profiles import PROFILES, validate_plan_contract
 
 def fields(obj: dict, required: dict[str, type], path: str = '') -> None:
     require(isinstance(obj, dict), 'CONTRACT_INVALID', 'Expected JSON object', path)
@@ -124,7 +124,8 @@ def load_plan(path: Path) -> dict:
     if path.name == 'plan.json' and path.parent.parent.name == 'outputs':
         require(obj.get('output_id') == path.parent.name, 'PLAN_OUTPUT_MISMATCH',
                 'Plan output_id must match its owning output directory', str(path))
-    fields(obj, {'schema_version': str, 'output_id': str, 'snapshot_id': str, 'profile': str, 'view': str, 'language': str,
+    validate_plan_contract(obj)
+    fields(obj, {'output_id': str, 'snapshot_id': str, 'profile': str, 'view': str, 'language': str,
                  'title': str, 'audience': str, 'reader_goals': list, 'question_ids': list, 'prerequisites': list,
                  'selections': list, 'omissions': list, 'proof_obligations': list, 'limits': dict, 'draft': bool}, loc)
     require(identifier(obj['output_id']) and re.fullmatch('KB-[a-f0-9]{64}', obj['snapshot_id']), 'CONTRACT_INVALID', 'Invalid output/snapshot ID', loc)

@@ -1,0 +1,78 @@
+{
+  "schema_version": "2.1.0",
+  "output_id": "minimal",
+  "snapshot_id": "KB-714ebb540c07ca2585ac455f40d642f6920d708a8a3ce1f91f4e4000d41f12cd",
+  "profile": "minimal",
+  "view": "integrated",
+  "language": "en",
+  "title": "Square completion and the Schur complement",
+  "audience": "The reader can test positive definiteness using quadratic forms, multiply block matrices, and complete a scalar square. Schur complements and congruence elimination are built here.",
+  "reader_goals": [
+    "Recover the full results, callable ingredients, and decisive mathematical connections."
+  ],
+  "question_ids": [
+    "N-question"
+  ],
+  "prerequisites": [
+    "Assumed: The reader can test positive definiteness using quadratic forms, multiply block matrices, and complete a scalar square. Schur complements and congruence elimination are built here."
+  ],
+  "selections": [
+    {
+      "node_id": "N-boundary",
+      "role": "boundary",
+      "statement_treatment": "explained_reference",
+      "proof_treatment": "citation",
+      "reason": "Actually used by the authored minimal argument or by its explicit failure-boundary discussion."
+    },
+    {
+      "node_id": "N-inverse",
+      "role": "essential_bridge",
+      "statement_treatment": "full",
+      "proof_treatment": "citation",
+      "reason": "Actually used by the authored minimal argument or by its explicit failure-boundary discussion."
+    },
+    {
+      "node_id": "N-main",
+      "role": "principal_answer",
+      "statement_treatment": "full",
+      "proof_treatment": "mechanism",
+      "reason": "Actually used by the authored minimal argument or by its explicit failure-boundary discussion."
+    },
+    {
+      "node_id": "N-square",
+      "role": "essential_bridge",
+      "statement_treatment": "full",
+      "proof_treatment": "citation",
+      "reason": "Actually used by the authored minimal argument or by its explicit failure-boundary discussion."
+    }
+  ],
+  "omissions": [
+    {
+      "node_id": "N-comparison",
+      "reason": "The square-completion route already closes this article; the equivalent congruence comparison belongs to the thematic output."
+    }
+  ],
+  "proof_obligations": [
+    {
+      "node_id": "N-main",
+      "treatment": "mechanism",
+      "required_steps": [
+        "Use the exact square identity to isolate the residual form.",
+        "Use the invertible change of variables for sufficiency.",
+        "Choose x=-A^{-1}By for every nonzero y to prove necessity."
+      ],
+      "imported_inputs": [
+        "N-square",
+        "N-inverse"
+      ]
+    }
+  ],
+  "limits": {
+    "max_pages": null,
+    "page_review_threshold": null
+  },
+  "comparison_group": null,
+  "draft": false,
+  "editorial_policy": "four-modes-2026-10-11-r2",
+  "contributions": []
+}

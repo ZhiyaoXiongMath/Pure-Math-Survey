@@ -1,0 +1,65 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "AUTHOR-schur-N-comparison",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-11",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/guide.md",
+      "sha256": "983facc726cb80b8557af6559099fb00c52189e4bdf201dc4d23d92f297f56eb"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "11cd32e393793531befa920aceac933e3c544ada8683f11f893b87876a529217"
+    },
+    {
+      "path": "knowledge/nodes/N-comparison.md",
+      "sha256": "632643cac6d7e6525b1a944dc6c9db71a6b4ea108217fd332da51951ccb0b86f"
+    },
+    {
+      "path": "knowledge/nodes/N-inverse.md",
+      "sha256": "6f5849541d1c6d504b6ba4422a55f8098b6799a09a560ec47edd7194d67c1825"
+    },
+    {
+      "path": "knowledge/nodes/N-square.md",
+      "sha256": "e85d8c39b5085ed191764a5d140b110b783fef7582b27ac50e1db6a761b74e57"
+    },
+    {
+      "path": "knowledge/sources/S-guide.json",
+      "sha256": "1e3177ed0672d6a08f1382eeca94e093f14d25c8ffb9690ed18686919af1283c"
+    },
+    {
+      "path": "project.json",
+      "sha256": "115206db4cea5d445c1b55fc133c7abb052682331c37821eedded041d8324ae3"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "6e6ebc462dbd6c081d7e03592bae8af55a86345bc8abfd525caff56d8ad00844"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-comparison"
+    ],
+    "evidence_basis": "Author expansion and rereading of the displayed square identity, both positivity directions, congruence computation and scalar failure model.",
+    "proof_steps": {
+      "N-comparison": [
+        "Expand the square with A symmetric and invertible.",
+        "Use the invertible change of variables for sufficiency.",
+        "Choose x=-A^{-1}By for every nonzero y to prove necessity."
+      ]
+    }
+  },
+  "findings": [
+    "Author expansion and rereading of the displayed square identity, both positivity directions, congruence computation and scalar failure model.",
+    "The necessity vector is nonzero because y is nonzero; symmetry of A is used in the expansion."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "No independent mathematical reviewer or real target-reader experiment; no originality or literature-completeness claim."
+    }
+  ],
+  "disposition": "accepted"
+}

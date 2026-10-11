@@ -1,17 +1,17 @@
 ---
 name: pure-math-survey
-description: Build and maintain source-grounded mathematical knowledge, then write only the requested English survey or lecture from an immutable snapshot. Supports knowledge-only projects and minimal, thematic, and lecture profiles; defaults to minimal plus integrated only when an output is requested.
+description: Build and maintain source-grounded mathematical knowledge, then write only the requested English survey, lecture or research-paper draft from an immutable snapshot. Supports knowledge-only projects and minimal, thematic, lecture, and paper profiles; defaults to minimal plus integrated only when an output is requested.
 ---
 
 # Pure Math Survey
 
-**Software version: 2.0.4; data schema: 2.0.0.** Local files, one writer, Python 3.10+. Mathematics and manuscripts are English; discussion follows the user's language.
+**Candidate software: 2.1.0-rc1; knowledge/snapshot schema: 2.0.0; new output/policy-review schema: 2.1.0.** Local files, one writer, Python 3.10+. Mathematics and manuscripts are English; discussion follows the user's language.
 
 ## Identify the task and project
 
 Recover the user's mathematical scope, actual materials, reader assumptions and requested outputs. A knowledge-only or update-only request ends with knowledge, evidence and optional snapshots: do not generate a manuscript or PDF. Otherwise default to **minimal + integrated**, and generate only the requested output. PDF is a delivery format, not a profile. Read [profiles](references/editions.md) and [records](references/records-and-delivery.md).
 
-Use `python scripts/survey.py init --output PROJECT --topic SLUG --scope SCOPE.md` for a new knowledge project. Existing projects must satisfy the current `project.json` and scoped-evidence contracts. Unsupported manifests or review formats are rejected; no conversion or compatibility commands are provided.
+Use `python scripts/survey.py init --output PROJECT --topic SLUG --scope SCOPE.md` for a new knowledge project. Existing projects must satisfy the current `project.json` and scoped-evidence contracts. Existing 2.0.0 knowledge and historical plans/reviews remain readable without mutation. New plans/policy-bearing reviews use 2.1.0; no in-place migration is performed. Unsupported formats are rejected. Read references/contracts.md before adopting new output policy.
 
 Do not require user approval for routine bookkeeping. Ask only about substantive unresolved scope or user choices. Maintain the records on the user's behalf. Script templates remain pending until the described reading has actually occurred.
 
@@ -55,13 +55,13 @@ Create an explicit plan with `output plan PROJECT --output ID --snapshot KB-...`
 
 Run `output prepare PROJECT --plan PROJECT/outputs/ID/plan.json`. Formal preparation requires readiness. Only explicit `--draft` permits a visibly `DRAFT_UNVERIFIED` internal scaffold; it can never be formally packaged. Preparation extracts exact statements, bibliography, conventions and bounded authoring materials. It preserves an existing manuscript instead of replacing authored prose. It does not automatically write a mathematical survey. Both generated fragments and all supplied `materials/` copies must match the fixed snapshot; structure/build/release reject altered, missing or extra materials. Keep editable author notes outside `materials/`; reprepare explicitly to restore copies while preserving the manuscript.
 
-Read [introduction](references/introduction.md), [writing style](references/writing-style.md) and the selected [profile](references/editions.md). Insert complete statements through `\input{../generated/statements/N-....tex}`; only the surrounding wrapper/label/number may differ. Never hand-edit generated fragments. Minimal presents the usable question, answer, short mechanism and decisive boundary early. Thematic explains supported relationships and compares routes around its question. Lecture orders prerequisites and actually develops the promised calculations, intermediate lemmas and examples. All three preserve exact shared claims.
+Read [introduction](references/introduction.md), [writing style](references/writing-style.md) and the selected [profile](references/editions.md). Insert complete statements through `\input{../generated/statements/N-....tex}`; only the surrounding wrapper/label/number may differ. Never hand-edit generated fragments. Minimal uses exactly three numbered main sections: Main Results, Key Mathematical Ingredients, Connecting the Ingredients. All principals appear completely in the first section; the second establishes genuinely consumed points and the third performs decisive mathematical connections. Thematic explains supported relationships and compares routes around its question. Lecture orders prerequisites and actually develops the promised calculations, intermediate lemmas and examples. Paper has an independent contribution/prior-art/full-proof contract. All four preserve exact shared claims.
 
 For a finished writing/layout reference, consult the [user-polished balanced dHYM manuscript](assets/reference-samples/dhym-balanced/README.md) and [example roles](references/exposition-examples.md). Borrow useful local exposition, not its topic scope, six-page length or counts of sections and results. The separate Schur example demonstrates the knowledge-to-output workflow.
 
 Do not invent decorative theorem or definition names. Author attributions are useful. Use mathematical formulas in place of wordy paraphrases, short clauses or itemized independent hypotheses, and focused conclusions. Put secondary consequences afterward. Omit trivial transitions. Repeat necessary local hypotheses rather than forcing needless backtracking. Examples must calculate, distinguish conditions or expose a boundary; no quotas. Neither page counts nor more words establish lecture quality.
 
-New claims discovered while writing return to the KB for argument, review and a new snapshot before formal use. The surrounding prose must not enlarge a correct imported fragment. Minimal must be independently readable without an unrequested lecture; lecture must not claim full proofs of imported results.
+New claims discovered while writing return to the KB for argument, review and a new snapshot before formal use. The surrounding prose must not enlarge a correct imported fragment. Minimal must be independently readable without an unrequested lecture; lecture must not claim full proofs of imported results. Paper must establish authorized original contributions, closest prior results and complete proofs; unverified or incomplete work stays internal draft.
 
 ## 7. Check, build, inspect and deliver
 
@@ -82,3 +82,44 @@ This is Survey, not Research Studio. Preserve stable IDs, exact content, source 
 ## Manuscript review and build history
 
 Read [output review](references/output-review.md) before release. Require canonical inputs in the actual document body, seven explicit whole-manuscript reading checks and real proof/principal locations. A template never grants acceptance. Preserve review and build attempts; a failed new build must not destroy or silently reuse the last successful build. Source, semantic and visual approval each require the actual recorded work.
+
+## vNext exposition and publication contract
+
+Before writing, read [reader calibration](references/reader-calibration.md),
+[project overview](references/overview.md), [four profiles](references/editions.md)
+and [self-contained writing](references/writing-style.md). Default to undergraduate
+general plus topic-specific early doctoral capabilities; classify current inputs as
+Assumed / Refreshable / Bridge-required. Work backward from the result and forward
+from this reader. Fast understanding exposes actual inputs, decisive operations,
+outputs and conditions; slow proofs must support exactly that route.
+
+Keep the project overview a readable multi-question map, not a node list or Minimal's
+third section. The per-output outline carries this article's choices. New implications
+and comparisons discovered there return to reviewed KB nodes. Four knowledge views
+do not generate four files and do not override mode responsibilities.
+
+Principal results must be statement-self-contained: objects/domain, fixed vs unknown,
+complete hypotheses, important equations, quantifiers/dependence, conclusion and status.
+Review them alone and check surrounding prose. Repair deficient canonical nodes before
+freezing again; do not change exported fragments. `review template PROJECT --kind
+mathematical --id N-ID --principal-statements --to evidence/reviews/NEW.json` prepares
+pending explicit self-contained observations, never an acceptance. New output-semantic
+templates also require actual common/mode findings and every promised proof-step location.
+
+Prefer short prose alternating with useful displayed equations, objects or estimates.
+About four normal typeset lines is an editorial heuristic, not a hard line limit. Do
+not add ornamental formulas, force breaks, shrink fonts or delete mathematics. Check
+real PDFs and explain reasonable exceptions in existing page/semantic findings.
+
+Paper planning defaults to DRAFT_UNVERIFIED. Classify every principal, bind authorized
+provenance, closest verified prior-result and comparison nodes, exact difference and
+complete proof obligations. A formal paper needs actual dated prior-art and full-proof
+reading. Classic examples and synthetic tests cannot certify originality. Only an
+explicitly promoted, ready and fully rereviewed plan may pass existing formal gates.
+
+Historical releases keep their old policy, bytes and reviews; they are never reported
+as newly accepted. Reprepare preserves existing main.tex and outline.md, not an automatic
+upgrade. Software checks identity, structure and evidence, not mathematical truth,
+reader understanding, authorization or originality. Author rereading remains author
+rereading, even in another tool or context. Report unperformed independent and real-reader
+checks separately. This candidate is not a formally published Release.

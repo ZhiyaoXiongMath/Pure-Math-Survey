@@ -43,7 +43,7 @@ def check()->dict:
         (project/'knowledge/nodes/N-r.md').write_bytes(node_bytes({**common,'id':'N-r','kind':'result','question_ids':['N-q']},'# Result\n\n## Canonical statement\n\n```latex\nFor $x\\in\\mathbb R$, $x=0$ implies $x^2=0$.\n```\n\n## Provenance\n\nSoftware fixture only.'))
         write_json(project/'knowledge/coverage.json',{'schema_version':VERSION,'questions':[{'question_id':'N-q','answer_nodes':['N-r'],'mechanism_nodes':[],'boundary_nodes':[],'gaps':['Actual review not performed.'],'assessment':'pending','rationale':'Resource smoke test only.'}]})
         sid=freeze_snapshot(project)['artifacts']['snapshot_id']
-        for profile in ('minimal','thematic','lecture'):
+        for profile in ('minimal','thematic','lecture','paper'):
             create_plan(project,profile,sid,profile=profile,draft=True)
             p=project/f'outputs/{profile}/plan.json';prepare_output(project,p,draft=True);verify_generated(project,load_plan(p));exercised.append(profile)
     return {'status':'PASSED','runtime_members':len(files),'checked_documentation_links':checked_links,'profile_preparations_executed':exercised,

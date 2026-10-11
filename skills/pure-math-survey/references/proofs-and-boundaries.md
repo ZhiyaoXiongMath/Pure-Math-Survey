@@ -1,9 +1,31 @@
-# Mechanisms, obligations and boundaries
+# Proof responsibility is mode-specific
 
-A mechanism node records its inputs and necessary dependencies, the constructed/estimated object, actual nontrivial steps, output, use and imported inputs. “Apply a standard method” is not an explanation. Relations need a variable mapping and argument; an edge label does not prove strengthening or equivalence.
+A mechanism node states inputs/dependencies, the constructed or estimated object,
+actual decisive operations, output, next use and imported inputs. A typed relation edge
+does not prove an implication: give the variable mapping and argument in a reviewed
+node. New deductions discovered in an outline return to the KB.
 
-Plan `proof_obligations` name a selected node, treatment (complete/sketch/mechanism), exact required_steps and imported_inputs. Both mathematical and output-semantic reviews must cover the promised step strings. The latter records where the reader can follow them. A complete promise requires complete obligations, not a sketch relabeled as a proof. Ordinary selected sketches and mechanisms still need substantive step obligations before formal readiness.
+A plan's `proof_obligations` names a selected node, treatment
+`complete / sketch / mechanism`, exact `required_steps`, and `imported_inputs`.
+Generated PENDING prompts are not actual steps and block formal readiness. The KB
+mathematical review covers those exact promises; the output review supplies a substantive
+finding and actual location for every promised step, not only one general proof checkbox.
+A complete claim needs complete obligations. Imported inputs must be selected or explicitly
+scoped prerequisites, with accurate source versions and mathematical interfaces.
 
-Minimal retains the short decisive derivation and exact external input; thematic compares the real interfaces and applicability; lecture develops promised calculations and intermediate lemmas. None must reprove a correctly stated external theorem unless that is the explicit learning goal. A new exercise requires a checked solution or a research-question status in knowledge. Regularity, compactness, strictness, branch, parameter and dimension restrictions survive every profile.
+| Mode | Proof responsibility |
+|---|---|
+| Minimal | Show the decisive point-to-result calculations/constructions; routine interiors may be compressed. Exact external inputs must not be disguised as independent proofs. |
+| Thematic | Explain each selected route's mechanism and all nontrivial comparison claims; do not assert equivalence across mismatched assumptions. |
+| Lecture | Develop every promised substantive calculation, estimate and limiting argument so it can be reproduced; disclose imported deep theorems and their exact use. |
+| Paper | Every original principal has its own complete proof obligation, established authorized derivation, prior-result/comparison records and contribution review. All essential gaps block formal publication. |
 
-Read statements alone, then follow inputs through intermediate outputs to closure. Distinguish a formal mathematical argument, finite computational spot checks and source attribution. Do not call a few numerical examples proof of a universal theorem.
+Read fast and slow routes in both directions. Uniform constants, admissibility,
+noncollapse, parameter branches, regularity, boundary conditions and convergence topology
+cannot be removed merely because their proofs are technical. A new exercise needs a
+checked solution or an explicit research-problem status. A model should actually execute
+the method and test a real boundary. Finite numerical checks are not universal proofs.
+
+Paper's originality check is not the same as proof closure. A correct proof of a known
+result is useful in Lecture but is not thereby an original research contribution.
+`DRAFT_UNVERIFIED` is the only path for unchecked or incomplete proposed contributions.

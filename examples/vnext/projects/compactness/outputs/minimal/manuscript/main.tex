@@ -1,0 +1,64 @@
+\documentclass[12pt,reqno]{amsart}
+\usepackage{math-review}
+\input{../generated/conventions.tex}
+\title{Strong Compactness and Admissible Limits -- Minimal}
+\author{Known-mathematics exposition benchmark}
+\date{}
+\begin{document}
+\maketitle
+\section{Main Results}
+The question starts with an existing solution sequence. The task is to
+justify its limit, not to prove a priori that the sequence or estimates exist.
+
+\input{../generated/statements/N-norm.tex}
+
+Matrix inequalities below mean inequalities of quadratic forms.
+\begin{theorem}[Conditional sequential closedness]\label{thm:main}
+\input{../generated/statements/N-main.tex}
+\end{theorem}
+The three hypotheses doing different jobs are a strong compactness bound,
+a uniform distance from the matrix-cone boundary, and continuity of the equation.
+
+\section{Key Mathematical Ingredients}
+The first input specifies what the estimate actually buys; a generic
+reference to compactness would not specify a topology for the nonlinear limit.
+\begin{samepage}
+\begin{lemma}\label{lem:compactness}
+\input{../generated/statements/N-compactness.tex}
+\end{lemma}
+\end{samepage}
+Here this classical compactness input is used, not reproved. Its derivative
+extraction and interpolation proof is developed in the companion lecture.
+The second input keeps the limit within the domain of the equation.
+\begin{lemma}\label{lem:margin}
+\input{../generated/statements/N-margin.tex}
+\end{lemma}
+The first implication follows by testing a fixed unit vector and passing
+to the uniform limit. The inverse formulation uses orthogonal diagonalization.
+
+\section{Connecting the Ingredients}
+Apply Lemma~\ref{lem:compactness} and relabel the resulting subsequence:
+\[
+ u_j\longrightarrow u_\infty\quad\text{in }C^{2,\beta}.
+\]
+Continuity of $A$ converts this into uniform convergence of matrices.
+For every $x$ and every unit vector $v\in\mathbb R^r$,
+\[
+ v^{\mathsf T}A(u_\infty)(x)v
+ =\lim_jv^{\mathsf T}A(u_j)(x)v\geq\delta.
+\]
+Consequently $u_\infty\in\mathcal U$. Only now may continuity on
+$[0,1]\times\mathcal U$ be invoked to obtain
+\[
+ \mathcal F(t_\infty,u_\infty)
+ =\lim_j\mathcal F(t_j,u_j)=0\quad\text{in }C^0.
+\]
+The uniform margin is indispensable to this route. With constant functions
+$u_j=t_j=1/j$, take $A(u)=uI_r$ and $\mathcal F(t,u)=u-t$ on positive functions.
+The functions are uniformly H\"older-bounded solutions, but their limit is zero
+and is not admissible. Separate strict positivity is not a uniform lower bound.
+
+\nocite{S-guide}
+\bibliographystyle{plain}
+\bibliography{../generated/references}
+\end{document}

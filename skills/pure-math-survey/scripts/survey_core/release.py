@@ -34,6 +34,8 @@ def semantic_scope_errors(out:Path,plan:dict,consumed_nodes:list[str],review:dic
         errors.extend(validate_locations(out,scope.get('proof_locations',{}).get(key),node_id=key))
     for key in sorted({s['node_id'] for s in plan['selections'] if s['role']=='principal_answer'}):
         errors.extend(validate_locations(out,scope.get('principal_locations',{}).get(key),node_id=key,canonical=True))
+    from .profiles import semantic_profile_errors
+    errors += semantic_profile_errors(out, plan, review)
     return errors
 
 def assess_release(root:Path,output_id:str)->dict:
@@ -86,8 +88,9 @@ def assess_release(root:Path,output_id:str)->dict:
             if vis is None:errors.append(diagnostic('VISUAL_REVIEW_INCOMPLETE','Actual full-page human observations and PDF/image-bound evidence are required','evidence'))
     if sem is None or sem['reviewer_mode']!='independent_review':
         warnings.append(diagnostic('NO_INDEPENDENT_REVIEW','No scoped independent mathematical reading of this manuscript is claimed. Author reread is not independent review.'))
+    from .profiles import policy
     return result('output.release','NEEDS_WORK' if errors else 'RELEASABLE',{'output_id':output_id,'snapshot_id':plan['snapshot_id'],
-                  'pages':built.get('pages'),'used_output_review_ids':used,'readiness':ready['status']},errors,warnings)
+                  'pages':built.get('pages'),'editorial_policy':policy(plan),'used_output_review_ids':used,'readiness':ready['status']},errors,warnings)
 
 def package_output(root:Path,output_id:str,destination:Path)->dict:
     check=assess_release(root,output_id)

@@ -1,0 +1,9 @@
+{
+  "schema_version": "2.0.0",
+  "project_id": "vnext-schur",
+  "title": "Square completion and the Schur complement",
+  "language": "en",
+  "scope_file": "scope.md",
+  "knowledge_root": "knowledge",
+  "literature_cutoff": null
+}
