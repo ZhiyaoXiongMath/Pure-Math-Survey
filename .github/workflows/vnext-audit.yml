@@ -24,6 +24,10 @@ jobs:
           mkdir -p "$RUNNER_TEMP/vnext-evidence"
           git archive --format=zip HEAD > "$RUNNER_TEMP/vnext-evidence/source.zip"
           git rev-parse HEAD > "$RUNNER_TEMP/vnext-evidence/revision.txt"
+      - name: Install TeX and PDF tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended lmodern poppler-utils
       - name: Baseline and development regression tests
         run: |
           set -o pipefail
