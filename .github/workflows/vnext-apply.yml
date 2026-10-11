@@ -1,0 +1,66 @@
+name: Apply verified vNext development patch
+
+on:
+  push:
+    branches: ['vnext/four-mode-exposition-2026-10-11']
+    paths: ['.vnext-transfer/**', '.github/workflows/vnext-apply.yml']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vnext-verified-development-patch
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    if: github.repository == 'ZhiyaoXiongMath/Pure-Math-Survey' && github.ref == 'refs/heads/vnext/four-mode-exposition-2026-10-11'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 2
+      - name: Verify the exact audited base and payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = 73ab963815d41a0a375d766440aa9a3c93951b09
+          python3 - <<'PY'
+          import base64, hashlib, lzma, os
+          from pathlib import Path
+          parts = sorted(Path('.vnext-transfer').glob('*.b64'))
+          assert [p.name for p in parts] == [f'{i:02d}.b64' for i in range(8)]
+          patch = lzma.decompress(base64.b64decode(''.join(p.read_text() for p in parts), validate=True))
+          assert hashlib.sha256(patch).hexdigest() == 'bede2a7956ecbca29694e974ffdaf6db817d2abf24c1f685af52e2f61fd7c13e'
+          Path(os.environ['RUNNER_TEMP'], 'vnext.patch').write_bytes(patch)
+          PY
+          # Workflow changes are applied separately through the authorized connector.
+          git apply --check --exclude='.github/workflows/*' "$RUNNER_TEMP/vnext.patch"
+      - name: Apply actual source, tests, resources, and authored examples
+        shell: bash
+        run: |
+          set -euo pipefail
+          git apply --exclude='.github/workflows/*' "$RUNNER_TEMP/vnext.patch"
+          rm -rf .vnext-transfer
+          git diff --check
+          python3 -m compileall -q skills/pure-math-survey/scripts tools tests
+          python3 skills/pure-math-survey/scripts/validate_assets.py --json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'feat: implement four-mode exposition, guarded Paper, canonical review contracts and authored benchmarks'
+          test "$(git ls-remote origin refs/heads/vnext/four-mode-exposition-2026-10-11 | cut -f1)" = "$GITHUB_SHA"
+          git push origin HEAD:refs/heads/vnext/four-mode-exposition-2026-10-11
+          mkdir -p "$RUNNER_TEMP/vnext-applied"
+          git rev-parse HEAD > "$RUNNER_TEMP/vnext-applied/revision.txt"
+          git archive --format=zip HEAD > "$RUNNER_TEMP/vnext-applied/source.zip"
+          git show --stat --oneline HEAD > "$RUNNER_TEMP/vnext-applied/commit-stat.txt"
+          echo 'The verified development patch was committed only to the vNext branch. Full regression CI runs on the subsequent PR.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Preserve applied source evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: vnext-applied-source
+          path: ${{ runner.temp }}/vnext-applied/
+          if-no-files-found: error
+          retention-days: 30
