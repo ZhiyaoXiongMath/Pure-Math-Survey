@@ -1,3 +1,39 @@
+# Pure Math Survey 2.1.0 — release preparation
+
+Software release preparation for the four-profile workflow and rc2 hardening.
+The `v2.1.0` tag and GitHub Release have not been published. This prepares the
+software/distribution version; it is not a new mathematical acceptance claim.
+
+- Maintain source-grounded knowledge independently of manuscripts, freeze immutable
+  snapshots, and prepare only the requested Minimal, Thematic, Lecture or Paper
+  profile. Minimal + integrated remains the default requested output.
+- Require located canonical/principal/proof readings, view-aware writing tasks,
+  explicit comparison endpoints and actually read primary support for closest
+  prior results. Preserve authored prose and bounded previews of incomplete drafts.
+- Include all required runtime modules and writing resources in the installation
+  allowlist, with archive/member checksums and isolated installed-runtime validation.
+- Synchronize repository and installed Chinese/English instructions, executable
+  metadata, installation links and archive names to software version 2.1.0.
+- Keep knowledge/snapshot schema 2.0.0 and new output/policy-review schema 2.2.0,
+  including policy identifier `four-modes-2026-10-12-rc2`. Historical snapshots,
+  examples, reviews and rc1/rc2 validation records keep their original identities.
+
+Paper remains an unverified internal draft by default. Independent mathematical
+review, real-reader feedback, genuine originality and complete-proof quality are
+not established by software tests or this preparation. A two-layer knowledge base is
+not implemented. The historical candidate records below describe their own runs;
+release validation must be performed against the final release commit.
+
+# 2.1.0-rc2 — hardening development candidate
+
+Not a formal Release. Retains and integrates the existing body-location inspector
+and exposition checker; repairs the installed runtime allowlist. New output/review
+schema 2.2.0 binds view-aware reader tasks, explicit comparison pairs and located
+primary-support readings. Knowledge remains 2.0.0; rc1 and legacy records retain
+their exact policy and cannot authorize a current release without a new output
+and reading. Explicit incomplete-design drafts have bounded preview support.
+See docs/rc2/CONTINUATION.md for actual tests and outstanding acceptance.
+
 # 2.1.0-rc1 — vNext development candidate
 
 Not a formal Release. Adds versioned four-profile exposition, strong principal-statement

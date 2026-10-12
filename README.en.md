@@ -1,13 +1,13 @@
 # Pure Math Survey
 
-> **2.1.0-rc1 is a development candidate, not a published release.** Install the complete skill directory from this branch or build its candidate ZIP. Historical release links below do not install vNext. See [four writing profiles](skills/pure-math-survey/references/editions.md).
+> **Software version 2.1.0 release preparation; the tag and GitHub Release are not published.** Copy the complete skill directory from this repository or build a local installation ZIP from source. See [four writing profiles](skills/pure-math-survey/references/editions.md).
 > Minimal has exactly Main Results / Key Mathematical Ingredients / Connecting the Ingredients. Thematic requires supported synthesis, Lecture every promised derivation, and Paper authorized contribution, closest-prior-art and complete-proof reviews. Paper defaults to an unverified internal draft. Software cannot certify truth, originality or comprehension.
-> Knowledge schema is 2.0.0; new plans and policy-bearing reviews use 2.1.0. No historical snapshot, manuscript or review is automatically migrated or accepted under the new policy.
+> Knowledge schema is 2.0.0; new plans and policy-bearing reviews use 2.2.0. No historical snapshot, manuscript or review is automatically migrated or accepted under the new policy.
 
 
 [简体中文](README.md) | **English**
 
-**Candidate 2.1.0-rc1; not a published Release.** Build source-grounded mathematical knowledge first, then write the requested English survey or lecture from an immutable snapshot.
+**Pure Math Survey 2.1.0** is for authors maintaining mathematical knowledge and writing manuscripts: build source-grounded knowledge first, then write the requested English survey, lecture or research-paper draft from an immutable snapshot.
 
 The knowledge project stores precise questions, definitions, results, proof mechanisms, relations, examples, boundaries and scoped source evidence. It can be maintained without generating a manuscript. An author or agent performs the mathematical reading and writing; the tools check file contracts, fixed inputs, evidence bindings and actual builds.
 
@@ -22,13 +22,14 @@ Default requested output is **minimal + integrated**. Only requested profiles ar
 
 ## Install
 
-**For the historical stable version only**, download [pure-math-survey-2.0.4.zip](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/download/v2.0.4/pure-math-survey-2.0.4.zip)
-and its checksum from the [v2.0.4 release](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/tag/v2.0.4).
-Extract and copy the complete `pure-math-survey` folder to your host application's skills directory.
-Alternatively, copy [skills/pure-math-survey](skills/pure-math-survey/) from this repository.
+For now, copy the complete [skills/pure-math-survey](skills/pure-math-survey/) folder from this repository to your host application's skills directory. Alternatively, build a local installation archive from the repository root:
 
-Release attachments provide only the installation archive and checksums. The examples below are stored in the repository and do not need to be downloaded separately to use the skill.
-Knowledge/project/node/snapshot schema remains 2.0.0. New plans and policy-bearing reviews use 2.1.0; old software cannot parse them. Historical plans remain readable under their explicitly reported legacy policy, without modification.
+```sh
+python skills/pure-math-survey/scripts/package_release.py --output ../pure-math-survey-2.1.0.zip
+```
+
+Extract and copy the complete `pure-math-survey` folder to your host application's skills directory. The build script also creates the member-checksum manifest and ZIP SHA-256 checksum file. The `v2.1.0` tag and GitHub Release are not published, so official download attachments for this version are not yet available. The examples below are stored in the repository and do not need to be downloaded separately to use the skill.
+The software version is 2.1.0. Knowledge/project/node/snapshot schema remains 2.0.0. New plans and policy-bearing reviews use 2.2.0; old software cannot parse them. Historical plans remain readable under their explicitly reported legacy policy, without modification.
 
 ## Use
 
@@ -92,13 +93,13 @@ The native knowledge CLI uses Python 3.10+ and the standard library. Building PD
 ```sh
 python -m unittest discover -s tests -v
 python skills/pure-math-survey/scripts/validate_assets.py --json
-python skills/pure-math-survey/scripts/package_release.py --output ../pure-math-survey-2.1.0-rc1.zip
-python tools/verify_release.py ../pure-math-survey-2.1.0-rc1.zip --no-build
+python skills/pure-math-survey/scripts/package_release.py --output ../pure-math-survey-2.1.0.zip
+python tools/verify_release.py ../pure-math-survey-2.1.0.zip --report ../pure-math-survey-2.1.0-verification.json
 ```
 
 Tests cover snapshot and material integrity, scoped reviews, TeX body checks, history and packaging, including real TeX builds. Synthetic accepted records are software fixtures only. Linux CI runs on Python 3.10 and 3.12; a Windows machine without symlink creation privilege explicitly reports the corresponding test as skipped.
 
-See [version notes](CHANGELOG.md). This release has no server, vector database, research scheduler or Research Studio bridge.
+See [version notes](CHANGELOG.md). This version has no server, vector database, research scheduler or Research Studio bridge; a two-layer knowledge base is not implemented.
 
 ## License
 
@@ -106,6 +107,8 @@ The project's skill instructions, scripts, templates and documentation are licen
 
 Mathematical example materials are reserved separately: contents of `examples/` and `skills/pure-math-survey/assets/reference-samples/dhym-balanced/`, including their TeX, PDFs, bibliographies and example projects, are excluded from this MIT grant. Adding this license grants no additional reuse permission for those materials and does not change existing third-party rights.
 
-## vNext acceptance evidence
+## Validation evidence and boundaries
 
-See [requirements and implementation map](docs/vnext/requirements.md), [actual validation and limitations](docs/vnext/validation.md), and [seven authored benchmark sources](examples/vnext/README.md). Six known-mathematics samples were compiled and author-reviewed; the Paper boundary sample is deliberately non-releasable. Independent review, real-reader feedback, and genuine original-Paper quality are NOT VERIFIED.
+The [rc2 candidate validation record](docs/rc2/CANDIDATE.md) preserves that stage's actual results and commit identities; it does not replace verification of the final release commit. rc2 preserves the historical examples and adds a real Simon–Maitre–Barrett–Süli three-paper project, paired methods/boundaries manuscripts, and a new Schur Lecture. The [editable project](examples/rc2/projects/time-compactness/README.md) and scoped author/page observations are retained. Reviewed PDFs, page images and build records in the historical candidate materials apply only to their recorded bytes; a fresh PDF build needs its own visual review.
+
+See also the [requirements and implementation map](docs/vnext/requirements.md), [actual validation and limitations](docs/vnext/validation.md), and [seven authored benchmark sources](examples/vnext/README.md). In those historical records, six known-mathematics samples were compiled and author-reviewed; the Paper boundary sample is deliberately non-releasable. Independent mathematical review, real-reader feedback, and genuine original-Paper originality and complete-proof quality remain NOT VERIFIED. A formal software release does not change those limitations.

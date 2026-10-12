@@ -1,0 +1,6 @@
+{
+  "baseline_commit": "ed8a1a006a008d0bc263839942838028df836e50",
+  "original_example_blobs_checked": 399,
+  "changed": [],
+  "method": "Git blob SHA-1 of actual bytes compared with fetched original recursive tree"
+}

@@ -6,6 +6,27 @@ waives a profile's responsibilities. Knowledge-only work produces no manuscript 
 For a requested output without a profile, use minimal/integrated. Generate only the
 requested profiles. PDF is a delivery format, not a fifth profile.
 
+## Views within each profile (rc2)
+
+| View | Editable reader task |
+|---|---|
+| integrated | Recover the question–answer–mechanism–boundary chain. |
+| foundations | Explain objects, distinctions in definitions, and a model making the tools callable. |
+| results | Compare conclusions, quantifiers, normalization and range using supported relations. |
+| methods | Work through construction, identity or estimate; retain uniformity, admissibility and topology. |
+| boundaries | Locate the hypothesis and step that fail; separate counterexamples from noncoverage. |
+
+Plans retain the necessary closure and all principals, while proposing editable
+node-specific uses and emphasis order from kinds, facets and roles. These tags
+are navigation, never mathematical evidence. An absent candidate is an explicit
+design gap requiring explanation or further KB work, not a generated claim.
+Lecture dependency order is only a starting point for teaching order. Minimal
+keeps its three sections and complete results in every view; Paper keeps all
+contribution and proof responsibilities. Prepare leaves view-specific writing
+tasks unfinished within the relevant section. Replace them with actual prose.
+The output reading binds `scope.view`; `view_focus` records a concrete finding,
+available `node_ids`, and reachable substantive manuscript locations.
+
 ## Minimal: Results → Points → Connections
 
 Use exactly three numbered main sections, in this order:

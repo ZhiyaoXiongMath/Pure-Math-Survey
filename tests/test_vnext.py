@@ -61,7 +61,11 @@ class VNext(unittest.TestCase):
             write_json(p,v)
         return p,v
     def authored(self,profile='minimal',oid='new',draft=True,view='integrated'):
-        p,v=self.make(profile,oid,draft,view=view);prepare_output(self.root,p)
+        p,v=self.make(profile,oid,draft,view=view)
+        v['audience']='Synthetic fixture reader can substitute real numbers and multiply.'
+        v['reader_goals']=['Reconstruct the substitution of zero in x times x; no research acceptance.']
+        write_json(p,v);prepare_output(self.root,p)
+        (p.parent/'outline.md').write_text('Synthetic design: multiply the assumed x=0 to obtain x squared=0. This is only a software fixture.\n')
         text=(p.parent/'manuscript/main.tex').read_text()
         # This synthetic manuscript is explicitly not a mathematical benchmark.
         import re
@@ -76,17 +80,25 @@ class VNext(unittest.TestCase):
         with self.assertRaises(SurveyError) as cm:fn(*a,**kw)
         self.assertEqual(cm.exception.diagnostic['code'],code)
     def sem(self,p,v):
-        out=p.parent;lines=(out/'manuscript/main.tex').read_text().splitlines()
+        # Explicitly author a real (trivial) computation in this SYNTHETIC
+        # fixture. Proof findings must never point merely at a theorem input.
+        out=p.parent;main=out/'manuscript/main.tex';text=main.read_text()
+        computation=r'For $x=0$, substitution gives $x^2=0\cdot 0=0$. This is a synthetic software fixture.'
+        if computation not in text:
+            text=text.replace(r'\end{document}',computation+'\n'+r'\end{document}');main.write_text(text)
+        lines=text.splitlines()
         def loc(n):return {'path':'manuscript/main.tex','line_start':n,'line_end':n}
         principal=next(i for i,l in enumerate(lines,1) if 'statements/N-main.tex' in l)
+        proof=lines.index(computation)+1
         scope=review_scope_template(v)
         scope.update(output_ids=[v['output_id']],profile=v['profile'],node_ids=['N-q','N-def','N-main'],
             whole_manuscript=True,checks=CHECKS,principal_locations={'N-main':[loc(principal)]},
             proof_steps={o['node_id']:o['required_steps'] for o in v['proof_obligations']},
-            proof_locations={o['node_id']:[loc(principal)] for o in v['proof_obligations']})
-        for key in scope['mode_findings']:scope['mode_findings'][key]={'outcome':'accepted','finding':SYNTH,'locations':[loc(principal)]}
+            proof_locations={o['node_id']:[loc(proof)] for o in v['proof_obligations']})
+        for key in scope['mode_findings']:scope['mode_findings'][key]={'outcome':'accepted','finding':SYNTH,'locations':[loc(proof)]}
+        if 'view_focus' in scope['mode_findings']:scope['mode_findings']['view_focus']['node_ids']=['N-main']
         for steps in scope['proof_step_findings'].values():
-            for key in steps:steps[key]={'outcome':'accepted','finding':SYNTH,'locations':[loc(principal)]}
+            for key in steps:steps[key]={'outcome':'accepted','finding':SYNTH,'locations':[loc(proof)]}
         item=principal_template((out/'generated/statements/N-main.tex').read_bytes());item['outcome']='accepted'
         item.update({k:SYNTH for k in STATEMENT_ASPECTS});scope['statement_reviews']['N-main']=item
         r=review_template(out,'output_semantic',[v['output_id']],output_inputs(out),scope)
@@ -94,13 +106,17 @@ class VNext(unittest.TestCase):
         return r
     def paper(self):
         putnode(self.root,'N-prior','result',r'For $x\in\mathbb R$, $0x=0$.',source=True,status='established')
-        putnode(self.root,'N-compare','relation',r'This is only a synthetic comparison fixture; it asserts no novelty.',status='established')
+        putnode(self.root,'N-compare','relation',r'This is only a synthetic comparison fixture; it asserts no novelty.',
+                links=[] if getattr(self,'isolated_comparison',False) else [('N-main','compares_with'),('N-prior','compares_with')],status='established')
         synthetic_reviews(self.root);synthetic_policy_reviews(self.root)
+        source_path=self.root/'evidence/reviews/source-S-test.json';source_review=read_json(source_path)
+        source_review['scope']['source_reading']={'S-test':dict(mode='original_text_local',version='Fixture v1',locators=['Synthetic fixture paragraph 1'])}
+        write_json(source_path,source_review)
         p,v=self.make('paper')
         for key in ['N-prior','N-compare']:
             v['selections'].append({'node_id':key,'role':'background','statement_treatment':'full','proof_treatment':'citation','reason':SYNTH})
         v['contributions']=[dict(node_id='N-main',classification='original',provenance=SYNTH,authorization=SYNTH,
-            actual_difference=SYNTH,proof_status='complete',closest_prior_results=['N-prior'],comparison_nodes=['N-compare'],gaps=[])]
+            actual_difference=SYNTH,proof_status='complete',closest_prior_results=['N-prior'],comparison_bindings=[dict(comparison_node_id='N-compare',prior_result_id='N-prior')],gaps=[])]
         write_json(p,v)
         return p,v
 
@@ -272,7 +288,7 @@ class VNext(unittest.TestCase):
         self.assertIn('PAPER_ORIGINAL_CONTRIBUTION_MISSING',self.readiness(v))
     def test_V32_paper_requires_authorized_provenance_and_comparison_relation(self):
         p,v=self.paper();v['contributions'][0]['authorization']='';self.assertIn('PAPER_PROVENANCE_UNVERIFIED',self.readiness(v))
-        v['contributions'][0]['comparison_nodes']=['N-def'];self.failcode('CONTRIBUTION_INVALID',validate_plan,self.root,v)
+        v['contributions'][0]['comparison_bindings'][0]['comparison_node_id']='N-def';self.failcode('CONTRIBUTION_INVALID',validate_plan,self.root,v)
     def test_V33_paper_unknown_prior_and_self_prior_rejected(self):
         p,v=self.paper();c=v['contributions'][0];c['closest_prior_results']=['N-absent']
         # consumption may discover the unknown before profile checks; both reject, never ignore.
@@ -292,6 +308,7 @@ class VNext(unittest.TestCase):
         entry={'outcome':'accepted','finding':SYNTH,'locations':loc,'closest_prior_results':['N-prior'],
                'prior_art_searches':[dict(searched_at=now(),query='SYNTHETIC query',outcome=SYNTH,checked_source_ids=['S-test'])]}
         entry.update({x:SYNTH for x in ['provenance_check','authorization_check','actual_difference','proof_closure','remaining_caveats']})
+        entry['prior_result_checks']=[dict(prior_result_id='N-prior',source_id='S-test',version='Fixture v1',locator='Synthetic fixture paragraph 1',outcome='accepted',finding=SYNTH)]
         r['scope']['contribution_reviews'][key]=entry
         self.assertEqual(semantic_profile_errors(p.parent,v,r),[])
         for defect in ['missing','unknown-source','future']:
@@ -309,7 +326,7 @@ class VNext(unittest.TestCase):
             z.extractall(self.base/'installed')
         entry=self.base/'installed/pure-math-survey/scripts/survey.py'
         run=subprocess.run([sys.executable,'-I',str(entry),'--version','--json'],cwd=self.base,capture_output=True,text=True)
-        self.assertEqual(run.returncode,0,run.stdout);self.assertIn('2.1.0-rc1',run.stdout)
+        self.assertEqual(run.returncode,0,run.stdout);self.assertIn('2.1.0',run.stdout)
     def test_V38_generated_fragment_edit_still_rejected(self):
         p,v=self.authored();(p.parent/'generated/statements/N-main.tex').write_text('A supposedly improved theorem.')
         self.failcode('CANONICAL_STATEMENT_CHANGED',verify_generated,self.root,v)

@@ -1,25 +1,25 @@
-# Pure Math Survey 2.1.0-rc1
+# Pure Math Survey 2.1.0
 
-> **2.1.0-rc1 is a development candidate, not a published release.** Install the complete skill directory from this branch or build its candidate ZIP. Historical release links below do not install vNext. See [four writing profiles](references/editions.md).
+> **Software version 2.1.0 release preparation; the tag and GitHub Release are not published.** Copy the complete skill directory from the repository or build a local installation ZIP from source. See [four writing profiles](references/editions.md).
 > Minimal has exactly Main Results / Key Mathematical Ingredients / Connecting the Ingredients. Thematic requires supported synthesis, Lecture every promised derivation, and Paper authorized contribution, closest-prior-art and complete-proof reviews. Paper defaults to an unverified internal draft. Software cannot certify truth, originality or comprehension.
-> Knowledge schema is 2.0.0; new plans and policy-bearing reviews use 2.1.0. No historical snapshot, manuscript or review is automatically migrated or accepted under the new policy.
+> Knowledge schema is 2.0.0; new plans and policy-bearing reviews use 2.2.0. No historical snapshot, manuscript or review is automatically migrated or accepted under the new policy.
 
 
 [简体中文](README.zh-CN.md) | **English**
 
 Knowledge first: scope → primary-source reading → readable nodes/relations/evidence → coverage/readiness → immutable snapshot → output plan → writing → actual checks/build/page inspection → delivery.
 
-**The core CLI uses only Python's standard library (Python 3.10+).** This is a file-based skill and deterministic tooling, not an autonomous theorem prover or an unattended survey-writing service. An agent/author performs source reading and mathematical writing; the CLI checks contracts, dependencies, fixed bytes and declared evidence. No server, vector database, multi-agent scheduler or Studio bridge.
+**The core CLI uses only Python's standard library (Python 3.10+).** This file-based skill is for authors maintaining source-grounded mathematical knowledge and writing surveys, lectures or research-paper drafts. It is not an autonomous theorem prover or an unattended survey-writing service. An agent/author performs source reading and mathematical writing; the CLI checks contracts, dependencies, fixed bytes and declared evidence. No server, vector database, multi-agent scheduler or Studio bridge; a two-layer knowledge base is not implemented.
 
 ## Writing and workflow examples
 
-The [balanced dHYM manuscript](assets/reference-samples/dhym-balanced/README.md), supplied by the user after multiple rounds of polishing, is the principal writing and layout reference. Its TeX, PDF, style and bibliography are preserved byte for byte. Its six pages and section/result counts are not output requirements. The separate [Schur-complement example](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/tree/main/examples/schur-complement) demonstrates the knowledge-to-output workflow. Data schema remains 2.0.0.
+The [balanced dHYM manuscript](assets/reference-samples/dhym-balanced/README.md), supplied by the user after multiple rounds of polishing, is the principal writing and layout reference. Its TeX, PDF, style and bibliography are preserved byte for byte. Its six pages and section/result counts are not output requirements. The separate [Schur-complement example](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/tree/main/examples/schur-complement) demonstrates the knowledge-to-output workflow. Knowledge and snapshot schema remains 2.0.0; new plans and policy-bearing reviews use 2.2.0 and cannot be read by old software.
 
 The [article example directory](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/tree/main/examples/dhym-balanced) contains only a standalone TeX and the original PDF. The TeX includes the required style and bibliography; the mathematical text is unchanged. Examples are stored in the repository; Release attachments contain the installation archive and checksums.
 
 ## Install and run
 
-Extract the candidate `pure-math-survey-2.1.0-rc1.zip` and copy its single `pure-math-survey/` folder to the skill directory used by your host application. Or run its scripts directly without installing any pip package:
+The `v2.1.0` tag and GitHub Release are not published, so official download attachments for this version are not yet available. Copy the complete `skills/pure-math-survey/` folder from the repository to your host application's skills directory. Alternatively, run `python skills/pure-math-survey/scripts/package_release.py --output ../pure-math-survey-2.1.0.zip` from the repository root, then extract the local archive and copy its single `pure-math-survey/` folder. The build script creates archive and member checksums. Or run the extracted scripts directly without installing any pip package:
 
 ```sh
 python pure-math-survey/scripts/survey.py --version --json
@@ -28,7 +28,7 @@ python pure-math-survey/scripts/survey.py init --output my-topic --topic my-topi
 python pure-math-survey/scripts/survey.py kb validate my-topic --json
 ```
 
-Write a real mathematical scope in my-scope.md first. Initialization is knowledge-only and creates no outputs. Native projects use `project.json` with schema 2.0.0. Build requires pdfLaTeX, BibTeX and the packages loaded by math-review.sty; actual page counting/rendering uses Poppler pdfinfo/pdftoppm. `bibtex.original`/`bibtex8` are recorded fallbacks when present. See references/layout-and-build.md for dependencies. No network access is required by the deterministic core; source discovery is performed through the agent's available tools and documented honestly.
+Write a real mathematical scope in my-scope.md first. Initialization is knowledge-only and creates no outputs. Native projects use `project.json` with schema 2.0.0. Build requires pdfLaTeX, BibTeX and the packages loaded by math-review.sty; actual page counting/rendering uses Poppler pdfinfo/pdftoppm. `bibtex.original`/`bibtex8` are recorded fallbacks when present. See [layout and build](references/layout-and-build.md) for dependencies. No network access is required by the deterministic core; source discovery is performed through the agent's available tools and documented honestly.
 
 ## Minimal input/output example
 
@@ -47,7 +47,7 @@ initialization. Reading sources and writing reviewed nodes are subsequent steps.
 
 ## Four profiles, one knowledge authority
 
-`minimal` gives exact core answers with essential mechanism/boundary; `thematic` organizes related results and their supported relations; `lecture` develops declared prerequisite steps and calculations. Default requested output is **minimal + integrated**. A knowledge/update-only request has no implicit manuscript. PDF is not a fifth profile. Part I–IV are overlapping foundations/results/methods/boundaries views, not required separate volumes. Only an explicit user max_pages is a length gate.
+`minimal` gives exact core answers with essential mechanism/boundary; `thematic` organizes related results and their supported relations; `lecture` develops declared prerequisite steps and calculations; `paper` requires authorized original contributions, closest-prior-art reading and complete proofs and defaults to `DRAFT_UNVERIFIED`. Default requested output is **minimal + integrated**. A knowledge/update-only request has no implicit manuscript. PDF is not a fifth profile. Part I–IV are overlapping foundations/results/methods/boundaries views, not required separate volumes. Only an explicit user max_pages is a length gate.
 
 Edit canonical mathematics only in knowledge nodes. Freeze with `kb freeze`. Create an explicit plan with `output plan ... --snapshot KB-...`. Refine audience, selections and proof steps; review scoped readiness before formal preparation. `output prepare` emits exact snapshot fragments and an incomplete writing scaffold; it does not invent a finished mathematical text. `--draft` permits unverified internal preparation but prevents formal release. Existing authored main.tex is preserved on reprepare; review it before adopting a changed snapshot.
 
@@ -55,9 +55,9 @@ Edit canonical mathematics only in knowledge nodes. Freeze with `kb freeze`. Cre
 
 ## Package contents
 
-The installation ZIP contains supported runtime resources, including survey_core modules, profiles, writing references and rebuild tools. Repository tests, development logs and the supplied manuscript's editorial records are excluded. See SKILL.md for the workflow and references/contracts.md for schemas and commands. Only the current project and review contracts are supported.
+The installation ZIP contains supported runtime resources, including survey_core modules, profiles, writing references and rebuild tools. Repository tests, development logs and the supplied manuscript's editorial records are excluded. See [SKILL.md](SKILL.md) for the workflow and [file contracts](references/contracts.md) for schemas and commands. Current knowledge uses schema 2.0.0 and new plans/reviews use 2.2.0; historical plans/reviews remain readable under their recorded policy without authorizing current formal packaging.
 
-No independent review or general mathematical correctness follows from a software test. Acceptance evidence records the actual scoped author rereads and limitations; source hashes, builds and PDF inspections are separate evidence.
+No independent review or general mathematical correctness follows from a software test. Independent mathematical review, real-reader feedback, and genuine original-Paper originality and complete-proof quality remain unverified; releasing the software does not establish them. Acceptance evidence records the actual scoped author rereads and limitations; source hashes, builds and PDF inspections are separate evidence.
 
 ## License
 

@@ -32,7 +32,9 @@ def build_output(root:Path,output_id:str)->dict:
     out=safe(root,'outputs/'+output_id);plan=load_plan(out/'plan.json');verify_generated(root,plan)
     # Exact fragments and literal input safety are checked even for drafts.
     structure=validate_structure(root,output_id)
-    hard=[e for e in structure['errors'] if e['code']!='MANUSCRIPT_INCOMPLETE']
+    from .exposition import PREVIEW_DESIGN_CODES
+    allowed=PREVIEW_DESIGN_CODES | {'MANUSCRIPT_INCOMPLETE'} if plan['draft'] else set()
+    hard=[e for e in structure['errors'] if e['code'] not in allowed]
     require(not hard,'BUILD_FAILED','Structural input errors: '+str(hard),'manuscript/main.tex')
     sources=file_inventory(out,sorted(output_inputs(out)))
     engine=executable(['pdflatex']);bib=executable(['bibtex','bibtex.original','bibtex8'])
@@ -40,7 +42,9 @@ def build_output(root:Path,output_id:str)->dict:
         archive_current(out, 'previous-build')
         stage=Path(tempfile.mkdtemp(prefix='.tex-build-',dir=out));compiled=stage/'compiled';compiled.mkdir()
         report={'built_at':now(),'output_id':output_id,'snapshot_id':plan['snapshot_id'],'source_inputs':sources,
-                'commands':[],'tools':{},'status':'FAILED','stability_reached':False,'warnings':[]}
+                'commands':[],'tools':{},'status':'FAILED','stability_reached':False,'warnings':[],
+                'draft_preview':plan['draft'],'preview_limitations':[e for e in structure['errors'] if e['code'] in allowed],
+                'acceptance':'Build does not perform mathematical, exposition or page review.'}
         try:
             for row in sources:
                 atomic_bytes(safe(stage,row['path']),safe(out,row['path'],True).read_bytes())

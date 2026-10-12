@@ -160,7 +160,7 @@ class OutputReview(unittest.TestCase):
         new=freeze_snapshot(self.root)['artifacts']['snapshot_id'];r=diff_snapshots(self.root,old,new)
         locations=r['artifacts']['affected_outputs'][0]['authored_locations'];self.assertIn('manuscript/sections/answer.tex',{x['path'] for x in locations})
     def test_U29_schema_stable_runtime_patch_version(self):
-        self.assertEqual(VERSION,'2.0.0');self.assertEqual(SOFTWARE_VERSION,'2.1.0-rc1')
+        self.assertEqual(VERSION,'2.0.0');self.assertEqual(SOFTWARE_VERSION,'2.1.0')
         sid=load_plan(self.out/'plan.json')['snapshot_id'];self.assertEqual(verify_snapshot(self.root,sid)['status'],'VERIFIED')
     def test_U30_python_310_grammar(self):
         for p in (SKILL/'scripts').rglob('*.py'):ast.parse(p.read_text(encoding='utf-8'),filename=str(p),feature_version=(3,10))
@@ -169,6 +169,6 @@ class OutputReview(unittest.TestCase):
         unpacked=self.base/'installed'
         with zipfile.ZipFile(destination) as z:z.extractall(unpacked)
         skill=unpacked/'pure-math-survey'
-        code="import sys,json;sys.path.insert(0,"+repr(str(skill/'scripts'))+");from survey_core import tex,history,structure;print(json.dumps([tex.__file__,history.__file__,structure.__file__]))"
+        code="import sys,json;sys.path.insert(0,"+repr(str(skill/'scripts'))+");from survey_core import tex,history,structure,exposition;assert callable(exposition.check_exposition_design);print(json.dumps([m.__file__ for m in (tex,history,structure,exposition)]))"
         p=subprocess.run([sys.executable,'-I','-c',code],capture_output=True,text=True,cwd=self.base)
         self.assertEqual(p.returncode,0,p.stderr);self.assertTrue(all(Path(f).is_relative_to(skill) for f in json.loads(p.stdout)))

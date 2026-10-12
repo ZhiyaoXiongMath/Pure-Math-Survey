@@ -91,7 +91,7 @@ def prepare_output(root:Path,plan_path:Path,draft:bool=False)->dict:
         if not (out/'outline.md').exists():
             order=topological(inv.nodes,ids) if plan['profile']=='lecture' else [s['node_id'] for s in plan['selections']]
             from .profiles import outline
-            atomic_bytes(out/'outline.md', outline(plan, order).encode('utf-8'))
+            atomic_bytes(out/'outline.md', outline(plan, order, inv.nodes).encode('utf-8'))
         if not (out/'manuscript/math-review.sty').exists():
             atomic_bytes(out/'manuscript/math-review.sty',(SKILL_ROOT/'assets/templates/math-review.sty').read_bytes())
         if not (out/'manuscript/main.tex').exists():
@@ -103,10 +103,14 @@ def prepare_output(root:Path,plan_path:Path,draft:bool=False)->dict:
                     snippet = f'\\begin{{{env}}}\\label{{node:{key}}}\n\\input{{../generated/statements/{key}.tex}}\n\\end{{{env}}}\n'
                     snippets.append(snippet)
                     (principals if s['role']=='principal_answer' else ingredients).append(snippet)
-            text=template.replace('@@TITLE@@',tex_text(plan['title'])).replace('@@STATEMENTS@@','\n'.join(snippets)).replace('@@PRINCIPALS@@','\n'.join(principals)).replace('@@INGREDIENTS@@','\n'.join(ingredients))
+            from .profiles import VIEW_TASKS, current
+            task='\\placeholder{'+tex_text(VIEW_TASKS[plan['view']])+'}' if current(plan) else ''
+            text=template.replace('@@TITLE@@',tex_text(plan['title'])).replace('@@STATEMENTS@@','\n'.join(snippets)).replace('@@PRINCIPALS@@','\n'.join(principals)).replace('@@INGREDIENTS@@','\n'.join(ingredients)).replace('@@VIEW_TASK@@',task)
             notice='\\noindent\\textbf{DRAFT\\_UNVERIFIED: source and mathematical review may be incomplete.}\n' if plan['draft'] else ''
             atomic_bytes(out/'manuscript/main.tex',text.replace('@@DRAFT@@',notice).encode())
-    return result('output.prepare','DRAFT_PREPARED' if plan['draft'] else 'PREPARED',{'output':out.relative_to(root).as_posix(),'snapshot_id':plan['snapshot_id'],'readiness':ready,'main_preserved':True})
+    from .exposition import check_exposition_design
+    return result('output.prepare','DRAFT_PREPARED' if plan['draft'] else 'PREPARED',{'output':out.relative_to(root).as_posix(),'snapshot_id':plan['snapshot_id'],'readiness':ready,'main_preserved':True,
+        'exposition_design':check_exposition_design(out,plan),'authorship':'SCAFFOLD: preparation is not completed writing or review.'})
 
 def verify_generated(root:Path,plan:dict)->dict:
     inv=validate_plan(root,plan);out=safe(root,'outputs/'+plan['output_id']);expected=expected_generated(inv,plan)
@@ -135,7 +139,8 @@ def verify_generated(root:Path,plan:dict)->dict:
     return manifest
 
 def output_inputs(out:Path)->set[str]:
-    paths={'plan.json','outline.md'}|set(all_files(out,'manuscript'))|set(all_files(out,'generated'))
+    paths={'plan.json'}|set(all_files(out,'manuscript'))|set(all_files(out,'generated'))
+    if safe(out,'outline.md').is_file():paths.add('outline.md')
     # Also bind the authoring materials actually supplied to the reader/agent.
     paths |= set(all_files(out,'materials'))
     return paths
@@ -175,4 +180,8 @@ def validate_structure(root:Path,output_id:str)->dict:
                 raw=strip_comments(safe(out,path,True).read_text(encoding='utf-8'))
                 if re.search(r'\\(?:re)?newcommand\s*(?:\{)?\\thesection\b|\\def\s*\\thesection\b',raw):
                     errors.append(diagnostic('MINIMAL_NUMBERING_UNSUPPORTED','Custom main-section numbering is not supported by the strict three-section contract.',path))
-    return result('output.structure','NEEDS_WORK' if errors else 'STRUCTURALLY_VALID',{'tex_inventory':public_inventory(inv),'actual_literal_inputs':sorted(used),'body_inputs':sorted(scan.body_inputs),'canonical_locations':scan.locations},errors,warnings)
+    from .exposition import check_exposition_design
+    from .profiles import policy
+    design=check_exposition_design(out,plan);errors+=design['errors']
+    return result('output.structure','NEEDS_WORK' if errors else 'STRUCTURALLY_VALID',{'tex_inventory':public_inventory(inv),'actual_literal_inputs':sorted(used),'body_inputs':sorted(scan.body_inputs),'canonical_locations':scan.locations,
+        'exposition_design':design,'recorded_policy':policy(plan)},errors,warnings)

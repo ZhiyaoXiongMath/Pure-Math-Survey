@@ -1,13 +1,13 @@
 # Pure Math Survey
 
-> **2.1.0-rc1 是开发候选版，不是已发布版本。** 安装本开发分支的完整 `skills/pure-math-survey` 目录，或构建候选 ZIP；旧版 Release 链接仅供历史参考。四模式契约见[成文模式](skills/pure-math-survey/references/editions.md)。
+> **软件版本 2.1.0 发布准备；tag 与 GitHub Release 尚未发布。** 当前可复制仓库中的完整技能目录，或从源码构建本地安装包。四模式契约见[成文模式](skills/pure-math-survey/references/editions.md)。
 > Minimal 严格三节；Thematic 核查路线比较；Lecture 兑现逐步证明；Paper 需授权原创贡献、最接近前人成果核查与闭合证明，默认只生成内部草稿。软件校验不保证数学正确、原创性或读者理解。
-> 知识 schema 为 2.0.0，新输出计划与新版政策审阅为 2.1.0；旧快照、正文和审阅不被静默迁移，历史 accepted 不构成新版政策验收。
+> 知识 schema 为 2.0.0，新输出计划与新版政策审阅为 2.2.0；旧快照、正文和审阅不被静默迁移，历史 accepted 不构成新版政策验收。
 
 
 **简体中文** | [English](README.en.md)
 
-**候选版本 2.1.0-rc1；尚未发布正式 Release。** 先建立有原始文献依据的数学知识库，再从固定的知识快照撰写所需的英文综述或讲义。
+**Pure Math Survey 2.1.0** 面向维护数学知识和撰写文章的作者：先建立有原始文献依据的知识库，再从固定的知识快照撰写所需的英文综述、讲义或研究论文草稿。
 
 知识项目保存明确的问题、定义、结论、证明机制、结果之间的关系、例子、适用边界及对应的文献证据。它可以独立维护，不必生成文章。作者或代理负责数学阅读与写作；工具负责检查文件约定、固定输入、证据关联和实际编译。
 
@@ -22,13 +22,14 @@
 
 ## 安装
 
-仅需历史稳定版时，从 [v2.0.4 Release](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/tag/v2.0.4) 下载
-[pure-math-survey-2.0.4.zip](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/download/v2.0.4/pure-math-survey-2.0.4.zip)
-及校验文件。解压后，将其中完整的 `pure-math-survey` 文件夹放入宿主应用的 skills 目录。
-也可以直接复制本仓库的 [skills/pure-math-survey](skills/pure-math-survey/) 文件夹。
+当前请将本仓库中完整的 [skills/pure-math-survey](skills/pure-math-survey/) 文件夹复制到宿主应用的 skills 目录。也可以在仓库根目录构建本地安装包：
 
-Release 附件只提供安装包和校验文件；下方示例保存在仓库中，无需单独下载示例即可使用 skill。
-本分支的软件版本为 2.1.0-rc1；知识与快照 schema 为 2.0.0，新计划及新版政策审阅 schema 为 2.1.0。旧软件不能读取新计划；旧成果按显式历史政策读取，不自动迁移。
+```sh
+python skills/pure-math-survey/scripts/package_release.py --output ../pure-math-survey-2.1.0.zip
+```
+
+解压后，将其中完整的 `pure-math-survey` 文件夹放入宿主应用的 skills 目录。构建脚本同时生成包内文件清单与 ZIP 的 SHA-256 校验文件。`v2.1.0` tag 和 GitHub Release 尚未发布，目前没有该版本的正式下载附件。下方示例保存在仓库中，无需单独下载示例即可使用 skill。
+本版本的软件版本为 2.1.0；知识与快照 schema 为 2.0.0，新计划及新版政策审阅 schema 为 2.2.0。旧软件不能读取新计划；旧成果按显式历史政策读取，不自动迁移。
 
 ## 使用
 
@@ -87,13 +88,13 @@ Release 附件只提供安装包和校验文件；下方示例保存在仓库中
 ```sh
 python -m unittest discover -s tests -v
 python skills/pure-math-survey/scripts/validate_assets.py --json
-python skills/pure-math-survey/scripts/package_release.py --output ../pure-math-survey-2.1.0-rc1.zip
-python tools/verify_release.py ../pure-math-survey-2.1.0-rc1.zip --no-build
+python skills/pure-math-survey/scripts/package_release.py --output ../pure-math-survey-2.1.0.zip
+python tools/verify_release.py ../pure-math-survey-2.1.0.zip --report ../pure-math-survey-2.1.0-verification.json
 ```
 
 测试覆盖快照与材料完整性、范围明确的审阅、TeX 正文检查、历史记录和打包，并包含实际 TeX 编译。测试中人工构造的审阅记录仅用于软件测试。Linux CI 使用 Python 3.10 和 3.12；Windows 若无创建符号链接的权限，会明确跳过对应的一项测试。
 
-参见[版本说明](CHANGELOG.md)。当前版本不包含服务器、向量数据库、研究调度器或 Research Studio 桥接功能。
+参见[版本说明](CHANGELOG.md)。当前版本不包含服务器、向量数据库、研究调度器或 Research Studio 桥接功能；两层知识库能力尚未实现。
 
 ## 许可证
 
@@ -101,6 +102,8 @@ python tools/verify_release.py ../pure-math-survey-2.1.0-rc1.zip --no-build
 
 数学示例材料单独保留：`examples/` 和 `skills/pure-math-survey/assets/reference-samples/dhym-balanced/` 下的内容不在本次 MIT 授权范围内，包含其中的 TeX、PDF、参考文献及示例项目。此次添加许可证不为这些材料授予额外的复用许可，也不改变第三方材料原有的权利。
 
-## vNext acceptance evidence
+## 验证证据与边界
 
-See [requirements and implementation map](docs/vnext/requirements.md), [actual validation and limitations](docs/vnext/validation.md), and [seven authored benchmark sources](examples/vnext/README.md). Six known-mathematics samples were compiled and author-reviewed; the Paper boundary sample is deliberately non-releasable. Independent review, real-reader feedback, and genuine original-Paper quality are NOT VERIFIED.
+[rc2 候选验证记录](docs/rc2/CANDIDATE.md)保留该阶段的实际结果和提交标识，不能替代正式版最终提交的验证。rc2 保留历史示例，新增 Simon–Maitre–Barrett–Süli 三篇原始论文的实际知识项目、配对的 methods／boundaries 文稿及新的 Schur 讲义。[可编辑项目](examples/rc2/projects/time-compactness/README.md)和有明确范围的作者／页面观察记录均予保留。历史候选材料中的已审阅 PDF、页面图片和构建记录只证明其对应字节；重新构建的 PDF 需要自己的视觉审阅。
+
+另见[需求与实现对照](docs/vnext/requirements.md)、[实际验证及限制](docs/vnext/validation.md)和[七个已有基准文稿](examples/vnext/README.md)。这些历史记录中的六个已知数学样例曾编译并由作者重读；Paper 边界样例有意保持不可正式交付。独立数学审阅、真实读者反馈以及真正原创 Paper 的原创性与完整证明质量仍未验证。软件正式发布不改变这些限制。

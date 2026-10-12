@@ -1,0 +1,40 @@
+name: rc2 hardening audit
+on:
+  push:
+    branches: [vnext/2.1.0-rc2-hardening]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12'
+      - name: Record immutable source for offline review
+        run: |
+          mkdir -p "$RUNNER_TEMP/rc2-audit"
+          git rev-parse HEAD HEAD^{tree} > "$RUNNER_TEMP/rc2-audit/source-identity.txt"
+          git archive --format=zip HEAD > "$RUNNER_TEMP/rc2-audit/source.zip"
+          python --version > "$RUNNER_TEMP/rc2-audit/python-version.txt"
+      - name: Install actual build tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended lmodern poppler-utils
+      - name: Run existing and hardening regression tests
+        run: |
+          set -o pipefail
+          python -m unittest discover -s tests -v 2>&1 | tee "$RUNNER_TEMP/rc2-audit/tests.log"
+      - name: Retain source and execution evidence, never semantic acceptance
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: rc2-audit-${{ github.sha }}
+          path: ${{ runner.temp }}/rc2-audit/
+          if-no-files-found: error
+          retention-days: 30

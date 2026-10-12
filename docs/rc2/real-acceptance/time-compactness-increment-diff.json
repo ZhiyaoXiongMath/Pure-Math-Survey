@@ -1,0 +1,155 @@
+{
+  "operation": "kb.diff",
+  "status": "COMPARED",
+  "errors": [],
+  "warnings": [],
+  "artifacts": {
+    "from": "KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c",
+    "to": "KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d",
+    "added": [
+      "N-cone",
+      "N-cone-definition",
+      "N-cone-ehrling",
+      "N-cone-mechanism",
+      "N-homogeneous-transfer"
+    ],
+    "removed": [],
+    "changed": [],
+    "source_changes": [
+      "S-barrett-suli"
+    ],
+    "affected_dependents": [],
+    "changed_files": [
+      "evidence/proof-step-catalog.json",
+      "evidence/reviews/coverage-cone-increment.json",
+      "evidence/reviews/date-correction-N-cone-definition.json",
+      "evidence/reviews/date-correction-N-cone-ehrling.json",
+      "evidence/reviews/date-correction-N-cone-mechanism.json",
+      "evidence/reviews/date-correction-N-cone.json",
+      "evidence/reviews/date-correction-N-homogeneous-transfer.json",
+      "evidence/reviews/date-correction-N-image-only.json",
+      "evidence/reviews/date-correction-N-maitre.json",
+      "evidence/reviews/date-correction-N-translations.json",
+      "evidence/reviews/date-correction-N-truncation.json",
+      "evidence/reviews/date-correction-S-barrett-suli.json",
+      "evidence/reviews/date-correction-S-maitre.json",
+      "evidence/reviews/math-cone-increment-N-cone-definition.json",
+      "evidence/reviews/math-cone-increment-N-cone-ehrling.json",
+      "evidence/reviews/math-cone-increment-N-cone-mechanism.json",
+      "evidence/reviews/math-cone-increment-N-cone.json",
+      "evidence/reviews/math-cone-increment-N-homogeneous-transfer.json",
+      "evidence/reviews/source-cone-increment.json",
+      "evidence/source-checks/S-barrett-suli.md",
+      "evidence/source-checks/S-maitre.md",
+      "knowledge/coverage.json",
+      "knowledge/discovery.md",
+      "knowledge/nodes/N-cone-definition.md",
+      "knowledge/nodes/N-cone-ehrling.md",
+      "knowledge/nodes/N-cone-mechanism.md",
+      "knowledge/nodes/N-cone.md",
+      "knowledge/nodes/N-homogeneous-transfer.md",
+      "knowledge/overview.md",
+      "knowledge/sources/S-barrett-suli.json"
+    ],
+    "affected_outputs": [
+      {
+        "output_id": "initial-two-paper",
+        "consumed_changes": [
+          "evidence/reviews/coverage-cone-increment.json",
+          "evidence/reviews/date-correction-N-image-only.json",
+          "evidence/reviews/date-correction-N-maitre.json",
+          "evidence/reviews/date-correction-N-translations.json",
+          "evidence/reviews/date-correction-N-truncation.json",
+          "evidence/reviews/date-correction-S-maitre.json",
+          "evidence/source-checks/S-maitre.md",
+          "knowledge/coverage.json",
+          "knowledge/discovery.md",
+          "knowledge/overview.md"
+        ],
+        "locations": [
+          {
+            "changed_input": "evidence/reviews/coverage-cone-increment.json",
+            "node_id": null,
+            "manuscript_lines": [],
+            "location": "outputs/initial-two-paper/plan.json",
+            "action": "Reassess consumed input, dependent proof and surrounding prose before adopting new snapshot."
+          },
+          {
+            "changed_input": "evidence/reviews/date-correction-N-image-only.json",
+            "node_id": null,
+            "manuscript_lines": [],
+            "location": "outputs/initial-two-paper/plan.json",
+            "action": "Reassess consumed input, dependent proof and surrounding prose before adopting new snapshot."
+          },
+          {
+            "changed_input": "evidence/reviews/date-correction-N-maitre.json",
+            "node_id": null,
+            "manuscript_lines": [],
+            "location": "outputs/initial-two-paper/plan.json",
+            "action": "Reassess consumed input, dependent proof and surrounding prose before adopting new snapshot."
+          },
+          {
+            "changed_input": "evidence/reviews/date-correction-N-translations.json",
+            "node_id": null,
+            "manuscript_lines": [],
+            "location": "outputs/initial-two-paper/plan.json",
+            "action": "Reassess consumed input, dependent proof and surrounding prose before adopting new snapshot."
+          },
+          {
+            "changed_input": "evidence/reviews/date-correction-N-truncation.json",
+            "node_id": null,
+            "manuscript_lines": [],
+            "location": "outputs/initial-two-paper/plan.json",
+            "action": "Reassess consumed input, dependent proof and surrounding prose before adopting new snapshot."
+          },
+          {
+            "changed_input": "evidence/reviews/date-correction-S-maitre.json",
+            "node_id": null,
+            "manuscript_lines": [],
+            "location": "outputs/initial-two-paper/plan.json",
+            "action": "Reassess consumed input, dependent proof and surrounding prose before adopting new snapshot."
+          },
+          {
+            "changed_input": "evidence/source-checks/S-maitre.md",
+            "node_id": null,
+            "manuscript_lines": [],
+            "location": "outputs/initial-two-paper/plan.json",
+            "action": "Reassess consumed input, dependent proof and surrounding prose before adopting new snapshot."
+          },
+          {
+            "changed_input": "knowledge/coverage.json",
+            "node_id": null,
+            "manuscript_lines": [],
+            "location": "outputs/initial-two-paper/plan.json",
+            "action": "Reassess consumed input, dependent proof and surrounding prose before adopting new snapshot."
+          },
+          {
+            "changed_input": "knowledge/discovery.md",
+            "node_id": null,
+            "manuscript_lines": [],
+            "location": "outputs/initial-two-paper/plan.json",
+            "action": "Reassess consumed input, dependent proof and surrounding prose before adopting new snapshot."
+          },
+          {
+            "changed_input": "knowledge/overview.md",
+            "node_id": null,
+            "manuscript_lines": [],
+            "location": "outputs/initial-two-paper/plan.json",
+            "action": "Reassess consumed input, dependent proof and surrounding prose before adopting new snapshot."
+          }
+        ],
+        "affected_nodes": [],
+        "authored_locations": [],
+        "review_changes": [
+          "evidence/reviews/coverage-cone-increment.json",
+          "evidence/reviews/date-correction-N-image-only.json",
+          "evidence/reviews/date-correction-N-maitre.json",
+          "evidence/reviews/date-correction-N-translations.json",
+          "evidence/reviews/date-correction-N-truncation.json",
+          "evidence/reviews/date-correction-S-maitre.json"
+        ]
+      }
+    ],
+    "historical_outputs": "Remain bound to old snapshot; no review record was rewritten."
+  }
+}

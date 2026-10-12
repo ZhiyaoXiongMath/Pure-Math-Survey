@@ -8,6 +8,7 @@ import argparse
 import importlib
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -26,11 +27,11 @@ def main()->int:
     ap.add_argument('--example-root',type=Path,help='Directory containing the authored schur and compactness projects (default: examples/vnext/projects).')
     ap.add_argument('--work-directory',type=Path,help='Parent of a short-lived staging directory; use a shallow path for deeply nested historical Windows artifacts.')
     args=ap.parse_args();report={'status':'RUNNING','checks':[],'archive':args.archive.name,'python':sys.version}
-    def check(command:list[str],cwd:Path,env:dict)->dict:
+    def check(command:list[str],cwd:Path,env:dict,decode:bool=True)->dict:
         p=subprocess.run(command,cwd=cwd,env=env,capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=180)
         row={'command':command,'returncode':p.returncode,'stdout':p.stdout,'stderr':p.stderr};report['checks'].append(row)
         if p.returncode:raise RuntimeError(p.stdout+p.stderr)
-        return json.loads(p.stdout)
+        return json.loads(p.stdout) if decode else row
     try:
         report['archive_verification']=verify_archive(args.archive)
         if args.work_directory:args.work_directory.mkdir(parents=True,exist_ok=True)
@@ -42,12 +43,28 @@ def main()->int:
             env=os.environ.copy();env.pop('PYTHONPATH',None);env.pop('PYTHONHOME',None)
             skill=dest/'pure-math-survey';entry=skill/'scripts/survey.py'
             v=check([str(exe),'-I',str(entry),'--json','--version'],base,env)
-            if v['artifacts']['version']!='2.1.0-rc1':raise AssertionError('Wrong installed version')
+            if v['artifacts']['version']!='2.1.0':raise AssertionError('Wrong installed version')
             code="import importlib,json,pkgutil,sys;sys.path.insert(0,"+repr(str(skill/'scripts'))+");import survey_core;mods={m.name:importlib.import_module('survey_core.'+m.name).__file__ for m in pkgutil.iter_modules(survey_core.__path__)};print(json.dumps({'prefix':sys.prefix,'modules':mods}))"
             loaded=check([str(exe),'-I','-c',code],base,env)
             if not loaded['modules'] or any(not Path(f).is_relative_to(skill) for f in loaded['modules'].values()):raise AssertionError('Imported source-tree module instead of installed one')
             assets=check([str(exe),'-I',str(skill/'scripts/validate_assets.py'),'--json'],base,env)
             if set(assets['profile_preparations_executed'])!={'minimal','thematic','lecture','paper'}:raise AssertionError('Not all installed profile resources executed')
+            if len(assets['profile_view_preparations_executed'])!=20:raise AssertionError('Not all installed view resources executed')
+            # Reuse the real regression suite, but replace its entire runtime
+            # tree with the verified archive. No import can fall back to the
+            # development skill; -I also removes user/site/PYTHONPATH leakage.
+            suite=base/'installed-suite'
+            shutil.copytree(ROOT/'tests',suite/'tests',ignore=shutil.ignore_patterns('__pycache__'))
+            shutil.copytree(ROOT/'tools',suite/'tools',ignore=shutil.ignore_patterns('__pycache__'))
+            shutil.copytree(ROOT/'examples/vnext/projects',suite/'examples/vnext/projects',
+                            ignore=shutil.ignore_patterns('build','history','__pycache__'))
+            shutil.copytree(ROOT/'examples/rc2/projects',suite/'examples/rc2/projects',
+                            ignore=shutil.ignore_patterns('build','history','__pycache__'))
+            shutil.copytree(skill,suite/'skills/pure-math-survey')
+            executed=check([str(exe),'-I','-m','unittest','discover','-s',str(suite/'tests'),'-v'],base,env,False)
+            count=re.search(r'Ran (\d+) tests',executed['stderr'])
+            if not count:raise AssertionError('Installed regression did not execute tests')
+            report['installed_regression']={'tests':int(count[1]),'status':'PASS','synthetic_gates_are_not_mathematical_acceptance':True}
             (base/'scope.md').write_text('# Scope\n\nRecord incidence-matrix conventions without requesting any manuscript.\n')
             project=base/'notebook'
             check([str(exe),'-I',str(entry),'--json','init','--output',str(project),'--topic','clean-install','--scope',str(base/'scope.md')],base,env)
@@ -63,7 +80,12 @@ def main()->int:
                     '--skill-root',str(skill),'--examples',str(example),'--output',str(base/'relocated-examples')],base,env)
                 if reproduced['status']!='PASS':raise AssertionError(reproduced)
                 report['installed_profile_builds']=reproduced['outputs']
-                report['installed_tex_build']='Seven PDFs BUILT and rendered using the isolated installed runtime; new PDFs NOT VISUALLY REVIEWED'
+                current=check([str(exe),'-I',str(ROOT/'tools/verify_rc2_examples.py'),
+                    '--repository',str(ROOT),'--skill-root',str(skill),
+                    '--output',str(base/'relocated-rc2')],base,env)
+                if current['status']!='PASS':raise AssertionError(current)
+                report['installed_rc2_builds']=current['outputs']
+                report['installed_tex_build']='Eleven PDFs BUILT and rendered using the isolated installed runtime: seven historical and four current rc2; new PDFs NOT VISUALLY REVIEWED'
             else:report['installed_tex_build']='NOT_EXECUTED (--no-build)'
         report['status']='PASS'
     except (AssertionError,ValueError,OSError,RuntimeError,subprocess.SubprocessError,zipfile.BadZipFile) as e:report.update(status='FAIL',failure=str(e))

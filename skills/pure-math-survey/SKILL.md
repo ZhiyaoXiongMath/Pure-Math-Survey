@@ -5,13 +5,13 @@ description: Build and maintain source-grounded mathematical knowledge, then wri
 
 # Pure Math Survey
 
-**Candidate software: 2.1.0-rc1; knowledge/snapshot schema: 2.0.0; new output/policy-review schema: 2.1.0.** Local files, one writer, Python 3.10+. Mathematics and manuscripts are English; discussion follows the user's language.
+**Software version: 2.1.0; knowledge/snapshot schema: 2.0.0; new output/policy-review schema: 2.2.0.** Local files, one writer, Python 3.10+. Mathematics and manuscripts are English; discussion follows the user's language.
 
 ## Identify the task and project
 
 Recover the user's mathematical scope, actual materials, reader assumptions and requested outputs. A knowledge-only or update-only request ends with knowledge, evidence and optional snapshots: do not generate a manuscript or PDF. Otherwise default to **minimal + integrated**, and generate only the requested output. PDF is a delivery format, not a profile. Read [profiles](references/editions.md) and [records](references/records-and-delivery.md).
 
-Use `python scripts/survey.py init --output PROJECT --topic SLUG --scope SCOPE.md` for a new knowledge project. Existing projects must satisfy the current `project.json` and scoped-evidence contracts. Existing 2.0.0 knowledge and historical plans/reviews remain readable without mutation. New plans/policy-bearing reviews use 2.1.0; no in-place migration is performed. Unsupported formats are rejected. Read references/contracts.md before adopting new output policy.
+Use `python scripts/survey.py init --output PROJECT --topic SLUG --scope SCOPE.md` for a new knowledge project. Existing projects must satisfy the current `project.json` and scoped-evidence contracts. Existing 2.0.0 knowledge and historical plans/reviews remain readable without mutation. New plans/policy-bearing reviews use 2.2.0; no in-place migration is performed. Unsupported formats are rejected. Read references/contracts.md before adopting new output policy.
 
 Do not require user approval for routine bookkeeping. Ask only about substantive unresolved scope or user choices. Maintain the records on the user's behalf. Script templates remain pending until the described reading has actually occurred.
 
@@ -83,7 +83,7 @@ This is Survey, not Research Studio. Preserve stable IDs, exact content, source 
 
 Read [output review](references/output-review.md) before release. Require canonical inputs in the actual document body, seven explicit whole-manuscript reading checks and real proof/principal locations. A template never grants acceptance. Preserve review and build attempts; a failed new build must not destroy or silently reuse the last successful build. Source, semantic and visual approval each require the actual recorded work.
 
-## vNext exposition and publication contract
+## Exposition and manuscript publication contract
 
 Before writing, read [reader calibration](references/reader-calibration.md),
 [project overview](references/overview.md), [four profiles](references/editions.md)
@@ -122,4 +122,25 @@ as newly accepted. Reprepare preserves existing main.tex and outline.md, not an 
 upgrade. Software checks identity, structure and evidence, not mathematical truth,
 reader understanding, authorization or originality. Author rereading remains author
 rereading, even in another tool or context. Report unperformed independent and real-reader
-checks separately. This candidate is not a formally published Release.
+checks separately. Software version 2.1.0 does not certify mathematical correctness,
+originality or complete-proof quality. A two-layer knowledge base is not implemented.
+
+## Current design and historical policy
+
+Read `artifacts.exposition_design` after prepare. Complete topic-specific audience,
+reader goals and outline; structure and release reject unresolved default tasks.
+Keep preview drafts visibly unverified. Repeated prepare preserves authored main,
+outline and style. Knowledge readiness never requires an output outline.
+Adopt the current policy with a new output ID and schema 2.2.0. Do not rewrite historical outputs.
+
+Treat `view` as a reader task within the requested profile. Use the generated
+node-specific reasons and emphasis order as editable navigation; inspect actual
+node content before claiming a relation. Methods develops input-to-output
+operations; boundaries locates failing hypotheses and distinguishes noncoverage
+from counterexamples. Preserve the full principal, dependencies, decisive
+boundaries and profile proof promises in every view. When no suitable node exists,
+record the gap or justify why none is needed, returning new claims to the KB.
+Record the current `scope.view` and a substantive `mode_findings.view_focus`
+with available `node_ids` and actual body locations in each output reading.
+Changing the view requires a fresh reading even if canonical bytes stay identical.
+`--policy recorded` is a read-only assessment, never current release authorization.

@@ -1,25 +1,25 @@
-# Pure Math Survey 2.1.0-rc1
+# Pure Math Survey 2.1.0
 
-> **2.1.0-rc1 是开发候选版，不是已发布版本。** 安装本开发分支的完整 `skills/pure-math-survey` 目录，或构建候选 ZIP；旧版 Release 链接仅供历史参考。四模式契约见[成文模式](references/editions.md)。
+> **软件版本 2.1.0 发布准备；tag 与 GitHub Release 尚未发布。** 当前可复制仓库中的完整技能目录，或从源码构建本地安装包。四模式契约见[成文模式](references/editions.md)。
 > Minimal 严格三节；Thematic 核查路线比较；Lecture 兑现逐步证明；Paper 需授权原创贡献、最接近前人成果核查与闭合证明，默认只生成内部草稿。软件校验不保证数学正确、原创性或读者理解。
-> 知识 schema 为 2.0.0，新输出计划与新版政策审阅为 2.1.0；旧快照、正文和审阅不被静默迁移，历史 accepted 不构成新版政策验收。
+> 知识 schema 为 2.0.0，新输出计划与新版政策审阅为 2.2.0；旧快照、正文和审阅不被静默迁移，历史 accepted 不构成新版政策验收。
 
 
 **简体中文** | [English](README.md)
 
 先维护数学知识，再按需成文：确定范围 → 阅读原始文献 → 建立可读的知识节点、关系与证据 → 检查覆盖与就绪状态 → 固定不可变快照 → 制定文章计划 → 写作 → 实际校验、编译及逐页检查 → 交付。
 
-**核心命令行工具只依赖 Python 3.10+ 标准库。** 本技能面向需要长期维护文献依据、数学结论和综述／讲义的作者。作者或代理执行文献阅读与数学写作，工具检查文件约定、依赖、固定输入及声明的证据。它不是自动定理证明器或无人值守的写作服务，不包含服务器、向量数据库、多代理调度器或 Studio 桥接。
+**核心命令行工具只依赖 Python 3.10+ 标准库。** 本技能面向需要长期维护文献依据、数学结论和综述／讲义／研究论文草稿的作者。作者或代理执行文献阅读与数学写作，工具检查文件约定、依赖、固定输入及声明的证据。它不是自动定理证明器或无人值守的写作服务，不包含服务器、向量数据库、多代理调度器或 Studio 桥接；两层知识库能力尚未实现。
 
 ## 写作与流程示例
 
-[balanced dHYM 文稿](assets/reference-samples/dhym-balanced/README.md)由用户经过多轮润色后提供，是主要的写作和排版参考；其中的 TeX、PDF、样式与参考文献保持原字节不变。它的六页篇幅和章节／结论数量不是其他文章的要求。独立的 [Schur 补示例](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/tree/main/examples/schur-complement)演示从知识库到文章的完整流程。知识节点与快照仍为 2.0.0；新计划及带新版政策的审阅采用 2.1.0，不能由旧软件读取。
+[balanced dHYM 文稿](assets/reference-samples/dhym-balanced/README.md)由用户经过多轮润色后提供，是主要的写作和排版参考；其中的 TeX、PDF、样式与参考文献保持原字节不变。它的六页篇幅和章节／结论数量不是其他文章的要求。独立的 [Schur 补示例](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/tree/main/examples/schur-complement)演示从知识库到文章的完整流程。知识节点与快照仍为 2.0.0；新计划及带新版政策的审阅采用 2.2.0，不能由旧软件读取。
 
 [文章示例目录](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/tree/main/examples/dhym-balanced)只有独立 TeX 和原始 PDF。TeX 已内嵌所需样式和参考文献，数学正文没有改变。示例放在仓库中；Release 附件只包含技能安装包与校验文件。
 
 ## 安装与运行
 
-解压候选安装包 `pure-math-survey-2.1.0-rc1.zip`，将其中唯一的 `pure-math-survey/` 文件夹完整复制到宿主应用的技能目录。也可以直接运行脚本，无需安装 pip 包：
+`v2.1.0` tag 和 GitHub Release 尚未发布，目前没有该版本的正式下载附件。请将仓库中完整的 `skills/pure-math-survey/` 文件夹复制到宿主应用的技能目录。也可以在仓库根目录运行 `python skills/pure-math-survey/scripts/package_release.py --output ../pure-math-survey-2.1.0.zip`，解压本地安装包，再复制其中唯一的 `pure-math-survey/` 文件夹；构建脚本同时生成安装包与包内文件的校验信息。也可以直接运行解压后的脚本，无需安装 pip 包：
 
 ```sh
 python pure-math-survey/scripts/survey.py --version --json
@@ -44,7 +44,7 @@ leading block. Exclude the general singular-pivot theorem.
 
 ## 四种写作模式与统一的知识依据
 
-`minimal` 给出精确的核心答案、必要机制和关键边界；`thematic` 组织相关结论及有依据的关系；`lecture` 展开指定的前置知识、计算和证明。请求成文时默认采用 **minimal + integrated**。仅建库或更新知识不会隐含生成文章。PDF 是交付格式，不是第五种模式。Part I–IV 是可以交叠的基础、结果、方法和边界视角，不要求分成多卷。只有用户明确设置的 `max_pages` 才是硬性页数上限。
+`minimal` 给出精确的核心答案、必要机制和关键边界；`thematic` 组织相关结论及有依据的关系；`lecture` 展开指定的前置知识、计算和证明；`paper` 要求获授权的原创贡献、最接近前人成果的实际阅读和完整证明，默认保持 `DRAFT_UNVERIFIED`。请求成文时默认采用 **minimal + integrated**。仅建库或更新知识不会隐含生成文章。PDF 是交付格式，不是第五种模式。Part I–IV 是可以交叠的基础、结果、方法和边界视角，不要求分成多卷。只有用户明确设置的 `max_pages` 才是硬性页数上限。
 
 只在知识节点中编辑规范数学陈述，用 `kb freeze` 固定快照，再以 `output plan ... --snapshot KB-...` 创建明确的文章计划。细化读者、选材和证明步骤，在正式准备前检查相应范围的就绪状态。`output prepare` 生成快照中的精确片段与待写作框架，不会凭空完成文章。`--draft` 允许准备尚未核查的内部草稿，但不允许正式发布。重新准备会保留已写的 `main.tex`；采用不同快照前应重新审阅。
 
@@ -52,9 +52,9 @@ leading block. Exclude the general singular-pivot theorem.
 
 ## 安装包内容
 
-安装 ZIP 包含支持的运行资源，包括 `survey_core` 模块、写作模式、参考材料与重建工具。仓库测试、开发日志和用户文稿的编辑记录不进入安装包。工作流程见 [SKILL.md](SKILL.md)，数据格式和命令见[文件约定](references/contracts.md)。仅支持当前的项目和审阅记录格式。
+安装 ZIP 包含支持的运行资源，包括 `survey_core` 模块、写作模式、参考材料与重建工具。仓库测试、开发日志和用户文稿的编辑记录不进入安装包。工作流程见 [SKILL.md](SKILL.md)，数据格式和命令见[文件约定](references/contracts.md)。当前知识采用 schema 2.0.0，新计划／审阅采用 2.2.0；历史计划／审阅可以按其记录政策读取，但不能授权当前政策下的正式打包。
 
-软件测试不构成独立审阅，也不能保证一般的数学正确性。验收证据记录实际执行的、范围明确的作者重读及其限制；来源哈希、实际编译和 PDF 页面检查是不同的证据。
+软件测试不构成独立审阅，也不能保证一般的数学正确性。独立数学审阅、真实读者反馈及真正原创 Paper 的原创性与完整证明质量仍未验证；软件正式发布不改变这些限制。验收证据记录实际执行的、范围明确的作者重读及其限制；来源哈希、实际编译和 PDF 页面检查是不同的证据。
 
 ## 许可证
 

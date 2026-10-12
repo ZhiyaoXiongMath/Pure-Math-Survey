@@ -1,0 +1,23 @@
+{
+  "N-linear-mechanism": [
+    "Obtain compact interval integrals from the X bound and invoke Simon in Y.",
+    "Choose the Ehrling parameter before the subsequence index to upgrade a Y-Cauchy subsequence."
+  ],
+  "N-truncation": [
+    "Bound the exceptional-set measure and the L1 truncation error uniformly.",
+    "Prove compactness of the closed convex hull by finite nets and apply it to interval averages.",
+    "Transfer compactness to untruncated interval integrals and invoke Simon in the target exponent."
+  ],
+  "N-translations": [
+    "Derive a uniform supremum bound from W11 and the L1 time norm.",
+    "Use Fubini and bounded-amplitude interpolation for every finite p.",
+    "Use Holder for a supremum translation modulus only when q is greater than one."
+  ],
+  "N-endpoint": [
+    "Compute the ramp derivative bound and finite-p error.",
+    "Prove lack of L-infinity compactness from uniform-limit continuity or separated indices."
+  ],
+  "N-image-only": [
+    "Calculate the pairwise L1 separation of dyadic sign functions and their constant squared images."
+  ]
+}

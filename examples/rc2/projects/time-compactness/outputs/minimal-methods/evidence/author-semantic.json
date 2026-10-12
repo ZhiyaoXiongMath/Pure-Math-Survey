@@ -1,0 +1,1020 @@
+{
+  "schema_version": "2.2.0",
+  "review_id": "AUTHOR-OUTPUT-MINIMAL-METHODS-20261012",
+  "kind": "output_semantic",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "generated/conventions.tex",
+      "sha256": "f46df710c1b856e2928bdd9d0144a8573dca5ed5d5ec1a6d50480ae6a0670f1c"
+    },
+    {
+      "path": "generated/manifest.json",
+      "sha256": "464ee34e939c71dc0a8870fc1fed09ef72793987e827f3e58259d69cb37bfd7d"
+    },
+    {
+      "path": "generated/references.bib",
+      "sha256": "6adb240518384ce607400eccfffa658b58ffbf023f1e113162a177fa2136e52b"
+    },
+    {
+      "path": "generated/statements/N-cone-definition.tex",
+      "sha256": "918d634e8b464555ea130676f031d77c373e814b463974f3bb9cab67202c3112"
+    },
+    {
+      "path": "generated/statements/N-cone-ehrling.tex",
+      "sha256": "a9b0965c30aa8b29377891795bbdd13c4446e780d4ffe1f3ef6ead06dca8626c"
+    },
+    {
+      "path": "generated/statements/N-cone.tex",
+      "sha256": "cd388b3b7b35cc2c36c21e0eaa41763095a9063b412eaa712f8e53ff9459d9b3"
+    },
+    {
+      "path": "generated/statements/N-homogeneous-transfer.tex",
+      "sha256": "122e0231a44e914eea6647d6c8f073910cbce788e6f338fac119e2408ce05a86"
+    },
+    {
+      "path": "generated/statements/N-maitre.tex",
+      "sha256": "598f363e6609544ec88d6889d82e046a6d72498a6211ff8fea479cf847afefaa"
+    },
+    {
+      "path": "generated/statements/N-simon-criterion.tex",
+      "sha256": "0beb6efdceb25e1712e63578c8872f7a314b35740e2a3187449842a626aa9133"
+    },
+    {
+      "path": "generated/statements/N-simon.tex",
+      "sha256": "3f456cbe9f894e64e297f61dafbf12f2178d80f7e5ee6b1da73cac7756018478"
+    },
+    {
+      "path": "generated/statements/N-translation-definition.tex",
+      "sha256": "9082cfbb458738ef3da5da088c737d6bff1966f1b3ceb15d14484399b14a1bd6"
+    },
+    {
+      "path": "manuscript/main.tex",
+      "sha256": "d2070ba4ec6d136b0d39b143e383a69c7a56c1bb608a395b745eeffbda5513ff"
+    },
+    {
+      "path": "manuscript/math-review.sty",
+      "sha256": "33e5673880cbebe90caab1beea95ed7b78493838790bef340944496c664a5b83"
+    },
+    {
+      "path": "materials/evidence/reviews/coverage-cone-increment.json",
+      "sha256": "4c7dd530a495734904dc6afeb0157b8d26ed920b39dac8652a48904e541f5d03"
+    },
+    {
+      "path": "materials/evidence/reviews/date-correction-N-cone-definition.json",
+      "sha256": "fe10912392478022cf1ede3b2ce585292362f9d5901aabd6426c7945dba9ecb8"
+    },
+    {
+      "path": "materials/evidence/reviews/date-correction-N-cone-ehrling.json",
+      "sha256": "c35068d58e80c37afdcaf73fccb5969a1131c3167102bf2132532ae341cb71df"
+    },
+    {
+      "path": "materials/evidence/reviews/date-correction-N-cone-mechanism.json",
+      "sha256": "6185e8dd75905e44ce3dbcf34b6a65e8eb1dfddd9a451af15d250054e4172c8e"
+    },
+    {
+      "path": "materials/evidence/reviews/date-correction-N-cone.json",
+      "sha256": "9cf4f70e7fefbadd132d98b017e00b0a44ee61eb892f920551683e876442651e"
+    },
+    {
+      "path": "materials/evidence/reviews/date-correction-N-homogeneous-transfer.json",
+      "sha256": "6157d8f892e8f7fc363857e441ef423a410b3d956f2724a66f9f7a615d85e662"
+    },
+    {
+      "path": "materials/evidence/reviews/date-correction-N-image-only.json",
+      "sha256": "49b9b101515f0f1a808cdcaf03c55310be0aa2040a64f840ff9b7b6b91c6d1d1"
+    },
+    {
+      "path": "materials/evidence/reviews/date-correction-N-maitre.json",
+      "sha256": "ec5e2ec0aa07de12b5e9710f1d95d88143ed6ab10ccaf76d6a56e5dd68256957"
+    },
+    {
+      "path": "materials/evidence/reviews/date-correction-N-translations.json",
+      "sha256": "451541ae171ba5d3e3997556577f2572d9c689b36b31603d98bbd14bfa19ca1b"
+    },
+    {
+      "path": "materials/evidence/reviews/date-correction-N-truncation.json",
+      "sha256": "52f8fd3f243590ba1f03a5f29de6733189bc148459111a7b333c9b4c7cc31ecc"
+    },
+    {
+      "path": "materials/evidence/reviews/date-correction-S-barrett-suli.json",
+      "sha256": "b030435a99ec15382cefe995b1536a58d57aaee5f13793982bf160e99ced5a5a"
+    },
+    {
+      "path": "materials/evidence/reviews/date-correction-S-maitre.json",
+      "sha256": "2bad6ebd786908c6b841d4a81d3170f8b6efe54ebbec20abe81fecbe456bbbca"
+    },
+    {
+      "path": "materials/evidence/reviews/math-initial-N-endpoint.json",
+      "sha256": "fbc85e9793da85ba3e4464dae8e0f6794239412504ac143d4ec569b153213a92"
+    },
+    {
+      "path": "materials/evidence/reviews/math-initial-N-linear-mechanism.json",
+      "sha256": "d81d93a340a4401f4bb1e93e3c931ec8ffb17ceb72ada8546cdb6c9ead12c048"
+    },
+    {
+      "path": "materials/evidence/reviews/math-initial-N-question.json",
+      "sha256": "1671d4db8ec8d4720d3dfb9990612c7d480d00bad8fd19870c5e90de9ed4e4aa"
+    },
+    {
+      "path": "materials/evidence/reviews/math-initial-N-simon-criterion.json",
+      "sha256": "eef9e44c1ce5532f4ad1ad3cb2f745e1e3a4f4cdaf001822add872d9cbe4b1ee"
+    },
+    {
+      "path": "materials/evidence/reviews/math-initial-N-simon.json",
+      "sha256": "f7df8d42a333e2f54a1e823c28ee988b25693df7051320f21604cb0610415740"
+    },
+    {
+      "path": "materials/evidence/reviews/math-initial-N-translation-definition.json",
+      "sha256": "b3235f3303778621a8f72efab047e5763297ddf881e4f793060eb958d8659b57"
+    },
+    {
+      "path": "materials/evidence/reviews/source-initial-S-simon.json",
+      "sha256": "0247be32212e7c9dc1f7eb9cb416c62c5ac1ee930875a9232d5eb53a44d5bf8e"
+    },
+    {
+      "path": "materials/evidence/source-checks/S-barrett-suli.md",
+      "sha256": "f22e9b05f64e9f66fc1771a55fa42b48f6a40b1c17179646ad5e22a4db92eea6"
+    },
+    {
+      "path": "materials/evidence/source-checks/S-maitre.md",
+      "sha256": "ee134671cad56df262b7aa20a19ca8d0eba5a357108a36cc3139a96c476d9109"
+    },
+    {
+      "path": "materials/evidence/source-checks/S-simon.md",
+      "sha256": "1a2d9bea287566277ef71888b173bc16dfc93d783fda5debc7143d0905f082d4"
+    },
+    {
+      "path": "materials/knowledge/conventions.tex",
+      "sha256": "f46df710c1b856e2928bdd9d0144a8573dca5ed5d5ec1a6d50480ae6a0670f1c"
+    },
+    {
+      "path": "materials/knowledge/coverage.json",
+      "sha256": "75db82ebf1d5c2386a6b141a812b33812a3abb433e49884477d2632bcdfa1429"
+    },
+    {
+      "path": "materials/knowledge/discovery.md",
+      "sha256": "5328ad7a89f1089c7cbd165ff87e863bb3b34c4f44361c146a2c237363de952e"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-cone-definition.md",
+      "sha256": "ed4e3e0005e024c8beac174caefa7fe45c3568e212e3fa73e38df4f5aa9026d3"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-cone-ehrling.md",
+      "sha256": "c73db5d12c0a398946c071d4767a947f932c900a63510538594e54c60618dd2c"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-cone-mechanism.md",
+      "sha256": "67b1b24a3adf6d99cdb5dc2a8ef577432c48d5e751c5da4bc6e66df1760b7486"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-cone.md",
+      "sha256": "c6055174fa650b894bf20bcabf2e5bf59ea9013dd1b9800ed2a6bfa22eb1a4a6"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-endpoint.md",
+      "sha256": "595ab0f8deb64bd042887edfadb73108172ed39da10f67dcbfe2d3f4a6ab71ce"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-homogeneous-transfer.md",
+      "sha256": "91c44c5f0fcd9bd9b39a239453d3104e86612e8552dd735981798403309311a8"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-image-only.md",
+      "sha256": "7ebc3be08f326820ebe87f99b22e6ded6b3d240e0142b3641620cdce1bf11f9a"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-linear-mechanism.md",
+      "sha256": "bda15c439b8cf5b378a812f3276bd600633e2f5b1f888aefe5147cd79e6b5be4"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-maitre.md",
+      "sha256": "576d7056ff93ddf46417eb60e36997823fb6d2f96d4221be740aaea722992553"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-question.md",
+      "sha256": "892de85c4d5f796417013baaf3b8fdcfd09c994d79dc3bb36aaf6e0131a37bcc"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-simon-criterion.md",
+      "sha256": "4676d7f90a33263804ae4b53438f8373bbe0e5c654eaeccd7b5cc0791784602d"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-simon.md",
+      "sha256": "cbfaf57cb8052d97595b49315cf26186d13a5cdf1871cdcbd9b4e4ef8a98dff0"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-translation-definition.md",
+      "sha256": "b76cfd3fd51fc2e7f351fe0e626d3e0ba9545b6456fd25284112890f151f4a13"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-translations.md",
+      "sha256": "971e970023d24ea9c2e121768677e5ac3f9c681b084ff09795ee5ce7c2fa18fb"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-truncation.md",
+      "sha256": "446c62b0634a1f230a77bd450abed63be97fffb460452c508aca3cc8d847a402"
+    },
+    {
+      "path": "materials/knowledge/overview.md",
+      "sha256": "1d1cfb8bc4dec87ffcb68671ae5b46c2c810074a52a48e9be8db429a24e70a2f"
+    },
+    {
+      "path": "materials/knowledge/sources/S-barrett-suli.json",
+      "sha256": "8ebe5cb8b76c4d5d9aa7c47e323728980e07993cebd8a0f352a85ce560a86ba0"
+    },
+    {
+      "path": "materials/knowledge/sources/S-maitre.json",
+      "sha256": "e36458b1cb74a89db360c6cf8c9fc41a99e7b5c3ab3a4e1fd6f8070a3ff56297"
+    },
+    {
+      "path": "materials/knowledge/sources/S-simon.json",
+      "sha256": "5f0eac1c0bcd283a1ffe4c39dca4cb2552d681022c2e0d4fd24f400a5fa1e288"
+    },
+    {
+      "path": "materials/materials-manifest.json",
+      "sha256": "464ee34e939c71dc0a8870fc1fed09ef72793987e827f3e58259d69cb37bfd7d"
+    },
+    {
+      "path": "materials/project.json",
+      "sha256": "f8e62a551e5c926ac1af2ad83421630a0555766a242709d3eabbea1319bab801"
+    },
+    {
+      "path": "materials/scope.md",
+      "sha256": "bc5dc378f261923ade16ab6bfae349d0233c018eb96de07ed2c99fa55951f353"
+    },
+    {
+      "path": "outline.md",
+      "sha256": "ebf51f27bec06b835a04b0176fa36f16c7193a1cef7cab4fed39abe8f746d3e9"
+    },
+    {
+      "path": "plan.json",
+      "sha256": "4046e6203fa95cf0ae6be7b7ecb70584cbb593f9b01815b30d3ddb161b104756"
+    }
+  ],
+  "scope": {
+    "output_ids": [
+      "minimal-methods"
+    ],
+    "profile": "minimal",
+    "node_ids": [
+      "N-cone",
+      "N-cone-definition",
+      "N-cone-ehrling",
+      "N-cone-mechanism",
+      "N-endpoint",
+      "N-homogeneous-transfer",
+      "N-image-only",
+      "N-linear-mechanism",
+      "N-maitre",
+      "N-question",
+      "N-simon",
+      "N-simon-criterion",
+      "N-translation-definition",
+      "N-translations",
+      "N-truncation"
+    ],
+    "whole_manuscript": true,
+    "checks": [
+      "whole_manuscript",
+      "canonical_use",
+      "conditions_quantifiers",
+      "selection",
+      "attribution",
+      "proof_obligations",
+      "readability"
+    ],
+    "principal_locations": {
+      "N-simon": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 11,
+          "line_end": 11
+        }
+      ],
+      "N-maitre": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 16,
+          "line_end": 16
+        }
+      ],
+      "N-cone": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 21,
+          "line_end": 21
+        }
+      ]
+    },
+    "proof_steps": {
+      "N-linear-mechanism": [
+        "Obtain compact interval integrals from the X bound and invoke Simon in Y.",
+        "Choose the Ehrling parameter before the subsequence index to upgrade a Y-Cauchy subsequence."
+      ],
+      "N-truncation": [
+        "Bound the exceptional-set measure and the L1 truncation error uniformly.",
+        "Prove compactness of the closed convex hull by finite nets and apply it to interval averages.",
+        "Transfer compactness to untruncated interval integrals and invoke Simon in the target exponent."
+      ],
+      "N-translations": [
+        "Derive a uniform supremum bound from W11 and the L1 time norm.",
+        "Use Fubini and bounded-amplitude interpolation for every finite p.",
+        "Use Holder for a supremum translation modulus only when q is greater than one."
+      ],
+      "N-endpoint": [
+        "Compute the ramp derivative bound and finite-p error.",
+        "Prove lack of L-infinity compactness from uniform-limit continuity or separated indices."
+      ],
+      "N-image-only": [
+        "Calculate the pairwise L1 separation of dyadic sign functions and their constant squared images."
+      ],
+      "N-cone-ehrling": [
+        "Normalize both cone points by the sum of their gauges and use compactness plus injectivity."
+      ],
+      "N-cone-mechanism": [
+        "Derive the A1 supremum bound and control the gauge-truncation tail.",
+        "Obtain compact interval integrals and apply Simon using the correct derivative exponent.",
+        "Upgrade weak-space Cauchy convergence with the two-point Ehrling estimate."
+      ],
+      "N-homogeneous-transfer": [
+        "Construct the degree-one inverse gauge and verify its compact embedding.",
+        "Compute the inverse-lift L1 bound and the W11 output bound.",
+        "Check matching derivative and output spaces and apply Maitre with the correct endpoint."
+      ]
+    },
+    "proof_locations": {
+      "N-linear-mechanism": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 80,
+          "line_end": 84
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 85,
+          "line_end": 94
+        }
+      ],
+      "N-truncation": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 96,
+          "line_end": 113
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 33,
+          "line_end": 42
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 114,
+          "line_end": 119
+        }
+      ],
+      "N-translations": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 60,
+          "line_end": 63
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 64,
+          "line_end": 71
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 72,
+          "line_end": 76
+        }
+      ],
+      "N-endpoint": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 166,
+          "line_end": 177
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 178,
+          "line_end": 181
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 178,
+          "line_end": 182
+        }
+      ],
+      "N-image-only": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 184,
+          "line_end": 193
+        }
+      ],
+      "N-cone-ehrling": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 47,
+          "line_end": 58
+        }
+      ],
+      "N-cone-mechanism": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 121,
+          "line_end": 134
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 135,
+          "line_end": 136
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 33,
+          "line_end": 42
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 64,
+          "line_end": 76
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 137,
+          "line_end": 143
+        }
+      ],
+      "N-homogeneous-transfer": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 148,
+          "line_end": 157
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 158,
+          "line_end": 163
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 163,
+          "line_end": 164
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 64,
+          "line_end": 76
+        }
+      ]
+    },
+    "editorial_policy": "four-modes-2026-10-12-rc2",
+    "statement_reviews": {
+      "N-cone": {
+        "canonical_sha256": "cd388b3b7b35cc2c36c21e0eaa41763095a9063b412eaa712f8e53ff9459d9b3",
+        "outcome": "accepted",
+        "objects": "Real Banach spaces A0,A1, a nonnegative cone M+, its gauge, and strongly measurable A0-valued family F are specified in the fragment.",
+        "domain": "T>0 and 1<=p,q<=infinity are fixed. The allowed cases are q>1 or q=1 with finite p, excluding exactly (infinity,1).",
+        "fixed_and_variable": "A0->A1 and the spatial gauge constant C0 are fixed. Trajectories vary in F and cone membership is almost everywhere, not a pointwise assertion on chosen representatives.",
+        "hypotheses": "The injection is continuous and linear; the cone is nonnegatively scalable; its gauge is positive definite and degree one, dominates the A0 norm, and has compact bounded sets. Gauge measurability and A1-valued Bochner derivative bounds are explicit.",
+        "equations": "The gauge axioms and the combined uniform Lp(gauge)/Lq(A1 derivative) bound occur in the canonical text. Neither [u-v] nor a triangle inequality for the gauge is introduced.",
+        "quantifiers": "Every gauge-bounded sequence has an A0-convergent subsequence and one time bound holds uniformly for v in F. The conclusion does not require a single timewise compact set for untruncated values.",
+        "conclusion": "F is relatively compact in Lp(A0); infinity is included only for q>1. No membership of the limit in a nonclosed cone is inferred.",
+        "status": "Bounded-family form of Barrett--Suli arXiv1101.1990v2 Theorem 1 and Remark 2, pp.3--4, with strong measurability made explicit; independent local mechanism is expository, not original research.",
+        "local_definitions": "All cone axioms needed by this principal are repeated inside its own statement, so it can be read without an earlier definition node. The surrounding explanation warns against cone subtraction."
+      },
+      "N-maitre": {
+        "canonical_sha256": "598f363e6609544ec88d6889d82e046a6d72498a6211ff8fea479cf847afefaa",
+        "outcome": "accepted",
+        "objects": "E1,E2, compact nonlinear map K, bounded input family U and image family V={K(u)} are separately named in the actual fragment.",
+        "domain": "Fixed T>0, target exponent 1<=p<=infinity, and an auxiliary 1<r<=infinity whose value is independent of p.",
+        "fixed_and_variable": "K and the spaces are fixed. Each u varies in U, v=K(u) varies in V, and compactness is asserted only for V.",
+        "hypotheses": "K sends bounded sets to relatively compact sets; U is L1 bounded; images are strongly measurable and belong to Lp; V has a uniform Lr bound and uniform target-Lp translations.",
+        "equations": "The Lr supremum and target-Lp shift limit appear together. The later tail estimate retains K(0) and does not require K(0)=0.",
+        "quantifiers": "There exists one r>1 and one uniform image bound for the whole family; the h-limit is uniform in v. This does not become pointwise time continuity alone.",
+        "conclusion": "Strong compactness of K(u) in Lp for finite p, and compact continuous representatives for p=infinity. No compactness of u is asserted.",
+        "status": "Imported published Maitre Theorem 2.1, p.1726, with renamed operator and explicit measurability. The original shifted sums are distinguished from the local convex-average reconstruction.",
+        "local_definitions": "Compactness of K is defined by images of bounded sets, without silently assuming linearity, injectivity or monotonicity; translations are defined in adjoining notation."
+      },
+      "N-simon": {
+        "canonical_sha256": "3f456cbe9f894e64e297f61dafbf12f2178d80f7e5ee6b1da73cac7756018478",
+        "outcome": "accepted",
+        "objects": "The actual imported fragment specifies Banach spaces X,B,Y and a family F of Bochner Lp(X) trajectories.",
+        "domain": "Fixed finite interval (0,T), T>0, with every exponent 1<=p<=infinity explicitly allowed.",
+        "fixed_and_variable": "The embeddings and exponent are fixed, the functions vary in F, and compactness supplies subsequences rather than convergence of the whole family.",
+        "hypotheses": "X injects compactly into B and B injects continuously into Y; one uniform Lp(X) bound and a family-uniform Lp(Y) translation limit are both present.",
+        "equations": "The spatial supremum and the shortened-domain (0,T-h) translation expression occur literally in the canonical input; the adjoining prose keeps Y distinct from B.",
+        "quantifiers": "The supremum over all f in F precedes the h-down-to-zero limit, so a function-dependent modulus has not been substituted.",
+        "conclusion": "Finite-p conclusion is strong Lp(B) relative compactness. At infinity the conclusion is about B-valued continuous representatives in the supremum norm.",
+        "status": "Established imported result: Simon, journal Theorem 5, printed pp.84--85. No reflexivity or original theorem claim is added.",
+        "local_definitions": "The compact injection is identified in the claim; surrounding notation defines uniform translations and relative compactness. Bochner spaces are declared prerequisites."
+      }
+    },
+    "view": "methods",
+    "mode_findings": {
+      "fast_path": {
+        "outcome": "accepted",
+        "finding": "The opening states the fixed finite-time compactness target and immediately supplies all three full principals. Adjacent prose identifies the weaker time norm Y, the image K(u), and the unavailable cone difference gauge. These passages permit a first accurate comparison before following the later constructions.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 8,
+            "line_end": 24
+          }
+        ]
+      },
+      "reader_calibration": {
+        "outcome": "accepted",
+        "finding": "The concrete reader can already use Bochner integration, Holder/Minkowski and the W11 fundamental theorem. The manuscript refreshes relative compactness and the shortened translation domain, imports the exact criterion, and actually develops compact convex averages and the two-point contradiction before invoking them. No real target-reader feedback was obtained.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 24,
+            "line_end": 24
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 33,
+            "line_end": 42
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 47,
+            "line_end": 58
+          }
+        ]
+      },
+      "points": {
+        "outcome": "accepted",
+        "finding": "The reusable points are the exact Simon criterion, compact convex averages, two-point Ehrling and quantitative derivative moduli. Each has an operational output consumed later: compact interval integrals, a norm-upgrade bound, or the correct target-exponent translation modulus. The three principal statements retain complete hypotheses rather than a list of theorem names.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 28,
+            "line_end": 31
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 33,
+            "line_end": 42
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 47,
+            "line_end": 58
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 60,
+            "line_end": 76
+          }
+        ]
+      },
+      "connections": {
+        "outcome": "accepted",
+        "finding": "The connections are explicit calculations: a small nonlinear tail plus a finite net creates compact interval integrals; a gauge tail creates weak-space compactness; an eta-first choice upgrades Cauchy convergence; the inverse-gauge substitution matches the output derivative space. The text distinguishes imported Simon from these worked constructions.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 96,
+            "line_end": 119
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 121,
+            "line_end": 143
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 148,
+            "line_end": 164
+          }
+        ]
+      },
+      "limits": {
+        "outcome": "accepted",
+        "finding": "The ramp proves actual endpoint failure, while dyadic signs prove that compact images do not recover inputs. The r>1 discussion says only that this tail estimate uses it and expressly refuses necessity/strongest-known claims. The homogeneous comparison separately states inverse measurability and identical derivative/output spaces; the source p.6 concern is scoped and is bypassed by a displayed reconstruction.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 166,
+            "line_end": 182
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 184,
+            "line_end": 193
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 197,
+            "line_end": 198
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 164,
+            "line_end": 164
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 143,
+            "line_end": 143
+          }
+        ]
+      },
+      "display_rhythm": {
+        "outcome": "accepted",
+        "finding": "Mathematically decisive tail, amplitude, translation, inverse-lift and Cauchy-upgrade estimates are displayed, with prose explaining their use and the order of choices. The nonlinear constants were split into a display to resolve a real overflow without shrinking typography. This checks source exposition rhythm only; full-page visual acceptance belongs to a separate review.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 96,
+            "line_end": 119
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 60,
+            "line_end": 76
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 121,
+            "line_end": 143
+          }
+        ]
+      },
+      "statement_context": {
+        "outcome": "accepted",
+        "finding": "The principal inputs are literal document-body inputs and the adjacent attribution gives Simon Theorem 5 pp.84--85, Maitre Theorem 2.1 p.1726, and Barrett--Suli v2 Theorem 1/Remark 2 pp.3--4. Adjacent prose keeps auxiliary r independent of p and states the excluded infinity/one pair, without silently strengthening the canonical claims.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 10,
+            "line_end": 23
+          }
+        ]
+      },
+      "results_first": {
+        "outcome": "accepted",
+        "finding": "The first of exactly three main sections contains the same full three canonical principals before any construction. The statements remain intact; the two following sections supply reusable tools and their decisive applications.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 8,
+            "line_end": 31
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 77,
+            "line_end": 84
+          }
+        ]
+      },
+      "point_use": {
+        "outcome": "accepted",
+        "finding": "The methods order puts finite-net convex averages, cone normalization and derivative moduli before their use in the third section. Each selected bridge is consumed: the tail and compact averages feed Simon, and the two-point estimate upgrades the weak-space Cauchy sequence.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 25,
+            "line_end": 76
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 118,
+            "line_end": 143
+          }
+        ]
+      },
+      "decisive_connections": {
+        "outcome": "accepted",
+        "finding": "The third section performs linear averaging, nonlinear truncation, the cone weak-space construction and the inverse-gauge transfer. It spells out choosing M or eta first, followed by a finite net or subsequence; these computations fulfil the selected mechanism obligations despite the principal proof labels being citation.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 80,
+            "line_end": 143
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 148,
+            "line_end": 164
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 194,
+            "line_end": 198
+          }
+        ]
+      },
+      "exposition_design": {
+        "outcome": "accepted",
+        "finding": "The plan/outline reader capabilities require executing finite-net and parameter-order arguments. Exactly Main Results, Key Mathematical Ingredients and Connecting the Ingredients implement that promise; the selected boundary checks remain present after the constructions. The shift from the paired boundaries view changes ordering and explanatory priority, not theorem content.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 8,
+            "line_end": 31
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 77,
+            "line_end": 94
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 194,
+            "line_end": 198
+          }
+        ]
+      },
+      "view_focus": {
+        "outcome": "accepted",
+        "finding": "Methods view prioritizes construction: N-truncation turns a small tail into compact averages; N-cone-ehrling normalizes two points; N-cone-mechanism fixes eta before indices; N-homogeneous-transfer calculates the measurable inverse lift and norm matching. Boundary examples test these operations after they have been developed.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 33,
+            "line_end": 58
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 96,
+            "line_end": 164
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 194,
+            "line_end": 198
+          }
+        ],
+        "node_ids": [
+          "N-linear-mechanism",
+          "N-truncation",
+          "N-cone-ehrling",
+          "N-cone-mechanism",
+          "N-homogeneous-transfer",
+          "N-translations",
+          "N-endpoint",
+          "N-image-only"
+        ]
+      }
+    },
+    "proof_step_findings": {
+      "N-linear-mechanism": {
+        "Obtain compact interval integrals from the X bound and invoke Simon in Y.": {
+          "outcome": "accepted",
+          "finding": "Holder bounds each interval integral by |I|^(1-1/p)M in X. The compact X->B and continuous B->Y injections give compact interval integrals in Y, where the separately assumed translations allow Simon Theorem 1, pp.71--73. This uses an interval integral, not a falsely uniform pointwise X bound.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 80,
+              "line_end": 84
+            }
+          ]
+        },
+        "Choose the Ehrling parameter before the subsequence index to upgrade a Y-Cauchy subsequence.": {
+          "outcome": "accepted",
+          "finding": "The displayed Ehrling bound is applied to f_n-f_m in X and then Minkowski gives 2*eta*M. Fix eta<epsilon/(4M), then choose the Y-Cauchy indices; M=0 is treated separately. This reconstructs the upgrade in Simon Lemma 8/Theorem 5, pp.84--85, with the infinity representative claim explicitly imported.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 85,
+              "line_end": 94
+            }
+          ]
+        }
+      },
+      "N-truncation": {
+        "Bound the exceptional-set measure and the L1 truncation error uniformly.": {
+          "outcome": "accepted",
+          "finding": "Markov gives |G_M|<=C_U/M. On that set v-v_M=v-K(0); Holder supplies (C_U/M)^(1-1/r)C_V and the constant K(0) contributes the other term. The tail is uniform and L1 regardless of the target p; v_M is strongly measurable because it equals v off the measurable set and a constant on it. Source: Maitre Lemma 2.3, equations (2.3)--(2.10), pp.1726--1728.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 96,
+              "line_end": 113
+            }
+          ]
+        },
+        "Prove compactness of the closed convex hull by finite nets and apply it to interval averages.": {
+          "outcome": "accepted",
+          "finding": "A finite delta-net for Q approximates every convex combination by the compact finite simplex; hence the convex hull is totally bounded and its closure is compact in the complete ambient Banach space. Measurable nearest-net cells approximate Bochner averages. The proof does not assert the average lies inside K(E1) or inside the cone. This is the displayed elementary reconstruction, not a quotation of Maitre shifted sums.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 33,
+              "line_end": 42
+            }
+          ]
+        },
+        "Transfer compactness to untruncated interval integrals and invoke Simon in the target exponent.": {
+          "outcome": "accepted",
+          "finding": "For fixed M the truncated values lie in the compact closure Q_M. Their interval integrals are compact by the earlier convex-average proof; choose M to reduce the tail and then a finite net. Thus the untruncated integrals are totally bounded and Simon applies with the actual Lp translations. The paragraph cites Maitre original Lemma 2.3, (2.3)--(2.24), pp.1726--1730 and labels the alternate proof route.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 114,
+              "line_end": 119
+            }
+          ]
+        }
+      },
+      "N-translations": {
+        "Derive a uniform supremum bound from W11 and the L1 time norm.": {
+          "outcome": "accepted",
+          "finding": "Choosing an approximate average-norm time and integrating the Bochner derivative yields sup||v||<=T^-1||v||L1+||vprime||L1. The W11 fundamental theorem is an explicit prerequisite; no Banach Radon--Nikodym property is inferred from a merely Lipschitz function. Source interfaces: Simon Lemma 4, pp.77--78; Maitre Corollary 2.4, p.1730.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 60,
+              "line_end": 63
+            }
+          ]
+        },
+        "Use Fubini and bounded-amplitude interpolation for every finite p.": {
+          "outcome": "accepted",
+          "finding": "Fubini counts each derivative contribution for at most length h and gives hD in L1. Since the difference has amplitude at most 2K0, its pth power is bounded by (2K0)^(p-1) times its first power. The resulting h^(1/p) modulus tends to zero for every finite p, including p=1.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 64,
+              "line_end": 71
+            }
+          ]
+        },
+        "Use Holder for a supremum translation modulus only when q is greater than one.": {
+          "outcome": "accepted",
+          "finding": "Holder on (t,t+h) gives h^(1-1/q)D; it is a small supremum modulus only for q>1, with q=infinity giving exponent one. At q=1 the written bound has exponent zero and cannot prove L-infinity translations. This is the exact distinction used later, consistent with Simon Corollary 4, pp.85--86.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 72,
+              "line_end": 76
+            }
+          ]
+        }
+      },
+      "N-endpoint": {
+        "Compute the ramp derivative bound and finite-p error.": {
+          "outcome": "accepted",
+          "finding": "The ramp is continuous, nonnegative and bounded by one; its derivative equals n on an interval of length 1/n, so its L1 derivative norm is one. Substitution s=t-1/2 computes the finite-p error to the step as 1/(n*(p+1)). The example directly tests the excluded pair in Barrett--Suli Remark 2, p.4, and Simon Proposition 3, p.94.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 166,
+              "line_end": 177
+            },
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 178,
+              "line_end": 181
+            }
+          ]
+        },
+        "Prove lack of L-infinity compactness from uniform-limit continuity or separated indices.": {
+          "outcome": "accepted",
+          "finding": "Every subsequence has the same discontinuous pointwise step limit. If a subsequence were L-infinity convergent, the equality of essential-supremum and supremum norms for continuous differences would make it uniformly Cauchy; completeness would give a continuous uniform limit, contradicting that pointwise limit. The manuscript uses this actual obstruction rather than treating a failed estimate as a counterexample.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 178,
+              "line_end": 182
+            }
+          ]
+        }
+      },
+      "N-image-only": {
+        "Calculate the pairwise L1 separation of dyadic sign functions and their constant squared images.": {
+          "outcome": "accepted",
+          "finding": "For m>n, every fixed dyadic sign interval of level n splits into an even number of m intervals, half with each sign. The difference therefore has magnitude two on total measure one half, giving L1 distance one. K(x)=x^2 has compact images of bounded real sets and all images are constant one. This tests exactly Maitre Theorem 2.1/Remark 2.2(3), p.1726, and prevents a noninjective inverse-gauge transfer.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 184,
+              "line_end": 193
+            }
+          ]
+        }
+      },
+      "N-cone-ehrling": {
+        "Normalize both cone points by the sum of their gauges and use compactness plus injectivity.": {
+          "outcome": "accepted",
+          "finding": "Failure at eta0 selects a pair with a_n=[u_n]+[v_n]>0; scaling both by a_n produces two gauge-bounded sequences. Their A0-convergent common subsequence has A1 difference tending to zero because the normalized A0 difference stays bounded and is divided by n. The injective continuous inclusion forces equal limits, contradicting the eta0 separation. Only scaling of each point is used. Source: Barrett--Suli Lemma 1, pp.4--5.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 47,
+              "line_end": 58
+            }
+          ]
+        }
+      },
+      "N-cone-mechanism": {
+        "Derive the A1 supremum bound and control the gauge-truncation tail.": {
+          "outcome": "accepted",
+          "finding": "The gauge domination and finite-interval Holder estimate put v in L1(A1); its assumed Lq derivative is also L1. W11 gives the written amplitude K1=C1*C0*T^(-1/p)G+T^(1-1/q)D. Markov on the scalar measurable gauge and that A1 amplitude give the 1/R tail, with cone membership used only almost everywhere. This is the local replacement for the unresolved source index-selection passage after (2.8), p.6, not an endorsement of that passage.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 121,
+              "line_end": 134
+            }
+          ]
+        },
+        "Obtain compact interval integrals and apply Simon using the correct derivative exponent.": {
+          "outcome": "accepted",
+          "finding": "Gauge-truncated values lie in a compact A0 closure and hence a compact A1 closure. Compact convex averages plus the uniform L1 tail make every interior interval integral compact in A1. The manuscript uses finite-p interpolation for q=1 and the Holder supremum modulus for q>1, meeting every imported Simon Theorem 1 hypothesis in A1 before asserting the Cauchy subsequence.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 135,
+              "line_end": 136
+            },
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 33,
+              "line_end": 42
+            },
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 64,
+              "line_end": 76
+            }
+          ]
+        },
+        "Upgrade weak-space Cauchy convergence with the two-point Ehrling estimate.": {
+          "outcome": "accepted",
+          "finding": "Pointwise two-point Ehrling and Minkowski give 2*eta*G+C_eta times the A1-Cauchy difference. Eta is fixed before the indices; G=0 is explicit. The infinity representative extension uses a full-measure dense good-time set, then completeness and injectivity. This is the final upgrade of Barrett--Suli equation (2.22), pp.12--13, after a separately reconstructed weak-space argument, with the scoped source concern disclosed.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 137,
+              "line_end": 143
+            }
+          ]
+        }
+      },
+      "N-homogeneous-transfer": {
+        "Construct the degree-one inverse gauge and verify its compact embedding.": {
+          "outcome": "accepted",
+          "finding": "Injectivity and positive homogeneity make K(0)=0 and K^-1(cv)=c^(1/alpha)K^-1(v); hence [v]=||K^-1v||^alpha is a positive degree-one gauge. Compact image of the unit ball gives a uniform bound, which scales to ||Kx||<=C||x||^alpha. Gauge-bounded sets are compact images of bounded input sets. Source interface: Barrett--Suli Section 4, pp.15--16.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 148,
+              "line_end": 157
+            }
+          ]
+        },
+        "Compute the inverse-lift L1 bound and the W11 output bound.": {
+          "outcome": "accepted",
+          "finding": "The displayed Holder bound is T^(1-1/(alpha*p))*G^(1/alpha), with alpha*p>=1; the infinity case has factor T. Strongly measurable inverse lifts are assumed separately rather than inferred from injectivity. Gauge domination and the E2 derivative bound yield uniform W11(E2), hence every fixed auxiliary Lr(E2), r>1.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 158,
+              "line_end": 163
+            }
+          ]
+        },
+        "Check matching derivative and output spaces and apply Maitre with the correct endpoint.": {
+          "outcome": "accepted",
+          "finding": "Both the derivative and output space here are E2. The finite-p or supremum translation estimate therefore matches Maitre Theorem 2.1, p.1726. For q>1 the W11 amplitude also puts V in L-infinity and its supremum translations allow the continuous compactness conclusion even if the original gauge exponent was finite. The following paragraph forbids substituting a derivative only in a larger weak space or assuming every cone has this parametrization.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 163,
+              "line_end": 164
+            },
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 64,
+              "line_end": 76
+            }
+          ]
+        }
+      }
+    },
+    "contribution_reviews": {}
+  },
+  "findings": [
+    "Actually reread this entire minimal-methods manuscript, its eight generated canonical fragments, plan and outline. Locations below identify the body derivations rather than only theorem imports; the evidence records author rereading, not independent or target-reader review.",
+    "The isolated principal readings were repeated against the actual generated SHA-bound Simon, Maitre and cone fragments. All family-uniform quantifiers, compact embeddings, measurable unknowns and the exceptional exponent pair are retained.",
+    "The scoped source proof concern after Barrett--Suli (2.8), p.6, remains disclosed. The accepted mathematical claim here is the displayed local weak-space reconstruction under the explicit hypotheses, not blanket acceptance of that source passage or a claim that its theorem is false.",
+    "Selection is checked against the same final snapshot and nonempty comparison group. The imported criterion is visibly stated and cited; all 18 promised mechanism steps have individual actual-body findings.",
+    "Methods view prioritizes construction: N-truncation turns a small tail into compact averages; N-cone-ehrling normalizes two points; N-cone-mechanism fixes eta before indices; N-homogeneous-transfer calculates the measurable inverse lift and norm matching. Boundary examples test these operations after they have been developed."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "No independent mathematical referee, real target-reader study or visual-page acceptance is claimed by this author review. Root performs a separate actual visual review. Source originals were transiently downloaded/read with recorded SHA-256 but are not redistributed; source reading remains scoped to the recorded passages."
+    }
+  ],
+  "disposition": "accepted"
+}

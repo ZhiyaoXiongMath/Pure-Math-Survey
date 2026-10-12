@@ -11,7 +11,7 @@ class Parser(argparse.ArgumentParser):
     def error(self,message):raise SurveyError('CLI_ARGUMENT_INVALID',message)
 
 def parser()->Parser:
-    p=Parser(description='Pure Math Survey 2.1.0-rc1: knowledge first, immutable inputs, honest evidence.');p.add_argument('--version',action='store_true')
+    p=Parser(description='Pure Math Survey 2.1.0: knowledge first, immutable inputs, honest evidence.');p.add_argument('--version',action='store_true')
     sub=p.add_subparsers(dest='command')
     i=sub.add_parser('init');i.add_argument('--output',type=Path,required=True);i.add_argument('--topic',required=True);i.add_argument('--scope',type=Path,required=True);i.add_argument('--title');i.add_argument('--language',default='en')
     k=sub.add_parser('kb');ks=k.add_subparsers(dest='action',required=True)
@@ -25,10 +25,12 @@ def parser()->Parser:
         x=os.add_parser(name);x.add_argument('project',type=Path)
         if name=='prepare':x.add_argument('--plan',required=True);x.add_argument('--draft',action='store_true')
         elif name=='plan':
-            x.add_argument('--output',required=True);x.add_argument('--snapshot',required=True);x.add_argument('--profile',default='minimal',choices=['minimal','thematic','lecture','paper']);x.add_argument('--view',default='integrated',choices=['integrated','foundations','results','methods','boundaries'])
+            x.add_argument('--output',required=True);x.add_argument('--snapshot',required=True);x.add_argument('--profile',default='minimal',choices=['minimal','thematic','lecture','paper']);x.add_argument('--view',default='integrated',choices=['integrated','foundations','results','methods','boundaries'],help='Reader emphasis for goals, node uses, writing tasks and semantic reading; preserves profile and canonical obligations')
             x.add_argument('--question',action='append');x.add_argument('--principal',action='append');x.add_argument('--title');x.add_argument('--draft',action='store_true');x.add_argument('--comparison-group');x.add_argument('--max-pages',type=int)
         else:x.add_argument('--output',required=True)
-        if name=='validate':x.add_argument('--stage',choices=['plan','structure','release'],default='plan')
+        if name=='validate':
+            x.add_argument('--stage',choices=['plan','structure','release'],default='plan')
+            x.add_argument('--policy',choices=['current','recorded'],default='current',help='recorded is read-only and never authorizes package')
         if name=='render':x.add_argument('--dpi',type=int,default=120)
         if name=='package':x.add_argument('--to',type=Path,required=True)
         if name=='review-template':x.add_argument('--kind',choices=['output_semantic','visual'],required=True);x.add_argument('--to')
@@ -36,7 +38,9 @@ def parser()->Parser:
     return p
 
 def execute(a)->dict:
-    if a.version:return result('version','OK',{'version':SOFTWARE_VERSION,'schema_version':VERSION,'output_schema_version':'2.1.0','supported_output_schemas':['2.0.0','2.1.0'],'python':sys.version})
+    if a.version:
+        from .profiles import OUTPUT_SCHEMA, POLICY, POLICIES
+        return result('version','OK',{'version':SOFTWARE_VERSION,'schema_version':VERSION,'output_schema_version':OUTPUT_SCHEMA,'editorial_policy':POLICY,'supported_output_schemas':list(POLICIES),'recorded_policies':POLICIES,'python':sys.version})
     if a.command=='init':
         from .knowledge import init_project
         return init_project(a.output,a.topic,a.scope,a.title,a.language)
@@ -89,7 +93,7 @@ def execute(a)->dict:
         if a.action=='render':return render_output(root,a.output,a.dpi)
         if a.action=='package':return package_output(root,a.output,a.to)
         if a.action=='validate':
-            if a.stage=='release':return assess_release(root,a.output)
+            if a.stage=='release':return assess_release(root,a.output,policy_mode=a.policy)
             if a.stage=='structure':return validate_structure(root,a.output)
             plan=load_plan(out/'plan.json');inv=validate_plan(root,plan)
             return result('output.plan','VALID',{'output_id':a.output,'consumed_nodes':sorted(consumption(inv,plan))})
@@ -98,9 +102,9 @@ def execute(a)->dict:
         if a.kind=='output_semantic':
             paths=output_inputs(out);scope={'output_ids':[a.output],'profile':plan['profile'],'node_ids':sorted(consumption(inv,plan)),
                   'whole_manuscript':False,'checks':[], 'principal_locations':{},'proof_steps':{},'proof_locations':{}}
-            from .profiles import review_scope_template, principal_template, current
+            from .profiles import review_scope_template, principal_template, four_modes
             scope.update(review_scope_template(plan))
-            if current(plan):
+            if four_modes(plan):
                 scope['statement_reviews']={s['node_id']:principal_template(inv.nodes[s['node_id']].statement) for s in plan['selections'] if s['role']=='principal_answer'}
         else:
             m=read_json(safe(out,'evidence/render-manifest.json',True))

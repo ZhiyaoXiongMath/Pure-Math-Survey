@@ -1,0 +1,11 @@
+# From time control to strong compactness: the two-paper starting point
+
+A spatial estimate alone does not stop rapid oscillation in time. The problem is to combine a compact set of possible spatial states with one modulus that is uniform over the trajectory family. The unknown in the linear case is f itself. For a nonlinear map, the coercive estimate may concern u while the time estimate concerns K(u); these are distinct objects.
+
+The linear route starts with X compactly embedded in B and B continuously in Y. Interval integrals int_I f are bounded in X, hence compact in Y. Uniform translations in Y supply Simon's compactness criterion. The adjustable inequality ||z||B<=eta||z||X+C_eta||z||Y then turns an Lp(Y)-Cauchy subsequence into an Lp(B)-Cauchy one: choose eta first and the subsequence index second. The exact answer is N-simon and the bridge is N-linear-mechanism.
+
+For a nonlinear compact K, averaging cannot be moved through K. Instead truncate the input on G_M={||u||>M}, whose measure is <=C/M. The output error has L1 size at most C M^{-(1-1/r)}+C'/M. All truncated outputs lie in one compact set, so their interval averages lie in its compact closed convex hull. Uniform approximation transfers compactness to the untruncated integrals. Only now is Simon's criterion used in the target Lp norm. N-maitre and N-truncation separate these two jobs.
+
+The same derivative estimate has different force at different exponents. Fubini yields an L1 translation bound hD; a uniform supremum bound upgrades it to O(h^{1/p}) for finite p. For a supremum modulus, q>1 gives O(h^{1-1/q}). N-endpoint shows that the latter cannot follow merely from an L1 derivative bound, even for real-valued nonnegative functions. N-image-only prevents a different mistake: convergence of K(u) need not recover u.
+
+What the first two papers do not yet supply in this KB is a compactness theorem for a nonadditive cone with a degree-one gauge. The missing bridge is not notation: differences leave the cone, and a general cone need not be a compact-map image with a measurable inverse. This is the precise target of the planned third-source increment. The first snapshot will retain this limitation, its source reviews and its initial reading plan.

@@ -9,7 +9,7 @@ from .reviews import coverage_inputs,find_review,mathematical_inputs,reviews_in,
 def assess_readiness(root:Path,plan:dict|Path)->dict:
     if isinstance(plan,Path):plan=load_plan(plan)
     inv=validate_plan(root,plan); records=reviews_in(inv.root); ids=consumption(inv,plan)
-    from .profiles import current, profile_readiness_errors, statement_errors, statement_warnings
+    from .profiles import four_modes, profile_readiness_errors, statement_errors, statement_warnings, mapping
     errors=profile_readiness_errors(inv, plan);warnings=[];used=[]; valid_math={}
     principals={s['node_id'] for s in plan['selections'] if s['role']=='principal_answer'}
     obligations={o['node_id']:o for o in plan['proof_obligations']}
@@ -31,19 +31,23 @@ def assess_readiness(root:Path,plan:dict|Path)->dict:
             if not a.get('material_sha256') or file_hash(inv.root,a['local_path'])!=a['material_sha256']:
                 add('SOURCE_MATERIAL_MISMATCH','Local source bytes differ from the declared original material hash',p)
         else:
-            reading=(r or {}).get('scope',{}).get('source_reading',{}).get(sid,{})
+            reading=mapping(mapping((r or {}).get('scope',{}).get('source_reading')).get(sid))
+            locators=reading.get('locators')
             valid= (a.get('material_hash_unavailable_reason') and s['identifiers'].get('url') and
                     reading.get('mode')=='original_text_online' and reading.get('version')==s['version'] and
-                    reading.get('locators') and reading.get('raw_bytes_unavailable_reason'))
-            if not valid:add('SOURCE_REVIEW_MISSING','Missing raw hash requires an explicit original-text online reading scope, exact version, locators and material-access limitation',p)
-            else:warnings.append(diagnostic('SOURCE_RAW_HASH_UNAVAILABLE','Original text was read online; raw PDF bytes were not obtained or byte-certified',p))
+                    isinstance(locators,list) and locators and all(isinstance(x,str) and x.strip() for x in locators)
+                    and reading.get('raw_bytes_unavailable_reason'))
+            if not valid:add('SOURCE_REVIEW_MISSING','No retained raw file: require an explicit original-text online reading scope, exact version, locator list and material-access limitation',p)
+            elif a.get('material_sha256'):
+                warnings.append(diagnostic('SOURCE_RAW_BYTES_NOT_RETAINED','A raw-source hash is recorded, but no in-project copy is available to rehash; source reading is documented with this retention limitation.',p))
+            else:warnings.append(diagnostic('SOURCE_RAW_HASH_UNAVAILABLE','Original text was read online; no raw-source hash or retained byte copy is available.',p))
         if r:used.append(r['review_id'])
     for key in sorted(ids):
         n=inv.nodes[key];m=n.meta
         if m['mathematical_status']=='unassessed':add('MATHEMATICAL_REVIEW_PENDING','Node remains mathematically unassessed',n.path,key)
         if m['origin'] in {'supplied_manuscript','primary_source'} and not (m['origin']=='supplied_manuscript' and key in supplied_originals) and not any(s['role']=='support' and inv.sources[s['source_id']]['kind']=='primary' for s in m['sources']):
             add('SOURCE_REVIEW_MISSING','Imported/primary claim needs an original supporting source, not only an attachment',n.path,key)
-        principal_check = current(plan) and key in principals
+        principal_check = four_modes(plan) and key in principals
         if principal_check: warnings.extend(statement_warnings(key, n.statement))
         def candidate_check(r, key=key, n=n, principal_check=principal_check):
             # Select a review satisfying this plan, not merely the first valid

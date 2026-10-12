@@ -12,7 +12,7 @@ Authoring materials are regenerated from the selected snapshot before verificati
 
 ## New-policy substantive readings
 
-A schema-2.1.0 output review binds the actual plan's editorial_policy. The seven existing
+A schema-2.2.0 output review binds the actual plan's editorial_policy. The seven existing
 whole-manuscript checks still apply; checking their names alone is not new-policy review.
 For each of the following mode_findings provide outcome, a concrete mathematical finding
 and actual manuscript path/line_start/line_end locations:
@@ -41,3 +41,27 @@ wrong policies, missing steps and invalid locations; it cannot verify that an el
 assertion is true. Distinguish author_reread from independent_review and from real target-reader
 feedback. Running another prompt is not independence. Formula density and typeset line
 counts are not a semantic score. Inspect actual pages, including justified long statements.
+
+For rc2 Paper, record prior_result_checks separately from prior_art_searches.
+Check each explicit comparison pair against the actual statements; report its
+unknowns, quantifiers, domain/parameters, regularity, normalization, conclusion
+and actual difference. Locate the manuscript discussion. A hash or accepted
+mechanical check does not establish correctness or novelty.
+
+## Current view and design readings
+
+A 2.2.0 output reading binds the exact `scope.view` and contains located
+`mode_findings.view_focus` and `exposition_design` findings. The former names
+nonempty available `node_ids` and explains the emphasized quantities or steps;
+the latter judges whether the concrete capabilities, outline and main text agree.
+Both use substantive manuscript body locations. An outline paragraph can help
+explain the design, but cannot stand in for a proof location. A fresh hash after
+a view edit does not replace either reading. Ordinary proof-step findings must
+point to the computation/argument, not merely the imported theorem statement.
+
+Called locally defined environments are checked for execution-changing controls
+in their begin/end definitions, just like called local commands. For example,
+a `setbox` wrapper cannot certify the enclosed text as literal proof evidence.
+An unused definition or an empty begin/end wrapper does not hide body content.
+This remains a bounded source model, not a general TeX interpreter or pixel
+visibility proof.

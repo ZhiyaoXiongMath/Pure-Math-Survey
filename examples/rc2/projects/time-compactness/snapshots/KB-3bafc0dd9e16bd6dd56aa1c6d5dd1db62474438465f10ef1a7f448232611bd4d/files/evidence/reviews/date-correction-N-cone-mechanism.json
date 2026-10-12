@@ -1,0 +1,100 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "AUTHOR-DATE-CORRECTION-N-cone-mechanism",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-barrett-suli.md",
+      "sha256": "f22e9b05f64e9f66fc1771a55fa42b48f6a40b1c17179646ad5e22a4db92eea6"
+    },
+    {
+      "path": "evidence/source-checks/S-maitre.md",
+      "sha256": "ee134671cad56df262b7aa20a19ca8d0eba5a357108a36cc3139a96c476d9109"
+    },
+    {
+      "path": "evidence/source-checks/S-simon.md",
+      "sha256": "1a2d9bea287566277ef71888b173bc16dfc93d783fda5debc7143d0905f082d4"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "f46df710c1b856e2928bdd9d0144a8573dca5ed5d5ec1a6d50480ae6a0670f1c"
+    },
+    {
+      "path": "knowledge/nodes/N-cone-definition.md",
+      "sha256": "ed4e3e0005e024c8beac174caefa7fe45c3568e212e3fa73e38df4f5aa9026d3"
+    },
+    {
+      "path": "knowledge/nodes/N-cone-ehrling.md",
+      "sha256": "c73db5d12c0a398946c071d4767a947f932c900a63510538594e54c60618dd2c"
+    },
+    {
+      "path": "knowledge/nodes/N-cone-mechanism.md",
+      "sha256": "67b1b24a3adf6d99cdb5dc2a8ef577432c48d5e751c5da4bc6e66df1760b7486"
+    },
+    {
+      "path": "knowledge/nodes/N-simon-criterion.md",
+      "sha256": "4676d7f90a33263804ae4b53438f8373bbe0e5c654eaeccd7b5cc0791784602d"
+    },
+    {
+      "path": "knowledge/nodes/N-translation-definition.md",
+      "sha256": "b76cfd3fd51fc2e7f351fe0e626d3e0ba9545b6456fd25284112890f151f4a13"
+    },
+    {
+      "path": "knowledge/nodes/N-translations.md",
+      "sha256": "971e970023d24ea9c2e121768677e5ac3f9c681b084ff09795ee5ce7c2fa18fb"
+    },
+    {
+      "path": "knowledge/nodes/N-truncation.md",
+      "sha256": "446c62b0634a1f230a77bd450abed63be97fffb460452c508aca3cc8d847a402"
+    },
+    {
+      "path": "knowledge/sources/S-barrett-suli.json",
+      "sha256": "8ebe5cb8b76c4d5d9aa7c47e323728980e07993cebd8a0f352a85ce560a86ba0"
+    },
+    {
+      "path": "knowledge/sources/S-maitre.json",
+      "sha256": "e36458b1cb74a89db360c6cf8c9fc41a99e7b5c3ab3a4e1fd6f8070a3ff56297"
+    },
+    {
+      "path": "knowledge/sources/S-simon.json",
+      "sha256": "5f0eac1c0bcd283a1ffe4c39dca4cb2552d681022c2e0d4fd24f400a5fa1e288"
+    },
+    {
+      "path": "project.json",
+      "sha256": "f8e62a551e5c926ac1af2ad83421630a0555766a242709d3eabbea1319bab801"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "bc5dc378f261923ade16ab6bfae349d0233c018eb96de07ed2c99fa55951f353"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-cone-mechanism"
+    ],
+    "evidence_basis": "Author rereading and explicit calculation of the fixed-node argument, with source support scoped as recorded. Checked every exponent in K=C1*C0*T^(-1/p)*G+T^(1-1/q)*D. W11 yields continuous A1 representatives but cone membership is retained only almost everywhere. For bad times [v]>R, Markov gives measure<=T^(1-1/p)G/R and uniform A1 amplitude gives an L1 tail with the same small factor. Compact convex hulls of gauge-bounded value sets give all interval-integral compactness. For q=1 and finite p, bounded-amplitude interpolation supplies target Lp(A1) translations; for q>1 it supplies supremum translations. Simon yields weak-space precompactness, and the two-point inequality with eta chosen first upgrades to A0. At p=infinity the full-measure dense-time argument yields A0 continuous extensions if needed; the theorem itself only claims L-infinity compactness. The proof has no assumption that limits stay in the cone.",
+    "proof_steps": {
+      "N-cone-mechanism": [
+        "Derive the A1 supremum bound and control the gauge-truncation tail.",
+        "Obtain compact interval integrals and apply Simon using the correct derivative exponent.",
+        "Upgrade weak-space Cauchy convergence with the two-point Ehrling estimate."
+      ]
+    }
+  },
+  "findings": [
+    "Checked every exponent in K=C1*C0*T^(-1/p)*G+T^(1-1/q)*D. W11 yields continuous A1 representatives but cone membership is retained only almost everywhere.",
+    "For bad times [v]>R, Markov gives measure<=T^(1-1/p)G/R and uniform A1 amplitude gives an L1 tail with the same small factor. Compact convex hulls of gauge-bounded value sets give all interval-integral compactness.",
+    "For q=1 and finite p, bounded-amplitude interpolation supplies target Lp(A1) translations; for q>1 it supplies supremum translations. Simon yields weak-space precompactness, and the two-point inequality with eta chosen first upgrades to A0.",
+    "At p=infinity the full-measure dense-time argument yields A0 continuous extensions if needed; the theorem itself only claims L-infinity compactness. The proof has no assumption that limits stay in the cone.",
+    "Reread correction on 12 October 2026: the cause of the internal 2018 PDF dates is unverified. The controlling source is still published Maitre 2003 or arXiv Barrett--Suli v2 2011, as appropriate. This corrects provenance wording, not any mathematical statement or proof step; earlier snapshot bytes and reviews remain unchanged."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "No independent mathematical referee or real target-reader study has been performed. Source reading is scoped, and raw originals are not redistributed."
+    }
+  ],
+  "disposition": "accepted"
+}

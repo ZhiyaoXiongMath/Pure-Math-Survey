@@ -1,0 +1,56 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "AUTHOR-MATH-INITIAL-N-endpoint",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-simon.md",
+      "sha256": "1a2d9bea287566277ef71888b173bc16dfc93d783fda5debc7143d0905f082d4"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "f46df710c1b856e2928bdd9d0144a8573dca5ed5d5ec1a6d50480ae6a0670f1c"
+    },
+    {
+      "path": "knowledge/nodes/N-endpoint.md",
+      "sha256": "595ab0f8deb64bd042887edfadb73108172ed39da10f67dcbfe2d3f4a6ab71ce"
+    },
+    {
+      "path": "knowledge/sources/S-simon.json",
+      "sha256": "5f0eac1c0bcd283a1ffe4c39dca4cb2552d681022c2e0d4fd24f400a5fa1e288"
+    },
+    {
+      "path": "project.json",
+      "sha256": "f8e62a551e5c926ac1af2ad83421630a0555766a242709d3eabbea1319bab801"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "bc5dc378f261923ade16ab6bfae349d0233c018eb96de07ed2c99fa55951f353"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-endpoint"
+    ],
+    "evidence_basis": "Actual source comparison and author rereading of the fixed node; concrete checks: Recomputed the derivative integral n*(1/n)=1 and finite-p error int_0^(1/n)(1-ns)^p ds=1/(n(p+1)). Each subsequence has the same discontinuous pointwise limit; continuous L-infinity differences have essential supremum equal to supremum. This proves the endpoint failure without claiming r>1 necessity for Maitre.",
+    "proof_steps": {
+      "N-endpoint": [
+        "Compute the ramp derivative bound and finite-p error.",
+        "Prove lack of L-infinity compactness from uniform-limit continuity or separated indices."
+      ]
+    }
+  },
+  "findings": [
+    "Recomputed the derivative integral n*(1/n)=1 and finite-p error int_0^(1/n)(1-ns)^p ds=1/(n(p+1)).",
+    "Each subsequence has the same discontinuous pointwise limit; continuous L-infinity differences have essential supremum equal to supremum. This proves the endpoint failure without claiming r>1 necessity for Maitre."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "No independent mathematical referee or real target-reader study has been performed. Source reading is scoped, and raw originals are not redistributed."
+    }
+  ],
+  "disposition": "accepted"
+}

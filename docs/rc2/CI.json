@@ -1,0 +1,38 @@
+{
+  "code_commit": "02d66046547a7581e3aff113720e89dffbc2d85d",
+  "code_tree": "e17da3d65ca556678311ed7fa2199c4d3d14d238",
+  "base": "7bf87324071de6ea221ef5f491148debb31ccba0",
+  "pr": "https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/2",
+  "pr_run": 38231441213,
+  "audit_run": 38231436703,
+  "conclusion": "success",
+  "jobs": [
+    {
+      "python": "3.10",
+      "job_id": 114751622171,
+      "source_tests": 189,
+      "source_seconds": 66.845,
+      "installed_tests": 189,
+      "installed_seconds": 66.745,
+      "installed_pdf_builds": 11
+    },
+    {
+      "python": "3.12",
+      "job_id": 114751622634,
+      "source_tests": 189,
+      "source_seconds": 85.432,
+      "installed_tests": 189,
+      "installed_seconds": 84.785,
+      "installed_pdf_builds": 11
+    }
+  ],
+  "archive_sha256": "4c25dee81dfc3b7bdb624f006e0b5385d1b4a7f325b2a0e76d85c926e753e411",
+  "verification": "Actual completed job conclusions and decoded logs fetched; both archive hashes match the local candidate.",
+  "newly_rebuilt_pdf_visual_review": "NOT PERFORMED",
+  "original_28_pages": "Actually inspected and separately bound",
+  "independent_math_review": "NOT VERIFIED",
+  "real_reader_feedback": "NOT VERIFIED",
+  "original_paper_formal_quality": "NOT VERIFIED",
+  "merge_performed": false,
+  "release_published": false
+}
