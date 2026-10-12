@@ -138,7 +138,7 @@ def knowledge_scope_template(inv, question_ids: list[str]) -> dict:
             'node_ids': sorted(nodes), 'checks': list(R3_READINGS)}
 
 
-def markdown_anchors(text: str) -> set[str]:
+def markdown_anchors(text: str, *, require_content: bool = False) -> set[str]:
     """Resolve bounded Markdown subsection syntax, excluding literal content.
 
     Explicit anchors must occupy their own unindented line. Arbitrary inline
@@ -147,6 +147,7 @@ def markdown_anchors(text: str) -> set[str]:
     front = re.match(r'\A\ufeff?---\r?\n.*?\r?\n(?:---|\.\.\.)[ \t]*(?:\r?\n|$)', text, re.S)
     if front: text = text[front.end():]
     anchors = set(); counts = {}; fence = None; comment = False; html_stack = []
+    content_anchors = set(); sections = []; explicit = set(); reference_definition = False
     # Markdown code spans may cross newlines. Preserve their line/column shape
     # so an anchor on a middle line cannot become falsely visible.
     code_mask = re.sub(r'(?<!`)(`+)(?!`)(.*?)(?<!`)\1(?!`)',
@@ -173,7 +174,22 @@ def markdown_anchors(text: str) -> set[str]:
                 position = start + 4; comment = True
         line = ''.join(visible); masked = ''.join(visible_mask)
         if comment_line: continue
-        if not line.strip() or re.match(r'^(?: {4}| {0,3}\t)', line): continue
+        if not line.strip():
+            reference_definition = False
+            continue
+        if re.match(r'^(?: {4}| {0,3}\t| {0,3}>)', line): continue
+        reference = re.match(r'^ {0,3}\[[^\]]+\]:[ \t]*(.*)$', masked)
+        if reference:
+            reference_definition = 'title' if reference[1].strip() else 'destination'
+            continue
+        if reference_definition == 'destination':
+            reference_definition = 'title'
+            continue
+        if reference_definition and re.fullmatch(r' {0,3}(?:"[^"\n]*"|\'[^\'\n]*\'|\([^\n]*\))[ \t]*', masked):
+            continue
+        reference_definition = False
+        if re.fullmatch(r' {0,3}([*_-])(?:[ \t]*\1){2,}[ \t]*', masked):
+            continue
         mark = re.match(r'^ {0,3}(`{3,}|~{3,})', line)
         if mark:
             fence = (mark[1][0], len(mark[1])); continue
@@ -183,7 +199,7 @@ def markdown_anchors(text: str) -> set[str]:
         tag = re.match(r'^ {0,3}<(/?)([A-Za-z][A-Za-z0-9-]*)\b[^>]*>', line)
         anchor = re.fullmatch(r' {0,3}<a\s+(?:id|name)=[\"\']([^\"\']+)[\"\']\s*>(?:</a>)?\s*', masked, re.I)
         if anchor and not html_stack:
-            anchors.add(anchor[1]); continue
+            anchors.add(anchor[1]); explicit.add(anchor[1]); continue
         if html_stack or tag:
             for closing, name in re.findall(r'<(/?)([A-Za-z][A-Za-z0-9-]*)\b[^>]*>', masked):
                 name = name.casefold()
@@ -197,8 +213,19 @@ def markdown_anchors(text: str) -> set[str]:
         if heading:
             value = re.sub(r'[^\w\- ]', '', heading[1].casefold()).replace(' ', '-')
             count = counts.get(value, 0); counts[value] = count + 1
-            anchors.add(value + (f'-{count}' if count else ''))
-    return anchors
+            name = value + (f'-{count}' if count else '')
+            anchors.add(name)
+            level = len(re.match(r'^ {0,3}(#+)', line)[1])
+            sections = [(key, depth) for key, depth in sections if depth < level]
+            sections.extend((key, level) for key in explicit)
+            explicit.clear()
+            sections.append((name, level))
+        elif re.search(r'\w', masked, re.UNICODE):
+            # Headings, anchors, comments and code blocks alone do not locate
+            # an explanation. Content may live in a descendant subsection.
+            content_anchors.update(key for key, _ in sections)
+            content_anchors.update(explicit)
+    return content_anchors if require_content else anchors
 
 
 def knowledge_scope_errors(inv, question_id: str, review: dict) -> list[dict]:
@@ -247,8 +274,8 @@ def knowledge_scope_errors(inv, question_id: str, review: dict) -> list[dict]:
                     file = safe(inv.root, path, True)
                     require(path.startswith(inv.project['knowledge_root'] + '/') and path.endswith('.md') and anchor,
                             'KNOWLEDGE_REVIEW_LOCATION_INVALID', 'Use a knowledge Markdown file and a concrete subsection anchor', path)
-                    require(anchor in markdown_anchors(file.read_text(encoding='utf-8')),
-                            'KNOWLEDGE_REVIEW_LOCATION_INVALID', 'Knowledge subsection does not exist', path)
+                    require(anchor in markdown_anchors(file.read_text(encoding='utf-8'), require_content=True),
+                            'KNOWLEDGE_REVIEW_LOCATION_INVALID', 'Knowledge subsection needs actual non-code body content', path)
                     required.add(path)
                 except (SurveyError, OSError, UnicodeError) as exc:
                     fail('KNOWLEDGE_REVIEW_LOCATION_INVALID', f'{task}: {exc}', path)

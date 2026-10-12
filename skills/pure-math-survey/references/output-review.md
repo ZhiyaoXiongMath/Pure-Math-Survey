@@ -130,7 +130,18 @@ line, outside frontmatter, comments, code and raw HTML blocks:
 <a id="radial-jacobian">
 
 ## Radial Jacobian
+
+The radial differential identifies the Jacobian used in the volume integral.
 ```
+
+The cited subsection must contain actual non-code body content, directly or in
+a descendant subsection. A heading or anchor alone, or content only in comments
+or literal code, cannot locate a knowledge explanation. Displayed mathematics
+and prose accompanying an exact canonical block remain valid body content.
+Reference definitions and horizontal rules alone do not supply body content.
+Blockquote-only content is outside this bounded subsection check; use a directly
+written paragraph or display to locate the explanation rather than relying on
+container rendering.
 
 The existing `inputs` list uses `{"path": "knowledge/route.md", "sha256":
 "ACTUAL_64_HEX_SHA256"}` entries. The shown hash is a placeholder, never a valid
