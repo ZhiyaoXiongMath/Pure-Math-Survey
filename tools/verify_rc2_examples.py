@@ -13,6 +13,26 @@ import sys
 ROOT=Path(__file__).resolve().parents[1]
 
 
+# Each exception has its own default/effective build and changed-page review.
+# This is not a new default for r3 or for arbitrary historical outputs.
+RC2_LAYOUT_OVERRIDES = {
+    ('time-compactness','thematic'): {
+        'emergency_stretch_em':2.0,
+        'reason':'Historical STIX2 run-in heading at lines 45-46; explicit page-3 rebuild adjustment reviewed separately.'},
+    ('time-compactness','minimal-methods'): {
+        'emergency_stretch_em':2.0,
+        'reason':'Historical STIX2 run-in heading at lines 80-81; explicit page-4 rebuild adjustment reviewed separately.'},
+    ('time-compactness','minimal-boundaries'): {
+        'emergency_stretch_em':2.0,
+        'reason':'Historical STIX2 run-in heading at lines 137-138; explicit page-5 rebuild adjustment reviewed separately.'},
+}
+
+
+def historical_layout_override(project_name:str,output_id:str)->dict|None:
+    selected=RC2_LAYOUT_OVERRIDES.get((project_name,output_id))
+    return dict(selected) if selected is not None else None
+
+
 def verify(repository:Path,destination:Path,skill:Path,build:bool=True,report:dict|None=None)->dict:
     if destination.exists():raise FileExistsError('Use a fresh verification directory')
     sys.path.insert(0,str(skill/'scripts'))
@@ -72,10 +92,10 @@ def verify(repository:Path,destination:Path,skill:Path,build:bool=True,report:di
             report['outputs'].append(row)
             if build:
                 row['build']='RUNNING'
-                override=2.0 if name=='time-compactness' and oid=='thematic' else None
-                built=build_output(project,oid,emergency_stretch_em=override);rendered=render_output(project,oid,dpi=100)
+                override=historical_layout_override(name,oid)
+                built=build_output(project,oid,emergency_stretch_em=override['emergency_stretch_em'] if override else None);rendered=render_output(project,oid,dpi=100)
                 if override is not None:
-                    row['layout_override']={'scope':'time-compactness/thematic only','reason':'Explicit Windows STIX2 historical run-in heading rebuild; original source bytes unchanged','parameters':built['artifacts']['layout']}
+                    row['layout_override']={'scope':name+'/'+oid+' only','reason':override['reason'],'parameters':built['artifacts']['layout']}
                     row['standalone_reproduction_option']='--emergency-stretch-em 2.0'
                 row.update(build=built['status'],pages=built['artifacts']['pages'],render=rendered['status'],
                            new_visual_review='NOT PERFORMED')

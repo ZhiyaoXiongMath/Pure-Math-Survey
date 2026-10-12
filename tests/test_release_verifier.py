@@ -106,6 +106,20 @@ class R3VerifierContracts(unittest.TestCase):
             explicit=root/'requested.json'
             self.assertEqual(verifier.resolve_r3_manifest(explicit,root),explicit)
 
+    def test_reviewed_rc2_layout_mapping_is_limited_to_each_approved_output(self):
+        spec=importlib.util.spec_from_file_location('rc2_mapping',ROOT/'tools/verify_rc2_examples.py')
+        module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+        for oid in ('thematic','minimal-methods','minimal-boundaries'):
+            selected=module.historical_layout_override('time-compactness',oid)
+            self.assertEqual(selected['emergency_stretch_em'],2.0)
+            self.assertTrue(selected['reason'])
+        for project,oid in (('schur','rc2-lecture'),('other','thematic'),
+                            ('r3','minimal-methods'),('time-compactness','unreviewed')):
+            self.assertIsNone(module.historical_layout_override(project,oid))
+        copy=module.historical_layout_override('time-compactness','thematic')
+        copy['emergency_stretch_em']=9.0
+        self.assertEqual(module.historical_layout_override('time-compactness','thematic')['emergency_stretch_em'],2.0)
+
     def test_example_failure_records_keep_progress_and_actual_log_location(self):
         with tempfile.TemporaryDirectory() as td:
             destination=Path(td);build=destination/'project/outputs/thematic/build';build.mkdir(parents=True)
@@ -192,14 +206,36 @@ class R3VerifierContracts(unittest.TestCase):
 
     def test_timeout_terminates_descendants_not_only_the_python_parent(self):
         with tempfile.TemporaryDirectory() as td:
-            base=Path(td);marker=base/'child-survived.txt'
-            child="import pathlib,time;time.sleep(2);pathlib.Path("+repr(str(marker))+").write_text('survived')"
-            parent="import subprocess,sys,time;subprocess.Popen([sys.executable,'-c',"+repr(child)+"]);print('child spawned',flush=True);time.sleep(20)"
+            base=Path(td);pid_file=base/'child.pid'
+            child="import time;time.sleep(30)"
+            parent=("import pathlib,subprocess,sys,time;p=subprocess.Popen([sys.executable,'-c',"+repr(child)+"]);"
+                    "pathlib.Path("+repr(str(pid_file))+").write_text(str(p.pid));"
+                    "print('child spawned',flush=True);time.sleep(30)")
             report={'checks':[]}
             with self.assertRaises(subprocess.TimeoutExpired):
                 verifier.run_check([sys.executable,'-I','-u','-c',parent],base,os.environ.copy(),report,False,timeout=1)
-            time.sleep(2.2)
-            self.assertFalse(marker.exists())
+            pid=int(pid_file.read_text())
+            if os.name=='nt':
+                import ctypes
+                from ctypes import wintypes
+                kernel=ctypes.WinDLL('kernel32',use_last_error=True)
+                kernel.OpenProcess.argtypes=[wintypes.DWORD,wintypes.BOOL,wintypes.DWORD]
+                kernel.OpenProcess.restype=wintypes.HANDLE
+                kernel.GetExitCodeProcess.argtypes=[wintypes.HANDLE,ctypes.POINTER(wintypes.DWORD)]
+                kernel.CloseHandle.argtypes=[wintypes.HANDLE]
+                handle=kernel.OpenProcess(0x1000,False,pid)
+                if handle:
+                    try:
+                        code=wintypes.DWORD()
+                        self.assertTrue(kernel.GetExitCodeProcess(handle,ctypes.byref(code)))
+                        self.assertNotEqual(code.value,259,'Descendant is STILL_ACTIVE after timeout cleanup')
+                    finally:kernel.CloseHandle(handle)
+                else:self.assertEqual(ctypes.get_last_error(),87,'Unable to confirm child process termination')
+            else:
+                state=Path(f'/proc/{pid}/stat')
+                if state.exists():self.assertEqual(state.read_text().split()[2],'Z')
+                else:
+                    with self.assertRaises(ProcessLookupError):os.kill(pid,0)
             self.assertEqual(report['checks'][0]['termination']['returncode'],0)
             self.assertIn('child spawned',report['checks'][0]['stdout'])
 
