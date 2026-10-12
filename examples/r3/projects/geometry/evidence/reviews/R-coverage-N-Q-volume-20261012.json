@@ -1,0 +1,82 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "R-coverage-N-Q-volume-20261012",
+  "kind": "coverage",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "knowledge/coverage.json",
+      "sha256": "5c8ced8f611264ab52ae8b124a5ace8106dd606a4f99f0bfd4b9349d2f9dfff2"
+    },
+    {
+      "path": "knowledge/discovery.md",
+      "sha256": "60e8e6d6ef8ff81660505ff8b7814b281a2a55bea3de1a37fcff1449d64b7d98"
+    },
+    {
+      "path": "knowledge/nodes/N-C-relative-volume.md",
+      "sha256": "dd5ea2fb32f03d46a0826eeeedca8bbd3529fa1a26df7be780417633734ae11a"
+    },
+    {
+      "path": "knowledge/nodes/N-E-collapse.md",
+      "sha256": "9244ae50f3169393daa84d292a06e8e5723bd5a74187a0d39a6e3cdec1175339"
+    },
+    {
+      "path": "knowledge/nodes/N-E-cylinder.md",
+      "sha256": "95c6b56885407679ee183bae1cecf9b63d458fce16f937bc20482d76218516c4"
+    },
+    {
+      "path": "knowledge/nodes/N-E-local-equality.md",
+      "sha256": "e272fb303c804062da10c8b40fd981146bd0a8347db21fd8280df45161c82738"
+    },
+    {
+      "path": "knowledge/nodes/N-M-cut-integration.md",
+      "sha256": "ce88692c391e0f66db28b1e99cc5e9e625c7f093285571c601df7e1d82fc19da"
+    },
+    {
+      "path": "knowledge/nodes/N-M-trace.md",
+      "sha256": "cf202437ac08f0db295c67d7293d7b95269f8677faf8a81d94fa057f1692502b"
+    },
+    {
+      "path": "knowledge/nodes/N-Q-volume.md",
+      "sha256": "cda27f40168596b9c31ec0be0398c9d83f0a1cb9bfff37dbe39768e5b6f451bb"
+    },
+    {
+      "path": "knowledge/nodes/N-R-bishop-gromov.md",
+      "sha256": "2193b4f3b92c077025852693c33101018a7a543c14a5ca3a08a24e3874221e23"
+    },
+    {
+      "path": "knowledge/nodes/N-R-gunther.md",
+      "sha256": "9dc6db326d931759d7ec0a3d64ff0094b2bd900b190d5b597ea442ad621931cf"
+    },
+    {
+      "path": "knowledge/nodes/N-R-volume-rigidity.md",
+      "sha256": "5f37f370c838dcadb6d5adbe7833aaef921dbaf7a53821635456282fa3bb3d92"
+    },
+    {
+      "path": "knowledge/overview.md",
+      "sha256": "71b794a1447e39bc223259c33cd4193f25b1a02942d66f81fdb47facfe7050a4"
+    },
+    {
+      "path": "project.json",
+      "sha256": "87cb6a2485b7efddf37961eed6780208253c1ad4d14360462040c068379c799f"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "c803acf2b2ef8ba6ce4d6aed6555916b204ecb5b42d9dbac738b0b74fd0a706b"
+    }
+  ],
+  "scope": {
+    "question_ids": [
+      "N-Q-volume"
+    ]
+  },
+  "findings": [
+    "Core absolute/relative bounds, doubling, the uncut lower bound and maximal-volume ball rigidity are checked. The broader equality classification remains explicitly unassessed.",
+    "Omission challenge returned to Toponogov1959 and HK1978, added splitting/rigidity/lower-volume nodes, and retained the stated gaps."
+  ],
+  "unchecked_items": [
+    "General equality-of-ratios classifications, including annular formulations and saturated positive-curvature radii, have not been incorporated. Maximal model-volume equality for 0<R<D_k is the checked case."
+  ],
+  "disposition": "limited"
+}

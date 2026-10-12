@@ -39,8 +39,8 @@ def parser()->Parser:
 
 def execute(a)->dict:
     if a.version:
-        from .profiles import OUTPUT_SCHEMA, POLICY, POLICIES
-        return result('version','OK',{'version':SOFTWARE_VERSION,'schema_version':VERSION,'output_schema_version':OUTPUT_SCHEMA,'editorial_policy':POLICY,'supported_output_schemas':list(POLICIES),'recorded_policies':POLICIES,'python':sys.version})
+        from .profiles import OUTPUT_SCHEMA, POLICY, POLICIES, SUPPORTED_CONTRACTS
+        return result('version','OK',{'version':SOFTWARE_VERSION,'schema_version':VERSION,'output_schema_version':OUTPUT_SCHEMA,'editorial_policy':POLICY,'supported_output_schemas':list(POLICIES),'recorded_policies':POLICIES,'supported_output_contracts':[{'schema_version':v,'editorial_policy':p} for v,p in sorted(SUPPORTED_CONTRACTS)],'python':sys.version})
     if a.command=='init':
         from .knowledge import init_project
         return init_project(a.output,a.topic,a.scope,a.title,a.language)
@@ -62,6 +62,9 @@ def execute(a)->dict:
         paths=set()
         for k in a.id:paths|=f(inv,k)
         scope=None
+        if a.kind=='coverage':
+            from .reviews import knowledge_scope_template
+            scope=knowledge_scope_template(inv,a.id)
         if a.principal_statements:
             from .profiles import POLICY, principal_template
             from .common import require
@@ -69,6 +72,8 @@ def execute(a)->dict:
             require(all(inv.nodes[k].statement is not None for k in a.id),'CANONICAL_BLOCK_MISSING','Principal review requires canonical statements')
             scope={'node_ids':a.id,'editorial_policy':POLICY,'statement_reviews':{k:principal_template(inv.nodes[k].statement) for k in a.id}}
         template=review_template(root,a.kind,a.id,paths,scope)
+        if a.kind=='coverage':
+            template['unchecked_items'].append('For each check, add a findings string beginning with its check name and a colon, the actual answer or failure, and a project-root-relative Markdown link to the knowledge file#subsection. Bind every cited route file in inputs. Do not use manuscript locations or claim real-reader/external review without that evidence.')
         if a.to:
             with writer(root):
                 target=safe(root,relpath(root,a.to))

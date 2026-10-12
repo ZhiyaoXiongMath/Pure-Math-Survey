@@ -1,0 +1,167 @@
+{
+  "kind": "public_copy_boundary_and_read_only_verification",
+  "status": "PASS",
+  "scope": "Exact copy identity, public file boundaries, PDF text/metadata/links, PNG metadata and snapshot/structure verification; not a new mathematical or visual review.",
+  "counts_before_this_check_record": {
+    "text_files": 1015,
+    "pdf_files": 9,
+    "pdf_pages": 54,
+    "png_files": 54
+  },
+  "exact_copied_files_verified": 1072,
+  "copied_files_equal_private_originals": true,
+  "raw_source_pdfs_in_export": 0,
+  "private_build_history_directories_in_export": 0,
+  "unclassified_files": 0,
+  "machine_paths_or_private_identifiers_detected": 0,
+  "pdfs": [
+    {
+      "path": "articles/geometry-lecture-r3.pdf",
+      "sha256": "366a9c651bf2c494499df288c70161de36ab21285956a5b2b742cd0874db9222",
+      "pages": 13,
+      "embedded_files": 0,
+      "link_count": 14
+    },
+    {
+      "path": "articles/geometry-minimal-r3.pdf",
+      "sha256": "c1c118be9c8b06e9a3c8482dadf5407c553ead864a9ffdea39ab2b6b3ce222d0",
+      "pages": 9,
+      "embedded_files": 0,
+      "link_count": 6
+    },
+    {
+      "path": "articles/holder-lecture-r3-r2.pdf",
+      "sha256": "bc96026d315c83206f0cd9864398e25315615e3f3f25f7e991e3d11ed78eba73",
+      "pages": 4,
+      "embedded_files": 0,
+      "link_count": 4
+    },
+    {
+      "path": "articles/lichnerowicz-minimal-r3.pdf",
+      "sha256": "c2fe745b5165aad0a7b3bcb8d90608148110035d2b5d6f7a0d80740988c28ee0",
+      "pages": 2,
+      "embedded_files": 0,
+      "link_count": 8
+    },
+    {
+      "path": "articles/minimal-boundaries-r3.pdf",
+      "sha256": "97022eea8e1982d133c8ccec1b95000048dc3c69dc8d600545888e1b441eb492",
+      "pages": 7,
+      "embedded_files": 0,
+      "link_count": 31
+    },
+    {
+      "path": "articles/minimal-methods-r3.pdf",
+      "sha256": "bbec3e185f42c15d2fe697bc8af809a88135d091e4b44db97f055c2e9bd0ef7f",
+      "pages": 7,
+      "embedded_files": 0,
+      "link_count": 32
+    },
+    {
+      "path": "articles/paper-r3-draft.pdf",
+      "sha256": "8c2c873371f0a97bb50186e70ff7de24777ff7ec3f59316f6a0999546209f381",
+      "pages": 2,
+      "embedded_files": 0,
+      "link_count": 4
+    },
+    {
+      "path": "articles/schur-minimal-r3.pdf",
+      "sha256": "d3322348184ae0958d73db0ce1f006a3de518dde444d2a5724782e3b5bff1823",
+      "pages": 2,
+      "embedded_files": 0,
+      "link_count": 6
+    },
+    {
+      "path": "articles/thematic-r3.pdf",
+      "sha256": "10fd917359d97aa768b7151cdcf9b00d9208b5bbe3fd1dd8b08a7e270d676f92",
+      "pages": 8,
+      "embedded_files": 0,
+      "link_count": 31
+    }
+  ],
+  "runtime_checks": [
+    {
+      "check": "snapshot-KB-9dab441b75c483c877b0cc9373440e693f97908ac64388e832bf83d865199f63",
+      "status": "VERIFIED",
+      "exit_code": 0,
+      "private_report_sha256": "3f99cbfdd6800777e8c0b908175b247d103b811f1504b9ef6293bb7618ebbacb"
+    },
+    {
+      "check": "structure-geometry-minimal-r3",
+      "status": "STRUCTURALLY_VALID",
+      "exit_code": 0,
+      "private_report_sha256": "d89fa7189ac9e2c02145772f020033f9220ea9d0e0ee5d3a0734e1ed07c894cd"
+    },
+    {
+      "check": "structure-geometry-lecture-r3",
+      "status": "STRUCTURALLY_VALID",
+      "exit_code": 0,
+      "private_report_sha256": "52ea2803edb47eed9b52228e7c75ec8466e777d4ab6987dc129ee33902de06d8"
+    },
+    {
+      "check": "snapshot-KB-81fe3de7af0884a61128fe5171b5245d1f5503f39c87be30930f3eb0114e4945",
+      "status": "VERIFIED",
+      "exit_code": 0,
+      "private_report_sha256": "05ebb63df5c9733ba5bcf20c588eeb43485b2905b948fb8ad8db2c3d13353db1"
+    },
+    {
+      "check": "structure-thematic-r3",
+      "status": "STRUCTURALLY_VALID",
+      "exit_code": 0,
+      "private_report_sha256": "8b1848cdc05f13dd975a7c686d93819e4cf7867b69f8bd26f800cfa70c557dd0"
+    },
+    {
+      "check": "structure-minimal-methods-r3",
+      "status": "STRUCTURALLY_VALID",
+      "exit_code": 0,
+      "private_report_sha256": "2253b21db1190e59e048f64ecdf3238d71fb0240ce061896104b32f979055021"
+    },
+    {
+      "check": "structure-minimal-boundaries-r3",
+      "status": "STRUCTURALLY_VALID",
+      "exit_code": 0,
+      "private_report_sha256": "d2f4158006bd0839d46184aa1d8f9ee2ad1db2fc6e13d4447dab7facf760fd63"
+    },
+    {
+      "check": "snapshot-KB-c2ed8ff3a21ead694a517e29232103f956cc4f433ba75e22183482569542973b",
+      "status": "VERIFIED",
+      "exit_code": 0,
+      "private_report_sha256": "998d18ae18ec43a499e67cca55dd9fa82fcfcc518ccac4a6df56f6ac1933266e"
+    },
+    {
+      "check": "structure-schur-minimal-r3",
+      "status": "STRUCTURALLY_VALID",
+      "exit_code": 0,
+      "private_report_sha256": "c4e884656593c52de7528e434d60cd8ab176cbf6cfeebd4e856ef791a2ec3fe6"
+    },
+    {
+      "check": "snapshot-KB-ebd94a0d6a8bc61daf5a4f35a3bda3a68ea95a294b5bad4291ba4eea8a40f9d3",
+      "status": "VERIFIED",
+      "exit_code": 0,
+      "private_report_sha256": "413920dfebbc9c39c481cd381fc1f5ce61ac806f199d3197ee7c951a32546372"
+    },
+    {
+      "check": "structure-holder-lecture-r3-r2",
+      "status": "STRUCTURALLY_VALID",
+      "exit_code": 0,
+      "private_report_sha256": "09284b096ccfba26b21598eee2fb731a21720ab93e956ebf6979967f47ac7668"
+    },
+    {
+      "check": "structure-lichnerowicz-minimal-r3",
+      "status": "STRUCTURALLY_VALID",
+      "exit_code": 0,
+      "private_report_sha256": "021508df5882d4414ec54e2f2202f07d442f56eea7c9f06fc5c514d162456d58"
+    },
+    {
+      "check": "structure-paper-r3-draft",
+      "status": "STRUCTURALLY_VALID",
+      "exit_code": 0,
+      "private_report_sha256": "d15b6f5a5eae90fbb0c2d4afd0e5d562c60cd7aee5bc58a7b27771df1ec575fc"
+    }
+  ],
+  "limitations": [
+    "Pattern scanning is a bounded check, not a universal proof against all possible private content.",
+    "Source-only copies intentionally omit original build and render reports; original visual evidence is retained privately and applies to the exact reviewed PDFs/pages.",
+    "No S06 installed-package or fresh integrated build acceptance is claimed."
+  ]
+}

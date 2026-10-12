@@ -1,0 +1,110 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "R-mathematical-N-D-curvature-20261012",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-Bishop-2013v2.md",
+      "sha256": "13257402ffc10778340ee5157754dff8bac376f5d3470536b19d81cda5fa8731"
+    },
+    {
+      "path": "evidence/source-checks/S-Eschenburg-1994.md",
+      "sha256": "9fb02b4fca1b61bce3f5d7f94bf154c8d3d44b694c4e964c420f2559b1d0f0c1"
+    },
+    {
+      "path": "evidence/source-checks/S-Eschenburg-Heintze-1984.md",
+      "sha256": "595415a04d661573ee769a3fc9ef59899b7e04e44e87d84485c8ae2f1f2ae609"
+    },
+    {
+      "path": "evidence/source-checks/S-Lang-2026.md",
+      "sha256": "d7125587caa888a2352110c7f227ca1d061a8123a626307a7a5b749134e002dd"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "268c64561038d5effab8f49c86289e70a118bfb6e848389d3e00d426c32d4280"
+    },
+    {
+      "path": "knowledge/nodes/N-D-curvature.md",
+      "sha256": "364213a5a4c5f279cf9e0c02891c0044b6677b0e6bb078b9495576a2346f4810"
+    },
+    {
+      "path": "knowledge/nodes/N-D-distance.md",
+      "sha256": "eb63cd05f332fe10c5fc845218ac504daf075792984b9da6d6095fa8db7a45e3"
+    },
+    {
+      "path": "knowledge/nodes/N-D-index.md",
+      "sha256": "13a1e6fd451cbdb9c55c64058b79e372b106e25802f82347109bef2bdc5992cf"
+    },
+    {
+      "path": "knowledge/nodes/N-D-jacobi.md",
+      "sha256": "34b710504185bdfd0c200babfb56de65568a042417015e343eb8cffb478d16c9"
+    },
+    {
+      "path": "knowledge/nodes/N-D-line.md",
+      "sha256": "278a7b7139b949f07eb0bceeeafa7b386eec45531025731768c311f6958887a3"
+    },
+    {
+      "path": "knowledge/nodes/N-D-model.md",
+      "sha256": "0f6d2a3add30a086aee33dbfe609f40645d68c9692f439165678d0c7ba709e39"
+    },
+    {
+      "path": "knowledge/nodes/N-D-support.md",
+      "sha256": "5756cc69fd1f2015d0260505f4f398b013178c8d80e0063beec879743802afb4"
+    },
+    {
+      "path": "knowledge/nodes/N-D-triangle.md",
+      "sha256": "ada7dbf8811aeb0bf2c4940f4b743efc3a9e6a274f3e833fcaa2364fadcacedb"
+    },
+    {
+      "path": "knowledge/sources/S-Bishop-2013v2.json",
+      "sha256": "3a1244553ee74de4bead7abddd2b8a27598480742e1c25cfff4ca23ab8a46636"
+    },
+    {
+      "path": "knowledge/sources/S-Eschenburg-1994.json",
+      "sha256": "1f92d5dc453c3e34093844ee568224942dfba8f1e6158bd0d3177b5b12801df5"
+    },
+    {
+      "path": "knowledge/sources/S-Eschenburg-Heintze-1984.json",
+      "sha256": "aad5eb76e6f545b8789b3225703d3f6b3e9dd2e79fadd36c2644425af733b508"
+    },
+    {
+      "path": "knowledge/sources/S-Lang-2026.json",
+      "sha256": "692680e2507398c6f36959dc1c3b8d4e810ba0e63402855f4451cf547ed70362"
+    },
+    {
+      "path": "project.json",
+      "sha256": "87cb6a2485b7efddf37961eed6780208253c1ad4d14360462040c068379c799f"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "c803acf2b2ef8ba6ce4d6aed6555916b204ecb5b42d9dbac738b0b74fd0a706b"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-D-curvature",
+      "N-D-distance",
+      "N-D-index",
+      "N-D-jacobi",
+      "N-D-line",
+      "N-D-model",
+      "N-D-support",
+      "N-D-triangle"
+    ],
+    "evidence_basis": "Actual author reading and explicit local calculations documented in each bound body and evidence/author-reading.md. Research-agent audit is part of this author reread."
+  },
+  "findings": [
+    "Read all eight canonical definitions. Curvature sign, unnormalized Ricci, model D_k, cut/conjugate times, Jacobi tensor, index form, support inequalities and Busemann sign are explicit.",
+    "Index nonnegativity follows from the read second-variation formula after removing Bishop’s energy factor 2. Cut-time continuity is an explicit imported fact. Triangle SSS and same-angle hinge data are distinguished."
+  ],
+  "unchecked_items": [
+    {
+      "item": "No independent peer review.",
+      "blocking": false,
+      "reason": "Optional independent review has not been performed and is not represented by these author records."
+    }
+  ],
+  "disposition": "accepted"
+}

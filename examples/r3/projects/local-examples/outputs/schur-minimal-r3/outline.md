@@ -1,0 +1,3 @@
+# Exposition design
+Profile minimal, view integrated, r3 local problem organization.
+The target is N-S-main for N-Q-schur. Matrix multiplication, transpose and inverse are assumed; positivity is refreshed; N-S-square constructs the unfamiliar cancellation. The first section states the full result, builds z and S, and proves both directions nearby. The second section uses the same identity to minimize and calculates N-S-boundary. No unrelated geometry or compactness is imported. The four steps in the plan cover the full promised argument. Each ordinary paragraph makes one mathematical move; complete statements remain intact. The known theorem and its source are explicitly attributed. This is one local problem, not a three-heading template or a research contribution.

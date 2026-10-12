@@ -47,7 +47,7 @@ def assess_release(root:Path,output_id:str,*,policy_mode:str='current')->dict:
     require(policy_mode in {'current','recorded'},'EDITORIAL_POLICY_UNSUPPORTED','Choose current or recorded assessment')
     if policy_mode=='current' and not current(plan):
         errors.append(diagnostic('EDITORIAL_POLICY_REASSESSMENT_REQUIRED',
-            'Create a new rc2 output ID and complete its current-policy reviews; historical bytes are preserved.', 'plan.json'))
+            'Create a new r3 output ID and complete its current-policy reviews; historical bytes are preserved.', 'plan.json'))
     if plan['draft']:errors.append(diagnostic('DRAFT_NOT_RELEASABLE','Internal unverified drafts cannot be packaged as formal output','plan.json'))
     structure=validate_structure(root,output_id);errors+=structure['errors'];warnings+=structure['warnings']
     records=reviews_in(out,'evidence')

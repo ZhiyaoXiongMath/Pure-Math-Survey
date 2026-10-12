@@ -19,3 +19,19 @@ Source reviews bind source records and reading notes/materials. Mathematical rev
 CLI envelopes are `{operation,status,errors,warnings,artifacts}` under `--json`. Exit codes: 0 completed operation; 2 invalid contract/input; 3 unmet readiness/release; 4 tool/I/O failure. Diagnostics carry consistent code/path/node_id/message. Use `kb readiness` and `output validate --stage release` for individual blocking findings; preparation/package cannot turn failures into PASS.
 
 Literal TeX scanning cannot evaluate arbitrary macro conditionals or prove a theorem. Source texts/TeX must be trusted: disabled shell escape is not an operating-system sandbox. Build and review reports are transparent local assertions, not signed independent attestations.
+
+## Separate r3 evidence and remaining verification
+
+Knowledge-only acceptance needs usable fast routes, reproducible slow explanations,
+condition tests and a reverse-obligation audit bound to actual nodes/routes. No article
+prepare is part of that check. Article acceptance needs its own current policy, design,
+actual body findings and final-page evidence. An accepted-shaped record cannot prove
+omission coverage, successful reconstruction, reproduction or understanding.
+
+Report software/structure, source and mathematics, author/AI exposition tasks, actual
+PDF inspection and real target-reader feedback separately. Preserve failures/repairs
+and exact objects/hashes. No real reader means no student-learning claim; no authorized
+original example means actual Paper originality/full research-proof quality is NOT VERIFIED.
+Other AI tasks are not external independent peers. Rules, scaffolds and passing software
+checks do not establish r3's content, final PDF, installed behavior or critical review;
+those require their own actual evidence on the fixed integrated candidate.

@@ -1,0 +1,56 @@
+{
+  "schema_version": "2.2.0",
+  "review_id": "R3-AUTHOR-N-H-compact",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-Shapiro.md",
+      "sha256": "3809bae5e2ca7cda7b6688c5bd52e3e1687f223f50b6ca355c76b6f3c1e10e7a"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "8e17ace33563d613860c89606b70c6b95a93cf077e4d21db9bff3ba08617bd63"
+    },
+    {
+      "path": "knowledge/nodes/N-H-compact.md",
+      "sha256": "d765e9f8daa10b2c42411d0d750e96859977f386f46de62f828da6881b0f0a5f"
+    },
+    {
+      "path": "knowledge/nodes/N-H-norm.md",
+      "sha256": "cd462d3ca5f275e07171958bd23cff4b0ae726658a58e21ca25e7c5600d40409"
+    },
+    {
+      "path": "knowledge/sources/S-Shapiro.json",
+      "sha256": "4b9680442eca30970ee56defc2eabecce441ea594a7645e5f7622e65d6b51a95"
+    },
+    {
+      "path": "project.json",
+      "sha256": "7477946aa36c1d422c055f0c3e0f0dcb875381993fc04e6265fea430aba03d83"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "3dd3b3a663967bb9e649114ebde3571061e0e376ab0c96911c5564260d1b5463"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-H-compact"
+    ],
+    "editorial_policy": "four-modes-2026-10-12-r3",
+    "evidence_basis": "Actual author reconstruction: Reproduced the dense-set diagonal and three-term finite-net estimate for every derivative family. Passing FToC along a coordinate segment identifies the limits as first and second derivatives. Checked min(a,b)<=a^(1-theta)b^theta with theta=beta/alpha; applying it to second-derivative differences produces convergence only when beta<alpha. Fixed-pair quotients preserve the alpha bound in the limit. The separate exhaustion argument retains nested subsequences; its diagonal converges on every fixed compact set, without a global estimate."
+  },
+  "findings": [
+    "Reproduced the dense-set diagonal and three-term finite-net estimate for every derivative family. Passing FToC along a coordinate segment identifies the limits as first and second derivatives.",
+    "Checked min(a,b)<=a^(1-theta)b^theta with theta=beta/alpha; applying it to second-derivative differences produces convergence only when beta<alpha. Fixed-pair quotients preserve the alpha bound in the limit.",
+    "The separate exhaustion argument retains nested subsequences; its diagonal converges on every fixed compact set, without a global estimate."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "Author/AI rereading only. No external mathematical peer review, actual target-reader experiment or originality certification is claimed."
+    }
+  ],
+  "disposition": "accepted"
+}

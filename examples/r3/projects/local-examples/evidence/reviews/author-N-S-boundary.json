@@ -1,0 +1,43 @@
+{
+  "schema_version": "2.2.0",
+  "review_id": "R3-AUTHOR-N-S-boundary",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "8e17ace33563d613860c89606b70c6b95a93cf077e4d21db9bff3ba08617bd63"
+    },
+    {
+      "path": "knowledge/nodes/N-S-boundary.md",
+      "sha256": "c9c3cb9fbe0d3c468a65407e0bf97d411a74f059bcb549a930471b0745486d71"
+    },
+    {
+      "path": "project.json",
+      "sha256": "7477946aa36c1d422c055f0c3e0f0dcb875381993fc04e6265fea430aba03d83"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "3dd3b3a663967bb9e649114ebde3571061e0e376ab0c96911c5564260d1b5463"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-S-boundary"
+    ],
+    "editorial_policy": "four-modes-2026-10-12-r3",
+    "evidence_basis": "Actual author reconstruction: Computed 2(x+y/2)^2+y^2/2 for A=2,B=C=1. For A=-1,B=0,C=1, the Schur remainder is positive but Q=-x^2+y^2 has no lower bound in x. A=0 makes the stated inverse unavailable; no denial of generalized singular-block theory is asserted."
+  },
+  "findings": [
+    "Computed 2(x+y/2)^2+y^2/2 for A=2,B=C=1. For A=-1,B=0,C=1, the Schur remainder is positive but Q=-x^2+y^2 has no lower bound in x.",
+    "A=0 makes the stated inverse unavailable; no denial of generalized singular-block theory is asserted."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "Author/AI rereading only. No external mathematical peer review, actual target-reader experiment or originality certification is claimed."
+    }
+  ],
+  "disposition": "accepted"
+}

@@ -6,7 +6,8 @@ from survey_core.readiness import assess_readiness
 
 
 class OnlineSources(unittest.TestCase):
-    def setUp(self):self.t=v.VNext();self.t.setUp()
+    def setUp(self):
+        self.t=v.VNext();self.t.setUp();self.t.editorial_policy=v.RC2_POLICY
     def tearDown(self):self.t.tearDown()
     def source(self,retain_hash=True,locators=None,malformed_scope=False):
         p=self.t.root/'knowledge/sources/S-test.json';source=read_json(p)

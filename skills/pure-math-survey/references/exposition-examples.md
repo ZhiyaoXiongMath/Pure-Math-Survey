@@ -13,8 +13,10 @@ repository; their local full proofs concern known mathematics, never Paper origi
 The installed templates and references expose the same mode responsibilities; benchmark
 acceptance requires actual writing, compilation and reading, not just available filenames.
 
-Minimal positive: completion of the square gives the Schur complement, and the third
-section uses invertibility of the coordinate change for both directions. Negative: the
+Minimal positive: completion of the square gives the Schur complement, and the nearby connections
+passage uses invertibility of the coordinate change for both directions. Under r3 this
+can be one local problem unit; only historical r2/rc1 and rc2 require the third-section
+placement. Negative: the
 correct three headings contain an unused tool list and only “standard arguments.”
 Thematic positive: compare square completion and congruence under the same A>0 assumption.
 Negative: call criteria equivalent after dropping positivity on one side. A single real
@@ -28,3 +30,25 @@ operator continuity and a uniform cone-interior margin. Negative: “take a weak
 without a topology that passes the nonlinear operator or a margin that preserves admissibility.
 A reviewer must record the actual defect and location. These are mathematical reading
 cases, not a claim that static code automatically detects such errors.
+
+## r3 task use and evidence limits
+
+Use these examples to ask for actual work, not expected-answer labels. Hide the long
+proof and reconstruct why the chosen object reaches the goal; reproduce a promised
+calculation from the declared prerequisites; change a decisive condition and locate
+the first step no longer justified. Compare these tasks with the author's obligation
+list only after reconstructing the necessary work independently. Save actual answers,
+failures, repairs, and exact node/subsection or manuscript-body locations.
+
+A bare determinant-density identity or an unexplained compactness-to-limit arrow is a
+missing bridge even if every listed step has a location. A deep theorem may be imported
+precisely, while its current substitution, object identification and hypothesis checks
+still need explanation. Return reusable repairs to live KB, review and a new snapshot.
+The comparison-geometry branches in the development regression are examples, not a
+compulsory syllabus; retain whatever full scope the actual user requested.
+
+Inspect ordinary explanations in the final PDF at normal width against the active
+2–3 typeset-line target. A necessary complete theorem or continuous proof can be longer
+with a specific page/source position, reason, considered alternative and reinspection
+bound to the final PDF hash. These examples and any machine checks do not establish
+actual reader comprehension, independent mathematical review or original-Paper quality.

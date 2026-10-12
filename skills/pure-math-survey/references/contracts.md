@@ -48,7 +48,7 @@ These recipes use placeholder IDs. init produces an empty unverified KB; add rea
 
 ## Versioned output policy (2.2.0)
 
-New plans require `editorial_policy: four-modes-2026-10-12-rc2` and `contributions`
+New r3 plans use `editorial_policy: four-modes-2026-10-12-r3` and `contributions`
 (an empty list outside Paper). The `profile` enum is minimal/thematic/lecture/paper.
 Each Paper contribution has `node_id`, classification original/known/conjectural/unverified,
 `provenance`, `authorization`, `actual_difference`, proof_status complete/incomplete/unverified,
@@ -90,7 +90,8 @@ Never manually downgrade a new plan to evade policy gates.
 | --- | --- | --- |
 | 2.0.0 | legacy-2.0.0 | Requires a new schema-2.2.0 output |
 | 2.1.0 | four-modes-2026-10-11-r2 | Requires a new schema-2.2.0 output |
-| 2.2.0 | four-modes-2026-10-12-rc2 | Only after current release checks |
+| 2.2.0 | four-modes-2026-10-12-rc2 | Historical recorded assessment only; new r3 output required |
+| 2.2.0 | four-modes-2026-10-12-r3 | Only after all current release checks |
 
 Unknown or mixed schema/policy pairs fail closed. Use `output validate ... --stage
 release --policy recorded` only for a read-only historical assessment: even a valid
@@ -135,3 +136,20 @@ records copied into materials must still match their actual bound inputs.
 Without directly comparable prior evidence, keep an explicit draft; no waiver
 can authorize formal publication. Read every claimed comparison in the same
 unknowns, quantifiers, dimension, parameters, regularity and normalization.
+
+## Explicit compatibility responsibilities
+
+Software 2.1.0, knowledge/snapshot schema 2.0.0, output/review schema 2.2.0 and r3
+editorial policy are distinct. The supported exact pairs above do not permit arbitrary
+policy names on schema 2.2.0. Legacy 2.0 uses its recorded default; r2/rc1 2.1 retains
+four modes; rc2 2.2 retains F1–F4, typed comparison/prior support, view/design and strict
+old Minimal; r3 2.2 retains those capabilities and adds local Minimal and new tasks.
+Current-release policy, four-mode support, rc2 capabilities, strict-old-Minimal and
+r3 duties must be distinguished. Old runtimes rejecting a new policy is expected.
+
+r3 reuses existing plan/outline, scope/findings, mode_findings and page_findings; it
+does not change the knowledge schema or promise a new typed API. Knowledge-only review
+records bind actual nodes/routes and subsections, independently of article locations.
+See [output review](output-review.md). Canonical/explanation revisions go through live
+KB, review and a new snapshot. Keep all old records and fixed artifacts unchanged;
+never downgrade policy or refresh hashes alone to manufacture current acceptance.

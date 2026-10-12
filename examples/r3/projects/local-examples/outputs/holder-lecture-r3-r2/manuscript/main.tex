@@ -1,0 +1,221 @@
+\documentclass[12pt,reqno]{amsart}
+\usepackage{math-review}
+\input{../generated/conventions.tex}
+\title{From a uniform H\"older bound to a valid limiting equation}
+\date{}
+\begin{document}
+\maketitle
+
+An a priori estimate is useful only after its topology and constants are
+specified. This lecture proves the compactness step and then separates
+the two further tasks: preserving the equation's domain and passing its residual.
+
+\section{The conditional target}
+We assume multivariable calculus, compactness of bounded real sequences
+and smooth partitions of unity. The compactness, interpolation and
+admissibility arguments below are developed explicitly.
+
+\begin{definition}\label{def:norm}
+\input{../generated/statements/N-H-norm.tex}
+\end{definition}
+\begin{theorem}\label{thm:closedness}
+\input{../generated/statements/N-H-main.tex}
+\end{theorem}
+
+The estimate and the positive constant $\delta$ are assumptions.
+A specific PDE must supply them, uniformly in $j$, from its own
+coefficients, geometry and normalization; this theorem does not do so.
+
+The proof proceeds from fixed coordinate pieces to a single limit,
+then to $C^{2,\beta}$ convergence. Only after the margin has placed the
+limit in $\mathcal U$ do we invoke continuity of $\mathcal F$.
+
+\section{Constructing the convergent subsequence}
+Write $v_{a,j}=(\chi_a u_j)\circ\phi_a^{-1}$, extended by zero.
+The chart supports are fixed compact sets. The assumed norm bound gives
+\[
+ \|D^\nu v_{a,j}\|_\infty\leq C\quad(|\nu|\leq2),
+ \qquad [D^\nu v_{a,j}]_\alpha\leq C\quad(|\nu|=2).
+\]
+The second derivatives have a common H\"older modulus. Lower derivatives
+have a common Lipschitz modulus by the next-derivative bound and
+integration along a segment in $\mathbb R^d$.
+
+\subsection*{A common subsequence}
+For each of the finitely many derivative families, choose a countable
+dense set in its compact support. Enumerate all scalar evaluations and
+successively extract subsequences on which the next evaluation converges.
+
+Take the diagonal of these nested subsequences. It converges at every
+listed point. To promote this to uniform convergence, choose a finite
+net from the dense set using the common modulus of continuity.
+
+For any two late terms $w_j,w_k$ of one derivative family and a net
+point $s$ close to $x$, use
+\[
+ |w_j(x)-w_k(x)|\leq
+ |w_j(x)-w_j(s)|+|w_j(s)-w_k(s)|+|w_k(s)-w_k(x)|.
+\]
+The first and third terms are small by the common modulus. The middle
+term is uniformly small on the finite net, so the subsequence is uniformly
+Cauchy. This is the scalar Arzel\`a--Ascoli argument of \cite{S-Shapiro}.
+
+\subsection*{The limits really are derivatives}
+Uniform limits of separately named derivatives need compatibility.
+For $|\nu|\leq1$, keep the identity
+\[
+ D^\nu v_{a,j}(x+he_i)-D^\nu v_{a,j}(x)
+ =\int_0^h D^{\nu+e_i}v_{a,j}(x+se_i)\,ds.
+\]
+Uniform convergence on the segment permits passage under the integral.
+The limiting identity identifies first and second derivatives, so each
+local limit is $C^2$ with the derivatives just extracted.
+
+Fixed smooth transition rules pass to the limit as well. The partition
+of unity glues these compatible pieces to a global function $u_*$.
+Compact support inside each chart makes zero extension harmless.
+
+For any fixed pair $x\ne y$, passing to the limit in its H\"older quotient
+retains the $\alpha$ bound. Taking suprema and then the finite sum yields
+\[
+ u_*\in C^{2,\alpha}(M),\qquad \|u_*\|_{2,\alpha}\leq C.
+\]
+
+\section{Why the exponent must be weakened}
+Uniform convergence of second derivatives does not by itself control
+their $\beta$ seminorms. For a bounded $\alpha$-H\"older function $w$,
+two available bounds can be combined:
+\[
+ |w(x)-w(y)|\leq
+ \min\{2\|w\|_\infty,[w]_\alpha|x-y|^\alpha\}.
+\]
+For positive $a,b$ and $0<\theta<1$, $\min(a,b)\leq a^{1-\theta}b^\theta$.
+Set $\theta=\beta/\alpha$ and divide by $|x-y|^\beta$:
+\begin{equation}\label{eq:interpolation}
+ [w]_\beta\leq(2\|w\|_\infty)^{1-\beta/\alpha}
+                  [w]_\alpha^{\beta/\alpha}.
+\end{equation}
+The zero cases follow directly. Apply this to each difference
+$D^\nu(v_{a,j}-v_{a,*})$ with $|\nu|=2$: its sup norm tends to zero
+and its $\alpha$ seminorm is at most $2C$.
+
+The strictly positive exponent $1-\beta/\alpha$ forces the right side
+of \eqref{eq:interpolation} to vanish. Combined with the lower derivatives,
+this proves
+\[
+ \|u_j-u_*\|_{2,\beta}\longrightarrow0
+\]
+along the extracted subsequence. The theorem's stronger regularity of
+the limit is a boundedness conclusion, not convergence in that stronger norm.
+
+\section{Passing the domain before the equation}
+Continuity of $A$ now supplies uniform matrix convergence. For every
+$x\in M$ and $v\in\mathbb R^r$,
+\[
+ v^TA(u_*)(x)v=\lim_j v^TA(u_j)(x)v\geq\delta|v|^2.
+\]
+Thus $A(u_*)\geq\delta I_r>0$, and $u_*\in\mathcal U$. The pair
+$(t_*,u_*)$ is therefore in the actual domain of $\mathcal F$, where
+joint continuity gives
+\[
+ \mathcal F(t_*,u_*)=\lim_j\mathcal F(t_j,u_j)=0\quad\text{in }C^0(M).
+\]
+This completes Theorem~\ref{thm:closedness}. If the sequence also has
+mean zero, that normalization passes because
+\[
+ \left|\int_M(u_j-u_*)\,dV_g\right|
+ \leq\operatorname{Vol}_g(M)\|u_j-u_*\|_\infty\longrightarrow0.
+\]
+
+\subsection*{A concrete continuity check}
+On a flat torus take a fixed continuous $h$ and
+\[
+ \mathcal F(t,u)=\operatorname{tr}(D^2u)+u^3-th.
+\]
+The second derivatives converge uniformly. On the common bounded range
+$|u_j|,|u_*|\leq R$, the nonlinear term satisfies
+\[
+ \|u_j^3-u_*^3\|_\infty\leq3R^2\|u_j-u_*\|_\infty.
+\]
+The parameter term is bounded by $|t_j-t_*|\|h\|_\infty$.
+These three estimates verify the claimed $C^0$ continuity for this
+example; they provide no existence theorem or a priori solution bound.
+
+\section{Localization and failure models}
+On an open subset of $\mathbb R^d$, estimates on every relatively compact
+open set give a local conclusion. Choose an exhaustion $K_\ell$ with
+$K_\ell\Subset\operatorname{int}K_{\ell+1}$ and insert fixed cutoffs.
+
+Extract on $K_1$, then on $K_2$ inside that subsequence, and continue.
+The diagonal converges on every fixed $K_\ell$; limits agree on overlaps.
+The bounds may depend on $\ell$, so the conclusion is only $C^{2,\beta}_{\rm loc}$.
+
+For a nonzero compactly supported smooth function $\eta$ on $\mathbb R$,
+$u_j(x)=\eta(x-j)$ eventually vanishes on every fixed compact set, but
+\[
+ \|u_j\|_\infty=\|\eta\|_\infty>0.
+\]
+Thus local extraction does not imply global uniform convergence.
+It also supplies no boundary convergence on a noncompact or open domain.
+
+\subsection*{Losing the positive margin}
+Let $A(u)=uI_r$, let $\mathcal U$ be the positive functions, and set
+$\mathcal F(t,u)=u-t$. The constant functions
+\[
+ t_j=u_j=1/j
+\]
+have uniform H\"older bounds and solve the equation, but their limit
+is zero and leaves $\mathcal U$. Individual strict inequalities cannot
+replace a uniform $\delta>0$.
+
+\subsection*{Losing the exponent gap}
+On $\mathbb R/(2\pi\mathbb Z)$, let $u_n(x)=n^{-2-\alpha}\cos(nx)$.
+Its second derivative is $-n^{-\alpha}\cos(nx)$ and converges uniformly
+to zero. The bound $|\cos a-\cos b|\leq\min\{2,|a-b|\}$ gives uniform
+$\alpha$ seminorms.
+
+At $x=0$ and $y=\pi/n$, however, the second-derivative quotient is
+\[
+ \frac{|u_n''(0)-u_n''(\pi/n)|}{(\pi/n)^\alpha}
+       =\frac{2}{\pi^\alpha}.
+\]
+It cannot converge to zero in $C^{2,\alpha}$. Since every possible
+uniform limit is zero, no subsequence can repair that failure.
+
+\subsection*{Weak convergence is a different input}
+Work in the real space $L^2(0,2\pi;\mathbb R)$, with inner product
+$\langle f,g\rangle=\int_0^{2\pi}fg\,dx$ and norm
+$\|g\|_2^2=\langle g,g\rangle$.
+
+By definition, $f_n\rightharpoonup0$ weakly in this space means
+$\int_0^{2\pi}f_ng\,dx\to0$ for every $g\in L^2(0,2\pi;\mathbb R)$.
+
+Set $e_n(x)=\sin(nx)/\sqrt\pi$ for integers $n\geq1$.
+Integrating the product-to-sum identity
+\[
+ 2\sin(nx)\sin(mx)=\cos((n-m)x)-\cos((n+m)x)
+\]
+gives $\langle e_n,e_m\rangle=0$ for $n\ne m$ and $1$ for $n=m$.
+Thus the sequence is orthonormal.
+
+Fix any $g$ in this real $L^2$ space and put $a_n=\langle g,e_n\rangle$.
+Expanding a finite squared norm using orthonormality gives
+\[
+ 0\leq\left\|g-\sum_{n=1}^N a_ne_n\right\|_2^2
+       =\|g\|_2^2-\sum_{n=1}^N|a_n|^2.
+\]
+Hence the partial sums of $\sum|a_n|^2$ are bounded, so $a_n\to0$.
+For this arbitrary $g$, $\int_0^{2\pi}\sin(nx)g(x)\,dx=\sqrt\pi\,a_n\to0$,
+proving $\sin(nx)\rightharpoonup0$.
+
+The squares also lie in $L^2$. Testing against $1\in L^2$ gives
+\[
+ \int_0^{2\pi}\sin^2(nx)\,dx=\pi.
+\]
+Thus the squares do not converge weakly to zero. The nonlinear passage
+in the theorem instead uses strong convergence in a topology for which
+continuity was actually verified.
+
+\bibliographystyle{../manuscript/localrefs}
+\bibliography{../generated/references}
+\end{document}

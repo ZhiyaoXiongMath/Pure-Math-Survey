@@ -22,7 +22,7 @@ from survey_core.exports import prepare_output, validate_structure, verify_gener
 from survey_core.reviews import review_template, mathematical_inputs, load_review
 from survey_core.release import semantic_scope_errors, assess_release, package_output
 from survey_core.readiness import assess_readiness
-from survey_core.profiles import (POLICY, OUTPUT_SCHEMA, MINIMAL_SECTIONS, COMMON_READINGS,
+from survey_core.profiles import (POLICY, RC2_POLICY, OUTPUT_SCHEMA, MINIMAL_SECTIONS, COMMON_READINGS,
     MODE_READINGS, STATEMENT_ASPECTS, principal_template, review_scope_template,
     statement_warnings, semantic_profile_errors, validate_plan_contract)
 from package_release import package
@@ -44,6 +44,18 @@ def synthetic_policy_reviews(root):
         rec.update(review_id='SYNTHETIC-NEW-'+key,reviewer_mode='author_reread',reviewed_at=now(),
                    findings=[SYNTH],unchecked_items=[],disposition='accepted')
         write_json(root/f'evidence/reviews/new-{key}.json',rec)
+    # Explicitly synthetic r3 knowledge-task evidence, separate from manuscript
+    # findings; the cited sections and input bytes must still really exist.
+    from survey_core.reviews import coverage_inputs, knowledge_scope_template
+    from survey_core.profiles import R3_READINGS
+    for q in inv.coverage['questions']:
+        key=q['question_id'];scope=knowledge_scope_template(inv,[key])
+        scope['evidence_basis']=SYNTH
+        rec=review_template(root,'coverage',[key],coverage_inputs(inv,key),scope)
+        rec.update(review_id='SYNTHETIC-KNOWLEDGE-'+key,reviewer_mode='author_reread',reviewed_at=now(),
+                   findings=[f'{task}: {SYNTH} [Actual fixture section]({inv.nodes[key].path}#software-fixture)' for task in R3_READINGS],
+                   unchecked_items=[],disposition='accepted')
+        write_json(root/f'evidence/reviews/new-coverage-{key}.json',rec)
 
 
 class VNext(unittest.TestCase):
@@ -52,16 +64,19 @@ class VNext(unittest.TestCase):
         self.root=fixture(self.base/'project',reviewed=True)
         synthetic_policy_reviews(self.root)
     def tearDown(self):self.tmp.cleanup()
-    def make(self,profile='minimal',oid='new',draft=True,refine=True,view='integrated'):
+    def make(self,profile='minimal',oid='new',draft=True,refine=True,view='integrated',policy=None):
         sid=freeze_snapshot(self.root)['artifacts']['snapshot_id']
         create_plan(self.root,oid,sid,profile=profile,draft=draft,view=view)
         p=self.root/f'outputs/{oid}/plan.json';v=read_json(p)
+        v['editorial_policy']=policy or getattr(self,'editorial_policy',POLICY)
+        write_json(p,v)
         if refine:
             for o in v['proof_obligations']:o['required_steps']=[STEP]
             write_json(p,v)
         return p,v
-    def authored(self,profile='minimal',oid='new',draft=True,view='integrated'):
+    def authored(self,profile='minimal',oid='new',draft=True,view='integrated',policy=None):
         p,v=self.make(profile,oid,draft,view=view)
+        if policy is not None:v['editorial_policy']=policy
         v['audience']='Synthetic fixture reader can substitute real numbers and multiply.'
         v['reader_goals']=['Reconstruct the substitution of zero in x times x; no research acceptance.']
         write_json(p,v);prepare_output(self.root,p)
@@ -157,31 +172,31 @@ class VNext(unittest.TestCase):
             self.assertNotIn('Readers of the selected mathematical scope',v['audience'])
             self.assertTrue(v['proof_obligations'])
     def test_V03_minimal_real_three_sections_and_methods_view(self):
-        self.authored(view='methods');self.assertEqual(self.codes(),set())
+        self.authored(view='methods',policy=RC2_POLICY);self.assertEqual(self.codes(),set())
     def test_V04_minimal_extra_numbered_section_fails(self):
-        p,v=self.authored();main=p.parent/'manuscript/main.tex'
+        p,v=self.authored(policy=RC2_POLICY);main=p.parent/'manuscript/main.tex'
         main.write_text(main.read_text().replace(r'\end{document}',r'\section{Appendix}Extra.\end{document}'))
         self.assertIn('MINIMAL_THREE_SECTIONS_REQUIRED',self.codes())
     def test_V05_background_before_results_fails(self):
-        p,v=self.authored();m=p.parent/'manuscript/main.tex'
+        p,v=self.authored(policy=RC2_POLICY);m=p.parent/'manuscript/main.tex'
         m.write_text(m.read_text().replace(r'\section{Main Results}',r'\section*{Background}\section{Main Results}'))
         self.assertIn('MINIMAL_RESULTS_FIRST',self.codes())
     def test_V06_titles_in_comments_false_or_uncalled_macro_do_not_count(self):
-        p,v=self.authored();m=p.parent/'manuscript/main.tex';original=m.read_text()
+        p,v=self.authored(policy=RC2_POLICY);m=p.parent/'manuscript/main.tex';original=m.read_text()
         for wrapper in [lambda x:'%'+x,lambda x:r'\iffalse '+x+r'\fi',lambda x:r'\newcommand{\unused}{'+x+'}']:
             with self.subTest(wrapper=wrapper):
                 m.write_text(original.replace(r'\section{Key Mathematical Ingredients}',wrapper(r'\section{Key Mathematical Ingredients}')))
                 self.assertIn('MINIMAL_THREE_SECTIONS_REQUIRED',self.codes())
     def test_V07_principal_in_later_section_fails(self):
-        p,v=self.authored();m=p.parent/'manuscript/main.tex';t=m.read_text();a=t.index(r'\begin{theorem}');b=t.index(r'\end{theorem}',a)+len(r'\end{theorem}')
+        p,v=self.authored(policy=RC2_POLICY);m=p.parent/'manuscript/main.tex';t=m.read_text();a=t.index(r'\begin{theorem}');b=t.index(r'\end{theorem}',a)+len(r'\end{theorem}')
         theorem=t[a:b];t=t[:a]+t[b:];t=t.replace(r'\section{Connecting the Ingredients}',r'\section{Connecting the Ingredients}'+theorem);m.write_text(t)
         self.assertIn('MINIMAL_PRINCIPAL_NOT_FIRST',self.codes())
     def test_V08_plain_principal_input_without_formal_result_fails(self):
-        p,v=self.authored();m=p.parent/'manuscript/main.tex'
+        p,v=self.authored(policy=RC2_POLICY);m=p.parent/'manuscript/main.tex'
         m.write_text(m.read_text().replace(r'\begin{theorem}', '').replace(r'\end{theorem}',''))
         self.assertIn('PRINCIPAL_RESULT_ENVIRONMENT_MISSING',self.codes())
     def test_V09_section_number_suppression_fails(self):
-        p,v=self.authored();m=p.parent/'manuscript/main.tex';t=m.read_text()
+        p,v=self.authored(policy=RC2_POLICY);m=p.parent/'manuscript/main.tex';t=m.read_text()
         for control in [r'\setcounter{secnumdepth}{-1}',r'\renewcommand{\thesection}{}',r'\appendix']:
             with self.subTest(control=control):
                 m.write_text(t.replace(r'\begin{document}',control+r'\begin{document}'))

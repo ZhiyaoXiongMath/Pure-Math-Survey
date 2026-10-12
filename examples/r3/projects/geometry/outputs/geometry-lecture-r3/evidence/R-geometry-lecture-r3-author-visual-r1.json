@@ -1,0 +1,330 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "R-geometry-lecture-r3-author-visual-r1",
+  "kind": "visual",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "build/build-report.json",
+      "sha256": "f32e2bdfa08c0cd0d1b4ad210e61dfb18071cd840bc9be7856fbca33e587b46c"
+    },
+    {
+      "path": "build/main.pdf",
+      "sha256": "366a9c651bf2c494499df288c70161de36ab21285956a5b2b742cd0874db9222"
+    },
+    {
+      "path": "evidence/pages/page-01.png",
+      "sha256": "9c6284f4d52aaa9497e73aeba238644d303da6059f0d80367ba2ef9c43881f19"
+    },
+    {
+      "path": "evidence/pages/page-02.png",
+      "sha256": "f7ffe116744d315736d2fb0c3ee3486909735e6553314531bc9ee9d108125083"
+    },
+    {
+      "path": "evidence/pages/page-03.png",
+      "sha256": "946da31975372a97c899a3306c1214182de9ccaff59a57ad5b64bd3e64593633"
+    },
+    {
+      "path": "evidence/pages/page-04.png",
+      "sha256": "1d36368b2e141dd3ba9b236c88fe3c04106cccb65dfa4590519ec7b6592fc952"
+    },
+    {
+      "path": "evidence/pages/page-05.png",
+      "sha256": "7e8440c2cb40d44f25ce5b5e3c3edb9b9856a63c92cdd2e7142d73e3bd41420a"
+    },
+    {
+      "path": "evidence/pages/page-06.png",
+      "sha256": "5ce8579419f99e586c7535d08193ddf05b4879152645177433a992863a611d55"
+    },
+    {
+      "path": "evidence/pages/page-07.png",
+      "sha256": "275e48c43354a5530781719a079460b7656834798095cf567556ed39ecedf74c"
+    },
+    {
+      "path": "evidence/pages/page-08.png",
+      "sha256": "77fb3684838fb86dafbfa4c4fa13cb07dde8d0c7a4ca8b04b7c8d11ce3dc45f9"
+    },
+    {
+      "path": "evidence/pages/page-09.png",
+      "sha256": "cce9068e168cc50cb5b2bdabeabb936550eae77fffcad51bc72b972ffb146b06"
+    },
+    {
+      "path": "evidence/pages/page-10.png",
+      "sha256": "f7bde05b7b4dad414d96ec8772f2d0eb6e49579470644af4ea9a662f737fa6bc"
+    },
+    {
+      "path": "evidence/pages/page-11.png",
+      "sha256": "a7088a51c858120001591a472b4c145cb6fe6db247bee91fafeceefcd09cce08"
+    },
+    {
+      "path": "evidence/pages/page-12.png",
+      "sha256": "56568fbedfd6fa678ccc43fc14451d983874a85bb72ef709d59b5de64e479661"
+    },
+    {
+      "path": "evidence/pages/page-13.png",
+      "sha256": "b75d4f52c6a96507ecdc51814482e589c10a431d09ec2e049ec1d18054e98c10"
+    },
+    {
+      "path": "evidence/render-manifest.json",
+      "sha256": "7f685d7559b9467982b7f78addfc72fd780507efa68feea92790538252f14843"
+    }
+  ],
+  "scope": {
+    "output_ids": [
+      "geometry-lecture-r3"
+    ],
+    "pdf_sha256": "366a9c651bf2c494499df288c70161de36ab21285956a5b2b742cd0874db9222",
+    "pages": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "page_findings": [
+      {
+        "page": 1,
+        "observation": "The full Bishop–Gromov target appears on page one with both quotient forms and the small-radius limit. The revised aim and audience paragraphs occupy three lines each. Metric norm and volume density are readable; the complete theorem is the justified longer block."
+      },
+      {
+        "page": 2,
+        "observation": "Connection product and torsion rules, curvature convention, Hessian operations and Euclidean model are legible. Hopf–Rinow consequences and its one-point criterion are separate short paragraphs. The exact cut-domain import fits in three lines."
+      },
+      {
+        "page": 3,
+        "observation": "The three constant-curvature cases and D_k are clear. The radial variation, Jacobi equation, factor 1/t and Taylor expansion are explicitly displayed without overfull text. Ordinary explanations are two or three lines."
+      },
+      {
+        "page": 4,
+        "observation": "The Gram matrix, determinant sign, coordinate expression and model calculation each have their own short explanation. The Wronskian and inverse-derivative calculations fit the width. No symbol collision or stretched vertical spacing remains."
+      },
+      {
+        "page": 5,
+        "observation": "The current-vector Hessian identity and trace calculation are legible. The singular integrating-factor argument preserves its common domain, positive factor, asymptotic limit and epsilon passage. All explanatory blocks are short; the next complete theorem moves intact to page six."
+      },
+      {
+        "page": 6,
+        "observation": "Laplacian comparison is complete at the top. Normalized density and the precise cut-domain substitution are readable. The zero-extension definition and angular average display fit. The final sentence after the average continues onto page seven without losing its displayed definition."
+      },
+      {
+        "page": 7,
+        "observation": "Angular dominated convergence is followed by the full weighted-average argument. The quotient derivative, absolute-continuity justification and small-radius limit are all readable. The endpoint reservation closes the page; extra bottom space keeps the Myers statement together."
+      },
+      {
+        "page": 8,
+        "observation": "Bonnet–Myers is complete with all three conclusions. Its endpoint fields and summed sine integral are clear. The terminal-sphere argument uses two short paragraphs and the continuity equation; the normalized volume endpoint is closed without dividing by the model zero."
+      },
+      {
+        "page": 9,
+        "observation": "The doubling display and collapsing-cylinder bound are legible. The Ricci-upper and cut-counting failures each have a short separate paragraph. The Rauch statement is complete near the directional heading, followed by its explicit singular-matrix import."
+      },
+      {
+        "page": 10,
+        "observation": "The regular matrix-order calculation is distinguished visibly from the imported singular start. The logarithmic norm, continuation contradiction and actual conjugate cutoff are readable. Hessian comparison is complete, with the full current-vector quadratic form below it."
+      },
+      {
+        "page": 11,
+        "observation": "The cylinder test separates cut from conjugacy. Cartan–Hadamard is complete, followed by corrected convexity, the full differential, pullback completeness and the inverse-sheet construction. The final topology paragraph fits in three lines."
+      },
+      {
+        "page": 12,
+        "observation": "The long Toponogov statement stays together with all strict-domain and matching-point clauses. The local map and contained-chord estimate fit the width. The gluing proposition, balanced-angle meaning and degenerate auxiliary convention have separate short explanations."
+      },
+      {
+        "page": 13,
+        "observation": "The geometric-series Cauchy bound, uniform-center argument and auxiliary perimeter calculation remain readable. The final scope was split into representative-proof and extension-limit paragraphs. Four references fit on the page; no cropped text, missing symbols or unresolved citations are visible."
+      }
+    ],
+    "rhythm_review": [
+      {
+        "pages": [
+          1,
+          2
+        ],
+        "purpose": "Audience and exact global inputs",
+        "action": "Rewrote aim and prerequisite paragraphs; separated the one-point completeness criterion from the other Hopf–Rinow consequences. These now occupy two or three lines.",
+        "source_locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 16,
+            "line_end": 16
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 25,
+            "line_end": 25
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 76,
+            "line_end": 76
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 78,
+            "line_end": 78
+          }
+        ]
+      },
+      {
+        "pages": [
+          1,
+          6,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "purpose": "Complete principal statements",
+        "action": "Justified exception: retain exact canonical quantifiers, alternatives and endpoint restrictions. Every canonical statement is complete on one page.",
+        "source_locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 395,
+            "line_end": 395
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 431,
+            "line_end": 431
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 243,
+            "line_end": 243
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 21,
+            "line_end": 21
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 323,
+            "line_end": 323
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 457,
+            "line_end": 457
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 492,
+            "line_end": 492
+          }
+        ]
+      },
+      {
+        "pages": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "purpose": "Reproducible representative derivation",
+        "action": "Two- or three-line explanations alternate with necessary differentiation, Gram matrix, limit, integral and quotient displays. Longer mathematical displays are retained because they execute the promised step.",
+        "source_locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 112,
+            "line_end": 112
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 146,
+            "line_end": 146
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 222,
+            "line_end": 222
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 290,
+            "line_end": 290
+          }
+        ]
+      },
+      {
+        "pages": [
+          12,
+          13
+        ],
+        "purpose": "Gluing input and final scope",
+        "action": "Separated the exact import from its admissibility test and split the final representative-proof scope from extension limits. No weakened triangle hypothesis was used to shorten these paragraphs.",
+        "source_locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 511,
+            "line_end": 511
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 530,
+            "line_end": 530
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 542,
+            "line_end": 542
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 544,
+            "line_end": 544
+          }
+        ]
+      },
+      {
+        "pages": [
+          5,
+          7,
+          11
+        ],
+        "purpose": "Stable page breaks",
+        "action": "Accepted bottom space before complete theorem blocks; ragged-bottom layout keeps natural display spacing and normal font size.",
+        "source_locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 9,
+            "line_end": 9
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 483,
+            "line_end": 483
+          }
+        ]
+      }
+    ]
+  },
+  "findings": [
+    "Every page of the current PDF was opened after the last prose and page-break edits. The image and PDF hashes are bound in this record.",
+    "Normal 12pt shared typography is retained. No manual two-em indentation, font reduction or narrower margin is used. Ragged-bottom layout prevents stretched vertical spacing when a complete theorem moves to the next page.",
+    "Ordinary explanatory paragraphs were rewritten by purpose toward two or three rendered lines. Necessary longer canonical statements retain exact assumptions, quantifiers and alternatives; the page-specific reasons are recorded below.",
+    "No clipping, overlap, missing symbol, unresolved reference or unreadable equation was observed in the final pages."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "The author performed this visual inspection; no independent visual reviewer is claimed."
+    }
+  ],
+  "disposition": "accepted",
+  "reviewer": "Geometry manuscript author",
+  "inspection_method": "Opened every final numbered PNG individually with view_image at the recorded 110 dpi and read the page. This is actual agent visual inspection, not an inference from a render success or a contact sheet."
+}

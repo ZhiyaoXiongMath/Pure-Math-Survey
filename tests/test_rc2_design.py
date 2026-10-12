@@ -14,7 +14,7 @@ from survey_core.profiles import RC1_SCHEMA, RC1_POLICY, POLICY, validate_plan_c
 
 class Design(unittest.TestCase):
     def setUp(self):
-        self.t=v.VNext();self.t.setUp()
+        self.t=v.VNext();self.t.setUp();self.t.editorial_policy=v.RC2_POLICY
     def tearDown(self):self.t.tearDown()
     def test_missing_empty_default_and_invalid_reference(self):
         p,plan=self.t.authored(draft=False);out=p.parent

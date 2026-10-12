@@ -1,7 +1,7 @@
 # Pure Math Survey
 
 > **Software version 2.1.0 release preparation; the tag and GitHub Release are not published.** Copy the complete skill directory from this repository or build a local installation ZIP from source. See [four writing profiles](skills/pure-math-survey/references/editions.md).
-> Minimal has exactly Main Results / Key Mathematical Ingredients / Connecting the Ingredients. Thematic requires supported synthesis, Lecture every promised derivation, and Paper authorized contribution, closest-prior-art and complete-proof reviews. Paper defaults to an unverified internal draft. Software cannot certify truth, originality or comprehension.
+> Under r3, Minimal uses local problem units keeping full results, needed points, decisive connections and first use nearby; historical r2/rc1 and rc2 retain the strict three-section policy. Thematic requires supported synthesis, Lecture every promised derivation, and Paper authorized contribution, closest-prior-art and complete-proof reviews. Paper defaults to an unverified internal draft. Software cannot certify truth, originality or comprehension.
 > Knowledge schema is 2.0.0; new plans and policy-bearing reviews use 2.2.0. No historical snapshot, manuscript or review is automatically migrated or accepted under the new policy.
 
 
@@ -49,6 +49,10 @@ Read the [workflow](skills/pure-math-survey/SKILL.md), [file contracts and comma
 New claims discovered during writing return to the knowledge project for review and a new snapshot. Both generated statements and supplied authoring materials are checked against that snapshot. Author self-review is recorded separately from independent review; compilation and hashes do not establish correctness.
 
 ## Examples
+
+### r3: nine articles and editable knowledge projects
+
+The [r3 examples](examples/r3/README.md) contain the comparison-geometry Minimal/Lecture pair, time-compactness Thematic and methods/boundaries pair, three local examples and a visibly marked Paper draft: nine articles and 54 pages. The public tree preserves reviewed manuscript, knowledge-snapshot, PDF and page-image bytes. Non-author review within the AI team is not external peer review; rebuilt outputs and installed-runtime behavior still require their own verification.
 
 ### dHYM: writing and layout reference
 
@@ -99,7 +103,7 @@ python tools/verify_release.py ../pure-math-survey-2.1.0.zip --report ../pure-ma
 
 Tests cover snapshot and material integrity, scoped reviews, TeX body checks, history and packaging, including real TeX builds. Synthetic accepted records are software fixtures only. Linux CI runs on Python 3.10 and 3.12; a Windows machine without symlink creation privilege explicitly reports the corresponding test as skipped.
 
-See [version notes](CHANGELOG.md). This version has no server, vector database, research scheduler or Research Studio bridge; a two-layer knowledge base is not implemented.
+See [version notes](CHANGELOG.md). This version has no server, vector database, research scheduler or Research Studio bridge; r3 requires fast routes and reproducible slow explanations in the knowledge base itself; their actual quality must be verified for each task.
 
 ## License
 
@@ -112,3 +116,41 @@ Mathematical example materials are reserved separately: contents of `examples/` 
 The [rc2 candidate validation record](docs/rc2/CANDIDATE.md) preserves that stage's actual results and commit identities; it does not replace verification of the final release commit. rc2 preserves the historical examples and adds a real Simon–Maitre–Barrett–Süli three-paper project, paired methods/boundaries manuscripts, and a new Schur Lecture. The [editable project](examples/rc2/projects/time-compactness/README.md) and scoped author/page observations are retained. Reviewed PDFs, page images and build records in the historical candidate materials apply only to their recorded bytes; a fresh PDF build needs its own visual review.
 
 See also the [requirements and implementation map](docs/vnext/requirements.md), [actual validation and limitations](docs/vnext/validation.md), and [seven authored benchmark sources](examples/vnext/README.md). In those historical records, six known-mathematics samples were compiled and author-reviewed; the Paper boundary sample is deliberately non-releasable. Independent mathematical review, real-reader feedback, and genuine original-Paper originality and complete-proof quality remain NOT VERIFIED. A formal software release does not change those limitations.
+
+## r3 daily-use responsibilities and evidence
+
+The daily-use main fixes the full request/latest corrections, reader operations and
+project revision, owns integration and checks returned artifacts. Use actual available
+tools for bounded source/knowledge/review/PDF tasks in isolated candidates; record task
+IDs, inputs, states and acceptance. Reject stale revisions, reconcile conflicts against
+sources, freeze old writers before takeover, and retain late results as candidates.
+Without delegation capability perform the same responsibilities serially and say so.
+Save files/patches, task answers, hashes and remaining work so stopping/recovery does not
+depend on chat access. This is distinct from a development-stage main and is not a
+resident scheduler. Knowledge-only creates zero manuscripts and performs no article prepare.
+
+The KB has three reading scales (overview, problem routes, nodes) sharing one canonical
+authority. Its fast route exposes inputs, decisive operations and conditions with exact
+slow-subsection links; slow passages discharge promised derivations, exact imports and
+present applications with backlinks. Reusable explanations discovered in an article
+return to live KB, review and a new snapshot before reuse. Classify actual input uses
+as Assumed/Refreshable/Bridge-required. Reconstruct necessary obligations before checking
+the author's list; save actual fast-route, slow-step and condition-change attempts and repairs.
+Preserve every explicit branch; the seven-branch regression is not a required user syllabus.
+
+All four modes actively target about 2–3 normal actual typeset lines for ordinary
+explanatory prose. Longer blocks require improvement or a specific located reason,
+alternatives considered and final PDF/hash reinspection; no source-line counting,
+decorative formulas, forced breaks, smaller type or omitted assumptions. Inspect every
+actual page. Five views change real reader tasks without changing mode duties or facts.
+Retain F1 body locations, F2 view/design, F3 comparison plus primary prior support and F4
+draft/design safety. Paper remains prominently DRAFT_UNVERIFIED by default.
+
+Software remains 2.1.0, KB/snapshot schema 2.0.0 and output/review schema 2.2.0; r3 is
+`four-modes-2026-10-12-r3`, distinct from rc2. Historical bytes and accepted records remain
+unchanged; recorded assessment is not current package authorization. Formal tag/Release
+publication remains paused. These rules are not completed acceptance: actual content,
+PDF, isolated installation and critical review require fixed-candidate evidence. Report
+software, mathematics, exposition attempts, PDF inspection and real-reader feedback
+separately. AI/team review is not external peer or student evidence; genuine original
+Paper originality/full research-proof quality remains NOT VERIFIED without actual input/review.

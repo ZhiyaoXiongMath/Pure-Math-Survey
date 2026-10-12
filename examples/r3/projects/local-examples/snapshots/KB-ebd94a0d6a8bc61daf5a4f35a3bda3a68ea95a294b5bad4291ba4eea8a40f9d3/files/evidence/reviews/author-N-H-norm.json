@@ -1,0 +1,58 @@
+{
+  "schema_version": "2.2.0",
+  "review_id": "R3-AUTHOR-N-H-norm",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "8e17ace33563d613860c89606b70c6b95a93cf077e4d21db9bff3ba08617bd63"
+    },
+    {
+      "path": "knowledge/nodes/N-H-norm.md",
+      "sha256": "cd462d3ca5f275e07171958bd23cff4b0ae726658a58e21ca25e7c5600d40409"
+    },
+    {
+      "path": "project.json",
+      "sha256": "7477946aa36c1d422c055f0c3e0f0dcb875381993fc04e6265fea430aba03d83"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "3dd3b3a663967bb9e649114ebde3571061e0e376ab0c96911c5564260d1b5463"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-H-norm"
+    ],
+    "editorial_policy": "four-modes-2026-10-12-r3",
+    "evidence_basis": "Actual author reconstruction: The compactly supported chart pieces extend by zero smoothly at chart edges. Their finite sum norm fixes all background choices before the sequence. The partition-of-unity reconstruction and product/chain rules justify use of these chart norms; varying backgrounds are outside this result.",
+    "statement_reviews": {
+      "N-H-norm": {
+        "canonical_sha256": "e9bbec593dae25aa9f44b88f73f6f0dd742f1f39e84d5d7b8cd594ec40cf812d",
+        "outcome": "accepted",
+        "objects": "Scalar functions on compact M localized by a finite partition.",
+        "domain": "Compact smooth d-manifold without boundary, charts in R^d and 0<gamma<1.",
+        "fixed_and_variable": "Atlas, cutoffs and background stay fixed; u varies.",
+        "hypotheses": "Each cutoff has support compactly contained in its chart.",
+        "equations": "The finite norm and Holder seminorm are displayed.",
+        "quantifiers": "Sum over all fixed charts and all derivative multi-indices through order two.",
+        "conclusion": "The norm specifies exactly the C2gamma space and topology used downstream.",
+        "status": "Definition, not a regularity theorem.",
+        "local_definitions": "Multi-index, zero extension and cutoff supports are defined locally."
+      }
+    }
+  },
+  "findings": [
+    "The compactly supported chart pieces extend by zero smoothly at chart edges. Their finite sum norm fixes all background choices before the sequence.",
+    "The partition-of-unity reconstruction and product/chain rules justify use of these chart norms; varying backgrounds are outside this result."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "Author/AI rereading only. No external mathematical peer review, actual target-reader experiment or originality certification is claimed."
+    }
+  ],
+  "disposition": "accepted"
+}

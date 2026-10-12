@@ -1,6 +1,7 @@
 """Immutable local build/render evidence. Current pointers are replaceable views."""
 from __future__ import annotations
 from pathlib import Path
+import os
 import shutil
 import tempfile
 
@@ -8,7 +9,25 @@ from .common import (all_files, atomic_bytes, canonical, read_json, require, saf
                      sha, write_json, result)
 
 
+def _history_path(path: Path) -> Path:
+    """Use Win32 extended I/O without changing stored relative member names.
+
+    A staging name can fit MAX_PATH while the final content-addressed name
+    does not. Normalize the I/O root before both staging and verification;
+    safe() still checks every member and resolved containment below it.
+    """
+    if os.name != 'nt':
+        return path
+    absolute = os.path.abspath(path)
+    if absolute.startswith('\\\\?\\'):
+        return Path(absolute)
+    if absolute.startswith('\\\\'):
+        return Path('\\\\?\\UNC\\' + absolute[2:])
+    return Path('\\\\?\\' + absolute)
+
+
 def verify_record(folder: Path) -> dict:
+    folder = _history_path(folder)
     manifest = read_json(safe(folder, 'manifest.json', True))
     files = manifest.get('files', [])
     require(isinstance(files, list), 'HISTORY_TAMPERED', 'Invalid history file inventory', str(folder))
@@ -30,6 +49,7 @@ def verify_record(folder: Path) -> dict:
 
 def save_record(out: Path, kind: str, data: dict[str, bytes]) -> dict:
     """Caller holds the project writer lock. Never overwrite an existing record."""
+    out = _history_path(out)
     require(kind in {'build', 'render', 'previous-build'}, 'CONTRACT_INVALID', 'Invalid history kind')
     rows = [{'path': p, 'sha256': sha(b), 'bytes': len(b)} for p, b in sorted(data.items())]
     payload = {'format': 'survey-artifact-history-1', 'kind': kind, 'files': rows}
@@ -56,6 +76,7 @@ def save_record(out: Path, kind: str, data: dict[str, bytes]) -> dict:
 
 
 def archive_current(out: Path, kind: str) -> dict | None:
+    out = _history_path(out)
     prefixes = ('build', 'evidence') if kind == 'previous-build' else ('evidence/pages',)
     paths = {p for prefix in prefixes for p in all_files(out, prefix)}
     if kind == 'render' and (out / 'evidence/render-manifest.json').is_file():
@@ -66,6 +87,7 @@ def archive_current(out: Path, kind: str) -> dict | None:
 
 
 def verify_history(root: Path, output_id: str) -> dict:
+    root = _history_path(root)
     out = safe(root, 'outputs/' + output_id)
     require(out.is_dir(), 'UNKNOWN_REFERENCE', 'Output directory is missing', 'outputs/' + output_id)
     records = []

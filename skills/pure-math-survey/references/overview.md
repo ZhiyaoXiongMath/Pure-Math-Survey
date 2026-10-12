@@ -39,3 +39,25 @@ Shared overview/scope files retain file-level consumption and invalidation. Ther
 no paragraph-level change analysis, new graph schema or second knowledge authority.
 Preparing again preserves authored outlines and manuscripts. A revised mathematical
 statement requires a new snapshot, not an output-only correction.
+
+## Knowledge-only fast and slow routes
+
+Use three scales: project overview, problem route and exact node. They are reading
+functions, not mandatory separate trees. Even a knowledge-only request must deliver
+usable fast routes, reproducible slow details and precise bidirectional entrances.
+For every nontrivial arrow identify the actual input, operation, obstacle removed,
+output and decisive conditions; link the specific supporting node/subsection. Each
+slow subsection names the route it discharges and where its output is consumed.
+
+The compressed unit is a construction already made callable for this reader. Naming
+an unfamiliar tensor or writing a determinant without its object-to-density explanation
+does not make it usable. Slow passages supply promised derivations, conditions,
+endpoint checks, constant dependence, exact imports and their present application.
+Do not hide gaps as technical details or draw joint premises as individually sufficient.
+
+Hide long interiors and reconstruct the fast route, perform a slow step, then change a
+condition and locate the first failure. Save actual attempts and fixes against fixed
+node/route inputs, even without any article. Reusable explanations discovered during
+writing return to the live KB, receive review and a new snapshot before output adoption.
+Pure transitions/layout remain in the article. Keep file-level invalidation; do not
+claim paragraph-level dependency analysis or a second canonical authority.

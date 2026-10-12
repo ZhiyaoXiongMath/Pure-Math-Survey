@@ -1,0 +1,105 @@
+{
+  "schema_version": "2.0.0",
+  "snapshot_id": "KB-c2ed8ff3a21ead694a517e29232103f956cc4f433ba75e22183482569542973b",
+  "output_id": "lichnerowicz-minimal-r3",
+  "plan_sha256": "3921a1d3e64181659abc5d9081617fbb4d86fad91ed5495aab55c2f839b331c4",
+  "draft": false,
+  "consumed_nodes": [
+    "N-L-boundary",
+    "N-L-connection",
+    "N-L-inputs",
+    "N-L-main",
+    "N-Q-lich"
+  ],
+  "consumed_inputs": [
+    {
+      "path": "evidence/source-checks/S-Datar.md",
+      "sha256": "cb543e1b156f8c7ed3086cdea32e8c9933da98da0f93d02acc560ecbda21ef69",
+      "bytes": 1654
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "8e17ace33563d613860c89606b70c6b95a93cf077e4d21db9bff3ba08617bd63",
+      "bytes": 168
+    },
+    {
+      "path": "knowledge/coverage.json",
+      "sha256": "74a153b3ba40c6d15e594f866f993b71fd1666d436aeecce75c4c02be38c5456",
+      "bytes": 1443
+    },
+    {
+      "path": "knowledge/discovery.md",
+      "sha256": "396f4321f019b18a21e80a39b52bbf92ed712884dd986b8f6a25c0e0e2642d83",
+      "bytes": 1869
+    },
+    {
+      "path": "knowledge/nodes/N-L-boundary.md",
+      "sha256": "e7edf0f1be29f3311fa0f31ff910b424946a83e5953e3b585c208952afea63a2",
+      "bytes": 1699
+    },
+    {
+      "path": "knowledge/nodes/N-L-connection.md",
+      "sha256": "72b03a7bd3f966a4b63a9ed64e85018aa15a338d51944ef95e42106def9154ce",
+      "bytes": 1840
+    },
+    {
+      "path": "knowledge/nodes/N-L-inputs.md",
+      "sha256": "10f2fe4a1ed07f848b47986d1a5f4c942f3f99d27fa61032e510b7a62b6b6002",
+      "bytes": 1739
+    },
+    {
+      "path": "knowledge/nodes/N-L-main.md",
+      "sha256": "2ace93d0da59d64d17bc042977e515b196f85ac4d038db0c194dac208b76bf81",
+      "bytes": 1648
+    },
+    {
+      "path": "knowledge/nodes/N-Q-lich.md",
+      "sha256": "ddfea40a9ed0167d4014d0941e702506cb019114210a5983f5aca9aaced51c84",
+      "bytes": 889
+    },
+    {
+      "path": "knowledge/overview.md",
+      "sha256": "f76e0e612e2b8ec44bb4252d24276a3dbee58755817c0214798351b0792847fb",
+      "bytes": 2625
+    },
+    {
+      "path": "knowledge/sources/S-Datar.json",
+      "sha256": "780107e7726b78836c4a359adc07cc93d05f247dfcff940f4cb60a603244bf71",
+      "bytes": 821
+    },
+    {
+      "path": "project.json",
+      "sha256": "7477946aa36c1d422c055f0c3e0f0dcb875381993fc04e6265fea430aba03d83",
+      "bytes": 259
+    },
+    {
+      "path": "scope.md",
+      "sha256": "3dd3b3a663967bb9e649114ebde3571061e0e376ab0c96911c5564260d1b5463",
+      "bytes": 2472
+    }
+  ],
+  "generated_files": [
+    {
+      "path": "generated/conventions.tex",
+      "sha256": "8e17ace33563d613860c89606b70c6b95a93cf077e4d21db9bff3ba08617bd63",
+      "bytes": 168
+    },
+    {
+      "path": "generated/references.bib",
+      "sha256": "17ca7f9bdd512e2faf47abd65bfba2ddf9b4e274f7e7791cfffb707864fec469",
+      "bytes": 373
+    },
+    {
+      "path": "generated/statements/N-L-inputs.tex",
+      "sha256": "48bb64397b7532fca3b5a7ab681e9b036af27446760898dd141a6c9d37703d76",
+      "bytes": 691
+    },
+    {
+      "path": "generated/statements/N-L-main.tex",
+      "sha256": "7931de1c7c8373ee0b2054e88f5b1134dac2d76cece17af9493bcde8e3ceab48",
+      "bytes": 398
+    }
+  ],
+  "raw_sources_omitted": [],
+  "meaning": "Exact stored bytes are reused; independent mathematical and output readings are still required."
+}

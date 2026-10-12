@@ -1,0 +1,74 @@
+{
+  "schema_version": "2.2.0",
+  "review_id": "AUTHOR-R3-mathematical-N-cone-ehrling",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-barrett-suli.md",
+      "sha256": "dd7c5b015babd856ff310329194965453ce76798586483f3208da252ddce0ea3"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "f46df710c1b856e2928bdd9d0144a8573dca5ed5d5ec1a6d50480ae6a0670f1c"
+    },
+    {
+      "path": "knowledge/nodes/N-cone-definition.md",
+      "sha256": "ed4e3e0005e024c8beac174caefa7fe45c3568e212e3fa73e38df4f5aa9026d3"
+    },
+    {
+      "path": "knowledge/nodes/N-cone-ehrling.md",
+      "sha256": "c73db5d12c0a398946c071d4767a947f932c900a63510538594e54c60618dd2c"
+    },
+    {
+      "path": "knowledge/sources/S-barrett-suli.json",
+      "sha256": "069c0d0a53e5be2b4cff83401f1f028d751760a82eb8df9596e8fc8efad94980"
+    },
+    {
+      "path": "project.json",
+      "sha256": "2e380066197293b95f1877c7bd77a75b18e3749c9128afc1db0e60737d3b7a2d"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "bc5dc378f261923ade16ab6bfae349d0233c018eb96de07ed2c99fa55951f353"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-cone-ehrling"
+    ],
+    "editorial_policy": "four-modes-2026-10-12-r3",
+    "statement_reviews": {
+      "N-cone-ehrling": {
+        "canonical_sha256": "a9b0965c30aa8b29377891795bbdd13c4446e780d4ffe1f3ef6ead06dca8626c",
+        "outcome": "accepted",
+        "objects": "Real A0,A1 and a seminormed cone.",
+        "domain": "All cone points u,v and each eta>0.",
+        "fixed_and_variable": "Spaces, embedding and cone fixed; eta chooses C_eta.",
+        "hypotheses": "Continuous injection, gauge embedding and gauge-bounded compactness.",
+        "equations": "The two-point inequality retains [u]+[v], not [u-v].",
+        "quantifiers": "For every eta exists one C_eta valid for every u,v.",
+        "conclusion": "Norm comparison between A0 and A1.",
+        "status": "Verified source lemma with reconstructed proof.",
+        "local_definitions": "All cone properties needed for normalization are repeated."
+      }
+    },
+    "evidence_basis": "Actual original-source comparison and local derivation reread: Read and reconstructed all of source Lemma 1. If the inequality fails, [u_n]+[v_n]>0; dividing both points by that sum keeps gauges<=1. A common subsequence converges in A0. Its A1 distance tends to zero because its bounded A0 distance is divided by n, so injectivity makes the two limits equal, contradicting separation.",
+    "proof_steps": {
+      "N-cone-ehrling": [
+        "Normalize both cone points by the sum of their gauges and use compactness plus injectivity."
+      ]
+    }
+  },
+  "findings": [
+    "Read and reconstructed all of source Lemma 1. If the inequality fails, [u_n]+[v_n]>0; dividing both points by that sum keeps gauges<=1. A common subsequence converges in A0. Its A1 distance tends to zero because its bounded A0 distance is divided by n, so injectivity makes the two limits equal, contradicting separation."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "No external peer review or real target-reader study is claimed. Raw originals are omitted from public distribution; source scope is recorded explicitly."
+    }
+  ],
+  "disposition": "accepted"
+}

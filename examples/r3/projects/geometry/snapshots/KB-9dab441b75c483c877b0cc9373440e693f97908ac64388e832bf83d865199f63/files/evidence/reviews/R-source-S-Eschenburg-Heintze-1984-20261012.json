@@ -1,0 +1,47 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "R-source-S-Eschenburg-Heintze-1984-20261012",
+  "kind": "source",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-Eschenburg-Heintze-1984.md",
+      "sha256": "595415a04d661573ee769a3fc9ef59899b7e04e44e87d84485c8ae2f1f2ae609"
+    },
+    {
+      "path": "knowledge/sources/S-Eschenburg-Heintze-1984.json",
+      "sha256": "aad5eb76e6f545b8789b3225703d3f6b3e9dd2e79fadd36c2644425af733b508"
+    }
+  ],
+  "scope": {
+    "source_ids": [
+      "S-Eschenburg-Heintze-1984"
+    ],
+    "source_reading": {
+      "S-Eschenburg-Heintze-1984": {
+        "mode": "original_text_online",
+        "version": "Annals of Global Analysis and Geometry 2(2) (1984), 141–151; Augsburg journal scan with one cover page",
+        "locators": [
+          "Sections 1–4, pp. 141–148",
+          "Section 5, Remark 1, p. 148",
+          "Section 6, p. 150; references p. 151"
+        ],
+        "raw_bytes_unavailable_reason": "Original PDF downloaded and hashed in a private, non-authoritative reading cache. No raw source is included in the authoritative knowledge corpus or frozen snapshot; source redistribution rights were not established. This is nonretention in the corpus, not failed access."
+      }
+    }
+  },
+  "findings": [
+    "Checked Annals of Global Analysis and Geometry 2(2) (1984), 141–151; Augsburg journal scan with one cover page against the actual reading/access record. Category: original_alternative_proof.",
+    "The recorded reading scope is Sections 1–4, pp. 141–148; Section 5, Remark 1, p. 148; Section 6, p. 150; references p. 151.",
+    "The bound source-check note records controlling notation, support limits and any observed discrepancies; metadata-only originals are not accepted theorem support."
+  ],
+  "unchecked_items": [
+    {
+      "item": "No raw original source included in authoritative corpus or snapshot.",
+      "blocking": false,
+      "reason": "Actual original PDF hash is recorded; supporting sections were read from the linked author/journal text via private downloaded cache. This is a disclosed retention limit, not fabricated raw evidence."
+    }
+  ],
+  "disposition": "accepted"
+}

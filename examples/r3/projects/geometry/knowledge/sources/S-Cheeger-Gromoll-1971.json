@@ -1,0 +1,32 @@
+{
+  "schema_version": "2.0.0",
+  "id": "S-Cheeger-Gromoll-1971",
+  "kind": "primary",
+  "title": "The splitting theorem for manifolds of nonnegative Ricci curvature",
+  "authors": [
+    "Jeff Cheeger",
+    "Detlef Gromoll"
+  ],
+  "publication_status": "published",
+  "identifiers": {
+    "url": "https://doi.org/10.4310/jdg/1214430220",
+    "doi": "10.4310/jdg/1214430220"
+  },
+  "version": "Journal of Differential Geometry 6 (1971), 119–128",
+  "access": {
+    "state": "metadata_only",
+    "checked_at": "2026-10-12",
+    "material_sha256": null,
+    "local_path": null,
+    "reading_note": "evidence/source-checks/S-Cheeger-Gromoll-1971.md",
+    "material_hash_unavailable_reason": "No original PDF bytes obtained; full-text reading is not claimed."
+  },
+  "evidence_category": "historical_original_metadata_only",
+  "bibliography": {
+    "year": 1971
+  },
+  "reading_scope": [
+    "Bibliographic identity and access attempt only; no original supporting section read"
+  ],
+  "classification_note": "The schema kind primary denotes the actual author text; evidence_category distinguishes historical research originals from later expositions. Exposition is not claimed to be the original discovery paper."
+}

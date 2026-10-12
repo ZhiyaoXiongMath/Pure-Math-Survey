@@ -6,7 +6,7 @@ waives a profile's responsibilities. Knowledge-only work produces no manuscript 
 For a requested output without a profile, use minimal/integrated. Generate only the
 requested profiles. PDF is a delivery format, not a fifth profile.
 
-## Views within each profile (rc2)
+## Views within each profile (rc2 and r3)
 
 | View | Editable reader task |
 |---|---|
@@ -21,15 +21,34 @@ node-specific uses and emphasis order from kinds, facets and roles. These tags
 are navigation, never mathematical evidence. An absent candidate is an explicit
 design gap requiring explanation or further KB work, not a generated claim.
 Lecture dependency order is only a starting point for teaching order. Minimal
-keeps its three sections and complete results in every view; Paper keeps all
+keeps complete results and its recorded-policy organization in every view; Paper keeps all
 contribution and proof responsibilities. Prepare leaves view-specific writing
 tasks unfinished within the relevant section. Replace them with actual prose.
 The output reading binds `scope.view`; `view_focus` records a concrete finding,
 available `node_ids`, and reachable substantive manuscript locations.
 
-## Minimal: Results → Points → Connections
+## Minimal under r3: local Results → Points → Connections
 
-Use exactly three numbered main sections, in this order:
+Start with a short mathematical result map, then organize local problem units: state
+each complete principal near the points it needs, perform the decisive connections,
+and give a first use or boundary nearby. A brief question, useful model or indispensable
+definition may precede its formal result. There is no fixed chapter count and no
+requirement to print three labels in every unit. The map cannot replace full results.
+
+Establish a shared construction at its first actual use, then recall its exact interface
+where reused. Keep one canonical authority; do not copy inconsistent theorem versions
+or turn units into disconnected paper abstracts. Every principal remains a full canonical
+input in a suitable result environment, with a self-contained statement reading.
+
+A three-chapter organization can suit a new r3 article: explain why in its outline,
+restore the local question and interface near use, and perform all r3 responsibility
+readings. Its appearance neither makes it historical nor waives the new obligations.
+Keep the user's explicit branches and promised depth; Minimal reduces simultaneous
+unfamiliar constructions, not the agreed mathematical scope.
+
+## Historical Minimal under r2/rc1 and rc2
+
+Only these recorded policies require exactly three numbered main sections, in order:
 
 1. Main Results
 2. Key Mathematical Ingredients
@@ -40,10 +59,10 @@ sentence are allowed; no long background section precedes the results. Put every
 principal's complete canonical statement in a theorem/proposition/corollary environment
 in the first section. Include decisive caveats locally, not a delayed correction.
 
-Choose only points the third section actually consumes and this reader cannot yet
+In every policy choose only points the argument actually consumes and this reader cannot yet
 reliably use. A point gives the object or precise identity, its input conditions,
 its mathematical output and its consumer. Neither a textbook-sized black box nor
-every algebraic equality is a useful point. The third section actually constructs,
+every algebraic equality is a useful point. The connections passage actually constructs,
 estimates, substitutes or takes a justified limit; identify conjunctions, alternatives,
 parameters and exact imported theorems. A bare arrow diagram or “standard arguments”
 is not a decisive connection. Routine proof interiors may be compressed; decisive
@@ -110,3 +129,12 @@ Only an explicitly requested same-spine comparison uses `comparison_group`; then
 snapshot, questions, principal answers and decisive boundaries agree. Otherwise each
 article may choose its own subset and teaching order. Preparation supplies bounded
 materials and an unfinished scaffold; authors must actually write and review it.
+
+## r3 responsibilities across all modes
+
+Reconstruct necessary obligations before locating the supplied list. Record actual
+fast-route reconstruction, slow-step reproduction and condition transfer, including
+failed attempts and repairs. All explanatory prose actively targets about 2–3 normal
+actual typeset lines; longer blocks need editing or a specifically located justified
+exception in the final PDF. Profile/view labels, formula density and test counts do
+not prove these responsibilities. See [output review](output-review.md).

@@ -48,7 +48,8 @@ class Locations(unittest.TestCase):
 
 
 class ReleaseLocations(unittest.TestCase):
-    def setUp(self):self.t=v.VNext();self.t.setUp()
+    def setUp(self):
+        self.t=v.VNext();self.t.setUp();self.t.editorial_policy=v.RC2_POLICY
     def tearDown(self):self.t.tearDown()
     def test_LOC14_called_environment_control_blocks_release_and_package(self):
         p,plan=self.t.authored(draft=False);main=p.parent/'manuscript/main.tex'

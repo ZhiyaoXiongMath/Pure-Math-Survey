@@ -24,6 +24,9 @@ class CurrentAuthoredBenchmarks(unittest.TestCase):
                 {('thematic','integrated'),('minimal','methods'),
                  ('minimal','boundaries'),('lecture','methods')})
             self.assertTrue(all(r['reviewer_mode']=='author_reread' for r in report['outputs']))
+            self.assertTrue(all(r['recorded_policy']=='four-modes-2026-10-12-rc2'
+                                and r['evaluated_policy']==r['recorded_policy']
+                                and not r['release_authorized'] for r in report['outputs']))
             self.assertEqual(report['new_pdf_visual_review'],'NOT PERFORMED')
             self.assertEqual(report['independent_mathematical_review'],'NOT VERIFIED')
 

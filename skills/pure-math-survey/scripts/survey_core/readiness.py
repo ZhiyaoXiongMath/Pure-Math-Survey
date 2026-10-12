@@ -9,7 +9,7 @@ from .reviews import coverage_inputs,find_review,mathematical_inputs,reviews_in,
 def assess_readiness(root:Path,plan:dict|Path)->dict:
     if isinstance(plan,Path):plan=load_plan(plan)
     inv=validate_plan(root,plan); records=reviews_in(inv.root); ids=consumption(inv,plan)
-    from .profiles import four_modes, profile_readiness_errors, statement_errors, statement_warnings, mapping
+    from .profiles import current, four_modes, profile_readiness_errors, statement_errors, statement_warnings, mapping
     errors=profile_readiness_errors(inv, plan);warnings=[];used=[]; valid_math={}
     principals={s['node_id'] for s in plan['selections'] if s['role']=='principal_answer'}
     obligations={o['node_id']:o for o in plan['proof_obligations']}
@@ -77,7 +77,9 @@ def assess_readiness(root:Path,plan:dict|Path)->dict:
         gaps=[] if q is None else [g for g in q['gaps'] if not (isinstance(g,dict) and g.get('disposition') in {'resolved','outside_explicit_scope'} and g.get('reason'))]
         if q is None or q['assessment'] not in {'adequate','limited'} or gaps:
             add('COVERAGE_PENDING','Selected question coverage or important gaps remain unresolved',inv.project['knowledge_root']+'/coverage.json',qid)
-        r,diagnostics=find_review(inv.root,records,'coverage','question_ids',qid,coverage_inputs(inv,qid));errors.extend(diagnostics)
+        from .reviews import knowledge_scope_errors
+        check = (lambda r, qid=qid: knowledge_scope_errors(inv, qid, r)) if current(plan) else None
+        r,diagnostics=find_review(inv.root,records,'coverage','question_ids',qid,coverage_inputs(inv,qid),extra_check=check);errors.extend(diagnostics)
         if r is None:add('COVERAGE_PENDING','Need actual omission challenge and overview/scope/coverage review',node_id=qid)
         else:used.append(r['review_id'])
     obligations={o['node_id']:o for o in plan['proof_obligations']}

@@ -4,10 +4,13 @@ All principal statements are complete and statement-self-contained; exact canoni
 bytes come from the reviewed snapshot. Explain nonstandard terminology immediately
 nearby when indispensable, without turning the opening into a distant glossary.
 
-**Minimal:** the first numbered section is Main Results, not a historical introduction.
-Present every principal formally there; only a title and brief orientation may precede
-it. The next two sections introduce truly consumed ingredients and perform decisive
-connections. Caveats preventing a stronger misreading belong beside the result.
+**Minimal under r3:** give a short result map, then local problem units with complete
+results, needed points, decisive connections and first use/boundary close together.
+A short problem/model/necessary definition can precede a result. A suitable three-chapter
+layout needs a design reason and all new responsibilities. **Historical r2/rc1 and rc2**
+keep the first numbered Main Results section with every full principal, followed by
+Key Mathematical Ingredients and Connecting the Ingredients. In either policy decisive
+caveats belong beside the result. See [policy-specific profiles](editions.md).
 
 **Thematic:** formulate the precise questions and representative full principal results
 early, then explain the structural difficulty behind the actual routes. Do not tour

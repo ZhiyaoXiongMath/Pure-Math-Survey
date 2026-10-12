@@ -1,0 +1,48 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "R-source-S-Toponogov-1959-20261012",
+  "kind": "source",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-Toponogov-1959.md",
+      "sha256": "793a21eb4ef690d0706a19d0f0ed286dcf6a37062f2fcad1900d9171fb0f0468"
+    },
+    {
+      "path": "knowledge/sources/S-Toponogov-1959.json",
+      "sha256": "404fabe3bed83cc2042949fd76f1f66c4320e20cfb60508a0b561f4d5c815af2"
+    }
+  ],
+  "scope": {
+    "source_ids": [
+      "S-Toponogov-1959"
+    ],
+    "source_reading": {
+      "S-Toponogov-1959": {
+        "mode": "original_text_online",
+        "version": "Uspekhi Matematicheskikh Nauk 14:1(85) (1959), 87–130; Russian original",
+        "locators": [
+          "Introduction, pp. 87–90",
+          "Section 8, Lemma 19 setup, pp. 112–113",
+          "Section 9, Theorems 1–3 statements, pp. 120–122",
+          "Section 9, Theorems 4–6 and endpoint convention, pp. 126–127"
+        ],
+        "raw_bytes_unavailable_reason": "Original PDF downloaded and hashed in a private, non-authoritative reading cache. No raw source is included in the authoritative knowledge corpus or frozen snapshot; source redistribution rights were not established. This is nonretention in the corpus, not failed access."
+      }
+    }
+  },
+  "findings": [
+    "Checked Uspekhi Matematicheskikh Nauk 14:1(85) (1959), 87–130; Russian original against the actual reading/access record. Category: historical_research_original.",
+    "The recorded reading scope is Introduction, pp. 87–90; Section 8, Lemma 19 setup, pp. 112–113; Section 9, Theorems 1–3 statements, pp. 120–122; Section 9, Theorems 4–6 and endpoint convention, pp. 126–127.",
+    "The bound source-check note records controlling notation, support limits and any observed discrepancies; metadata-only originals are not accepted theorem support."
+  ],
+  "unchecked_items": [
+    {
+      "item": "No raw original source included in authoritative corpus or snapshot.",
+      "blocking": false,
+      "reason": "Actual original PDF hash is recorded; supporting sections were read from the linked author/journal text via private downloaded cache. This is a disclosed retention limit, not fabricated raw evidence."
+    }
+  ],
+  "disposition": "accepted"
+}

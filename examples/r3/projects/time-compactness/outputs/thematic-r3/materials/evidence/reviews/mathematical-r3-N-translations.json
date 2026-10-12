@@ -1,0 +1,66 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "AUTHOR-R3-mathematical-N-translations",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-maitre.md",
+      "sha256": "7c44d72e9f4d0d309166a2e0fb8b7a0ce64fdd966fa7f37b8f2b2cfb045f064a"
+    },
+    {
+      "path": "evidence/source-checks/S-simon.md",
+      "sha256": "a4758bd5d649f85d32fc45c9114429956d7733f45450a97f96c02437c7d326fe"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "f46df710c1b856e2928bdd9d0144a8573dca5ed5d5ec1a6d50480ae6a0670f1c"
+    },
+    {
+      "path": "knowledge/nodes/N-translations.md",
+      "sha256": "2e5c6a3de78b9307d39d9f17bc85069e2cc2255a7170d093b14ad86bccf8d850"
+    },
+    {
+      "path": "knowledge/sources/S-maitre.json",
+      "sha256": "09c1da46094f77ccd08bea4c143c148d54ec338228c6ad52d2d20d11c29892e1"
+    },
+    {
+      "path": "knowledge/sources/S-simon.json",
+      "sha256": "4d6c3fc888384bb312fbdae564565b47d632a6dfa330f543665e499f1d2a3d62"
+    },
+    {
+      "path": "project.json",
+      "sha256": "2e380066197293b95f1877c7bd77a75b18e3749c9128afc1db0e60737d3b7a2d"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "bc5dc378f261923ade16ab6bfae349d0233c018eb96de07ed2c99fa55951f353"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-translations"
+    ],
+    "evidence_basis": "Actual original-source comparison and local derivation reread: Recomputed the W11 amplitude from a time with norm at most the L1 average plus epsilon. The derivative is in the same Banach space E as the amplitude estimate. Fubini bounds the L1 translation by hD. Multiplying the integrand by (2K0)^(p-1) gives h^(1/p), not h, for finite p. Holder on (t,t+h) gives h^(1-1/q)Dq only for q>1 as a small uniform supremum modulus. q=1 removes the positive power; the explicit ramp separately proves failure.",
+    "proof_steps": {
+      "N-translations": [
+        "Derive a uniform supremum bound from W11 and the L1 time norm.",
+        "Use Fubini and bounded-amplitude interpolation for every finite p.",
+        "Use Holder for a supremum translation modulus only when q is greater than one."
+      ]
+    }
+  },
+  "findings": [
+    "Recomputed the W11 amplitude from a time with norm at most the L1 average plus epsilon. The derivative is in the same Banach space E as the amplitude estimate.",
+    "Fubini bounds the L1 translation by hD. Multiplying the integrand by (2K0)^(p-1) gives h^(1/p), not h, for finite p.",
+    "Holder on (t,t+h) gives h^(1-1/q)Dq only for q>1 as a small uniform supremum modulus. q=1 removes the positive power; the explicit ramp separately proves failure."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "No external peer review or real target-reader study is claimed. Raw originals are omitted from public distribution; source scope is recorded explicitly."
+    }
+  ],
+  "disposition": "accepted"
+}

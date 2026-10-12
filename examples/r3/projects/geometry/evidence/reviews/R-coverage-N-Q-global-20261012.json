@@ -1,0 +1,96 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "R-coverage-N-Q-global-20261012",
+  "kind": "coverage",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "knowledge/coverage.json",
+      "sha256": "5c8ced8f611264ab52ae8b124a5ace8106dd606a4f99f0bfd4b9349d2f9dfff2"
+    },
+    {
+      "path": "knowledge/discovery.md",
+      "sha256": "60e8e6d6ef8ff81660505ff8b7814b281a2a55bea3de1a37fcff1449d64b7d98"
+    },
+    {
+      "path": "knowledge/nodes/N-E-completeness.md",
+      "sha256": "d428753fd941edda521371d037a99c544be7e7e1fad9939552d396965773874d"
+    },
+    {
+      "path": "knowledge/nodes/N-E-cylinder.md",
+      "sha256": "95c6b56885407679ee183bae1cecf9b63d458fce16f937bc20482d76218516c4"
+    },
+    {
+      "path": "knowledge/nodes/N-E-local-equality.md",
+      "sha256": "e272fb303c804062da10c8b40fd981146bd0a8347db21fd8280df45161c82738"
+    },
+    {
+      "path": "knowledge/nodes/N-E-splitting-boundary.md",
+      "sha256": "1d6790700abc0b77db04980f1e4b62bafad3d59f4afed5f08c9a4c51cefaa239"
+    },
+    {
+      "path": "knowledge/nodes/N-M-cheng.md",
+      "sha256": "8df234253b9415208e1dad72c08cde37c6067219539589cb530c4e6ca27a3b7f"
+    },
+    {
+      "path": "knowledge/nodes/N-M-hadamard.md",
+      "sha256": "eafdca9bb0eae661736fcc5155effcb70c5e77751c1f2895ae4bf48420cc86d9"
+    },
+    {
+      "path": "knowledge/nodes/N-M-myers.md",
+      "sha256": "ae3cea333a9dddcb0a2e283a66210c25fee134a3720d92c5c37d5de005417215"
+    },
+    {
+      "path": "knowledge/nodes/N-M-splitting.md",
+      "sha256": "055218ca3c23dd211fd13f5a6530ef55821473121574ce758d5f36998d414af1"
+    },
+    {
+      "path": "knowledge/nodes/N-M-support.md",
+      "sha256": "dfbbc6cdffe121a664fe33f30f1bee8e17cb2528a234f47dcf62ba76c59df704"
+    },
+    {
+      "path": "knowledge/nodes/N-Q-global.md",
+      "sha256": "67847b55c907408e1f7d57b05dc28e443fcff47a2d2cabde8e3b20cdfa05faba"
+    },
+    {
+      "path": "knowledge/nodes/N-R-cheng.md",
+      "sha256": "6f22d60db72e7085f23f7110362d06b421cb9b33495756ecfed2e705f55a476d"
+    },
+    {
+      "path": "knowledge/nodes/N-R-hadamard.md",
+      "sha256": "b2f438fc58d2a8252631cbfbe05eeedb7c7c5dcc4ceb09daaffa2593f7a8c366"
+    },
+    {
+      "path": "knowledge/nodes/N-R-myers.md",
+      "sha256": "1ae52d37d9e9782f4a0dfc1e512bca8861f16881f6cb51e8c96400989be0c507"
+    },
+    {
+      "path": "knowledge/nodes/N-R-splitting.md",
+      "sha256": "078d26277364c43357bdf77a9e014bc95585daeb4d76a9652720e937c988734c"
+    },
+    {
+      "path": "knowledge/overview.md",
+      "sha256": "71b794a1447e39bc223259c33cd4193f25b1a02942d66f81fdb47facfe7050a4"
+    },
+    {
+      "path": "project.json",
+      "sha256": "87cb6a2485b7efddf37961eed6780208253c1ad4d14360462040c068379c799f"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "c803acf2b2ef8ba6ce4d6aed6555916b204ecb5b42d9dbac738b0b74fd0a706b"
+    }
+  ],
+  "scope": {
+    "question_ids": [
+      "N-Q-global"
+    ]
+  },
+  "findings": [
+    "The four specified global results have complete interfaces and hypothesis tests. Cheng is controlled by later author exposition; splitting by an actual original alternative proof. Historical full-text access limits are recorded rather than hidden.",
+    "Omission challenge returned to Toponogov1959 and HK1978, added splitting/rigidity/lower-volume nodes, and retained the stated gaps."
+  ],
+  "unchecked_items": [],
+  "disposition": "accepted"
+}

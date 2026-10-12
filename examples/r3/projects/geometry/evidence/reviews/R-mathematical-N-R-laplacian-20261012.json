@@ -1,0 +1,90 @@
+{
+  "schema_version": "2.2.0",
+  "review_id": "R-mathematical-N-R-laplacian-20261012",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-Bishop-2013v2.md",
+      "sha256": "13257402ffc10778340ee5157754dff8bac376f5d3470536b19d81cda5fa8731"
+    },
+    {
+      "path": "evidence/source-checks/S-Eschenburg-1994.md",
+      "sha256": "9fb02b4fca1b61bce3f5d7f94bf154c8d3d44b694c4e964c420f2559b1d0f0c1"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "268c64561038d5effab8f49c86289e70a118bfb6e848389d3e00d426c32d4280"
+    },
+    {
+      "path": "knowledge/nodes/N-D-curvature.md",
+      "sha256": "364213a5a4c5f279cf9e0c02891c0044b6677b0e6bb078b9495576a2346f4810"
+    },
+    {
+      "path": "knowledge/nodes/N-D-distance.md",
+      "sha256": "eb63cd05f332fe10c5fc845218ac504daf075792984b9da6d6095fa8db7a45e3"
+    },
+    {
+      "path": "knowledge/nodes/N-D-model.md",
+      "sha256": "0f6d2a3add30a086aee33dbfe609f40645d68c9692f439165678d0c7ba709e39"
+    },
+    {
+      "path": "knowledge/nodes/N-R-laplacian.md",
+      "sha256": "1983f4adeee0e08a3d742c9c7123c4879f946417d13a94c982b3a029f227b6fe"
+    },
+    {
+      "path": "knowledge/sources/S-Bishop-2013v2.json",
+      "sha256": "3a1244553ee74de4bead7abddd2b8a27598480742e1c25cfff4ca23ab8a46636"
+    },
+    {
+      "path": "knowledge/sources/S-Eschenburg-1994.json",
+      "sha256": "1f92d5dc453c3e34093844ee568224942dfba8f1e6158bd0d3177b5b12801df5"
+    },
+    {
+      "path": "project.json",
+      "sha256": "87cb6a2485b7efddf37961eed6780208253c1ad4d14360462040c068379c799f"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "c803acf2b2ef8ba6ce4d6aed6555916b204ecb5b42d9dbac738b0b74fd0a706b"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-R-laplacian"
+    ],
+    "statement_reviews": {
+      "N-R-laplacian": {
+        "canonical_sha256": "926f58f62a7d93074d39a15bb3c3f7869409e27c37c1aca49cc87705ce1813a0",
+        "outcome": "accepted",
+        "objects": "Distance function on a connected complete smooth n-manifold.",
+        "domain": "Excludes p/Cut(p) and retains r<D_k.",
+        "fixed_and_variable": "Fix metric,k, then each p and regular x.",
+        "hypotheses": "Ric >= (n−1)k g is global, without an unstated sectional requirement.",
+        "equations": "Delta=div grad; coefficient (n−1)s prime/s matches the trace convention.",
+        "quantifiers": "For every base point and every regular point in range.",
+        "conclusion": "A scalar upper bound only; no reversed or directional bound implied.",
+        "status": "Known theorem supported by actual trace-comparison sections.",
+        "local_definitions": "Model s,D_k and r are defined within the canonical block."
+      }
+    },
+    "evidence_basis": "Actual canonical/body/source-section rereading; local deductions use the explicit argument and necessary dependencies named in this node.",
+    "proof_steps": {},
+    "editorial_policy": "four-modes-2026-10-12-rc2"
+  },
+  "findings": [
+    "Ric >= (n−1)k g is global, without an unstated sectional requirement.",
+    "A scalar upper bound only; no reversed or directional bound implied.",
+    "Known theorem supported by actual trace-comparison sections.",
+    "The standalone canonical statement was reread with its bound definitions, sources and mathematical body. Observed repairs are recorded in evidence/author-reading.md."
+  ],
+  "unchecked_items": [
+    {
+      "item": "No complete independent reproof of every imported prerequisite.",
+      "blocking": false,
+      "reason": "This review certifies the scoped statement and recorded mechanism only; no output-specific complete proof has been promised."
+    }
+  ],
+  "disposition": "accepted"
+}

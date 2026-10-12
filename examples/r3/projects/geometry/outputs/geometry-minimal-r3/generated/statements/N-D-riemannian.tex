@@ -1,0 +1,11 @@
+A Riemannian metric on a smooth manifold \(M\) is a smooth positive-definite inner product \(g_p\) on each tangent space. Write \(\langle X,Y\rangle=g(X,Y)\) and \(|X|^2=g(X,X)\). For a piecewise smooth curve \(\gamma:[a,b]\to M\), define
+\[
+L_g(\gamma)=\int_a^b|\dot\gamma(t)|\,dt,\qquad
+d_g(p,q)=\inf_{\gamma(a)=p,\,\gamma(b)=q}L_g(\gamma).
+\]
+The Levi--Civita connection \(\nabla\) is the unique torsion-free, metric-compatible connection. A geodesic satisfies \(D_t\dot\gamma=0\), where \(D_t=\nabla_{\dot\gamma}\); if \(\gamma_v(0)=p\) and \(\dot\gamma_v(0)=v\), set \(\exp_p(v)=\gamma_v(1)\) whenever defined. For a smooth function \(f\), its gradient and Hessian are characterized by
+\[
+\langle\operatorname{grad}f,X\rangle=df(X),\qquad
+\nabla^2f(X,Y)=\langle\nabla_X\operatorname{grad}f,Y\rangle
+=XYf-(\nabla_XY)f.
+\]

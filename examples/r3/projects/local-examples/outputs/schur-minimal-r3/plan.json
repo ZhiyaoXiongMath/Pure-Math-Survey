@@ -1,0 +1,65 @@
+{
+  "schema_version": "2.2.0",
+  "output_id": "schur-minimal-r3",
+  "snapshot_id": "KB-c2ed8ff3a21ead694a517e29232103f956cc4f433ba75e22183482569542973b",
+  "profile": "minimal",
+  "view": "integrated",
+  "language": "en",
+  "title": "Completing a block quadratic form",
+  "audience": "The reader expands real quadratic forms and solves an invertible triangular change of variables. Symmetric positivity is refreshed; the cross-term-eliminating variable and Schur complement are constructed here.",
+  "reader_goals": [
+    "Recover the complete strict-positivity criterion from a local quadratic-form problem.",
+    "Execute the cancellation, both implications and fixed-y minimization, then identify failure under mere invertibility."
+  ],
+  "question_ids": [
+    "N-Q-schur"
+  ],
+  "prerequisites": [
+    "Real matrix multiplication and transpose; quadratic-form positivity; inverse of an invertible matrix."
+  ],
+  "selections": [
+    {
+      "node_id": "N-S-main",
+      "role": "principal_answer",
+      "statement_treatment": "full",
+      "proof_treatment": "mechanism",
+      "reason": "Complete principal statement with the decisive proof developed in this local problem unit."
+    },
+    {
+      "node_id": "N-S-boundary",
+      "role": "boundary",
+      "statement_treatment": "explained_reference",
+      "proof_treatment": "none",
+      "reason": "This selected boundary is actually developed within the principal proof or its nearby application/boundary; the principal obligation enumerates the work."
+    },
+    {
+      "node_id": "N-S-square",
+      "role": "essential_bridge",
+      "statement_treatment": "explained_reference",
+      "proof_treatment": "none",
+      "reason": "This selected essential_bridge is actually developed within the principal proof or its nearby application/boundary; the principal obligation enumerates the work."
+    }
+  ],
+  "omissions": [],
+  "proof_obligations": [
+    {
+      "node_id": "N-S-main",
+      "treatment": "mechanism",
+      "required_steps": [
+        "Expand the square with A symmetric and invertible.",
+        "Invert the change of variables and prove both positivity directions.",
+        "Identify the unique fixed-y minimum using A>0.",
+        "Calculate the scalar model and the invertible-indefinite failure."
+      ],
+      "imported_inputs": []
+    }
+  ],
+  "limits": {
+    "max_pages": null,
+    "page_review_threshold": null
+  },
+  "comparison_group": null,
+  "draft": false,
+  "editorial_policy": "four-modes-2026-10-12-r3",
+  "contributions": []
+}

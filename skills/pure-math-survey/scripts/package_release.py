@@ -38,6 +38,7 @@ REQUIRED_FILES = {
     'assets/templates/math-review.sty',
     'assets/templates/profile-lecture.tex',
     'assets/templates/profile-minimal.tex',
+    'assets/templates/profile-minimal-rc2.tex',
     'assets/templates/profile-thematic.tex',
     'assets/templates/profile-paper.tex',
     'assets/v2/empty-project/knowledge/conventions.tex',

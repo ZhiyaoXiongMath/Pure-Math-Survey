@@ -18,7 +18,7 @@ For each of the following mode_findings provide outcome, a concrete mathematical
 and actual manuscript path/line_start/line_end locations:
 
 - Common: fast_path, reader_calibration, points, connections, limits, display_rhythm, statement_context.
-- Minimal: results_first, point_use, decisive_connections.
+- Minimal: results_first (early within the local unit under r3; global first section only under historical r2/rc1 or rc2), point_use, decisive_connections.
 - Thematic: question_structure, approach_mechanisms, comparison_basis, synthesis.
 - Lecture: motivation, worked_derivations, hypothesis_use, imported_inputs, model_boundary.
 - Paper: contribution_position, prior_art, proof_closure, attribution.
@@ -42,7 +42,7 @@ assertion is true. Distinguish author_reread from independent_review and from re
 feedback. Running another prompt is not independence. Formula density and typeset line
 counts are not a semantic score. Inspect actual pages, including justified long statements.
 
-For rc2 Paper, record prior_result_checks separately from prior_art_searches.
+For rc2 and r3 Paper, record prior_result_checks separately from prior_art_searches.
 Check each explicit comparison pair against the actual statements; report its
 unknowns, quantifiers, domain/parameters, regularity, normalization, conclusion
 and actual difference. Locate the manuscript discussion. A hash or accepted
@@ -65,3 +65,106 @@ a `setbox` wrapper cannot certify the enclosed text as literal proof evidence.
 An unused definition or an empty begin/end wrapper does not hide body content.
 This remains a bounded source model, not a general TeX interpreter or pixel
 visibility proof.
+
+## r3 task findings and actual final pages
+
+In article `mode_findings`, retain all inherited checks and add the existing-shaped
+`outcome`, `finding`, `locations` entries:
+
+- `obligation_coverage`: reconstruct necessary transformations from target/reader/materials
+  before comparing the author's list; record omissions and fixes, then locate evidence.
+- `fast_route_reconstruction`: save actual reasoning with long interiors hidden, not headings.
+- `slow_step_reproduction`: save a concrete derivation/construction and any missing inputs.
+- `condition_transfer`: change a decisive assumption and identify the first failure;
+  distinguish a verified counterexample from this route's non-applicability.
+
+Locations remain real executed substantive manuscript body positions (F1). A present
+field or plausible assertion is not mathematical/understanding acceptance. Knowledge-only
+uses existing knowledge-review scope/findings with actual nodes/routes, revision/hash
+and precise subsections; no manuscript is created to obtain article locations. Keep the
+knowledge binding/reader contract separate from article evidence. This uses existing
+record shapes, not a newly promised typed route database or new CLI.
+
+### Knowledge-only coverage record
+
+Use the existing `review template PROJECT --kind coverage --id QUESTION --json`
+command. It creates a pending review, not an accepted reading. Knowledge and
+snapshots remain schema `2.0.0`; this policy-bearing review uses `schema_version:
+"2.2.0"`, `kind: "coverage"` and the following existing scope fields:
+
+```json
+{
+  "editorial_policy": "four-modes-2026-10-12-r3",
+  "question_ids": ["Q-density"],
+  "node_ids": ["Q-density", "N-density", "N-radial-change", "N-zero-boundary"],
+  "checks": ["obligation_coverage", "fast_route_reconstruction",
+             "slow_step_reproduction", "condition_transfer"]
+}
+```
+
+This is a scope example, not a review ready for acceptance. Replace its IDs with
+the actual question and all coverage-declared answer, mechanism and boundary
+nodes; bind any additionally reviewed node too. Keep `findings` as a list of
+strings, each beginning with its exact check name and a colon. For example, an
+actual reading could report the following forms, only after doing the work:
+
+- `obligation_coverage: Reconstructing the radial substitution exposed the missing Jacobian; the corrected derivation now supplies it.` Link target: `knowledge/nodes/N-radial-change.md#radial-jacobian`.
+- `fast_route_reconstruction: With the calculation hidden, I recovered the density from the stated symmetry and normalization; the support condition was missing from my first answer.` Link target: `knowledge/route.md#density-fast-route`.
+- `slow_step_reproduction: I evaluated the normalization integral from the declared change of variables and found the stated constant.` Link target: `knowledge/nodes/N-density.md#normalization`.
+- `condition_transfer: At the zero parameter the change of variables loses invertibility; this defeats this derivation and does not by itself disprove the claimed limit.` Link target: `knowledge/nodes/N-zero-boundary.md#zero-parameter`.
+
+In each saved finding string, append a real Markdown link: concatenate
+`[descriptive label]` and `(knowledge/path.md#subsection)` without an intervening
+space. The paths above describe example project inputs, not installed resources.
+
+These illustrative sentences are not evidence about a real project. Save the
+actual attempted answer/calculation, first failed step, repair and remaining
+uncertainty, rather than copying the sentences or changing a pending template to
+accepted. Preserve blocking unchecked items and use the actual reviewer mode/date.
+
+Every link is project-root-relative and resolves to an existing subsection. Use
+an ordinary ATX heading or put an explicit stable anchor on its own unindented
+line, outside frontmatter, comments, code and raw HTML blocks:
+
+```markdown
+<a id="radial-jacobian">
+
+## Radial Jacobian
+
+The radial differential identifies the Jacobian used in the volume integral.
+```
+
+The cited subsection must contain actual non-code body content, directly or in
+a descendant subsection. A heading or anchor alone, or content only in comments
+or literal code, cannot locate a knowledge explanation. Displayed mathematics
+and prose accompanying an exact canonical block remain valid body content.
+Reference definitions and horizontal rules alone do not supply body content.
+Blockquote-only content is outside this bounded subsection check; use a directly
+written paragraph or display to locate the explanation rather than relying on
+container rendering.
+
+The existing `inputs` list uses `{"path": "knowledge/route.md", "sha256":
+"ACTUAL_64_HEX_SHA256"}` entries. The shown hash is a placeholder, never a valid
+binding: compute each digest from the exact saved bytes. Include the route,
+overview, scoped node files and required project, coverage, scope and source
+inputs. The template supplies required coverage inputs; add every other cited
+route/node and source used by the reading. A revision string in
+`scope.evidence_basis` can aid provenance but cannot replace these file hashes.
+Missing links/anchors, unbound inputs or changed bytes invalidate the binding;
+passing those checks still does not establish mathematical truth or learning.
+
+For every page of the actual final PDF inspect the active 2–3 normal typeset-line target,
+usefulness of displays, local symbol definitions, hidden transformations and fragmentation.
+Record actual page/block/equation and corresponding source, finding, impact, repair or
+specific exception reason/alternatives, final PDF hash and reinspection scope. Complete
+statements/necessary continuous proofs can be long with justification; no blanket waiver.
+Never measure TeX wrapping or add decorative formulas/forced breaks/shrunk typography.
+Scanners identify candidates only. Rebuild after changes; old observations may be reused
+only for verified identical page images and do not grant the new output semantic binding.
+New visual records bind the actual final PDF/build/render inputs and all pages.
+
+F2 view/design, F3 explicit comparison pairs plus primary prior support, and F4 draft/design
+safety remain on both rc2 and r3. Old accepted fields gain no new r3 responsibilities;
+`RECORDED_VALID` cannot authorize current release. Paper remains prominently draft unless
+actual authorization, originality positioning and complete proofs are reviewed. Software,
+mathematics, exposition attempts, PDF checks and real-reader feedback remain five reports.

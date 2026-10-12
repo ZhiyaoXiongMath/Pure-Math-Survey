@@ -1,0 +1,52 @@
+{
+  "schema_version": "2.0.0",
+  "questions": [
+    {
+      "question_id": "N-Q-schur",
+      "answer_nodes": [
+        "N-S-main"
+      ],
+      "mechanism_nodes": [
+        "N-S-square"
+      ],
+      "boundary_nodes": [
+        "N-S-boundary"
+      ],
+      "gaps": [],
+      "assessment": "adequate",
+      "rationale": "Square expansion, inverse map, both positivity directions and fixed-y minimum are established; negative/singular A are distinguished."
+    },
+    {
+      "question_id": "N-Q-holder",
+      "answer_nodes": [
+        "N-H-main"
+      ],
+      "mechanism_nodes": [
+        "N-H-norm",
+        "N-H-compact"
+      ],
+      "boundary_nodes": [
+        "N-H-boundary"
+      ],
+      "gaps": [],
+      "assessment": "adequate",
+      "rationale": "Fixed-background extraction, derivative identification, exponent interpolation, domain preservation and joint-continuity passage are established conditionally; uniform PDE estimates are not asserted."
+    },
+    {
+      "question_id": "N-Q-lich",
+      "answer_nodes": [
+        "N-L-main"
+      ],
+      "mechanism_nodes": [
+        "N-L-inputs",
+        "N-L-connection"
+      ],
+      "boundary_nodes": [
+        "N-L-boundary"
+      ],
+      "gaps": [],
+      "assessment": "adequate",
+      "rationale": "Bochner/spectral imports are exact; all integration, trace and positive-factor division steps are derived; boundary and rigidity extensions are excluded."
+    }
+  ]
+}

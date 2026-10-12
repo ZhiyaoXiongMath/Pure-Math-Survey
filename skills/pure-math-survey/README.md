@@ -1,7 +1,7 @@
 # Pure Math Survey 2.1.0
 
 > **Software version 2.1.0 release preparation; the tag and GitHub Release are not published.** Copy the complete skill directory from the repository or build a local installation ZIP from source. See [four writing profiles](references/editions.md).
-> Minimal has exactly Main Results / Key Mathematical Ingredients / Connecting the Ingredients. Thematic requires supported synthesis, Lecture every promised derivation, and Paper authorized contribution, closest-prior-art and complete-proof reviews. Paper defaults to an unverified internal draft. Software cannot certify truth, originality or comprehension.
+> Under r3, Minimal uses local problem units keeping full results, needed points, decisive connections and first use nearby; historical r2/rc1 and rc2 retain the strict three-section policy. Thematic requires supported synthesis, Lecture every promised derivation, and Paper authorized contribution, closest-prior-art and complete-proof reviews. Paper defaults to an unverified internal draft. Software cannot certify truth, originality or comprehension.
 > Knowledge schema is 2.0.0; new plans and policy-bearing reviews use 2.2.0. No historical snapshot, manuscript or review is automatically migrated or accepted under the new policy.
 
 
@@ -9,7 +9,7 @@
 
 Knowledge first: scope → primary-source reading → readable nodes/relations/evidence → coverage/readiness → immutable snapshot → output plan → writing → actual checks/build/page inspection → delivery.
 
-**The core CLI uses only Python's standard library (Python 3.10+).** This file-based skill is for authors maintaining source-grounded mathematical knowledge and writing surveys, lectures or research-paper drafts. It is not an autonomous theorem prover or an unattended survey-writing service. An agent/author performs source reading and mathematical writing; the CLI checks contracts, dependencies, fixed bytes and declared evidence. No server, vector database, multi-agent scheduler or Studio bridge; a two-layer knowledge base is not implemented.
+**The core CLI uses only Python's standard library (Python 3.10+).** This file-based skill is for authors maintaining source-grounded mathematical knowledge and writing surveys, lectures or research-paper drafts. It is not an autonomous theorem prover or an unattended survey-writing service. An agent/author performs source reading and mathematical writing; the CLI checks contracts, dependencies, fixed bytes and declared evidence. No server, vector database, multi-agent scheduler or Studio bridge; r3 requires fast routes and reproducible slow explanations in the knowledge base itself; their actual quality must be verified for each task.
 
 ## Writing and workflow examples
 
@@ -64,3 +64,41 @@ No independent review or general mathematical correctness follows from a softwar
 The skill instructions, scripts, templates and documentation are licensed under the [MIT License](LICENSE), with `Copyright (c) 2026 ZhiyaoXiongMath`.
 
 The bundled mathematical reference materials under `assets/reference-samples/dhym-balanced/` are excluded from this MIT grant, including their TeX, PDF, bibliography and supplied style. The separate repository `examples/` directory is likewise excluded. No additional reuse permission is granted for these materials, and existing third-party rights remain unchanged.
+
+## r3 daily-use responsibilities and evidence
+
+The daily-use main fixes the full request/latest corrections, reader operations and
+project revision, owns integration and checks returned artifacts. Use actual available
+tools for bounded source/knowledge/review/PDF tasks in isolated candidates; record task
+IDs, inputs, states and acceptance. Reject stale revisions, reconcile conflicts against
+sources, freeze old writers before takeover, and retain late results as candidates.
+Without delegation capability perform the same responsibilities serially and say so.
+Save files/patches, task answers, hashes and remaining work so stopping/recovery does not
+depend on chat access. This is distinct from a development-stage main and is not a
+resident scheduler. Knowledge-only creates zero manuscripts and performs no article prepare.
+
+The KB has three reading scales (overview, problem routes, nodes) sharing one canonical
+authority. Its fast route exposes inputs, decisive operations and conditions with exact
+slow-subsection links; slow passages discharge promised derivations, exact imports and
+present applications with backlinks. Reusable explanations discovered in an article
+return to live KB, review and a new snapshot before reuse. Classify actual input uses
+as Assumed/Refreshable/Bridge-required. Reconstruct necessary obligations before checking
+the author's list; save actual fast-route, slow-step and condition-change attempts and repairs.
+Preserve every explicit branch; the seven-branch regression is not a required user syllabus.
+
+All four modes actively target about 2–3 normal actual typeset lines for ordinary
+explanatory prose. Longer blocks require improvement or a specific located reason,
+alternatives considered and final PDF/hash reinspection; no source-line counting,
+decorative formulas, forced breaks, smaller type or omitted assumptions. Inspect every
+actual page. Five views change real reader tasks without changing mode duties or facts.
+Retain F1 body locations, F2 view/design, F3 comparison plus primary prior support and F4
+draft/design safety. Paper remains prominently DRAFT_UNVERIFIED by default.
+
+Software remains 2.1.0, KB/snapshot schema 2.0.0 and output/review schema 2.2.0; r3 is
+`four-modes-2026-10-12-r3`, distinct from rc2. Historical bytes and accepted records remain
+unchanged; recorded assessment is not current package authorization. Formal tag/Release
+publication remains paused. These rules are not completed acceptance: actual content,
+PDF, isolated installation and critical review require fixed-candidate evidence. Report
+software, mathematics, exposition attempts, PDF inspection and real-reader feedback
+separately. AI/team review is not external peer or student evidence; genuine original
+Paper originality/full research-proof quality remains NOT VERIFIED without actual input/review.

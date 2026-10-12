@@ -1,0 +1,31 @@
+{
+  "schema_version": "2.0.0",
+  "id": "S-Cheng-1975",
+  "kind": "primary",
+  "title": "Eigenvalue comparison theorems and its geometric applications",
+  "authors": [
+    "Shiu-Yuen Cheng"
+  ],
+  "publication_status": "published",
+  "identifiers": {
+    "url": "https://doi.org/10.1007/BF01214381",
+    "doi": "10.1007/BF01214381"
+  },
+  "version": "Mathematische Zeitschrift 143 (1975), 289–297",
+  "access": {
+    "state": "metadata_only",
+    "checked_at": "2026-10-12",
+    "material_sha256": null,
+    "local_path": null,
+    "reading_note": "evidence/source-checks/S-Cheng-1975.md",
+    "material_hash_unavailable_reason": "No original PDF bytes obtained; full-text reading is not claimed."
+  },
+  "evidence_category": "historical_original_metadata_only",
+  "bibliography": {
+    "year": 1975
+  },
+  "reading_scope": [
+    "Bibliographic identity and access attempt only; no original supporting section read"
+  ],
+  "classification_note": "The schema kind primary denotes the actual author text; evidence_category distinguishes historical research originals from later expositions. Exposition is not claimed to be the original discovery paper."
+}

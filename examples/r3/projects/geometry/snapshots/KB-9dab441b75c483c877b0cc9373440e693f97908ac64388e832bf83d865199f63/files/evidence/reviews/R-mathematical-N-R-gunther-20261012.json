@@ -1,0 +1,102 @@
+{
+  "schema_version": "2.2.0",
+  "review_id": "R-mathematical-N-R-gunther-20261012",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-Bishop-2013v2.md",
+      "sha256": "13257402ffc10778340ee5157754dff8bac376f5d3470536b19d81cda5fa8731"
+    },
+    {
+      "path": "evidence/source-checks/S-Eschenburg-1994.md",
+      "sha256": "9fb02b4fca1b61bce3f5d7f94bf154c8d3d44b694c4e964c420f2559b1d0f0c1"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "268c64561038d5effab8f49c86289e70a118bfb6e848389d3e00d426c32d4280"
+    },
+    {
+      "path": "knowledge/nodes/N-D-curvature.md",
+      "sha256": "364213a5a4c5f279cf9e0c02891c0044b6677b0e6bb078b9495576a2346f4810"
+    },
+    {
+      "path": "knowledge/nodes/N-D-distance.md",
+      "sha256": "eb63cd05f332fe10c5fc845218ac504daf075792984b9da6d6095fa8db7a45e3"
+    },
+    {
+      "path": "knowledge/nodes/N-D-jacobi.md",
+      "sha256": "34b710504185bdfd0c200babfb56de65568a042417015e343eb8cffb478d16c9"
+    },
+    {
+      "path": "knowledge/nodes/N-D-model.md",
+      "sha256": "0f6d2a3add30a086aee33dbfe609f40645d68c9692f439165678d0c7ba709e39"
+    },
+    {
+      "path": "knowledge/nodes/N-M-riccati.md",
+      "sha256": "bb9c4598bec55a152b68dfd41b9a36c1dd138a5fd6a85d0dd8c71db7d891e604"
+    },
+    {
+      "path": "knowledge/nodes/N-R-gunther.md",
+      "sha256": "9dc6db326d931759d7ec0a3d64ff0094b2bd900b190d5b597ea442ad621931cf"
+    },
+    {
+      "path": "knowledge/nodes/N-R-hessian.md",
+      "sha256": "67fa0a43a049f5c5b82754a1d5f6617615c38d58d8bbb823f7e387d0dff6f12d"
+    },
+    {
+      "path": "knowledge/sources/S-Bishop-2013v2.json",
+      "sha256": "3a1244553ee74de4bead7abddd2b8a27598480742e1c25cfff4ca23ab8a46636"
+    },
+    {
+      "path": "knowledge/sources/S-Eschenburg-1994.json",
+      "sha256": "1f92d5dc453c3e34093844ee568224942dfba8f1e6158bd0d3177b5b12801df5"
+    },
+    {
+      "path": "project.json",
+      "sha256": "87cb6a2485b7efddf37961eed6780208253c1ad4d14360462040c068379c799f"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "c803acf2b2ef8ba6ce4d6aed6555916b204ecb5b42d9dbac738b0b74fd0a706b"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-R-gunther"
+    ],
+    "statement_reviews": {
+      "N-R-gunther": {
+        "canonical_sha256": "cf43d2240e6282844c187ea52c2e7b77ad1e18493e7c06b7b936d99aa803d2ed",
+        "outcome": "accepted",
+        "objects": "Metric-ball volumes in a complete smooth n-manifold.",
+        "domain": "0<r<min(inj_p,D_k); the strict injectivity condition prevents truncation losses.",
+        "fixed_and_variable": "Fix metric,k,p; all admissible radii.",
+        "hypotheses": "Sectional upper bound, not Ricci upper bound.",
+        "equations": "Lower volume bound against V_k^n with explicit D_k.",
+        "quantifiers": "Every radius in the displayed local range.",
+        "conclusion": "Uncut volume is at least the model volume.",
+        "status": "Local deduction with determinant integration; not a claimed quotation from the unread historical original.",
+        "local_definitions": "Model volume and D_k are locally named; injectivity is defined in N-D-distance."
+      }
+    },
+    "evidence_basis": "Actual canonical/body/source-section rereading; local deductions use the explicit argument and necessary dependencies named in this node.",
+    "proof_steps": {},
+    "editorial_policy": "four-modes-2026-10-12-rc2"
+  },
+  "findings": [
+    "Sectional upper bound, not Ricci upper bound.",
+    "Uncut volume is at least the model volume.",
+    "Local deduction with determinant integration; not a claimed quotation from the unread historical original.",
+    "The standalone canonical statement was reread with its bound definitions, sources and mathematical body. Observed repairs are recorded in evidence/author-reading.md."
+  ],
+  "unchecked_items": [
+    {
+      "item": "No complete independent reproof of every imported prerequisite.",
+      "blocking": false,
+      "reason": "This review certifies the scoped statement and recorded mechanism only; no output-specific complete proof has been promised."
+    }
+  ],
+  "disposition": "accepted"
+}

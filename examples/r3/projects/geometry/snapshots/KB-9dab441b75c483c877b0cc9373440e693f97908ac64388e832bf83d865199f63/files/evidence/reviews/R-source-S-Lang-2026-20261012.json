@@ -1,0 +1,47 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "R-source-S-Lang-2026-20261012",
+  "kind": "source",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-Lang-2026.md",
+      "sha256": "d7125587caa888a2352110c7f227ca1d061a8123a626307a7a5b749134e002dd"
+    },
+    {
+      "path": "knowledge/sources/S-Lang-2026.json",
+      "sha256": "692680e2507398c6f36959dc1c3b8d4e810ba0e63402855f4451cf547ed70362"
+    }
+  ],
+  "scope": {
+    "source_ids": [
+      "S-Lang-2026"
+    ],
+    "source_reading": {
+      "S-Lang-2026": {
+        "mode": "original_text_online",
+        "version": "Preliminary and incomplete version, 5 January 2026",
+        "locators": [
+          "Sections 5.1–5.3, pp. 63–70",
+          "Definition 5.7, Lemmas 5.8–5.9, pp. 66–67",
+          "Theorem 5.12, Propositions 5.13–5.14, Theorem 5.15 and Remark 5.16, pp. 67–70"
+        ],
+        "raw_bytes_unavailable_reason": "Original PDF downloaded and hashed in a private, non-authoritative reading cache. No raw source is included in the authoritative knowledge corpus or frozen snapshot; source redistribution rights were not established. This is nonretention in the corpus, not failed access."
+      }
+    }
+  },
+  "findings": [
+    "Checked Preliminary and incomplete version, 5 January 2026 against the actual reading/access record. Category: author_written_exposition.",
+    "The recorded reading scope is Sections 5.1–5.3, pp. 63–70; Definition 5.7, Lemmas 5.8–5.9, pp. 66–67; Theorem 5.12, Propositions 5.13–5.14, Theorem 5.15 and Remark 5.16, pp. 67–70.",
+    "The bound source-check note records controlling notation, support limits and any observed discrepancies; metadata-only originals are not accepted theorem support."
+  ],
+  "unchecked_items": [
+    {
+      "item": "No raw original source included in authoritative corpus or snapshot.",
+      "blocking": false,
+      "reason": "Actual original PDF hash is recorded; supporting sections were read from the linked author/journal text via private downloaded cache. This is a disclosed retention limit, not fabricated raw evidence."
+    }
+  ],
+  "disposition": "accepted"
+}

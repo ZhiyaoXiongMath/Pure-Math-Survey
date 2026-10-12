@@ -5,3 +5,13 @@ Only explicit user `limits.max_pages` is a hard page-count limit, measured from 
 Coverage tracks important candidates per selected question. Plans select nodes with role, full/explained_reference statement treatment, proof treatment and reason. Principal answers must be full. Necessary dependencies must be selected or declared as precisely scoped prerequisites. Explicitly explain important omissions; unrelated KB branches need no omission row.
 
 Plan audiences and reader goals determine proof depth, not the size of the original paper. A lecture expands necessary steps, not filler; a minimal account remains independently usable. `output reading-budget` uses the actual PDF; the release gate independently checks explicit limits.
+
+## Full scope and tool burden
+
+Retain all explicit user branches and explain their promised depth. A representative
+route may be developed first but cannot stand for completion of every requested branch.
+For a request without a full list, choose a core using the exact question, reusable
+constructions and reader cost; compare real new tools and later reuse instead of theorem
+fame, node count or formula brevity. Minimal under r3 keeps local results/points/connections
+near first use and retains every necessary input. Only historical r2/rc1 and rc2 force
+the strict three-section layout. The seven-branch benchmark is not a universal syllabus.

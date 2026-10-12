@@ -1,7 +1,7 @@
 # Pure Math Survey
 
 > **软件版本 2.1.0 发布准备；tag 与 GitHub Release 尚未发布。** 当前可复制仓库中的完整技能目录，或从源码构建本地安装包。四模式契约见[成文模式](skills/pure-math-survey/references/editions.md)。
-> Minimal 严格三节；Thematic 核查路线比较；Lecture 兑现逐步证明；Paper 需授权原创贡献、最接近前人成果核查与闭合证明，默认只生成内部草稿。软件校验不保证数学正确、原创性或读者理解。
+> r3 Minimal 默认采用局部问题单元，就近组织完整结果、必要支点、关键连接与首次使用；旧 r2/rc1、rc2 保留严格三节政策；Thematic 核查路线比较；Lecture 兑现逐步证明；Paper 需授权原创贡献、最接近前人成果核查与闭合证明，默认只生成内部草稿。软件校验不保证数学正确、原创性或读者理解。
 > 知识 schema 为 2.0.0，新输出计划与新版政策审阅为 2.2.0；旧快照、正文和审阅不被静默迁移，历史 accepted 不构成新版政策验收。
 
 
@@ -50,6 +50,10 @@ python skills/pure-math-survey/scripts/package_release.py --output ../pure-math-
 
 ## 示例
 
+### r3：九篇文章与可编辑知识项目
+
+[r3 示例入口](examples/r3/README.md)包含比较几何 Minimal／Lecture、时间紧性 Thematic 与 methods／boundaries 配对稿，以及三个局部例子和明确标记的 Paper 草稿，共九篇、54 页。公开树保留经审阅的原始正文、知识快照、PDF 和页面图片。团队内非作者审阅不等于外部同行评审；重新构建及安装后的验证仍须针对新产物执行。
+
 ### dHYM：写作与排版参考
 
 这份六页的 balanced dHYM 综述由作者经过多轮专门润色，是主要的成文与排版参考。它从精确的可解性结论进入证明机制，再就地引入稳定性定义，并给出明确的等号边界例子。它的页数、提纲和结论数量不构成其他综述的要求。
@@ -94,7 +98,7 @@ python tools/verify_release.py ../pure-math-survey-2.1.0.zip --report ../pure-ma
 
 测试覆盖快照与材料完整性、范围明确的审阅、TeX 正文检查、历史记录和打包，并包含实际 TeX 编译。测试中人工构造的审阅记录仅用于软件测试。Linux CI 使用 Python 3.10 和 3.12；Windows 若无创建符号链接的权限，会明确跳过对应的一项测试。
 
-参见[版本说明](CHANGELOG.md)。当前版本不包含服务器、向量数据库、研究调度器或 Research Studio 桥接功能；两层知识库能力尚未实现。
+参见[版本说明](CHANGELOG.md)。当前版本不包含服务器、向量数据库、研究调度器或 Research Studio 桥接功能；r3 要求知识库自身具有可用快路线和可复现慢解释，其实际质量须按任务验证。
 
 ## 许可证
 
@@ -107,3 +111,31 @@ python tools/verify_release.py ../pure-math-survey-2.1.0.zip --report ../pure-ma
 [rc2 候选验证记录](docs/rc2/CANDIDATE.md)保留该阶段的实际结果和提交标识，不能替代正式版最终提交的验证。rc2 保留历史示例，新增 Simon–Maitre–Barrett–Süli 三篇原始论文的实际知识项目、配对的 methods／boundaries 文稿及新的 Schur 讲义。[可编辑项目](examples/rc2/projects/time-compactness/README.md)和有明确范围的作者／页面观察记录均予保留。历史候选材料中的已审阅 PDF、页面图片和构建记录只证明其对应字节；重新构建的 PDF 需要自己的视觉审阅。
 
 另见[需求与实现对照](docs/vnext/requirements.md)、[实际验证及限制](docs/vnext/validation.md)和[七个已有基准文稿](examples/vnext/README.md)。这些历史记录中的六个已知数学样例曾编译并由作者重读；Paper 边界样例有意保持不可正式交付。独立数学审阅、真实读者反馈以及真正原创 Paper 的原创性与完整证明质量仍未验证。软件正式发布不改变这些限制。
+
+## r3 日常使用职责与证据
+
+日常使用 main 固定完整请求、最新纠正、读者可执行操作与项目 revision，负责唯一集成和实物验收。
+按需要使用真实可用工具向隔离候选任务委派来源、知识、审阅和 PDF 工作，记录实际任务 ID、输入、
+状态和接收。拒收过期 revision；数学冲突回来源；接替前冻结旧写者；迟到结果只保留候选。
+无委派能力时串行执行相同职责并如实说明。保存文件／补丁、任务实际回答、哈希和未完成项，
+使停止／恢复不依赖聊天可读。这不同于开发阶段 main，也不是常驻调度平台。
+knowledge-only 不新增文章，不调用文章 prepare。
+
+KB 具有 overview、问题路线、节点三个阅读尺度，共用单一 canonical。快路线显示输入、关键操作
+和决定条件，链接到具体慢层小节；慢层兑现承诺推导、精确导入与本次应用，并反向标明路线和消费处。
+文章中形成的可复用解释回 live KB，经审阅和新 snapshot 后采用。按本次用法区分 Assumed／
+Refreshable／Bridge-required。先从目标与读者逆推义务，再检查作者清单；保存快层重建、慢层实作、
+条件改变的实际回答、失败和修复。保留所有明确主题分支；七分支回归不是每个用户的强制课程。
+
+四模式普通解释正文主动以正常字号页宽下约 2–3 个实际排版行为目标。长块须改进或记录具体位置、
+保留理由、曾考虑的改法、最终 PDF 哈希和复看范围；禁止 TeX 源码计行、装饰公式、强制换行、缩字体
+或删条件。实际检查所有页面。五 view 改变真实读者任务，不改变模式职责或数学事实。
+保留 F1 正文定位、F2 视角／设计、F3 比较与前人 primary 支持、F4 草稿／设计安全。
+Paper 默认显著 DRAFT_UNVERIFIED。
+
+软件仍为 2.1.0，KB／snapshot schema 2.0.0，output／review schema 2.2.0；r3 政策为
+`four-modes-2026-10-12-r3`，与 rc2 分开。旧字节和 accepted 保持原样；recorded 读取不授权当前
+正式打包。正式 tag／Release 继续暂停。规范文字不等于验收完成；实际内容、PDF、独立安装和关键
+复核须针对固定候选留证。分开报告程序、数学、讲解任务、PDF 检查和真实读者反馈；团队／AI 审阅
+不是外部同行或学生实测。无实际原创输入与相应审阅，真实 Paper 原创性及完整研究证明质量仍为
+NOT VERIFIED。

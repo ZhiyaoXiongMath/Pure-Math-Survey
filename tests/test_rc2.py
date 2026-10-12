@@ -71,7 +71,7 @@ class Locations(unittest.TestCase):
 
 class Hardening(unittest.TestCase):
     def setUp(self):
-        self.fixture = vnext.VNext(); self.fixture.setUp()
+        self.fixture = vnext.VNext(); self.fixture.setUp(); self.fixture.editorial_policy=vnext.RC2_POLICY
     def tearDown(self):
         self.fixture.tearDown()
     def test_VIEW02_same_facts_different_reader_tasks(self):
@@ -115,7 +115,12 @@ class Hardening(unittest.TestCase):
         self.assertIn(result['status'],('PREPARED','DRAFT_PREPARED'))
         self.assertEqual(result['artifacts'].get('exposition_design',{}).get('status'),'NEEDS_WORK')
     def test_COMPAT03_new_contract_explicit(self):
-        p,v=self.fixture.make()
+        p,v=self.fixture.make(policy=vnext.POLICY)
+        # Keep the recorded rc2 contract explicit now that new plans use r3.
+        from survey_core.profiles import POLICY, RC2_POLICY, validate_plan_contract
+        self.assertEqual(v['editorial_policy'], POLICY)
+        v['editorial_policy'] = RC2_POLICY
+        validate_plan_contract(v)
         self.assertEqual(v['schema_version'],'2.2.0')
         self.assertEqual(v['editorial_policy'],'four-modes-2026-10-12-rc2')
 

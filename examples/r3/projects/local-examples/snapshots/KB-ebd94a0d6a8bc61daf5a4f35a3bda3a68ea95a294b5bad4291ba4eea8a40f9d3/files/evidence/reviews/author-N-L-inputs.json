@@ -1,0 +1,67 @@
+{
+  "schema_version": "2.2.0",
+  "review_id": "R3-AUTHOR-N-L-inputs",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-Datar.md",
+      "sha256": "cb543e1b156f8c7ed3086cdea32e8c9933da98da0f93d02acc560ecbda21ef69"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "8e17ace33563d613860c89606b70c6b95a93cf077e4d21db9bff3ba08617bd63"
+    },
+    {
+      "path": "knowledge/nodes/N-L-inputs.md",
+      "sha256": "71a786bcc6bac98d544fde57f9b98f9e917ab7888004acce66197513692ed55a"
+    },
+    {
+      "path": "knowledge/sources/S-Datar.json",
+      "sha256": "780107e7726b78836c4a359adc07cc93d05f247dfcff940f4cb60a603244bf71"
+    },
+    {
+      "path": "project.json",
+      "sha256": "7477946aa36c1d422c055f0c3e0f0dcb875381993fc04e6265fea430aba03d83"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "3dd3b3a663967bb9e649114ebde3571061e0e376ab0c96911c5564260d1b5463"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-L-inputs"
+    ],
+    "editorial_policy": "four-modes-2026-10-12-r3",
+    "evidence_basis": "Actual author reconstruction: Checked the sign conversion from Datar, and that tr Hess h=-Delta h. The source gives a smooth positive eigenfunction on the compact boundaryless manifold. Both the spectral existence theorem and local Bochner identity are explicit imports, not claimed as proofs in this project.",
+    "statement_reviews": {
+      "N-L-inputs": {
+        "canonical_sha256": "48bb64397b7532fca3b5a7ab681e9b036af27446760898dd141a6c9d37703d76",
+        "outcome": "accepted",
+        "objects": "The nonnegative scalar Laplacian, smooth eigenfunction and Hessian.",
+        "domain": "Closed connected smooth Riemannian manifold of explicitly stated dimension m>=2.",
+        "fixed_and_variable": "Metric is fixed; h is arbitrary smooth and f is a nonzero first positive eigenfunction.",
+        "hypotheses": "Closedness and connectedness are explicit; spectral existence is imported.",
+        "equations": "Delta sign, eigenfunction equation, Bochner identity and Hessian trace are given.",
+        "quantifiers": "Bochner holds for every smooth real h; there exists a nonzero first eigenfunction.",
+        "conclusion": "A precise callable spectral and differential identity interface.",
+        "status": "Imported classical results, not local complete proofs.",
+        "local_definitions": "Hessian, Hilbert--Schmidt norm and trace sign are defined in the statement."
+      }
+    }
+  },
+  "findings": [
+    "Checked the sign conversion from Datar, and that tr Hess h=-Delta h. The source gives a smooth positive eigenfunction on the compact boundaryless manifold.",
+    "Both the spectral existence theorem and local Bochner identity are explicit imports, not claimed as proofs in this project.",
+    "After nonauthor feedback, the input now explicitly assumes m>=2; this excludes the zero-dimensional closed connected manifold, which has no positive scalar eigenvalue. The final statement and dependent bindings were reread."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "Author/AI rereading only. No external mathematical peer review, actual target-reader experiment or originality certification is claimed."
+    }
+  ],
+  "disposition": "accepted"
+}

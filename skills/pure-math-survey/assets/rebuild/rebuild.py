@@ -7,6 +7,8 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
+from decimal import Decimal
 from pathlib import Path,PurePosixPath
 import re
 import shutil
@@ -23,8 +25,22 @@ def tool(*names:str)->str:
         if shutil.which(n):return shutil.which(n)
     raise RuntimeError('External executable missing: '+', '.join(names))
 
+def emergency_stretch_argument(value:float|None)->tuple[str,dict]:
+    """Same opt-in line-breaking parameter as the installed builder."""
+    if value is None:return 'main.tex',{}
+    if type(value) not in (int,float) or not math.isfinite(value) or not 0<value<=10:
+        raise ValueError('emergency_stretch_em must be finite and in (0, 10]')
+    amount=format(Decimal(str(value)),'f')
+    if '.' in amount:amount=amount.rstrip('0').rstrip('.')
+    argument=(r'\AddToHook{begindocument/end}{\emergencystretch='+amount+
+              r'em\typeout{PMS-EMERGENCY-STRETCH-PT: \the\emergencystretch}}\input{main.tex}')
+    return argument,{'emergency_stretch_em':value,'application':'begindocument/end',
+                     'effective_emergency_stretch_pt':None}
+
+
 def main()->int:
-    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--output',type=Path,required=True);args=ap.parse_args()
+    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--output',type=Path,required=True);ap.add_argument('--emergency-stretch-em',type=float,help='Explicit normal line-breaking adjustment after style loading; default keeps original behavior.');args=ap.parse_args()
+    tex_argument,layout=emergency_stretch_argument(args.emergency_stretch_em)
     root=Path(__file__).resolve().parent;dest=args.output.resolve()
     if dest.exists() or root==dest or root in dest.parents:raise ValueError('Use a new destination outside the package')
     m=json.loads((root/'package-manifest.json').read_text(encoding='utf-8'))
@@ -40,11 +56,11 @@ def main()->int:
     from build_checks import log_issues,log_warnings
     dest.mkdir(parents=True);build=dest/'build';build.mkdir()
     for folder in ('manuscript','generated'):shutil.copytree(root/folder,dest/folder)
-    report={'status':'FAILED','snapshot_id':m['snapshot_id'],'commands':[],'review_status':'NOT_REVIEWED_NEW_BUILD','source_package_verified':True}
+    report={'status':'FAILED','snapshot_id':m['snapshot_id'],'commands':[],'layout':layout,'review_status':'NOT_REVIEWED_NEW_BUILD','source_package_verified':True}
     try:
         engine=tool('pdflatex');bib=tool('bibtex','bibtex.original','bibtex8');previous=None;bibbed=False;stable=False
         for i in range(1,7):
-            r=command([engine,'-no-shell-escape','-interaction=nonstopmode','-halt-on-error','-recorder','-output-directory=../build','main.tex'],dest/'manuscript');report['commands'].append(r)
+            r=command([engine,'-no-shell-escape','-interaction=nonstopmode','-halt-on-error','-recorder','-output-directory=../build',*(['-jobname=main'] if layout else []),tex_argument],dest/'manuscript');report['commands'].append(r)
             if r['returncode']:raise RuntimeError('TeX failed')
             aux=(build/'main.aux').read_text(errors='replace')
             if '\\bibdata' in aux and '\\citation' in aux and not bibbed:
@@ -55,6 +71,11 @@ def main()->int:
             if previous==digest and i>=2:stable=True;break
             previous=digest
         log=(build/'main.log').read_text(errors='replace');issues=log_issues(log)
+        if layout:
+            effective=re.search(r'PMS-EMERGENCY-STRETCH-PT:\s*([0-9.]+)pt',log)
+            if effective is None:raise RuntimeError('Explicit emergency stretch was not observed in the TeX log')
+            layout['effective_emergency_stretch_pt']=float(effective[1])
+        report.update(auxiliary_stable=stable,blocking_log_issues=issues,warnings=log_warnings(log))
         if not stable or issues:raise RuntimeError('Unstable or blocking TeX diagnostics: '+str(issues))
         info=command([tool('pdfinfo'),'main.pdf'],build);report['commands'].append(info)
         page=re.search(r'^Pages:\s*(\d+)',info['stdout'],re.M)

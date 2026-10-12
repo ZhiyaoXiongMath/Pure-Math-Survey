@@ -1,0 +1,33 @@
+{
+  "operation": "output.release",
+  "status": "RELEASABLE",
+  "errors": [],
+  "warnings": [
+    {
+      "code": "SOURCE_RAW_BYTES_NOT_RETAINED",
+      "path": "knowledge/sources/S-Boyd.json",
+      "node_id": null,
+      "message": "A raw-source hash is recorded, but no in-project copy is available to rehash; source reading is documented with this retention limitation."
+    },
+    {
+      "code": "NO_INDEPENDENT_REVIEW",
+      "path": "",
+      "node_id": null,
+      "message": "No scoped independent mathematical reading of this manuscript is claimed. Author reread is not independent review."
+    }
+  ],
+  "artifacts": {
+    "output_id": "schur-minimal-r3",
+    "snapshot_id": "KB-c2ed8ff3a21ead694a517e29232103f956cc4f433ba75e22183482569542973b",
+    "pages": 2,
+    "editorial_policy": "four-modes-2026-10-12-r3",
+    "recorded_policy": "four-modes-2026-10-12-r3",
+    "evaluated_policy": "four-modes-2026-10-12-r3",
+    "release_authorized": true,
+    "used_output_review_ids": [
+      "author-schur-minimal-r3-semantic-r1",
+      "author-schur-minimal-r3-visual-r1"
+    ],
+    "readiness": "READY"
+  }
+}

@@ -39,3 +39,14 @@ During author rereading, reconstruct the target, points, conversions and conditi
 without looking at long proof interiors, then verify that the interiors support exactly
 that skeleton. Locate failures rather than score comprehension. This is author self-check,
 not an independent reviewer or a real-reader experiment.
+
+## Required reader tasks before acceptance
+
+Keep this capability baseline throughout revision; do not silently raise it after
+finding explanations hard. Before checking positions, reconstruct the necessary
+obligations independently of the writer's step list. Then save actual fast-route
+answers, one or more promised slow derivations and the first failure after changing
+a decisive condition, including missing input, repair and reattempt. This applies to
+the KB itself without articles. Nodes/routes use specific subsection entrances and
+fixed input hashes; output findings use actual body locations. Team/AI attempts are
+named as such and cannot be reported as target-student feedback.

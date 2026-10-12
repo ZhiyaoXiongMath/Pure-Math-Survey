@@ -1,0 +1,31 @@
+{
+  "schema_version": "2.0.0",
+  "id": "S-Rauch-1951",
+  "kind": "primary",
+  "title": "A Contribution to Differential Geometry in the Large",
+  "authors": [
+    "Harry Ernest Rauch"
+  ],
+  "publication_status": "published",
+  "identifiers": {
+    "url": "https://doi.org/10.2307/1969309",
+    "doi": "10.2307/1969309"
+  },
+  "version": "Annals of Mathematics 54 (1951), 38–55",
+  "access": {
+    "state": "metadata_only",
+    "checked_at": "2026-10-12",
+    "material_sha256": null,
+    "local_path": null,
+    "reading_note": "evidence/source-checks/S-Rauch-1951.md",
+    "material_hash_unavailable_reason": "No original PDF bytes obtained; full-text reading is not claimed."
+  },
+  "evidence_category": "historical_original_metadata_only",
+  "bibliography": {
+    "year": 1951
+  },
+  "reading_scope": [
+    "Bibliographic identity and access attempt only; no original supporting section read"
+  ],
+  "classification_note": "The schema kind primary denotes the actual author text; evidence_category distinguishes historical research originals from later expositions. Exposition is not claimed to be the original discovery paper."
+}
