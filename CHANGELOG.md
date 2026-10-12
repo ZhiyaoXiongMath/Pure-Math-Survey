@@ -1,3 +1,20 @@
+# r3 policy preparation — software 2.1.0, not a published release
+
+- Specify KB-native fast/slow routes at overview/problem/node scales, one canonical,
+  precise bidirectional entrances and reviewed reusable-explanation return.
+- Default new Minimal to local problem units; retain r2/rc1 and rc2 strict layout under
+  recorded policy. Preserve F1–F4 and distinguish capabilities from current authorization.
+- Require reverse obligation audit, actual reconstruction/reproduction/condition tasks,
+  and active 2–3 normal typeset-line editing with located final-PDF exceptions and hashes.
+- Define daily-use main's bounded real dispatch/acceptance, serial fallback, stale-input
+  rejection, stop/recovery and late-candidate handling using ordinary existing records.
+- Keep software 2.1.0, KB 2.0.0 and output/review 2.2.0; add r3 policy identity without
+  rewriting historical artifacts. Formal tag/Release publication remains paused.
+
+Rules/scaffolds are not mathematical, PDF, installed-runtime or real-reader acceptance.
+The integrated fixed candidate still needs actual content and critical review. Paper
+defaults to DRAFT_UNVERIFIED; genuine originality/full research-proof quality is NOT VERIFIED.
+
 # Pure Math Survey 2.1.0 — release preparation
 
 Software release preparation for the four-profile workflow and rc2 hardening.

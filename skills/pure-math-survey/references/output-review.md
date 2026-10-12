@@ -18,7 +18,7 @@ For each of the following mode_findings provide outcome, a concrete mathematical
 and actual manuscript path/line_start/line_end locations:
 
 - Common: fast_path, reader_calibration, points, connections, limits, display_rhythm, statement_context.
-- Minimal: results_first, point_use, decisive_connections.
+- Minimal: results_first (early within the local unit under r3; global first section only under historical r2/rc1 or rc2), point_use, decisive_connections.
 - Thematic: question_structure, approach_mechanisms, comparison_basis, synthesis.
 - Lecture: motivation, worked_derivations, hypothesis_use, imported_inputs, model_boundary.
 - Paper: contribution_position, prior_art, proof_closure, attribution.
@@ -42,7 +42,7 @@ assertion is true. Distinguish author_reread from independent_review and from re
 feedback. Running another prompt is not independence. Formula density and typeset line
 counts are not a semantic score. Inspect actual pages, including justified long statements.
 
-For rc2 Paper, record prior_result_checks separately from prior_art_searches.
+For rc2 and r3 Paper, record prior_result_checks separately from prior_art_searches.
 Check each explicit comparison pair against the actual statements; report its
 unknowns, quantifiers, domain/parameters, regularity, normalization, conclusion
 and actual difference. Locate the manuscript discussion. A hash or accepted
@@ -65,3 +65,38 @@ a `setbox` wrapper cannot certify the enclosed text as literal proof evidence.
 An unused definition or an empty begin/end wrapper does not hide body content.
 This remains a bounded source model, not a general TeX interpreter or pixel
 visibility proof.
+
+## r3 task findings and actual final pages
+
+In article `mode_findings`, retain all inherited checks and add the existing-shaped
+`outcome`, `finding`, `locations` entries:
+
+- `obligation_coverage`: reconstruct necessary transformations from target/reader/materials
+  before comparing the author's list; record omissions and fixes, then locate evidence.
+- `fast_route_reconstruction`: save actual reasoning with long interiors hidden, not headings.
+- `slow_step_reproduction`: save a concrete derivation/construction and any missing inputs.
+- `condition_transfer`: change a decisive assumption and identify the first failure;
+  distinguish a verified counterexample from this route's non-applicability.
+
+Locations remain real executed substantive manuscript body positions (F1). A present
+field or plausible assertion is not mathematical/understanding acceptance. Knowledge-only
+uses existing knowledge-review scope/findings with actual nodes/routes, revision/hash
+and precise subsections; no manuscript is created to obtain article locations. Keep the
+knowledge binding/reader contract separate from article evidence. This uses existing
+record shapes, not a newly promised typed route database or new CLI.
+
+For every page of the actual final PDF inspect the active 2–3 normal typeset-line target,
+usefulness of displays, local symbol definitions, hidden transformations and fragmentation.
+Record actual page/block/equation and corresponding source, finding, impact, repair or
+specific exception reason/alternatives, final PDF hash and reinspection scope. Complete
+statements/necessary continuous proofs can be long with justification; no blanket waiver.
+Never measure TeX wrapping or add decorative formulas/forced breaks/shrunk typography.
+Scanners identify candidates only. Rebuild after changes; old observations may be reused
+only for verified identical page images and do not grant the new output semantic binding.
+New visual records bind the actual final PDF/build/render inputs and all pages.
+
+F2 view/design, F3 explicit comparison pairs plus primary prior support, and F4 draft/design
+safety remain on both rc2 and r3. Old accepted fields gain no new r3 responsibilities;
+`RECORDED_VALID` cannot authorize current release. Paper remains prominently draft unless
+actual authorization, originality positioning and complete proofs are reviewed. Software,
+mathematics, exposition attempts, PDF checks and real-reader feedback remain five reports.

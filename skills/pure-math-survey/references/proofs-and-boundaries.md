@@ -29,3 +29,20 @@ the method and test a real boundary. Finite numerical checks are not universal p
 Paper's originality check is not the same as proof closure. A correct proof of a known
 result is useful in Lecture but is not thereby an original research contribution.
 `DRAFT_UNVERIFIED` is the only path for unchecked or incomplete proposed contributions.
+
+## Reverse obligation audit and exact imports (r3)
+
+Before accepting the supplied step list, derive necessary work from the full target,
+declared reader operations and actual materials. Compare afterward to find missing
+object identifications, normalization, singular starts, parameter uniformity,
+topology/regularity, endpoints and hypothesis consumption. Add omissions to the real
+design/body responsibilities and then locate them; valid locations for an incomplete
+list do not close the proof or learning route.
+
+An exact deep theorem can be imported with attribution, scope and assumption checks.
+Its present substitution, object conversion and output use may be the decisive bridge:
+do not black-box these or relabel treatment as citation to avoid the reader's task.
+Perform fast reconstruction, a concrete slow derivation and a condition-change test,
+saving actual attempts, failures and repairs. A route failing is not proof the theorem
+is false. Knowledge-only uses real node/route review findings, never an article created
+to obtain locations; article records bind their actual substantive body.

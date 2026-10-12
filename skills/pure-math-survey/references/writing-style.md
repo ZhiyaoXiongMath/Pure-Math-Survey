@@ -1,19 +1,25 @@
 # Mathematical writing and self-contained results
 
-Prefer short explanatory prose alternating with substantive displayed mathematics.
-In normal font size, line width and margins, about four **typeset** prose lines is an
-editing heuristic. At a natural mathematical turn, display the decisive object,
+Actively organize ordinary explanatory prose around **about 2–3 normal actual typeset
+lines** in every mode. More than about three lines triggers editorial review for hidden
+objects, conditions, estimates or transformations; improve blocks that can be improved.
+Measure normal font size, line width and margins in the actual PDF, not TeX source lines.
+For Markdown/HTML knowledge use an agreed normal reading width, not any narrow window. At a natural mathematical turn, display the decisive object,
 condition, equation, transformation, estimate or output and explain its role nearby.
 It is not a source-line count, mandatory formula frequency or readability score.
 
 A display should reveal why this quantity matters now and what it supplies next.
 Define its major new symbols locally. Do not show long unmotivated formula galleries.
 Do not insert decorative equations, force line breaks, shrink typography, fragment a
-proof or remove hypotheses to satisfy the heuristic. Long rigorous statements and
-necessary lists may exceed four lines; organize them better without losing content.
-Bibliographies, code, tables and externally constrained abstracts are reasonable
-exceptions. Record local exceptions in existing semantic/page findings, not a new
-approval database. Actual PDFs, not source wrapping, decide layout observations.
+proof or remove hypotheses to satisfy the target. Complete statements, necessary lists
+and continuous proofs may exceed it after considering a better mathematical arrangement.
+This is neither an automatic failure for every four-line block nor a formula every three
+lines. Bibliographies, code, tables and title/author matter use their own readability checks.
+For each retained long explanatory block record actual PDF page/block and source location,
+purpose, specific reason, alternatives considered, hidden-object check and final result.
+Bind observations and repairs to the final PDF SHA-256 and reinspection scope. Inspect
+every page; do not claim a blanket theorem/mode exception or an automatic readability
+score. Use existing semantic/page findings, not a new approval database.
 
 ## Principal statement-self-contained contract
 

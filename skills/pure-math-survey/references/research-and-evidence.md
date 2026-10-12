@@ -17,3 +17,12 @@ failed access. Validation reports `SOURCE_RAW_BYTES_NOT_RETAINED`: the recorded
 hash is not a rechecked in-project byte certificate. The online reading still
 requires the exact controlling version, a nonempty list of locators, and actual
 input-bound findings. Never invent a hash or substitute a reading-note hash.
+
+## Read explanatory choices as well as facts
+
+When useful, record how the source rewrites its target, chooses/normalizes an auxiliary
+object, computes a model, identifies objects, isolates a difficult lemma and reuses the
+output. Check those choices against the current reader's operations rather than copying
+the source's omissions. A teaching reference and primary support have separate evidence
+roles; readable prose does not certify its formulas. Report the exact supporting sections
+actually inspected, never a full-course audit inferred from a few later lectures.
