@@ -5,7 +5,7 @@ description: Build and maintain source-grounded mathematical knowledge, then wri
 
 # Pure Math Survey
 
-**Candidate software: 2.1.0-rc2; knowledge/snapshot schema: 2.0.0; new output/policy-review schema: 2.2.0.** Local files, one writer, Python 3.10+. Mathematics and manuscripts are English; discussion follows the user's language.
+**Software version: 2.1.0; knowledge/snapshot schema: 2.0.0; new output/policy-review schema: 2.2.0.** Local files, one writer, Python 3.10+. Mathematics and manuscripts are English; discussion follows the user's language.
 
 ## Identify the task and project
 
@@ -83,7 +83,7 @@ This is Survey, not Research Studio. Preserve stable IDs, exact content, source 
 
 Read [output review](references/output-review.md) before release. Require canonical inputs in the actual document body, seven explicit whole-manuscript reading checks and real proof/principal locations. A template never grants acceptance. Preserve review and build attempts; a failed new build must not destroy or silently reuse the last successful build. Source, semantic and visual approval each require the actual recorded work.
 
-## vNext exposition and publication contract
+## Exposition and manuscript publication contract
 
 Before writing, read [reader calibration](references/reader-calibration.md),
 [project overview](references/overview.md), [four profiles](references/editions.md)
@@ -122,15 +122,16 @@ as newly accepted. Reprepare preserves existing main.tex and outline.md, not an 
 upgrade. Software checks identity, structure and evidence, not mathematical truth,
 reader understanding, authorization or originality. Author rereading remains author
 rereading, even in another tool or context. Report unperformed independent and real-reader
-checks separately. This candidate is not a formally published Release.
+checks separately. Software version 2.1.0 does not certify mathematical correctness,
+originality or complete-proof quality. A two-layer knowledge base is not implemented.
 
-## rc2 design and historical policy
+## Current design and historical policy
 
 Read `artifacts.exposition_design` after prepare. Complete topic-specific audience,
 reader goals and outline; structure and release reject unresolved default tasks.
 Keep preview drafts visibly unverified. Repeated prepare preserves authored main,
 outline and style. Knowledge readiness never requires an output outline.
-Adopt rc2 with a new output ID and schema 2.2.0. Do not rewrite historical outputs.
+Adopt the current policy with a new output ID and schema 2.2.0. Do not rewrite historical outputs.
 
 Treat `view` as a reader task within the requested profile. Use the generated
 node-specific reasons and emphasis order as editable navigation; inspect actual

@@ -32,17 +32,17 @@ jobs:
       - name: Validate installed resources and create archive
         run: |
           python skills/pure-math-survey/scripts/validate_assets.py --json
-          python skills/pure-math-survey/scripts/package_release.py --output "$RUNNER_TEMP/pure-math-survey-2.1.0-rc2.zip"
+          python skills/pure-math-survey/scripts/package_release.py --output "$RUNNER_TEMP/pure-math-survey-2.1.0.zip"
       - name: Verify clean isolated installation and actual benchmark builds
-        run: python tools/verify_release.py "$RUNNER_TEMP/pure-math-survey-2.1.0-rc2.zip" --report "$RUNNER_TEMP/clean-install.json"
-      - name: Retain candidate validation evidence (not a Release)
+        run: python tools/verify_release.py "$RUNNER_TEMP/pure-math-survey-2.1.0.zip" --report "$RUNNER_TEMP/clean-install.json"
+      - name: Retain validation evidence (not a Release)
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: candidate-python-${{ matrix.python }}-${{ github.sha }}
+          name: validation-python-${{ matrix.python }}-${{ github.sha }}
           path: |
-            ${{ runner.temp }}/pure-math-survey-2.1.0-rc2.zip
-            ${{ runner.temp }}/pure-math-survey-2.1.0-rc2.zip.sha256
+            ${{ runner.temp }}/pure-math-survey-2.1.0.zip
+            ${{ runner.temp }}/pure-math-survey-2.1.0.zip.sha256
             ${{ runner.temp }}/clean-install.json
             ${{ runner.temp }}/tests.log
           if-no-files-found: error

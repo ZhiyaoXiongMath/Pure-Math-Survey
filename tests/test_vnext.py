@@ -326,7 +326,7 @@ class VNext(unittest.TestCase):
             z.extractall(self.base/'installed')
         entry=self.base/'installed/pure-math-survey/scripts/survey.py'
         run=subprocess.run([sys.executable,'-I',str(entry),'--version','--json'],cwd=self.base,capture_output=True,text=True)
-        self.assertEqual(run.returncode,0,run.stdout);self.assertIn('2.1.0-rc2',run.stdout)
+        self.assertEqual(run.returncode,0,run.stdout);self.assertIn('2.1.0',run.stdout)
     def test_V38_generated_fragment_edit_still_rejected(self):
         p,v=self.authored();(p.parent/'generated/statements/N-main.tex').write_text('A supposedly improved theorem.')
         self.failcode('CANONICAL_STATEMENT_CHANGED',verify_generated,self.root,v)

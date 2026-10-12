@@ -1,6 +1,6 @@
 # Native file fields and reproducible operations
 
-The candidate software runtime is `2.1.0-rc2`. Project, knowledge, sources, snapshots and generated/build manifests retain schema `2.0.0`. New output plans and policy-bearing mathematical/output-semantic reviews use schema `2.2.0`; historical `2.0.0` plans and reviews remain readable without mutation. See [output review](output-review.md) for whole-manuscript checks, actual body locations and build history. JSON has no duplicate keys or nonfinite numbers. Stable IDs use letters/digits/dot/underscore/hyphen, with N- and S- prefixes for nodes and sources; each filename equals its ID. All project-relative paths are POSIX, contain no traversal/absolute prefix and cross no symbolic links.
+The software runtime is `2.1.0`. Project, knowledge, sources, snapshots and generated/build manifests retain schema `2.0.0`. New output plans and policy-bearing mathematical/output-semantic reviews use schema `2.2.0`; historical `2.0.0` plans and reviews remain readable without mutation. See [output review](output-review.md) for whole-manuscript checks, actual body locations and build history. JSON has no duplicate keys or nonfinite numbers. Stable IDs use letters/digits/dot/underscore/hyphen, with N- and S- prefixes for nodes and sources; each filename equals its ID. All project-relative paths are POSIX, contain no traversal/absolute prefix and cross no symbolic links.
 
 ## Project and knowledge
 
@@ -77,19 +77,19 @@ no script claims to decide mathematical truth, comprehension, authorization or n
 
 Schema 2.0.0 output plans use only the historical three modes and may not contain new
 policy/contribution fields. Schema 2.2.0 plans cannot be read by the old 2.0.4 parser.
-No in-place migration command is added. To adopt vNext, create a new output ID from an
+No in-place migration command is added. To adopt the current policy, create a new output ID from an
 appropriate snapshot, refine its new plan/outline, and perform the new readings. Repair
 canonical statements in knowledge and freeze again when necessary. Old snapshots,
 manuscripts and evidence remain unchanged; reprepare preserves authored prose and outline.
-Legacy release checks explicitly identify `legacy-2.0.0`; they are not vNext acceptance.
+Legacy release checks explicitly identify `legacy-2.0.0`; they are not current-policy acceptance.
 Never manually downgrade a new plan to evade policy gates.
 
-## rc2 adoption and design checks
+## Current-policy adoption and design checks
 
 | Output schema | Recorded policy | Current package authorization |
 | --- | --- | --- |
-| 2.0.0 | legacy-2.0.0 | Requires a new rc2 output |
-| 2.1.0 | four-modes-2026-10-11-r2 | Requires a new rc2 output |
+| 2.0.0 | legacy-2.0.0 | Requires a new schema-2.2.0 output |
+| 2.1.0 | four-modes-2026-10-11-r2 | Requires a new schema-2.2.0 output |
 | 2.2.0 | four-modes-2026-10-12-rc2 | Only after current release checks |
 
 Unknown or mixed schema/policy pairs fail closed. Use `output validate ... --stage
@@ -107,7 +107,7 @@ Only explicitly draft plans may preview missing/incomplete design and manuscript
 placeholders. Invalid outline node references, canonical and TeX safety errors
 still block previews. Preview never flips draft or creates accepted evidence.
 
-## Paper comparison and support evidence (rc2)
+## Paper comparison and support evidence (schema 2.2.0)
 
 Each original contribution binds explicit `(comparison_node_id, prior_result_id)`
 pairs. The relation must use compares_with links to both the contribution node
