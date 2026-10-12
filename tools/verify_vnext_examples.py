@@ -41,6 +41,10 @@ def verify(examples: Path, destination: Path, skill: Path, build: bool = True) -
             report['snapshots_verified'] += 1
         for path in sorted((project / 'outputs').glob('*/plan.json')):
             plan = load_plan(path); oid = plan['output_id']; out = path.parent
+            # This is the fixed historical rc1 regression suite. New rc2
+            # outputs are checked separately by verify_rc2_examples.py.
+            if plan['schema_version'] == '2.2.0':
+                continue
             structure = validate_structure(project, oid)
             if structure['errors']: raise AssertionError(structure['errors'])
             ready = assess_readiness(project, plan)

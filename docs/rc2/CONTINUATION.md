@@ -85,3 +85,24 @@ mathematical comparison and source-reading acceptance remain NOT VERIFIED.
 Status: F1–F4 software IMPLEMENTED and locally TESTED. This result is not remote
 CI acceptance, a real mathematical reading, PDF observation or candidate delivery.
 Real three-paper authoring and final installed-environment acceptance are ongoing.
+
+## Recovered remote and isolated test loop
+
+- Commit 307dd831: remote run 38226754768, job 114736041828, **184 tests OK**
+  (77.515 seconds), successful Actions conclusion.
+- Built the install ZIP from that runtime: 71 members, 70 verified member hashes;
+  SHA-256 `75a49d5b5a657bd819d7576f0a84fa3bedbd0e783d8baa8358a4b2bc23c21a7e`.
+- Extended verify_release.py to copy the full regression harness around only
+  the extracted skill, execute all 184 tests with isolated Python in a fresh
+  no-pip/no-system-site-packages venv, and check all 20 installed view resources.
+  This actual installed run passed, imported 17 installed modules, kept
+  knowledge-only outputs at zero, and rebuilt/rendered all seven historical
+  rc1 benchmark PDFs. Those new renders were explicitly NOT VISUALLY REVIEWED.
+- Historical verifier now selects the fixed rc1 suite, leaving new rc2 outputs
+  to their separate acceptance path. Initial installation attempt encountered
+  an unfinished rc2 Lecture while globbing historical outputs; the scope fix
+  above preserves the original seven scenarios and the rerun passed.
+- Source regression after verifier changes: 184 tests OK (45.580 seconds).
+
+Status: reliable source/installed/remote test loop TESTED. Candidate mathematics
+and final PR CI remain separate unfinished acceptance responsibilities.
