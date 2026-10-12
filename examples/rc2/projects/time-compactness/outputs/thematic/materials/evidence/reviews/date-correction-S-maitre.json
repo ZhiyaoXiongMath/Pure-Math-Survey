@@ -1,0 +1,47 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "AUTHOR-DATE-CORRECTION-S-maitre",
+  "kind": "source",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-maitre.md",
+      "sha256": "ee134671cad56df262b7aa20a19ca8d0eba5a357108a36cc3139a96c476d9109"
+    },
+    {
+      "path": "knowledge/sources/S-maitre.json",
+      "sha256": "e36458b1cb74a89db360c6cf8c9fc41a99e7b5c3ab3a4e1fd6f8070a3ff56297"
+    }
+  ],
+  "scope": {
+    "source_ids": [
+      "S-maitre"
+    ],
+    "source_reading": {
+      "S-maitre": {
+        "mode": "original_text_online",
+        "version": "Published IJMMS 2003:27, pp. 1725--1730, DOI 10.1155/S0161171203106175",
+        "locators": [
+          "Introduction, p. 1725",
+          "Theorem 2.1 and Remark 2.2, p. 1726",
+          "Lemma 2.3 and proof, pp. 1726--1729",
+          "Equation (2.24) and Corollary 2.4, p. 1730"
+        ],
+        "raw_bytes_unavailable_reason": "Downloaded and read in transient scratch; raw copyrighted PDF excluded from the redistributable project. Actual transient PDF SHA-256 is retained in the source record; project-local byte rechecking is unavailable."
+      }
+    }
+  },
+  "findings": [
+    "Actually read the original supporting sections listed in scope and the detailed reading note. Mathematical locators and controlling version, including publication/preprint distinction, were checked.",
+    "Published numbering Theorem 2.1 controls. The full truncation proof and K(0) term were checked. No inverse, monotonicity or continuity of K is smuggled into the theorem.",
+    "Reread correction on 12 October 2026: the cause of the internal 2018 PDF dates is unverified. The controlling source is still published Maitre 2003 or arXiv Barrett--Suli v2 2011, as appropriate. This corrects provenance wording, not any mathematical statement or proof step; earlier snapshot bytes and reviews remain unchanged."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "No independent mathematical referee or real target-reader study has been performed. Source reading is scoped, and raw originals are not redistributed."
+    }
+  ],
+  "disposition": "accepted"
+}

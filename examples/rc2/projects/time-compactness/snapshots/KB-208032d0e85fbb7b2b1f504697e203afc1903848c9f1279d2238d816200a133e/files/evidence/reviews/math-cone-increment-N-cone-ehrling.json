@@ -1,0 +1,59 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "AUTHOR-MATH-CONE-INCREMENT-N-cone-ehrling",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-barrett-suli.md",
+      "sha256": "edd2eb873a0d7132b1bff24016fd30abbe2e83132b7fece919000cb23cac4a71"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "f46df710c1b856e2928bdd9d0144a8573dca5ed5d5ec1a6d50480ae6a0670f1c"
+    },
+    {
+      "path": "knowledge/nodes/N-cone-definition.md",
+      "sha256": "ed4e3e0005e024c8beac174caefa7fe45c3568e212e3fa73e38df4f5aa9026d3"
+    },
+    {
+      "path": "knowledge/nodes/N-cone-ehrling.md",
+      "sha256": "c73db5d12c0a398946c071d4767a947f932c900a63510538594e54c60618dd2c"
+    },
+    {
+      "path": "knowledge/sources/S-barrett-suli.json",
+      "sha256": "8ebe5cb8b76c4d5d9aa7c47e323728980e07993cebd8a0f352a85ce560a86ba0"
+    },
+    {
+      "path": "project.json",
+      "sha256": "f8e62a551e5c926ac1af2ad83421630a0555766a242709d3eabbea1319bab801"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "bc5dc378f261923ade16ab6bfae349d0233c018eb96de07ed2c99fa55951f353"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-cone-ehrling"
+    ],
+    "evidence_basis": "Author rereading and explicit calculation of the fixed-node argument, with source support scoped as recorded. Recomputed the normalization by a_n=[u_n]+[v_n]>0. Both scaled points have gauge<=1; common A0 subsequences exist, their difference tends to zero in A1, and injectivity identifies the A0 limits. A positive lower bound eta0 on A0 separation contradicts that limit. The proof never evaluates the gauge at u-v.",
+    "proof_steps": {
+      "N-cone-ehrling": [
+        "Normalize both cone points by the sum of their gauges and use compactness plus injectivity."
+      ]
+    }
+  },
+  "findings": [
+    "Recomputed the normalization by a_n=[u_n]+[v_n]>0. Both scaled points have gauge<=1; common A0 subsequences exist, their difference tends to zero in A1, and injectivity identifies the A0 limits.",
+    "A positive lower bound eta0 on A0 separation contradicts that limit. The proof never evaluates the gauge at u-v."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "No independent mathematical referee or real target-reader study has been performed. Source reading is scoped, and raw originals are not redistributed."
+    }
+  ],
+  "disposition": "accepted"
+}

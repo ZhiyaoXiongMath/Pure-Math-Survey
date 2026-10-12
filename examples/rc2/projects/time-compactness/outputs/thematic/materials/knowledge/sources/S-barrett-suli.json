@@ -1,0 +1,26 @@
+{
+  "schema_version": "2.0.0",
+  "id": "S-barrett-suli",
+  "kind": "primary",
+  "title": "Reflections on Dubinskii's nonlinear compact embedding theorem",
+  "authors": [
+    "John W. Barrett",
+    "Endre Suli"
+  ],
+  "publication_status": "preprint",
+  "identifiers": {
+    "url": "https://arxiv.org/pdf/1101.1990v2"
+  },
+  "version": "arXiv:1101.1990v2, submitted 16 April 2011, 17 pages",
+  "bibliography": {
+    "year": 2011
+  },
+  "access": {
+    "state": "full_text_read",
+    "checked_at": "2026-10-12",
+    "material_sha256": "030e553efcf2a73b25da62b744f03300dc7827f8bc2f9953112b90751082b2f1",
+    "local_path": null,
+    "reading_note": "evidence/source-checks/S-barrett-suli.md",
+    "material_hash_unavailable_reason": "The original PDF was downloaded transiently and inspected. Its actual SHA-256 is retained, but copyrighted raw text is not redistributed in this project or snapshot; no project-local raw-byte verification is available. Original-text online readings and locators are retained."
+  }
+}

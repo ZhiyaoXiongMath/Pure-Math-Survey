@@ -57,7 +57,9 @@ def main()->int:
             shutil.copytree(ROOT/'tests',suite/'tests',ignore=shutil.ignore_patterns('__pycache__'))
             shutil.copytree(ROOT/'tools',suite/'tools',ignore=shutil.ignore_patterns('__pycache__'))
             shutil.copytree(ROOT/'examples/vnext/projects',suite/'examples/vnext/projects',
-                            ignore=shutil.ignore_patterns('rc2-*','build','history','__pycache__'))
+                            ignore=shutil.ignore_patterns('build','history','__pycache__'))
+            shutil.copytree(ROOT/'examples/rc2/projects',suite/'examples/rc2/projects',
+                            ignore=shutil.ignore_patterns('build','history','__pycache__'))
             shutil.copytree(skill,suite/'skills/pure-math-survey')
             executed=check([str(exe),'-I','-m','unittest','discover','-s',str(suite/'tests'),'-v'],base,env,False)
             count=re.search(r'Ran (\d+) tests',executed['stderr'])
@@ -78,7 +80,12 @@ def main()->int:
                     '--skill-root',str(skill),'--examples',str(example),'--output',str(base/'relocated-examples')],base,env)
                 if reproduced['status']!='PASS':raise AssertionError(reproduced)
                 report['installed_profile_builds']=reproduced['outputs']
-                report['installed_tex_build']='Seven PDFs BUILT and rendered using the isolated installed runtime; new PDFs NOT VISUALLY REVIEWED'
+                current=check([str(exe),'-I',str(ROOT/'tools/verify_rc2_examples.py'),
+                    '--repository',str(ROOT),'--skill-root',str(skill),
+                    '--output',str(base/'relocated-rc2')],base,env)
+                if current['status']!='PASS':raise AssertionError(current)
+                report['installed_rc2_builds']=current['outputs']
+                report['installed_tex_build']='Eleven PDFs BUILT and rendered using the isolated installed runtime: seven historical and four current rc2; new PDFs NOT VISUALLY REVIEWED'
             else:report['installed_tex_build']='NOT_EXECUTED (--no-build)'
         report['status']='PASS'
     except (AssertionError,ValueError,OSError,RuntimeError,subprocess.SubprocessError,zipfile.BadZipFile) as e:report.update(status='FAIL',failure=str(e))

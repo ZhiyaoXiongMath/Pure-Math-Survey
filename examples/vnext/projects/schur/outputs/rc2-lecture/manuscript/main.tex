@@ -1,0 +1,180 @@
+\documentclass[12pt,reqno]{amsart}
+\usepackage{math-review}
+\input{../generated/conventions.tex}
+\title[Square completion and the Schur complement]{Deriving the Schur-complement criterion\\by square completion}
+\author{A lecture on classical linear algebra}
+\date{}
+\begin{document}
+\maketitle
+
+\section{The goal and the operation that will prove it}
+A block quadratic form couples two vectors through a mixed term. The aim
+is to remove that coupling by a change of variables and then test the two
+remaining terms separately. The complete goal is the following classical
+criterion.
+\begin{theorem}\label{thm:main}
+\input{../generated/statements/N-main.tex}
+\end{theorem}
+Throughout, $H>0$ abbreviates the positive definiteness defined in the
+statement. The fixed data are the blocks $A,B,C$; the vectors $x,y$ will
+range freely over their respective real spaces. Multiplying the blocks gives
+\begin{equation}\label{eq:Q}
+ Q(x,y):=\begin{pmatrix}x\\y\end{pmatrix}^{\!\mathsf T}
+ M\begin{pmatrix}x\\y\end{pmatrix}
+ =x^{\mathsf T}Ax+2x^{\mathsf T}By+y^{\mathsf T}Cy.
+\end{equation}
+The cross term $2x^{\mathsf T}By$ prevents a direct separate sign test.
+We will choose $z=x+Ky$ to absorb it into $z^{\mathsf T}Az$. Matching the
+cross term will force $AK=B$ and hence $K=A^{-1}B$.
+
+There are two tasks after this choice: compute the remainder exactly, and
+verify that $(x,y)\mapsto(z,y)$ preserves nonzero pairs. The first is
+Lemma~\ref{lem:square}; the second is Lemma~\ref{lem:inverse}. Together they
+prove sufficiency. Necessity uses the particular choice $x=-A^{-1}By$,
+which cancels the first term for each nonzero $y$.
+
+\paragraph{Reader inputs.}
+We assume multiplication of compatible real matrices, the transpose rule
+$(UV)^{\mathsf T}=V^{\mathsf T}U^{\mathsf T}$, and expansion of a scalar
+square. Positive definiteness was recalled in the theorem. We also import
+the elementary finite-dimensional fact that a square linear map with zero
+kernel is invertible. We will use it only to justify $A^{-1}$; the block
+identity and its inverse change of variables are proved below.
+No Schur-complement or congruence theorem is assumed.
+
+\section{Choose the shift by matching the mixed term}
+For real scalars $a>0,b,c$, expand a trial square:
+\[
+ a(x+ky)^2=ax^2+2akxy+ak^2y^2.
+\]
+Matching $2bxy$ means $ak=b$. Substituting $k=b/a$ leaves
+\begin{equation}\label{eq:scalar}
+ ax^2+2bxy+cy^2
+ =a\left(x+\frac ba y\right)^2+
+   \left(c-\frac{b^2}{a}\right)y^2.
+\end{equation}
+The last coefficient is the cost of removing the mixed term. In blocks
+we seek a $p\times q$ matrix $K$, so that $Ky\in\mathbb R^p$ can be
+added to $x$. Symmetry of $A$ gives
+\[
+ (x+Ky)^{\mathsf T}A(x+Ky)
+ =x^{\mathsf T}Ax+2x^{\mathsf T}AKy+y^{\mathsf T}K^{\mathsf T}AKy.
+\]
+Thus $AK=B$ matches the mixed terms for all $x,y$, exactly as $ak=b$
+did in the scalar calculation.
+
+Here the hypothesis $A>0$ first enters. If $Au=0$, then
+$u^{\mathsf T}Au=0$, so positivity forces $u=0$. The imported kernel test
+now gives invertibility, and the unique choice is
+\[
+ K=A^{-1}B\in\mathbb R^{p\times q},\qquad z=x+A^{-1}By.
+\]
+The construction has supplied an admissible vector $z$ of the correct
+size. The next calculation identifies exactly what remains.
+
+\section{Expand the square and identify the remainder}
+Symmetry and invertibility give
+$(A^{-1})^{\mathsf T}=(A^{\mathsf T})^{-1}=A^{-1}$. Hence
+\begin{align*}
+ z^{\mathsf T}Az
+ &=(x+A^{-1}By)^{\mathsf T}A(x+A^{-1}By)\\
+ &=x^{\mathsf T}Ax+x^{\mathsf T}AA^{-1}By
+   +y^{\mathsf T}B^{\mathsf T}(A^{-1})^{\mathsf T}Ax\\
+ &\hspace{1.5em}+y^{\mathsf T}B^{\mathsf T}(A^{-1})^{\mathsf T}AA^{-1}By\\
+ &=x^{\mathsf T}Ax+x^{\mathsf T}By+y^{\mathsf T}B^{\mathsf T}x
+   +y^{\mathsf T}B^{\mathsf T}A^{-1}By\\
+ &=x^{\mathsf T}Ax+2x^{\mathsf T}By+y^{\mathsf T}B^{\mathsf T}A^{-1}By.
+\end{align*}
+The middle terms coincide because the scalar $x^{\mathsf T}By$ equals
+its transpose. Subtract the last term and add $y^{\mathsf T}Cy$.
+This proves the exact identity we need, with weaker assumptions than the
+goal theorem.
+\begin{lemma}\label{lem:square}
+\input{../generated/statements/N-square.tex}
+\end{lemma}
+Thus the remaining matrix is $S=C-B^{\mathsf T}A^{-1}B$, the Schur
+complement of $A$ in $M$. It is a symmetric $q\times q$ matrix:
+\[
+ S^{\mathsf T}=C^{\mathsf T}-B^{\mathsf T}(A^{-1})^{\mathsf T}B=S.
+\]
+The square calculation used symmetry and invertibility, without using
+the sign of $A$. That sign becomes essential in the positivity argument.
+
+\section{Preserve nonzero vectors and prove both directions}
+An identity in new variables is useful only if the change does not lose
+any vectors that positivity must test. The precise elementary fact is:
+\begin{lemma}\label{lem:inverse}
+\input{../generated/statements/N-inverse.tex}
+\end{lemma}
+\begin{proof}
+The two compositions are
+\[
+ (x,y)\longmapsto(x+Ky,y)\longmapsto((x+Ky)-Ky,y)=(x,y)
+\]
+and
+\[
+ (z,y)\longmapsto(z-Ky,y)\longmapsto((z-Ky)+Ky,y)=(z,y).
+\]
+Both maps take zero to zero. Applying the inverse shows that a nonzero
+pair cannot map to zero. The same argument applies in the reverse direction.
+\end{proof}
+We use this lemma with $K=A^{-1}B$. The proof now separates into two
+arguments with different choices of vectors.
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+\emph{Sufficiency.} Assume $S>0$, retaining the theorem's hypothesis $A>0$.
+Take an arbitrary nonzero pair $(x,y)$ and set $z=x+A^{-1}By$.
+Lemma~\ref{lem:inverse} ensures that $(z,y)\ne(0,0)$, and
+Lemma~\ref{lem:square} gives
+\[
+ Q(x,y)=z^{\mathsf T}Az+y^{\mathsf T}Sy.
+\]
+If $z\ne0$, the first term is positive and the second is nonnegative.
+If $z=0$, then $y\ne0$, so the second term is positive and the first
+is zero. In either case $Q(x,y)>0$. Since the original nonzero pair was
+arbitrary, this proves $M>0$.
+
+\emph{Necessity.} Assume $M>0$ and let $y\in\mathbb R^q$ be an arbitrary
+nonzero vector. Choose $x=-A^{-1}By$. This makes $z=0$, while $(x,y)$
+is still nonzero because its second component is nonzero. Therefore
+\[
+ y^{\mathsf T}Sy=Q(-A^{-1}By,y)>0.
+\]
+This holds for every nonzero $y$, which is exactly $S>0$.
+\end{proof}
+The inverse map protects the universal test in the forward direction;
+the cancellation vector isolates the residual form in the reverse
+direction. No determinant criterion or eigenvalue formula was needed.
+
+\section{Execute the method and locate its limit}
+Take $p=q=1$, $A=2$, $B=1$, $C=1$. The prescribed operations give
+\[
+ A^{-1}B=\frac12,\qquad S=1-\frac12=\frac12,
+\]
+and the complete quadratic-form calculation is
+\[
+ 2x^2+2xy+y^2=2(x+y/2)^2+\frac12y^2.
+\]
+For $(x,y)\ne(0,0)$, the two terms cannot both vanish: vanishing of the
+second forces $y=0$, and vanishing of the first then forces $x=0$.
+This verifies positive definiteness directly. With $y$ fixed, the first
+term has unique minimum zero at $x=-y/2$, leaving minimum $y^2/2$.
+
+To see why invertibility alone is insufficient, take $A=-1$, $B=0$,
+$C=1$. Then $A$ is invertible and $S=1>0$, but
+\[
+ Q(x,y)=-x^2+y^2,\qquad Q(1,0)=-1<0.
+\]
+The square identity remains valid. The precise failing step is the
+assertion that $z^{\mathsf T}Az$ is positive when $z\ne0$.
+This is a counterexample to dropping $A>0$, not to the stated theorem.
+If $A$ is singular, $A^{-1}B$ is unavailable, so this construction does
+not apply. No pseudoinverse criterion is asserted.
+
+The exposition follows the elementary model in the supplied development
+guide~\cite[Appendix A]{S-guide}, with the square expansion, inverse map,
+and both positivity directions written out here. It concerns known
+finite-dimensional linear algebra and makes no originality claim.
+\bibliographystyle{plain}
+\bibliography{../generated/references}
+\end{document}

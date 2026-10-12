@@ -16,3 +16,9 @@ __pycache__/
 !examples/schur-complement/pure-math-survey-2.0.4-schur-example.zip
 build/
 dist/
+# New rc2 binary build/page history is delivered in the reviewed candidate bundle.
+# Editable projects, snapshots, scoped readings and artifact hashes remain in Git.
+examples/rc2/**/history/
+examples/rc2/**/evidence/pages/
+examples/vnext/projects/schur/outputs/rc2-lecture/history/
+examples/vnext/projects/schur/outputs/rc2-lecture/evidence/pages/

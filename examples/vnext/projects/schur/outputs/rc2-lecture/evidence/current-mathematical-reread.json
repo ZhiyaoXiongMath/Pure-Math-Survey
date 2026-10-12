@@ -1,0 +1,84 @@
+{
+  "schema_version": "2.2.0",
+  "review_id": "AUTHOR-schur-rc2-current-mathematics-20261012",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "materials/evidence/source-checks/guide.md",
+      "sha256": "983facc726cb80b8557af6559099fb00c52189e4bdf201dc4d23d92f297f56eb"
+    },
+    {
+      "path": "materials/knowledge/conventions.tex",
+      "sha256": "11cd32e393793531befa920aceac933e3c544ada8683f11f893b87876a529217"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-inverse.md",
+      "sha256": "6f5849541d1c6d504b6ba4422a55f8098b6799a09a560ec47edd7194d67c1825"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-main.md",
+      "sha256": "504e3086ebf7c713451c245be990652dc090f50891213035ff3e545ebf085bfc"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-square.md",
+      "sha256": "e85d8c39b5085ed191764a5d140b110b783fef7582b27ac50e1db6a761b74e57"
+    },
+    {
+      "path": "materials/knowledge/sources/S-guide.json",
+      "sha256": "1e3177ed0672d6a08f1382eeca94e093f14d25c8ffb9690ed18686919af1283c"
+    },
+    {
+      "path": "materials/project.json",
+      "sha256": "115206db4cea5d445c1b55fc133c7abb052682331c37821eedded041d8324ae3"
+    },
+    {
+      "path": "materials/scope.md",
+      "sha256": "6e6ebc462dbd6c081d7e03592bae8af55a86345bc8abfd525caff56d8ad00844"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-main"
+    ],
+    "editorial_policy": "four-modes-2026-10-12-rc2",
+    "statement_reviews": {
+      "N-main": {
+        "canonical_sha256": "7fbd296b18eeb836ea91f525d36f456fdf0cd5e5755ca999a15b3892364e4227",
+        "outcome": "accepted",
+        "objects": "The statement itself gives real blocks A, B, C, constructs the symmetric block matrix M and defines the residual matrix S. No remote formula is needed.",
+        "domain": "The integers p,q are at least one and each block dimension is explicit; vectors in the positivity definition have the appropriate real dimension.",
+        "fixed_and_variable": "A,B,C are arbitrary fixed input blocks satisfying the stated assumptions. The positivity tests quantify varying vectors, not a solution matrix to be found.",
+        "hypotheses": "A and C are symmetric and A has strictly positive quadratic form on every nonzero x. The hypothesis implies existence of A inverse through the zero-kernel argument developed in section 2.",
+        "equations": "Both M=[[A,B],[B^T,C]] and S=C-B^T A^{-1}B are displayed inside the imported statement. The surrounding proof uses exactly those signs and block orders.",
+        "quantifiers": "The criterion holds for each admissible block triple and all p,q>=1. Necessity tests each nonzero y separately; it does not select just one favourable y.",
+        "conclusion": "Under the retained A>0 assumption the conclusion is precisely M positive definite if and only if S positive definite. Neither singular blocks nor a semidefinite extension is asserted.",
+        "status": "This is an established elementary classical criterion, rederived as a lecture. The ending explicitly disclaims an originality claim.",
+        "local_definitions": "Positive definite is defined within the statement, including the nonzero-vector quantifier. The only other operations are ordinary real transpose, multiplication and inverse, calibrated in section 1."
+      }
+    },
+    "evidence_basis": "Actual current reading of N-main, N-square, N-inverse and their derivation bodies, plus supplied guide r2 Appendix A. Each product and both positivity directions were recomputed. This output-local record supplements the unchanged historical readiness evidence; it does not alter the snapshot or redate historical records.",
+    "proof_steps": {
+      "N-main": [
+        "Expand the square with A symmetric and invertible.",
+        "Use the invertible change of variables for sufficiency.",
+        "Choose x=-A^{-1}By for every nonzero y to prove necessity."
+      ]
+    }
+  },
+  "findings": [
+    "Reread the isolated canonical criterion. Its A>0 hypothesis simultaneously gives a zero kernel and the sign of z^T A z; the inverse therefore has a justified domain.",
+    "Recomputed z^T A z with (A^{-1})^T=A^{-1}; the cross terms agree as transposed real scalars and the remainder has minus B^T A^{-1}B, with all dimensions compatible.",
+    "Checked the inverse map by both compositions. Under A>0 and S>0, a nonzero pair gives either a positive z term or, if z=0, a positive y term.",
+    "Checked necessity with arbitrary nonzero y and x=-A^{-1}By. The pair stays nonzero and cancels the square, proving a universal positivity condition.",
+    "The supplied guide Appendix A was actually reread from the local r2 upload. Its full file SHA256 2e8c5ab518cc40f62a2085ec573ac3c53c81ad9cf53e0fefe9e38f2d35420188 agrees with S-guide. No external literature search is claimed."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "This is author rereading of known elementary mathematics, without independent review, target-reader testing or literature-completeness assessment."
+    }
+  ],
+  "disposition": "accepted"
+}

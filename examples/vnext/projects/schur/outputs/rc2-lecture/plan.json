@@ -1,0 +1,84 @@
+{
+  "schema_version": "2.2.0",
+  "output_id": "rc2-lecture",
+  "snapshot_id": "KB-714ebb540c07ca2585ac455f40d642f6920d708a8a3ce1f91f4e4000d41f12cd",
+  "profile": "lecture",
+  "view": "methods",
+  "language": "en",
+  "title": "Deriving the Schur-complement criterion by square completion",
+  "audience": "A reader who can multiply real matrices and block vectors, transpose products, and complete a scalar square. Positive definiteness and the square-matrix kernel test are refreshed explicitly. No prior Schur-complement formula or invariance under congruence is assumed.",
+  "reader_goals": [
+    "Derive the shift K=A^{-1}B by matching the mixed term, then reproduce the complete block square expansion.",
+    "Use the inverse coordinate map to prove sufficiency and a universally quantified cancellation vector to prove necessity.",
+    "Compute the scalar example A=2, B=1, C=1 and identify the failed sign step for A=-1, B=0, C=1; distinguish that counterexample from the unaddressed singular case."
+  ],
+  "question_ids": [
+    "N-question"
+  ],
+  "prerequisites": [
+    "Assumed: multiply compatible real matrices and block vectors, transpose a product, and recognize that a real scalar equals its transpose.",
+    "Assumed: expand a scalar square and collect coefficients; section 2 repeats the specific calculation used.",
+    "Refreshable: a real symmetric H is positive definite exactly when v^T H v>0 for every nonzero real v; this is stated with the goal theorem.",
+    "Refreshable imported input: a square linear map on a finite-dimensional vector space is invertible if its kernel is zero; used only to obtain A^{-1} from A>0.",
+    "Bridge-required: construct the block shift and residual S by explicit expansion, prove its inverse map, and track nonzero vectors. Both required result nodes are selected in full."
+  ],
+  "selections": [
+    {
+      "node_id": "N-main",
+      "role": "principal_answer",
+      "statement_treatment": "full",
+      "proof_treatment": "complete",
+      "reason": "The full goal and both directions of its proof are the lecture task; square completion and nonzero-vector control are its two consumed inputs."
+    },
+    {
+      "node_id": "N-boundary",
+      "role": "boundary",
+      "statement_treatment": "explained_reference",
+      "proof_treatment": "none",
+      "reason": "Execute the recorded scalar positive model and the negative-block counterexample; state the singular case only as noncoverage."
+    },
+    {
+      "node_id": "N-inverse",
+      "role": "essential_bridge",
+      "statement_treatment": "full",
+      "proof_treatment": "none",
+      "reason": "Prove both inverse compositions and use nonzero-pair preservation precisely in the sufficiency argument."
+    },
+    {
+      "node_id": "N-square",
+      "role": "essential_bridge",
+      "statement_treatment": "full",
+      "proof_treatment": "none",
+      "reason": "Build the exact identity by matching AK=B, checking dimensions and symmetry, and expanding all four terms before applying it."
+    }
+  ],
+  "omissions": [
+    {
+      "node_id": "N-comparison",
+      "reason": "The lecture teaches the square-completion construction completely. A separate congruence formulation is not needed to execute this method, so its alternative matrix statement is omitted."
+    }
+  ],
+  "proof_obligations": [
+    {
+      "node_id": "N-main",
+      "treatment": "complete",
+      "required_steps": [
+        "Expand the square with A symmetric and invertible.",
+        "Use the invertible change of variables for sufficiency.",
+        "Choose x=-A^{-1}By for every nonzero y to prove necessity."
+      ],
+      "imported_inputs": [
+        "N-square",
+        "N-inverse"
+      ]
+    }
+  ],
+  "limits": {
+    "max_pages": null,
+    "page_review_threshold": null
+  },
+  "comparison_group": null,
+  "draft": false,
+  "editorial_policy": "four-modes-2026-10-12-rc2",
+  "contributions": []
+}

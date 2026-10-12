@@ -1,0 +1,90 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "AUTHOR-COVERAGE-CONE-INCREMENT",
+  "kind": "coverage",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "knowledge/coverage.json",
+      "sha256": "75db82ebf1d5c2386a6b141a812b33812a3abb433e49884477d2632bcdfa1429"
+    },
+    {
+      "path": "knowledge/discovery.md",
+      "sha256": "5328ad7a89f1089c7cbd165ff87e863bb3b34c4f44361c146a2c237363de952e"
+    },
+    {
+      "path": "knowledge/nodes/N-cone-mechanism.md",
+      "sha256": "67b1b24a3adf6d99cdb5dc2a8ef577432c48d5e751c5da4bc6e66df1760b7486"
+    },
+    {
+      "path": "knowledge/nodes/N-cone.md",
+      "sha256": "c6055174fa650b894bf20bcabf2e5bf59ea9013dd1b9800ed2a6bfa22eb1a4a6"
+    },
+    {
+      "path": "knowledge/nodes/N-endpoint.md",
+      "sha256": "595ab0f8deb64bd042887edfadb73108172ed39da10f67dcbfe2d3f4a6ab71ce"
+    },
+    {
+      "path": "knowledge/nodes/N-homogeneous-transfer.md",
+      "sha256": "91c44c5f0fcd9bd9b39a239453d3104e86612e8552dd735981798403309311a8"
+    },
+    {
+      "path": "knowledge/nodes/N-image-only.md",
+      "sha256": "7ebc3be08f326820ebe87f99b22e6ded6b3d240e0142b3641620cdce1bf11f9a"
+    },
+    {
+      "path": "knowledge/nodes/N-linear-mechanism.md",
+      "sha256": "bda15c439b8cf5b378a812f3276bd600633e2f5b1f888aefe5147cd79e6b5be4"
+    },
+    {
+      "path": "knowledge/nodes/N-maitre.md",
+      "sha256": "576d7056ff93ddf46417eb60e36997823fb6d2f96d4221be740aaea722992553"
+    },
+    {
+      "path": "knowledge/nodes/N-question.md",
+      "sha256": "892de85c4d5f796417013baaf3b8fdcfd09c994d79dc3bb36aaf6e0131a37bcc"
+    },
+    {
+      "path": "knowledge/nodes/N-simon.md",
+      "sha256": "cbfaf57cb8052d97595b49315cf26186d13a5cdf1871cdcbd9b4e4ef8a98dff0"
+    },
+    {
+      "path": "knowledge/nodes/N-translations.md",
+      "sha256": "971e970023d24ea9c2e121768677e5ac3f9c681b084ff09795ee5ce7c2fa18fb"
+    },
+    {
+      "path": "knowledge/nodes/N-truncation.md",
+      "sha256": "446c62b0634a1f230a77bd450abed63be97fffb460452c508aca3cc8d847a402"
+    },
+    {
+      "path": "knowledge/overview.md",
+      "sha256": "1d1cfb8bc4dec87ffcb68671ae5b46c2c810074a52a48e9be8db429a24e70a2f"
+    },
+    {
+      "path": "project.json",
+      "sha256": "f8e62a551e5c926ac1af2ad83421630a0555766a242709d3eabbea1319bab801"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "bc5dc378f261923ade16ab6bfae349d0233c018eb96de07ed2c99fa55951f353"
+    }
+  ],
+  "scope": {
+    "question_ids": [
+      "N-question"
+    ]
+  },
+  "findings": [
+    "The final overview now answers all three versions of the bounded question: linear embedding, arbitrary compact image and nonadditive cone. The third source adds an actual new target and two-point mechanism rather than a new citation on an unchanged result.",
+    "Reread all route interfaces forward from the calibrated reader and backward from each principal: interval integrals plus translations, the cone bad-set tail, and the eta-before-index upgrade are explicit.",
+    "Omission challenge retains Chen--Liu 2012 as a relevant excluded refinement and avoids r>1 necessity. The (infinity,1) ramp and image-only example are decisive shared boundaries. The unresolved source proof passage is replaced with a fully recorded argument, not waived."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "No independent mathematical referee or real target-reader study has been performed. Source reading is scoped, and raw originals are not redistributed."
+    }
+  ],
+  "disposition": "accepted"
+}

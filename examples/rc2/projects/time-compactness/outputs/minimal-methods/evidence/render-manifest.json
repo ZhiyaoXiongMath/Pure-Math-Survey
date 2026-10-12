@@ -1,0 +1,60 @@
+{
+  "rendered_at": "2026-10-12T09:24:37.200878+00:00",
+  "pdf_path": "build/main.pdf",
+  "pdf_sha256": "6f868234ffd5774e3634a260fe981e6f326fdba0f63bcdc441347d21eb20dc11",
+  "pages": [
+    {
+      "page": 1,
+      "path": "evidence/pages/page-1.png",
+      "sha256": "b5e0cebdcf87abbf9a415c6c0933c5e1e16cc5286468b38d5e781bfbb712bab3"
+    },
+    {
+      "page": 2,
+      "path": "evidence/pages/page-2.png",
+      "sha256": "a66aabdfd43c07135f2af32812c95b4162b68b1cef5931857c0d7a429ba2dfcf"
+    },
+    {
+      "page": 3,
+      "path": "evidence/pages/page-3.png",
+      "sha256": "a983c77454f05fca8d79a34b03e5b425c676bc89513d1373cd92a086ce59bf9c"
+    },
+    {
+      "page": 4,
+      "path": "evidence/pages/page-4.png",
+      "sha256": "ba27cac9ad00f6142679ea2efee4c0b0a729587e0425dbce29d0668579f2a107"
+    },
+    {
+      "page": 5,
+      "path": "evidence/pages/page-5.png",
+      "sha256": "10060f3fb1f92ad78d1b80d847d5119bf905818791138ae73eac68cfdc9c7416"
+    },
+    {
+      "page": 6,
+      "path": "evidence/pages/page-6.png",
+      "sha256": "a39fa016804c4e16fe6633bde8fc976a4c40452547eabe1bca269cfdbe15f3ef"
+    },
+    {
+      "page": 7,
+      "path": "evidence/pages/page-7.png",
+      "sha256": "f08a8705d27eb7fcee55feb8f674c86efba861bdd3cfd0a02c1f584e0a0fc017"
+    },
+    {
+      "page": 8,
+      "path": "evidence/pages/page-8.png",
+      "sha256": "66a9ad11ac251d1f1813a64d266f37a485c9ad1c2682030030d58970edbfe5bd"
+    }
+  ],
+  "dpi": 120,
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override/pdftoppm",
+    "-png",
+    "-r",
+    "120",
+    "../../build/main.pdf",
+    "page"
+  ],
+  "tool_stdout": "",
+  "tool_stderr": "",
+  "status": "RENDERED_NOT_REVIEWED",
+  "meaning": "Image generation is not a human visual check."
+}

@@ -126,3 +126,37 @@ and final PR CI remain separate unfinished acceptance responsibilities.
 Status: these narrow authoring findings IMPLEMENTED and TESTED. faf7934 remote
 run 38227400876 was still installing TeX at the latest observation; no completed
 CI result is inferred for that run here.
+
+## Remote loop confirmed after source-retention fix
+
+- The previously pending run 38227400876 (faf7934) completed successfully.
+- Run 38228676928 at 3df41200, job 114742439518, also completed successfully.
+  Its actual job log was retrieved, not inferred from local counts.
+- Fresh extracted-package verification at 3df41200 passed 186 tests in isolated
+  Python, checked 70 member hashes, imported all 17 installed runtime modules,
+  prepared 20 profile/view combinations, and rebuilt/rendered the original seven
+  benchmarks. Installation ZIP SHA-256:
+  `11fa729ca89153f91f6e89b6cbca955e8fcc2f56ed16170e22647c1027fb38b5`.
+- These are software results. New rebuilds do not inherit visual acceptance;
+  mathematical and rendered-page readings are recorded on their own exact inputs.
+
+## Real authoring integrated with installation verification
+
+- Completed real three-paper time-compactness Thematic and same-spine methods /
+  boundaries outputs, eight pages each; new Schur Lecture, four pages.
+- Scoped original-source/author semantic readings and actual root observations
+  of all 28 final pages are retained. All four current release/package gates
+  pass, with independent-review limits accurately reported.
+- Added a real-source contract regression and current-output verifier that
+  preserves authored files, rechecks evidence, and compares the canonical spine.
+  Fresh source full regression: 187 tests OK (44.074 seconds).
+- Fresh isolated installation: 187 tests OK (44.878 seconds), all 20 resources,
+  seven historical and four current actual PDF builds/renders. Newly rebuilt
+  PDFs correctly remain NOT VISUALLY REVIEWED.
+- All 399 original example blobs match the original ed8a1a0 remote tree.
+- No accepted historical snapshot/output/review was rewritten. Pagination fixes
+  in the two new Minimal outputs received new semantic records; old accepted
+  author records were retained and affected final pages reopened.
+
+Status: local source/installed tests and actual mathematical/page author readings
+are complete for this group. Final pushed-head PR CI is a separate pending gate.

@@ -103,4 +103,12 @@ python tools/verify_release.py ../pure-math-survey-2.1.0-rc2.zip --no-build
 
 ## vNext acceptance evidence
 
+The rc2 continuation is documented in [candidate validation](docs/rc2/CANDIDATE.md).
+It preserves the historical examples and adds a real Simon–Maitre–Barrett–Süli
+three-paper project, paired methods/boundaries manuscripts, and a new Schur
+Lecture. [Editable rc2 project](examples/rc2/projects/time-compactness/README.md)
+and scoped author/page observations are retained. The candidate bundle contains
+the exact reviewed PDFs, page images and complete build history; a fresh build
+must receive its own visual review.
+
 See [requirements and implementation map](docs/vnext/requirements.md), [actual validation and limitations](docs/vnext/validation.md), and [seven authored benchmark sources](examples/vnext/README.md). Six known-mathematics samples were compiled and author-reviewed; the Paper boundary sample is deliberately non-releasable. Independent review, real-reader feedback, and genuine original-Paper quality are NOT VERIFIED.

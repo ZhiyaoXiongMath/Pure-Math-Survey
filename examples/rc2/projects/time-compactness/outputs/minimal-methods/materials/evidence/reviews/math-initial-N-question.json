@@ -1,0 +1,41 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "AUTHOR-MATH-INITIAL-N-question",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "f46df710c1b856e2928bdd9d0144a8573dca5ed5d5ec1a6d50480ae6a0670f1c"
+    },
+    {
+      "path": "knowledge/nodes/N-question.md",
+      "sha256": "892de85c4d5f796417013baaf3b8fdcfd09c994d79dc3bb36aaf6e0131a37bcc"
+    },
+    {
+      "path": "project.json",
+      "sha256": "f8e62a551e5c926ac1af2ad83421630a0555766a242709d3eabbea1319bab801"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "bc5dc378f261923ade16ab6bfae349d0233c018eb96de07ed2c99fa55951f353"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-question"
+    ],
+    "evidence_basis": "Actual source comparison and author rereading of the fixed node; concrete checks: Reread the scope from the question without paper names: the fixed spaces, varying trajectories, exact strong target and uniform-in-family time quantifier are identifiable. The initial plan must exclude the not-yet-admitted cone branch."
+  },
+  "findings": [
+    "Reread the scope from the question without paper names: the fixed spaces, varying trajectories, exact strong target and uniform-in-family time quantifier are identifiable. The initial plan must exclude the not-yet-admitted cone branch."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "No independent mathematical referee or real target-reader study has been performed. Source reading is scoped, and raw originals are not redistributed."
+    }
+  ],
+  "disposition": "accepted"
+}

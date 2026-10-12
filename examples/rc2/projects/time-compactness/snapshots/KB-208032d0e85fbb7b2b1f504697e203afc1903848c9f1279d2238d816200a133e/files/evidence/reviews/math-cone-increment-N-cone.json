@@ -1,0 +1,70 @@
+{
+  "schema_version": "2.2.0",
+  "review_id": "AUTHOR-MATH-CONE-INCREMENT-N-cone",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-barrett-suli.md",
+      "sha256": "edd2eb873a0d7132b1bff24016fd30abbe2e83132b7fece919000cb23cac4a71"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "f46df710c1b856e2928bdd9d0144a8573dca5ed5d5ec1a6d50480ae6a0670f1c"
+    },
+    {
+      "path": "knowledge/nodes/N-cone-definition.md",
+      "sha256": "ed4e3e0005e024c8beac174caefa7fe45c3568e212e3fa73e38df4f5aa9026d3"
+    },
+    {
+      "path": "knowledge/nodes/N-cone.md",
+      "sha256": "c6055174fa650b894bf20bcabf2e5bf59ea9013dd1b9800ed2a6bfa22eb1a4a6"
+    },
+    {
+      "path": "knowledge/sources/S-barrett-suli.json",
+      "sha256": "8ebe5cb8b76c4d5d9aa7c47e323728980e07993cebd8a0f352a85ce560a86ba0"
+    },
+    {
+      "path": "project.json",
+      "sha256": "f8e62a551e5c926ac1af2ad83421630a0555766a242709d3eabbea1319bab801"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "bc5dc378f261923ade16ab6bfae349d0233c018eb96de07ed2c99fa55951f353"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-cone"
+    ],
+    "editorial_policy": "four-modes-2026-10-12-rc2",
+    "statement_reviews": {
+      "N-cone": {
+        "canonical_sha256": "cd388b3b7b35cc2c36c21e0eaa41763095a9063b412eaa712f8e53ff9459d9b3",
+        "outcome": "accepted",
+        "objects": "A0,A1, M+, its gauge and the family F are explicitly named.",
+        "domain": "Finite T>0, real Banach spaces and 1<=p,q<=infinity with the excluded pair spelled out.",
+        "fixed_and_variable": "Spaces, embedding and cone/gauge are fixed; v varies in a uniformly bounded family.",
+        "hypotheses": "Positive definiteness, nonnegative scaling, degree-one homogeneity, gauge-to-A0 bound, compact gauge balls, measurability and both time bounds are visible.",
+        "equations": "Gauge identities and the sum of the Lp gauge and Lq(A1) derivative norms are displayed.",
+        "quantifiers": "Bounds hold uniformly over F; compactness applies to every gauge-bounded sequence; q>1 or q=1,p finite is an explicit disjunction.",
+        "conclusion": "Every trajectory sequence has an Lp(A0)-convergent subsequence; no cone-closedness or stronger-norm conclusion is implied.",
+        "status": "Known Barrett--Suli theorem in the verified v2, with a local replacement of a source proof interface; no novelty asserted.",
+        "local_definitions": "All nonstandard cone axioms are repeated in the principal. Distributional derivatives and essential norms have their assumed Bochner meaning."
+      }
+    },
+    "evidence_basis": "Author rereading and explicit calculation of the fixed-node argument, with source support scoped as recorded. Isolated canonical rereading retains the full cone axioms, fixed continuous injection A0->A1, compact gauge-bounded inclusion, measurable gauge, both uniform norms and exactly the two allowed exponent ranges. It concludes Lp(A0) compactness and explicitly excludes the (infinity,1) endpoint and limit-in-nonclosed-cone inference. The local proof does not rely on the unresolved source passage."
+  },
+  "findings": [
+    "Isolated canonical rereading retains the full cone axioms, fixed continuous injection A0->A1, compact gauge-bounded inclusion, measurable gauge, both uniform norms and exactly the two allowed exponent ranges.",
+    "It concludes Lp(A0) compactness and explicitly excludes the (infinity,1) endpoint and limit-in-nonclosed-cone inference. The local proof does not rely on the unresolved source passage."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "No independent mathematical referee or real target-reader study has been performed. Source reading is scoped, and raw originals are not redistributed."
+    }
+  ],
+  "disposition": "accepted"
+}
