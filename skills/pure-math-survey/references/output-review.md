@@ -108,10 +108,14 @@ nodes; bind any additionally reviewed node too. Keep `findings` as a list of
 strings, each beginning with its exact check name and a colon. For example, an
 actual reading could report the following forms, only after doing the work:
 
-- `obligation_coverage: Reconstructing the radial substitution exposed the missing Jacobian; the corrected derivation now supplies it [at the conversion](knowledge/nodes/N-radial-change.md#radial-jacobian).`
-- `fast_route_reconstruction: With the calculation hidden, I recovered the density from the stated symmetry and normalization; the support condition was missing from my first answer [in the fast route](knowledge/route.md#density-fast-route).`
-- `slow_step_reproduction: I evaluated the normalization integral from the declared change of variables and found the stated constant [in the calculation](knowledge/nodes/N-density.md#normalization).`
-- `condition_transfer: At the zero parameter the change of variables loses invertibility; this defeats this derivation and does not by itself disprove the claimed limit [at the boundary](knowledge/nodes/N-zero-boundary.md#zero-parameter).`
+- `obligation_coverage: Reconstructing the radial substitution exposed the missing Jacobian; the corrected derivation now supplies it.` Link target: `knowledge/nodes/N-radial-change.md#radial-jacobian`.
+- `fast_route_reconstruction: With the calculation hidden, I recovered the density from the stated symmetry and normalization; the support condition was missing from my first answer.` Link target: `knowledge/route.md#density-fast-route`.
+- `slow_step_reproduction: I evaluated the normalization integral from the declared change of variables and found the stated constant.` Link target: `knowledge/nodes/N-density.md#normalization`.
+- `condition_transfer: At the zero parameter the change of variables loses invertibility; this defeats this derivation and does not by itself disprove the claimed limit.` Link target: `knowledge/nodes/N-zero-boundary.md#zero-parameter`.
+
+In each saved finding string, append a real Markdown link: concatenate
+`[descriptive label]` and `(knowledge/path.md#subsection)` without an intervening
+space. The paths above describe example project inputs, not installed resources.
 
 These illustrative sentences are not evidence about a real project. Save the
 actual attempted answer/calculation, first failed step, repair and remaining
