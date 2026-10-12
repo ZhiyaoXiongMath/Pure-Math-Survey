@@ -17,8 +17,8 @@ PREVIEW_DESIGN_CODES = {'EXPOSITION_DESIGN_INCOMPLETE', 'EXPOSITION_DESIGN_MISSI
 
 
 def check_exposition_design(out: Path, plan: dict) -> dict:
-    from .profiles import current, GOALS
-    if not current(plan):
+    from .profiles import rc2_capabilities, GOALS
+    if not rc2_capabilities(plan):
         return {'status': 'NOT_EVALUATED_RECORDED', 'errors': [],
                 'meaning': 'Historical design bytes are preserved, not certified under rc2.'}
     errors = []

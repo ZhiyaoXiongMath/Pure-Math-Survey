@@ -12,7 +12,7 @@ from survey_core.release import assess_release
 
 class Prior(unittest.TestCase):
     def setUp(self):
-        self.t=v.VNext();self.t.setUp();self.p,self.plan=self.t.paper()
+        self.t=v.VNext();self.t.setUp();self.t.editorial_policy=v.RC2_POLICY;self.p,self.plan=self.t.paper()
     def tearDown(self):self.t.tearDown()
     def ready_codes(self,inv=None,plan=None):
         return {e['code'] for e in profile_readiness_errors(inv or inventory(self.t.root),plan or self.plan)}

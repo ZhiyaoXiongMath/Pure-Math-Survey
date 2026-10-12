@@ -24,7 +24,7 @@ def verify(repository:Path,destination:Path,skill:Path,build:bool=True)->dict:
     from survey_core.reviews import reviews_in,find_review
     from survey_core.release import semantic_scope_errors
     from survey_core.build import build_output,render_output
-    from survey_core.profiles import current
+    from survey_core.profiles import OUTPUT_SCHEMA, RC2_POLICY
     from survey_core.common import sha
     if not Path(survey_core.__file__).resolve().is_relative_to(skill.resolve()):
         raise RuntimeError('Imported development runtime instead of requested installation')
@@ -44,7 +44,8 @@ def verify(repository:Path,destination:Path,skill:Path,build:bool=True)->dict:
             verify_snapshot(project,snapshot.name);report['snapshots_verified']+=1
         for oid in ids:
             out=project/'outputs'/oid;plan=load_plan(out/'plan.json')
-            if not current(plan) or plan['draft']:raise AssertionError('Expected authored current nondraft output: '+oid)
+            if (plan['schema_version'],plan.get('editorial_policy')) != (OUTPUT_SCHEMA,RC2_POLICY) or plan['draft']:
+                raise AssertionError('Expected authored recorded rc2 nondraft output: '+oid)
             before={p:p.read_bytes() for p in (out/'outline.md',out/'manuscript/main.tex',out/'manuscript/math-review.sty')}
             verify_generated(project,plan)
             prepared=prepare_output(project,out/'plan.json')
@@ -57,6 +58,7 @@ def verify(repository:Path,destination:Path,skill:Path,build:bool=True)->dict:
                 output_inputs(out),lambda r:semantic_scope_errors(out,plan,ready['artifacts']['consumed_nodes'],r))
             if review is None:raise AssertionError({'output':oid,'semantic':errors})
             row={'project':name,'output_id':oid,'profile':plan['profile'],'view':plan['view'],
+                 'recorded_policy':RC2_POLICY,'evaluated_policy':RC2_POLICY,'release_authorized':False,
                  'snapshot_id':plan['snapshot_id'],'readiness':'READY','structure':'STRUCTURALLY_VALID',
                  'stored_semantic_review_id':review['review_id'],'reviewer_mode':review['reviewer_mode'],
                  'design':'COMPLETE','prepared_from_requested_installation':True}

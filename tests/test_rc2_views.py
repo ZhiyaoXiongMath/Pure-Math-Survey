@@ -11,7 +11,8 @@ from survey_core.plans import consumption, validate_plan
 
 
 class Views(unittest.TestCase):
-    def setUp(self):self.t=v.VNext();self.t.setUp()
+    def setUp(self):
+        self.t=v.VNext();self.t.setUp();self.t.editorial_policy=v.RC2_POLICY
     def tearDown(self):self.t.tearDown()
     def test_all_twenty_interfaces_preserve_core_and_mode_obligations(self):
         for profile in ('minimal','thematic','lecture','paper'):

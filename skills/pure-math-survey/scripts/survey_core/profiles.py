@@ -10,11 +10,16 @@ import re
 from .common import diagnostic, require, sha, valid_date
 
 OUTPUT_SCHEMA = '2.2.0'
-POLICY = 'four-modes-2026-10-12-rc2'
+POLICY = 'four-modes-2026-10-12-r3'
+RC2_POLICY = 'four-modes-2026-10-12-rc2'
 RC1_SCHEMA = '2.1.0'
 RC1_POLICY = 'four-modes-2026-10-11-r2'
 LEGACY_POLICY = 'legacy-2.0.0'
-POLICIES = {'2.0.0': LEGACY_POLICY, RC1_SCHEMA: RC1_POLICY, OUTPUT_SCHEMA: POLICY}
+POLICIES = {'2.0.0': (LEGACY_POLICY,), RC1_SCHEMA: (RC1_POLICY,),
+            OUTPUT_SCHEMA: (RC2_POLICY, POLICY)}
+SUPPORTED_CONTRACTS = {(version, name) for version, names in POLICIES.items() for name in names}
+R3_READINGS = ('obligation_coverage', 'fast_route_reconstruction',
+               'slow_step_reproduction', 'condition_transfer')
 PROFILES = {'minimal', 'thematic', 'lecture', 'paper'}
 MINIMAL_SECTIONS = ['Main Results', 'Key Mathematical Ingredients', 'Connecting the Ingredients']
 STATEMENT_ASPECTS = ('objects', 'domain', 'fixed_and_variable', 'hypotheses',
@@ -70,12 +75,38 @@ def current(plan: dict) -> bool:
 
 
 def four_modes(plan: dict) -> bool:
-    return current(plan) or (plan.get('schema_version') == RC1_SCHEMA and plan.get('editorial_policy') == RC1_POLICY)
+    return rc2_capabilities(plan) or (plan.get('schema_version') == RC1_SCHEMA and plan.get('editorial_policy') == RC1_POLICY)
+
+
+def rc2_capabilities(plan: dict) -> bool:
+    """F1-F4 apply to recorded rc2 as well as the current r3 policy."""
+    return (plan.get('schema_version') == OUTPUT_SCHEMA
+            and plan.get('editorial_policy') in (RC2_POLICY, POLICY))
+
+
+def strict_old_minimal(plan: dict) -> bool:
+    return plan.get('profile') == 'minimal' and (
+        (plan.get('schema_version'), plan.get('editorial_policy')) in
+        ((RC1_SCHEMA, RC1_POLICY), (OUTPUT_SCHEMA, RC2_POLICY)))
+
+
+def supported_contract(version: object, name: object) -> bool:
+    """Reject malformed JSON values as well as unknown schema-policy pairs."""
+    return isinstance(version, str) and isinstance(name, str) and (version, name) in SUPPORTED_CONTRACTS
+
+
+def required_readings(plan: dict) -> tuple[str, ...]:
+    # Under r3, results_first means early in each local problem unit;
+    # only strict_old_minimal imposes the historical global first section.
+    mode = MODE_READINGS[plan['profile']]
+    return (COMMON_READINGS + mode
+            + (('exposition_design', 'view_focus') if rc2_capabilities(plan) else ())
+            + (R3_READINGS if current(plan) else ()))
 
 
 def policy(plan: dict) -> str:
     validate_plan_contract(plan)
-    return POLICIES[plan['schema_version']]
+    return plan.get('editorial_policy', LEGACY_POLICY)
 
 
 def comparison_ids(contribution: dict) -> list[str]:
@@ -92,15 +123,18 @@ def filled(value: object) -> bool:
 
 def validate_plan_contract(plan: dict) -> None:
     """Schema checks only; an incomplete, explicitly draft plan is legal."""
+    require(isinstance(plan, dict), 'CONTRACT_INVALID', 'Output plan must be an object', 'plan.json')
     version = plan.get('schema_version')
-    require(version in POLICIES, 'SCHEMA_UNSUPPORTED', 'Unsupported output-plan schema', 'plan.json')
+    require(isinstance(version, str) and version in POLICIES, 'SCHEMA_UNSUPPORTED', 'Unsupported output-plan schema', 'plan.json')
     if version == '2.0.0':
-        require(plan.get('profile') in PROFILES - {'paper'}, 'SCHEMA_UNSUPPORTED',
+        require(isinstance(plan.get('profile'), str) and plan['profile'] in PROFILES - {'paper'}, 'SCHEMA_UNSUPPORTED',
                 'Paper requires an explicit four-mode schema; legacy has only three profiles', 'plan.json')
         require('editorial_policy' not in plan and 'contributions' not in plan,
                 'SCHEMA_UNSUPPORTED', 'Do not disguise new-policy fields as a legacy plan', 'plan.json')
         return
-    require(plan.get('editorial_policy') == POLICIES[version], 'EDITORIAL_POLICY_UNSUPPORTED', 'Schema and editorial policy must match exactly', 'plan.json')
+    require(supported_contract(version, plan.get('editorial_policy')), 'EDITORIAL_POLICY_UNSUPPORTED', 'Schema and editorial policy must match an explicitly supported pair', 'plan.json')
+    require(isinstance(plan.get('profile'), str) and plan['profile'] in PROFILES,
+            'CONTRACT_INVALID', 'Invalid output profile', 'plan.json')
     require(type(plan.get('contributions')) is list, 'CONTRACT_INVALID', 'Four-mode plans require contributions (empty outside Paper)', 'plan.json')
     if plan['profile'] != 'paper':
         require(not plan['contributions'], 'CONTRACT_INVALID', 'Contribution claims belong only to Paper', 'plan.json')
@@ -160,8 +194,8 @@ def principal_template(statement: bytes) -> dict:
 def statement_errors(key: str, statement: bytes, review: dict) -> list[dict]:
     scope = mapping(review.get('scope'))
     entry = mapping(scope.get('statement_reviews')).get(key, {})
-    valid = (review.get('schema_version') in {RC1_SCHEMA, OUTPUT_SCHEMA}
-             and scope.get('editorial_policy') == POLICIES[review['schema_version']]
+    valid = (review.get('schema_version') in (RC1_SCHEMA, OUTPUT_SCHEMA)
+             and supported_contract(review.get('schema_version'), scope.get('editorial_policy'))
              and isinstance(entry, dict) and entry.get('outcome') == 'accepted'
              and entry.get('canonical_sha256') == sha(statement)
              and all(filled(entry.get(k)) for k in STATEMENT_ASPECTS))
@@ -213,7 +247,7 @@ def profile_readiness_errors(inv, plan: dict) -> list[dict]:
             add('PAPER_PROOF_NOT_CLOSED', 'Each original principal requires an established node and its own complete proof obligation.', key)
         if not c['closest_prior_results'] or not comparison_ids(c) or not filled(c['actual_difference']):
             add('PAPER_PRIOR_ART_MISSING', 'Identify closest prior-result nodes, supported comparison relations and the precise difference.', key)
-        if current(plan):
+        if rc2_capabilities(plan):
             covered=set()
             for binding in c['comparison_bindings']:
                 relation=inv.nodes[binding['comparison_node_id']]
@@ -255,16 +289,16 @@ def profile_readiness_errors(inv, plan: dict) -> list[dict]:
 def review_scope_template(plan: dict) -> dict:
     if not four_modes(plan):
         return {}
-    keys = COMMON_READINGS + MODE_READINGS[plan['profile']] + (('exposition_design','view_focus') if current(plan) else ())
+    keys = required_readings(plan)
     return {'editorial_policy': policy(plan), 'statement_reviews': {},
-            **({'view':plan['view']} if current(plan) else {}),
+            **({'view':plan['view']} if rc2_capabilities(plan) else {}),
             'mode_findings': {k: {'outcome': 'not_performed', 'finding': '', 'locations': [],
                                 **({'node_ids':[]} if k=='view_focus' else {})} for k in keys},
             'proof_step_findings': {o['node_id']: {s: {'outcome': 'not_performed', 'finding': '', 'locations': []}
                                     for s in o['required_steps']} for o in plan['proof_obligations']},
             'contribution_reviews': {c['node_id']: {'outcome': 'not_performed', 'finding': '', 'locations': [],
                 'closest_prior_results': c['closest_prior_results'], 'prior_art_searches': [],
-                **({'prior_result_checks':[]} if current(plan) else {}),
+                **({'prior_result_checks':[]} if rc2_capabilities(plan) else {}),
                 'provenance_check': '', 'authorization_check': '', 'actual_difference': '',
                 'proof_closure': '', 'remaining_caveats': ''}
                 for c in plan['contributions'] if c['classification'] == 'original'}}
@@ -284,9 +318,9 @@ def semantic_profile_errors(out: Path, plan: dict, review: dict, *, inspection=N
             return
         errors.extend(validate_locations(out, entry.get('locations'), node_id=key, inspection=inspection))
     findings = mapping(scope.get('mode_findings'))
-    for name in COMMON_READINGS + MODE_READINGS[plan['profile']] + (('exposition_design','view_focus') if current(plan) else ()):
+    for name in required_readings(plan):
         check_entry(findings.get(name), name)
-    if current(plan):
+    if rc2_capabilities(plan):
         if scope.get('view') != plan['view']:
             errors.append(diagnostic('VIEW_REVIEW_MISMATCH','Review the current view; changing only the plan or its hash is not a new reading.','evidence'))
         ids=mapping(findings.get('view_focus')).get('node_ids')
@@ -314,7 +348,7 @@ def semantic_profile_errors(out: Path, plan: dict, review: dict, *, inspection=N
             valid_search = isinstance(searches, list) and bool(searches) and all(
                 isinstance(s, dict) and valid_date(s.get('searched_at')) and filled(s.get('query'))
                 and filled(s.get('outcome')) and isinstance(s.get('checked_source_ids'), list)
-                and (current(plan) or bool(s['checked_source_ids'])) and all(isinstance(x, str) and x.startswith('S-') for x in s['checked_source_ids'])
+                and (rc2_capabilities(plan) or bool(s['checked_source_ids'])) and all(isinstance(x, str) and x.startswith('S-') for x in s['checked_source_ids'])
                 for s in searches)
             # The searched identities must be actual, snapshot-bound authoring source records.
             from .common import read_json
@@ -326,7 +360,7 @@ def semantic_profile_errors(out: Path, plan: dict, review: dict, *, inspection=N
                     or entry.get('closest_prior_results') != c['closest_prior_results']):
                 errors.append(diagnostic('PAPER_CONTRIBUTION_REVIEW_PENDING',
                     'Record actual dated prior-art searches against bound sources, closest results, authorization, precise difference, proof closure and caveats. Software cannot establish novelty.', 'evidence', key))
-            if current(plan):
+            if rc2_capabilities(plan):
                 errors.extend(prior_support_errors(out,c,entry))
     return errors
 
@@ -421,7 +455,7 @@ def structure_errors(inv, plan: dict, nodes: dict, expanded: str) -> tuple[list[
         return [], [diagnostic('LEGACY_EDITORIAL_POLICY', 'Only the historical 2.0.0 policy is being checked; this is not vNext acceptance.')]
     errors = []; warnings = []
     sections = inv['sections']; numbered = [s for s in sections if not s['starred']]
-    if plan['profile'] == 'minimal':
+    if strict_old_minimal(plan):
         if [s['title'] for s in numbered] != MINIMAL_SECTIONS:
             errors.append(diagnostic('MINIMAL_THREE_SECTIONS_REQUIRED', 'Use exactly the three ordered numbered main sections: ' + ' / '.join(MINIMAL_SECTIONS), 'manuscript/main.tex'))
         # A fourth unnumbered mathematical section is not a bibliography escape.
@@ -441,7 +475,7 @@ def structure_errors(inv, plan: dict, nodes: dict, expanded: str) -> tuple[list[
         candidates = [r for r in inv['results'] if visible_statement and visible_statement in r['text']]
         if not candidates:
             errors.append(diagnostic('PRINCIPAL_RESULT_ENVIRONMENT_MISSING', 'Put the full principal canonical input in a theorem/proposition/corollary/lemma environment.', 'manuscript/main.tex', key))
-        elif plan['profile'] == 'minimal' and not any(r['section_index'] == 0 for r in candidates):
+        elif strict_old_minimal(plan) and not any(r['section_index'] == 0 for r in candidates):
             errors.append(diagnostic('MINIMAL_PRINCIPAL_NOT_FIRST', 'Every principal belongs in Main Results, independently of view.', 'manuscript/main.tex', key))
     if plan['profile'] == 'paper' and not plan['draft'] and re.search(r'DRAFT(?:\\)?_UNVERIFIED', inv['body_text']):
         errors.append(diagnostic('PAPER_DRAFT_NOTICE_REMAINS', 'Resolve all draft conditions before explicitly promoting and rereviewing a Paper.', 'manuscript/main.tex'))
@@ -456,6 +490,11 @@ def outline(plan: dict, order: list[str], nodes: dict | None = None) -> str:
         'lecture': 'Early goal theorem -> needed prerequisites/model -> construction -> worked lemmas/estimates -> closed promised proof -> useful boundary example. Titles and section count are editable.',
         'paper': 'Contributions and closest prior work -> new mechanism -> complete proofs -> justified consequences. Research-note or longer article structures are equally valid.',
     }
+    if current(plan) and plan['profile'] == 'minimal':
+        section_plans['minimal'] = ('Brief result map -> local problem units: complete principal, needed points, '
+            'decisive connections and first use or boundary nearby. Shared tools may be established once, '
+            'with their exact interface recalled at each consumer. These are responsibilities, not fixed headings. '
+            'A three-section layout is an explicit design choice: explain why it suits this reader and scope.')
     lines = ['# Exposition Contract', '', f'Mode: {plan["profile"]}', f'Editorial policy: {policy(plan)}',
              f'Fixed snapshot: {plan["snapshot_id"]}', '', '## Target and reader', plan['audience'],
              GOALS[plan['profile']], 'Questions: ' + ', '.join(plan['question_ids']),
@@ -472,10 +511,15 @@ def outline(plan: dict, order: list[str], nodes: dict | None = None) -> str:
              '', '## Limits and statement concerns',
              'PENDING: identify unproved/uncalled branches and exact node sections for slow reading. Inspect each principal alone and its neighboring prose; repair deficient canonical statements in KB, review and freeze a new snapshot.',
              '', '## Reading rhythm',
-             'Prefer short prose alternating with mathematically useful displays. About four TYPESet lines is an editorial heuristic, never a source-line count, formula quota or permission to drop hypotheses.',
+             ('Target about 2-3 actual typeset lines for ordinary explanatory prose. Longer blocks trigger editorial review; record concrete reasons for necessary continuous proofs or full statements. Read the final PDF and bind page, source range, finding, repair or exception to its hash. Never force source breaks, shrink type, insert decorative formulas or drop hypotheses to meet this target.' if current(plan) else
+              'Prefer short prose alternating with mathematically useful displays. About four TYPESet lines is the recorded editorial heuristic, never a source-line count, formula quota or permission to drop hypotheses.'),
              '', '## Review boundary',
              'No semantic, originality, reader-comprehension or page review was performed by prepare. Project overview may cover many questions and routes; this outline selects just this manuscript.']
     if current(plan):
+        lines += ['', '## Coverage and actual understanding tasks',
+                  'PENDING: independently reconstruct the necessary conversions from the reader goal and exact result before comparing the authored proof-obligation list; record omissions and repairs.',
+                  'PENDING: reconstruct the fast route, reproduce decisive slow steps, and change a condition to identify the first failed step. Record actual outcomes and body locations in obligation_coverage, fast_route_reconstruction, slow_step_reproduction and condition_transfer; nonempty text is not mathematical acceptance.']
+    if rc2_capabilities(plan):
         lines += ['', '## View-specific work', VIEW_TASKS[plan['view']],
                   'PENDING: replace these navigation suggestions with the actual quantities, operations, node consumers and manuscript locations. Preserve all principal results, decisive boundaries and mode proof promises.',
                   *[f'- [[{s["node_id"]}]]: {s["reason"]}' for s in plan['selections']]]

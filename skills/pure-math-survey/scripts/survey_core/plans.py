@@ -17,8 +17,8 @@ def consumption(inv: Inventory, plan: dict) -> set[str]:
         from .profiles import comparison_ids
         seeds.update(claim['closest_prior_results']); seeds.update(comparison_ids(claim))
     ids=required_closure(inv.nodes, seeds, explain)
-    from .profiles import current
-    if current(plan):
+    from .profiles import rc2_capabilities
+    if rc2_capabilities(plan):
         from .reviews import comparison_evidence_closure
         ids=comparison_evidence_closure(inv,ids)
     return ids

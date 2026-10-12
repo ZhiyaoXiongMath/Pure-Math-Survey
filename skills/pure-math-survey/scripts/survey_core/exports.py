@@ -95,17 +95,48 @@ def prepare_output(root:Path,plan_path:Path,draft:bool=False)->dict:
         if not (out/'manuscript/math-review.sty').exists():
             atomic_bytes(out/'manuscript/math-review.sty',(SKILL_ROOT/'assets/templates/math-review.sty').read_bytes())
         if not (out/'manuscript/main.tex').exists():
-            template=(SKILL_ROOT/f"assets/templates/profile-{plan['profile']}.tex").read_text(encoding='utf-8')
-            snippets=[]; principals=[]; ingredients=[]
+            from .profiles import VIEW_TASKS, rc2_capabilities, strict_old_minimal, current
+            template_name = ('profile-minimal-rc2.tex' if plan['profile']=='minimal' and not current(plan) else
+                             f"profile-{plan['profile']}.tex")
+            template=(SKILL_ROOT/'assets/templates'/template_name).read_text(encoding='utf-8')
+            snippets=[]; principals=[]; ingredients=[]; by_node={}
             for s in plan['selections']:
                 if s['statement_treatment']=='full':
                     key=s['node_id']; env='definition' if inv.nodes[key].meta['kind']=='definition' else 'theorem'
                     snippet = f'\\begin{{{env}}}\\label{{node:{key}}}\n\\input{{../generated/statements/{key}.tex}}\n\\end{{{env}}}\n'
                     snippets.append(snippet)
+                    by_node[key]=snippet
                     (principals if s['role']=='principal_answer' else ingredients).append(snippet)
-            from .profiles import VIEW_TASKS, current
-            task='\\placeholder{'+tex_text(VIEW_TASKS[plan['view']])+'}' if current(plan) else ''
+            task='\\placeholder{'+tex_text(VIEW_TASKS[plan['view']])+'}' if rc2_capabilities(plan) else ''
             text=template.replace('@@TITLE@@',tex_text(plan['title'])).replace('@@STATEMENTS@@','\n'.join(snippets)).replace('@@PRINCIPALS@@','\n'.join(principals)).replace('@@INGREDIENTS@@','\n'.join(ingredients)).replace('@@VIEW_TASK@@',task)
+            if current(plan) and plan['profile']=='minimal':
+                # The scaffold selects no new mathematics. Reuse each canonical
+                # input once and leave local teaching/first-use work explicit.
+                from .dependencies import required_closure
+                units=[]; imported=set()
+                principal_ids={s['node_id'] for s in plan['selections'] if s['role']=='principal_answer'}
+                for selection in plan['selections']:
+                    key=selection['node_id']
+                    if key not in principal_ids:continue
+                    needed=required_closure(inv.nodes,{key},{key})-principal_ids
+                    local=[k for k in by_node if k in needed and k not in imported]
+                    reused=[k for k in by_node if k in needed and k in imported]
+                    units += ['\\section{'+tex_text(inv.nodes[key].meta['title'])+'}',
+                        '\\placeholder{State the local question, model and necessary definitions; identify what this result will answer.}',
+                        by_node[key],
+                        '\\placeholder{Establish only the points needed here and explain each exact input, output and consumer.}',
+                        *[by_node[k] for k in local]]
+                    imported.update(local);imported.add(key)
+                    if reused:
+                        units += ['\\placeholder{Recall the exact previously established interfaces for '+tex_text(', '.join(reused))+', with their local use; do not duplicate canonical authority.}']
+                    units += ['\\placeholder{Show the decisive operations connecting the points to this result, including conditions and exact imported theorem applications.}',
+                              '\\placeholder{Give the first use or a necessary boundary nearby; identify which changed condition breaks which step.}']
+                remaining=[k for k in by_node if k not in imported]
+                if remaining:
+                    units += ['\\section{Additional selected inputs and boundaries}',
+                              '\\placeholder{Place each remaining input near its actual consumer, or justify a shared-tool section and recall its interface at each use.}',
+                              *[by_node[k] for k in remaining]]
+                text=text.replace('@@LOCAL_UNITS@@','\n'.join(units))
             notice='\\noindent\\textbf{DRAFT\\_UNVERIFIED: source and mathematical review may be incomplete.}\n' if plan['draft'] else ''
             atomic_bytes(out/'manuscript/main.tex',text.replace('@@DRAFT@@',notice).encode())
     from .exposition import check_exposition_design
@@ -173,7 +204,8 @@ def validate_structure(root:Path,output_id:str)->dict:
     from .profiles import structure_errors
     profile_errors, profile_warnings = structure_errors(inv, plan, validate_plan(root, plan).nodes, text)
     errors += profile_errors; warnings += profile_warnings
-    if plan.get('editorial_policy') and plan['profile']=='minimal':
+    from .profiles import strict_old_minimal
+    if strict_old_minimal(plan):
         from .structure import strip_comments
         for path in sorted(used | {'manuscript/main.tex'}):
             if path.startswith('manuscript/') and path.endswith('.tex'):

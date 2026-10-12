@@ -10,14 +10,20 @@ def load_review(path: Path) -> dict:
     obj = read_json(path)
     fields(obj, {'review_id':str,'kind':str,'reviewer_mode':str,'inputs':list,'findings':list,'unchecked_items':list,'disposition':str}, path.name)
     if 'schema_version' in obj:
-        require(obj['schema_version'] in {VERSION, '2.1.0', '2.2.0'},'SCHEMA_UNSUPPORTED','Unsupported review schema',path.name)
+        require(obj['schema_version'] in (VERSION, '2.1.0', '2.2.0'),'SCHEMA_UNSUPPORTED','Unsupported review schema',path.name)
     require(isinstance(obj.get('scope',{}),dict),'REVIEW_INVALID','Review scope must be an object',path.name)
-    if obj.get('scope', {}).get('editorial_policy') is not None:
-        from .profiles import POLICIES
-        require(obj.get('schema_version') in {'2.1.0','2.2.0'} and obj['scope']['editorial_policy']==POLICIES[obj['schema_version']],
+    if 'editorial_policy' in obj.get('scope', {}):
+        from .profiles import supported_contract
+        require(obj.get('schema_version') in ('2.1.0','2.2.0') and supported_contract(obj.get('schema_version'),obj['scope']['editorial_policy']),
                 'SCHEMA_UNSUPPORTED','Review schema and policy must match exactly',path.name)
     else:
         require(obj.get('schema_version', VERSION) == VERSION, 'SCHEMA_UNSUPPORTED', 'New review schemas require their explicit policy', path.name)
+    from .profiles import POLICY, R3_READINGS
+    mode_findings = obj.get('scope', {}).get('mode_findings', {})
+    require(isinstance(mode_findings, dict), 'REVIEW_INVALID', 'mode_findings must be an object', path.name)
+    if obj.get('scope', {}).get('editorial_policy') != POLICY:
+        require(not set(R3_READINGS) & set(mode_findings),
+                'SCHEMA_UNSUPPORTED', 'r3 output responsibilities require the explicit r3 policy', path.name)
     if obj.get('schema_version') != '2.2.0':
         scope = obj.get('scope', {})
         findings=scope.get('mode_findings',{})
@@ -120,9 +126,99 @@ def coverage_inputs(inv,question_id:str)->set[str]:
                 paths.add(inv.nodes[k].path)
     return paths
 
+
+def knowledge_scope_template(inv, question_ids: list[str]) -> dict:
+    """Use existing scope fields for an r3 question-route reading."""
+    from .profiles import POLICY, R3_READINGS
+    nodes = set(question_ids)
+    for q in inv.coverage['questions']:
+        if q['question_id'] in question_ids:
+            nodes.update(q['answer_nodes'] + q['mechanism_nodes'] + q['boundary_nodes'])
+    return {'editorial_policy': POLICY, 'question_ids': question_ids,
+            'node_ids': sorted(nodes), 'checks': list(R3_READINGS)}
+
+
+def markdown_anchors(text: str) -> set[str]:
+    """Resolve ordinary ATX headings and explicit anchors, outside code fences."""
+    anchors = set(); counts = {}; fence = None
+    for line in text.splitlines():
+        mark = re.match(r'^\s*(`{3,}|~{3,})', line)
+        if mark:
+            kind = mark[1][0]
+            if fence is None: fence = (kind, len(mark[1]))
+            elif kind == fence[0] and len(mark[1]) >= fence[1]: fence = None
+            continue
+        if fence is not None: continue
+        anchors.update(re.findall(r'<a\s+(?:id|name)=[\"\']([^\"\']+)[\"\']\s*>', line, re.I))
+        heading = re.match(r'^ {0,3}#{1,6}\s+(.+?)(?:\s+#+)?\s*$', line)
+        if heading:
+            value = re.sub(r'[^\w\- ]', '', heading[1].casefold()).replace(' ', '-')
+            count = counts.get(value, 0); counts[value] = count + 1
+            anchors.add(value + (f'-{count}' if count else ''))
+    return anchors
+
+
+def knowledge_scope_errors(inv, question_id: str, review: dict) -> list[dict]:
+    """Check fixed KB task evidence; never infer understanding from the record.
+
+    Existing findings strings start with a required check name and contain a
+    project-root-relative Markdown link to the actual knowledge subsection.
+    Existing inputs bind every cited file. No manuscript locations are used.
+    """
+    from urllib.parse import unquote
+    from .profiles import POLICY, R3_READINGS, filled, mapping
+    from .common import SurveyError
+    scope = mapping(review.get('scope')); errors = []
+    def fail(code, message, path='evidence/reviews'):
+        errors.append(diagnostic(code, message, path, question_id))
+    if scope.get('editorial_policy') != POLICY:
+        fail('KNOWLEDGE_REVIEW_POLICY_REASSESSMENT_REQUIRED',
+             'Record the four r3 knowledge tasks against the current node and route bytes; historical acceptance does not supply them.')
+        return errors
+    expected = knowledge_scope_template(inv, [question_id])
+    checks = scope.get('checks', [])
+    nodes = scope.get('node_ids', [])
+    if (not isinstance(checks, list) or not all(isinstance(x, str) for x in checks)
+            or not set(R3_READINGS) <= set(checks)):
+        fail('KNOWLEDGE_REVIEW_PENDING', 'Knowledge scope must name all four actual understanding checks.')
+    if (not isinstance(nodes, list) or not all(isinstance(x, str) and x in inv.nodes for x in nodes)
+            or not set(expected['node_ids']) <= set(nodes)):
+        fail('KNOWLEDGE_REVIEW_SCOPE_INSUFFICIENT', 'Knowledge review must identify the question and its actual answer, mechanism and boundary nodes.')
+        nodes = expected['node_ids']
+    required = coverage_inputs(inv, question_id) | {inv.nodes[k].path for k in nodes}
+    findings = review.get('findings', [])
+    for task in R3_READINGS:
+        rows = [x.split(':', 1)[1].strip() for x in findings
+                if isinstance(x, str) and re.match(r'^' + re.escape(task) + r'\s*:', x)]
+        if not rows or any(not filled(row) for row in rows):
+            fail('KNOWLEDGE_REVIEW_PENDING', f'Record the actual {task} answer, omissions and repairs in findings, not an accepted label.')
+            continue
+        for row in rows:
+            links = re.findall(r'\[[^\]]+\]\(([^\s()]+)\)', row)
+            local = [unquote(x) for x in links if '.md#' in x and '://' not in x]
+            if not local:
+                fail('KNOWLEDGE_REVIEW_LOCATION_INVALID', f'{task} needs a project-relative knowledge Markdown subsection link.')
+            for link in local:
+                path, _, anchor = link.partition('#')
+                try:
+                    file = safe(inv.root, path, True)
+                    require(path.startswith(inv.project['knowledge_root'] + '/') and path.endswith('.md') and anchor,
+                            'KNOWLEDGE_REVIEW_LOCATION_INVALID', 'Use a knowledge Markdown file and a concrete subsection anchor', path)
+                    require(anchor in markdown_anchors(file.read_text(encoding='utf-8')),
+                            'KNOWLEDGE_REVIEW_LOCATION_INVALID', 'Knowledge subsection does not exist', path)
+                    required.add(path)
+                except (SurveyError, OSError, UnicodeError) as exc:
+                    fail('KNOWLEDGE_REVIEW_LOCATION_INVALID', f'{task}: {exc}', path)
+    errors.extend(check_review_bindings(inv.root, review, required))
+    return errors
+
 def review_template(root:Path,kind:str,keys:list[str],required:set[str],scope:dict|None=None)->dict:
     from .profiles import POLICIES
-    version = next((v for v,p in POLICIES.items() if p == (scope or {}).get('editorial_policy')), VERSION)
+    selected_policy = (scope or {}).get('editorial_policy')
+    require((selected_policy is None and 'editorial_policy' not in (scope or {})) or
+            (isinstance(selected_policy, str) and selected_policy in {p for names in POLICIES.values() for p in names}),
+            'SCHEMA_UNSUPPORTED', 'Unknown review policy')
+    version = next((v for v,names in POLICIES.items() if selected_policy in names), VERSION)
     return {'schema_version':version,'review_id':'REPLACE-WITH-STABLE-REVIEW-ID','kind':kind,'reviewer_mode':'not_performed',
             'reviewed_at':None,'inputs':[{'path':p,'sha256':file_hash(root,p)} for p in sorted(required)],
             'scope':scope or { {'source':'source_ids','mathematical':'node_ids','coverage':'question_ids'}.get(kind,'output_ids'):keys},
