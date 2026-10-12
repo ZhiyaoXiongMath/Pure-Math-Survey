@@ -24,6 +24,17 @@ def load_review(path: Path) -> dict:
                 'SCHEMA_UNSUPPORTED', 'rc2 review responsibilities require schema 2.2.0', path.name)
         for entry in scope.get('contribution_reviews', {}).values() if isinstance(scope.get('contribution_reviews', {}), dict) else []:
             require(not isinstance(entry, dict) or 'prior_result_checks' not in entry, 'SCHEMA_UNSUPPORTED', 'rc2 prior checks require schema 2.2.0', path.name)
+    else:
+        contributions=obj.get('scope',{}).get('contribution_reviews',{})
+        require(isinstance(contributions,dict),'REVIEW_INVALID','contribution_reviews must be an object',path.name)
+        for entry in contributions.values():
+            require(isinstance(entry,dict) and isinstance(entry.get('prior_result_checks'),list),
+                    'REVIEW_INVALID','rc2 contribution review requires typed prior_result_checks',path.name)
+            for check in entry['prior_result_checks']:
+                require(isinstance(check,dict) and all(isinstance(check.get(k),str) for k in
+                    ('prior_result_id','source_id','version','locator','outcome','finding'))
+                    and check['outcome'] in {'not_performed','accepted','revise','limited'},
+                    'REVIEW_INVALID','Invalid prior-result support check',path.name)
     require(obj['kind'] in {'source','mathematical','coverage','output_semantic','visual'},'REVIEW_INVALID','Invalid review kind',path.name)
     require(obj['reviewer_mode'] in {'author_reread','independent_review','not_performed'},'REVIEW_INVALID','Do not label self-review independent',path.name)
     require(obj['disposition'] in {'accepted','revise','limited'} and 'reviewed_at' in obj,'REVIEW_INVALID','Invalid review disposition/date',path.name)
@@ -82,11 +93,21 @@ def source_inputs(inv, source_id:str)->set[str]:
 
 def mathematical_inputs(inv,node_id:str)->set[str]:
     kr=inv.project['knowledge_root']; paths={'project.json',inv.project['scope_file'],kr+'/conventions.tex'}
-    for key in required_closure(inv.nodes,{node_id}):
+    for key in comparison_evidence_closure(inv,required_closure(inv.nodes,{node_id})):
         paths.add(inv.nodes[key].path)
         for s in inv.nodes[key].meta['sources']:
             paths |= source_inputs(inv,s['source_id'])
     return paths
+
+def comparison_evidence_closure(inv,ids:set[str])->set[str]:
+    """Bind compared endpoints, without making navigation into proof edges.
+
+    Only relation nodes actually consumed by the proof/selection provide pairs;
+    do not recursively follow arbitrary navigation from endpoint nodes.
+    """
+    endpoints={edge['target'] for key in ids if inv.nodes[key].meta['kind']=='relation'
+               for edge in inv.nodes[key].meta['links'] if edge['relation']=='compares_with'}
+    return set(ids) | required_closure(inv.nodes,endpoints)
 
 def coverage_inputs(inv,question_id:str)->set[str]:
     kr=inv.project['knowledge_root']

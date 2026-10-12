@@ -39,3 +39,23 @@ mathematical, originality, independent-reader or visual acceptance.
 
 Status: contract/F4 changes IMPLEMENTED and TESTED; candidate still BLOCKED
 by the four retained F2/F3 assertions. Full completion is not claimed.
+
+## F3 comparison and prior-support closure
+
+- F4 commit e599975 remote Actions run 38224602338: 156 tests,
+  four retained failures, zero errors (60.323 seconds).
+- Every current original-contribution comparison is explicitly paired with a
+  closest prior. Its established relation must name both endpoints with
+  compares_with. Endpoint content participates in review binding without
+  making comparison navigation a proof dependency.
+- Each closest prior requires established primary support, matching version
+  and normalized locator, and an accepted source-reading record bound to the
+  actual source record and reading note. Online original-text access can omit
+  unavailable raw bytes only with an explicit reason; a URL alone is not reading.
+- Negative searches may record no hits. They do not supply known-prior support
+  or waive the unverified status of an unsupported novelty claim.
+- Targeted F3 regressions: 14 tests, OK (3.627 seconds). Full regression:
+  170 tests, one retained F2 view assertion, zero errors (35.853 seconds).
+
+Status: F3 IMPLEMENTED and TESTED with synthetic regression fixtures. Real
+mathematical comparison and source-reading acceptance remain NOT VERIFIED.

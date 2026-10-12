@@ -41,3 +41,9 @@ wrong policies, missing steps and invalid locations; it cannot verify that an el
 assertion is true. Distinguish author_reread from independent_review and from real target-reader
 feedback. Running another prompt is not independence. Formula density and typeset line
 counts are not a semantic score. Inspect actual pages, including justified long statements.
+
+For rc2 Paper, record prior_result_checks separately from prior_art_searches.
+Check each explicit comparison pair against the actual statements; report its
+unknowns, quantifiers, domain/parameters, regularity, normalization, conclusion
+and actual difference. Locate the manuscript discussion. A hash or accepted
+mechanical check does not establish correctness or novelty.

@@ -106,3 +106,32 @@ outline, known defaults and unresolved task lines block formal build and release
 Only explicitly draft plans may preview missing/incomplete design and manuscript
 placeholders. Invalid outline node references, canonical and TeX safety errors
 still block previews. Preview never flips draft or creates accepted evidence.
+
+## Paper comparison and support evidence (rc2)
+
+Each original contribution binds explicit `(comparison_node_id, prior_result_id)`
+pairs. The relation must use compares_with links to both the contribution node
+and that prior; every closest prior requires its own explicit pair. Navigation
+is not proof dependence. Mathematical relation reviews bind compared endpoints
+and their supporting versions, without making navigation cycles proof cycles.
+
+Each output contribution review includes `prior_result_checks`: objects with
+prior_result_id, source_id, version, locator, outcome and finding. At least one
+accepted primary support check is required per prior. All submitted checks are
+validated. A provenance-only or unrelated source cannot supply support. The
+source review must bind the source record and reading note, and its
+`scope.source_reading[S-ID]` must name the controlling version and list the
+actual locators read. Local originals also bind their material hash; online-only
+original readings retain explicit access limitations and null raw hashes.
+
+Locator normalization is deliberately narrow: case, whitespace, terminal
+punctuation, page/p./pp., theorem/thm., section/sec./section sign, and dash glyphs.
+No approximate text similarity or inferred theorem numbering is used.
+
+Prior-art searches record dated queries and outcomes independently. Empty
+checked_source_ids is valid for a negative search. Named hits must be fixed
+material source IDs, but hits alone never establish support. Source review
+records copied into materials must still match their actual bound inputs.
+Without directly comparable prior evidence, keep an explicit draft; no waiver
+can authorize formal publication. Read every claimed comparison in the same
+unknowns, quantifiers, dimension, parameters, regularity and normalization.

@@ -16,7 +16,12 @@ def consumption(inv: Inventory, plan: dict) -> set[str]:
     for claim in plan.get('contributions', []):
         from .profiles import comparison_ids
         seeds.update(claim['closest_prior_results']); seeds.update(comparison_ids(claim))
-    return required_closure(inv.nodes, seeds, explain)
+    ids=required_closure(inv.nodes, seeds, explain)
+    from .profiles import current
+    if current(plan):
+        from .reviews import comparison_evidence_closure
+        ids=comparison_evidence_closure(inv,ids)
+    return ids
 
 def consumed_paths(inv: Inventory, plan: dict) -> set[str]:
     ids = consumption(inv, plan); kr = inv.project['knowledge_root']

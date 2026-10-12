@@ -193,6 +193,23 @@ def profile_readiness_errors(inv, plan: dict) -> list[dict]:
             add('PAPER_PROOF_NOT_CLOSED', 'Each original principal requires an established node and its own complete proof obligation.', key)
         if not c['closest_prior_results'] or not comparison_ids(c) or not filled(c['actual_difference']):
             add('PAPER_PRIOR_ART_MISSING', 'Identify closest prior-result nodes, supported comparison relations and the precise difference.', key)
+        if current(plan):
+            covered=set()
+            for binding in c['comparison_bindings']:
+                relation=inv.nodes[binding['comparison_node_id']]
+                prior=binding['prior_result_id']
+                endpoints={e['target'] for e in relation.meta['links'] if e['relation']=='compares_with'}
+                if prior not in c['closest_prior_results'] or prior==key:
+                    add('PAPER_COMPARISON_PRIOR_INVALID','Binding prior must be a distinct declared closest prior.',prior)
+                elif not {key,prior} <= endpoints:
+                    add('PAPER_COMPARISON_ENDPOINT_MISSING',
+                        f'{relation.id} must explicitly compare both {key} and {prior}; proof links do not substitute.',relation.id)
+                elif relation.meta['mathematical_status']!='established':
+                    add('PAPER_COMPARISON_UNVERIFIED','Comparison relation must be established and actually reviewed.',relation.id)
+                else:
+                    covered.add(prior)
+            for prior in set(c['closest_prior_results'])-covered:
+                add('PAPER_COMPARISON_COVERAGE_MISSING','Every closest prior needs an explicit supported pair; no inferred all-pairs coverage.',prior)
         # A proved original result cannot import a conjecture as a proof premise.
         # Discussion-only frontier selections are not proof dependencies.
         from .dependencies import required_closure
@@ -210,7 +227,7 @@ def profile_readiness_errors(inv, plan: dict) -> list[dict]:
                 add('PAPER_PROVENANCE_UNVERIFIED', 'A supplied original needs a versioned, actually read manuscript provenance record, not just authorization prose.', key)
         for prior in c['closest_prior_results']:
             n = inv.nodes[prior]
-            if n.meta['mathematical_status'] != 'established' or not any(s['role'] == 'support' and inv.sources[s['source_id']]['kind'] == 'primary' for s in n.meta['sources']):
+            if n.meta['kind'] != 'result' or n.meta['mathematical_status'] != 'established' or not any(s['role'] == 'support' and inv.sources[s['source_id']]['kind'] == 'primary' for s in n.meta['sources']):
                 add('PAPER_PRIOR_ART_MISSING', 'Closest prior results require established nodes and actual primary-source support.', prior)
     return errors
 
@@ -225,6 +242,7 @@ def review_scope_template(plan: dict) -> dict:
                                     for s in o['required_steps']} for o in plan['proof_obligations']},
             'contribution_reviews': {c['node_id']: {'outcome': 'not_performed', 'finding': '', 'locations': [],
                 'closest_prior_results': c['closest_prior_results'], 'prior_art_searches': [],
+                **({'prior_result_checks':[]} if current(plan) else {}),
                 'provenance_check': '', 'authorization_check': '', 'actual_difference': '',
                 'proof_closure': '', 'remaining_caveats': ''}
                 for c in plan['contributions'] if c['classification'] == 'original'}}
@@ -266,16 +284,105 @@ def semantic_profile_errors(out: Path, plan: dict, review: dict, *, inspection=N
             valid_search = isinstance(searches, list) and bool(searches) and all(
                 isinstance(s, dict) and valid_date(s.get('searched_at')) and filled(s.get('query'))
                 and filled(s.get('outcome')) and isinstance(s.get('checked_source_ids'), list)
-                and bool(s['checked_source_ids']) and all(isinstance(x, str) and x.startswith('S-') for x in s['checked_source_ids'])
+                and (current(plan) or bool(s['checked_source_ids'])) and all(isinstance(x, str) and x.startswith('S-') for x in s['checked_source_ids'])
                 for s in searches)
             # The searched identities must be actual, snapshot-bound authoring source records.
-            source_ids = {p.stem for p in (out/'materials').rglob('sources/S-*.json')}
+            from .common import read_json
+            project=read_json(safe(out,'materials/project.json',True))
+            source_ids = {p.stem for p in safe(out,'materials/'+project['knowledge_root']+'/sources').glob('S-*.json')}
             if valid_search:
                 valid_search = all(set(s['checked_source_ids']) <= source_ids for s in searches)
             if (not all(filled(entry.get(k)) for k in required) or not valid_search
                     or entry.get('closest_prior_results') != c['closest_prior_results']):
                 errors.append(diagnostic('PAPER_CONTRIBUTION_REVIEW_PENDING',
                     'Record actual dated prior-art searches against bound sources, closest results, authorization, precise difference, proof closure and caveats. Software cannot establish novelty.', 'evidence', key))
+            if current(plan):
+                errors.extend(prior_support_errors(out,c,entry))
+    return errors
+
+
+def normalize_locator(value: str) -> str:
+    """Documented spelling aliases only; never fuzzy-match different locations."""
+    import unicodedata
+    value=unicodedata.normalize('NFKC',value).casefold().strip()
+    value=value.replace('\u2013','-').replace('\u2014','-')
+    value=re.sub(r'\b(?:pages?|pp?)\.?(?=\s|\d)', 'page ',value)
+    value=re.sub(r'\b(?:theorem|thm)\.?(?=\s|\d)', 'theorem ',value)
+    value=re.sub(r'\b(?:section|sec)\.?(?=\s|\d)', 'section ',value)
+    value=value.replace('\u00a7','section ')
+    return re.sub(r'\s+',' ',value).strip().rstrip('.,;')
+
+
+def prior_support_errors(out: Path, contribution: dict, entry: dict) -> list[dict]:
+    """Check fixed prior->primary support->version/locator->reading evidence.
+
+    Authoring materials omit raw PDFs. Their declared hash is checked against
+    the fixed manifest and source review, never against a substituted note.
+    Release separately verifies all materials against the original snapshot.
+    """
+    from .common import SurveyError, read_json, safe, file_hash
+    from .models import load_node, load_source
+    from .reviews import reviews_in, blocking_unchecked
+    materials=safe(out,'materials');project=read_json(safe(materials,'project.json',True))
+    kr=project['knowledge_root'];checks=entry.get('prior_result_checks',[])
+    records=reviews_in(materials)
+    manifest=read_json(safe(out,'generated/manifest.json',True))
+    fixed={r['path']:r['sha256'] for r in manifest['consumed_inputs']}
+    errors=[];covered=set()
+    def fail(prior,reason):
+        errors.append(diagnostic('PAPER_PRIOR_SUPPORT_UNVERIFIED',reason,'evidence',prior))
+    if not isinstance(checks,list):
+        checks=[]
+    for check in checks:
+        if not isinstance(check,dict):
+            fail(contribution['node_id'],'Prior-result check must be an object.');continue
+        prior=check.get('prior_result_id')
+        if not isinstance(prior,str) or prior not in contribution['closest_prior_results']:
+            fail(contribution['node_id'],'Support check does not identify a declared closest prior.');continue
+        try:
+            node=load_node(safe(materials,f'{kr}/nodes/{prior}.md',True))
+            sid=check.get('source_id');locator=check.get('locator');version=check.get('version')
+            matching=[s for s in node.meta['sources'] if s['role']=='support' and s['source_id']==sid
+                      and isinstance(locator,str) and locator.strip()
+                      and normalize_locator(s['locator'])==normalize_locator(locator)]
+            if (not matching or check.get('outcome')!='accepted' or not filled(check.get('finding'))):
+                fail(prior,'Need an accepted located finding for an actual support source of this prior.');continue
+            source_path=f'{kr}/sources/{sid}.json';source=load_source(safe(materials,source_path,True));access=source['access']
+            if (source['kind']!='primary' or not version or version!=source['version']
+                    or source.get('version_conflicts') or any(s.get('version',version)!=version for s in matching)
+                    or access['state']!='full_text_read' or not valid_date(access.get('checked_at')) or not access.get('reading_note')):
+                fail(prior,'Primary support must have the same controlling version and an actual dated original-text reading.');continue
+            required={source_path,access['reading_note']};raw=access.get('local_path')
+            found=False
+            for _,review in records:
+                if review['kind']!='source' or sid not in review.get('scope',{}).get('source_ids',[]):continue
+                if review['disposition']!='accepted' or blocking_unchecked(review):continue
+                reading=mapping(mapping(review.get('scope')).get('source_reading')).get(sid,{})
+                if not isinstance(reading,dict):continue
+                locators=reading.get('locators')
+                if (reading.get('version')!=version or not isinstance(locators,list)
+                        or not all(isinstance(x,str) for x in locators)
+                        or normalize_locator(locator) not in {normalize_locator(x) for x in locators}):continue
+                bindings={x['path']:x['sha256'] for x in review['inputs']}
+                if raw:
+                    if not access.get('material_sha256') or bindings.get(raw)!=access['material_sha256'] or fixed.get(raw)!=access['material_sha256']:continue
+                elif not (reading.get('mode')=='original_text_online' and source['identifiers'].get('url')
+                          and access.get('material_hash_unavailable_reason') and reading.get('raw_bytes_unavailable_reason')):continue
+                if not required <= bindings.keys():continue
+                valid=True
+                for path,digest in bindings.items():
+                    if path==raw:
+                        continue
+                    file=safe(materials,path)
+                    if not file.is_file() or file_hash(materials,path)!=digest:
+                        valid=False;break
+                if valid:found=True;break
+            if found:covered.add(prior)
+            else:fail(prior,'No current input-bound source review covers this version and support locator; searches are a separate record.')
+        except (SurveyError,OSError) as exc:
+            fail(prior,f'Fixed support evidence cannot be read: {exc}')
+    for prior in set(contribution['closest_prior_results'])-covered:
+        fail(prior,'Every closest prior requires at least one verified primary support check.')
     return errors
 
 

@@ -98,8 +98,12 @@ class VNext(unittest.TestCase):
         return r
     def paper(self):
         putnode(self.root,'N-prior','result',r'For $x\in\mathbb R$, $0x=0$.',source=True,status='established')
-        putnode(self.root,'N-compare','relation',r'This is only a synthetic comparison fixture; it asserts no novelty.',status='established')
+        putnode(self.root,'N-compare','relation',r'This is only a synthetic comparison fixture; it asserts no novelty.',
+                links=[] if getattr(self,'isolated_comparison',False) else [('N-main','compares_with'),('N-prior','compares_with')],status='established')
         synthetic_reviews(self.root);synthetic_policy_reviews(self.root)
+        source_path=self.root/'evidence/reviews/source-S-test.json';source_review=read_json(source_path)
+        source_review['scope']['source_reading']={'S-test':dict(mode='original_text_local',version='Fixture v1',locators=['Synthetic fixture paragraph 1'])}
+        write_json(source_path,source_review)
         p,v=self.make('paper')
         for key in ['N-prior','N-compare']:
             v['selections'].append({'node_id':key,'role':'background','statement_treatment':'full','proof_treatment':'citation','reason':SYNTH})
@@ -296,6 +300,7 @@ class VNext(unittest.TestCase):
         entry={'outcome':'accepted','finding':SYNTH,'locations':loc,'closest_prior_results':['N-prior'],
                'prior_art_searches':[dict(searched_at=now(),query='SYNTHETIC query',outcome=SYNTH,checked_source_ids=['S-test'])]}
         entry.update({x:SYNTH for x in ['provenance_check','authorization_check','actual_difference','proof_closure','remaining_caveats']})
+        entry['prior_result_checks']=[dict(prior_result_id='N-prior',source_id='S-test',version='Fixture v1',locator='Synthetic fixture paragraph 1',outcome='accepted',finding=SYNTH)]
         r['scope']['contribution_reviews'][key]=entry
         self.assertEqual(semantic_profile_errors(p.parent,v,r),[])
         for defect in ['missing','unknown-source','future']:
