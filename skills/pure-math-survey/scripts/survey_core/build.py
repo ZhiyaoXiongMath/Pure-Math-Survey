@@ -2,6 +2,7 @@
 from __future__ import annotations
 from pathlib import Path
 import os
+import math
 import re
 import shutil
 import subprocess
@@ -28,7 +29,20 @@ def pdf_pages(path:Path)->int:
     require(m,'BUILD_FAILED','PDF has no readable page count',path.name)
     return int(m[1])
 
-def build_output(root:Path,output_id:str)->dict:
+def emergency_stretch_argument(value:float|None)->tuple[str,dict]:
+    """Opt-in normal line breaking; no source, font or margin changes."""
+    if value is None:return 'main.tex',{}
+    require(type(value) in (int,float) and math.isfinite(value) and 0<value<=10,
+            'CONTRACT_INVALID','emergency_stretch_em must be finite and in (0, 10]')
+    amount=format(value,'.6g')
+    argument=(r'\AddToHook{begindocument/end}{\emergencystretch='+amount+
+              r'em\typeout{PMS-EMERGENCY-STRETCH-PT: \the\emergencystretch}}\input{main.tex}')
+    return argument,{'emergency_stretch_em':value,'application':'begindocument/end',
+                     'effective_emergency_stretch_pt':None}
+
+
+def build_output(root:Path,output_id:str,emergency_stretch_em:float|None=None)->dict:
+    tex_argument,layout=emergency_stretch_argument(emergency_stretch_em)
     out=safe(root,'outputs/'+output_id);plan=load_plan(out/'plan.json');verify_generated(root,plan)
     # Exact fragments and literal input safety are checked even for drafts.
     structure=validate_structure(root,output_id)
@@ -42,7 +56,7 @@ def build_output(root:Path,output_id:str)->dict:
         archive_current(out, 'previous-build')
         stage=Path(tempfile.mkdtemp(prefix='.tex-build-',dir=out));compiled=stage/'compiled';compiled.mkdir()
         report={'built_at':now(),'output_id':output_id,'snapshot_id':plan['snapshot_id'],'source_inputs':sources,
-                'commands':[],'tools':{},'status':'FAILED','stability_reached':False,'warnings':[],
+                'commands':[],'tools':{},'layout':layout,'status':'FAILED','stability_reached':False,'warnings':[],
                 'draft_preview':plan['draft'],'preview_limitations':[e for e in structure['errors'] if e['code'] in allowed],
                 'acceptance':'Build does not perform mathematical, exposition or page review.'}
         try:
@@ -54,7 +68,7 @@ def build_output(root:Path,output_id:str)->dict:
             env=os.environ.copy();env['openout_any']='p'
             previous=None;bib_done=False
             for turn in range(1,7):
-                cmd=[engine,'-no-shell-escape','-halt-on-error','-interaction=nonstopmode','-file-line-error','-recorder','-output-directory=../compiled','main.tex']
+                cmd=[engine,'-no-shell-escape','-halt-on-error','-interaction=nonstopmode','-file-line-error','-recorder','-output-directory=../compiled',*(['-jobname=main'] if layout else []),tex_argument]
                 proc=run_command(cmd,stage/'manuscript',env=env);report['commands'].append(proc)
                 atomic_bytes(compiled/f'pass-{turn}.txt',(proc['stdout']+proc['stderr']).encode())
                 require(proc['returncode']==0,'BUILD_FAILED',f'TeX pass {turn} failed; actual logs retained','build')
@@ -68,6 +82,10 @@ def build_output(root:Path,output_id:str)->dict:
                 previous=digest
             from build_checks import log_issues,log_warnings
             log=(compiled/'main.log').read_text(errors='replace');issues=log_issues(log)
+            if layout:
+                effective=re.search(r'PMS-EMERGENCY-STRETCH-PT:\s*([0-9.]+)pt',log)
+                require(effective is not None,'BUILD_FAILED','Explicit emergency stretch was not observed in the TeX log','build/main.log')
+                layout['effective_emergency_stretch_pt']=float(effective[1])
             if not report['stability_reached']:issues['unstable_auxiliary_files']=['Six passes did not stabilize.']
             report['blocking_log_issues']=issues;report['nonblocking_log_warnings']=log_warnings(log)
             require(not issues,'BUILD_FAILED','Blocking TeX log diagnostics: '+', '.join(issues),'build/main.log')
@@ -86,7 +104,7 @@ def build_output(root:Path,output_id:str)->dict:
             dest=out/'build'
             if dest.exists():shutil.rmtree(dest)
             compiled.rename(dest);shutil.rmtree(stage,ignore_errors=True)
-    return result('output.build','BUILT',{'pdf':f'outputs/{output_id}/build/main.pdf','report':f'outputs/{output_id}/build/build-report.json','pages':report['pages'],'tools':report['tools']})
+    return result('output.build','BUILT',{'pdf':f'outputs/{output_id}/build/main.pdf','report':f'outputs/{output_id}/build/build-report.json','pages':report['pages'],'tools':report['tools'],'layout':report['layout']})
 
 def check_build(out:Path)->tuple[dict,list[dict]]:
     errors=[];path=out/'build/build-report.json'
