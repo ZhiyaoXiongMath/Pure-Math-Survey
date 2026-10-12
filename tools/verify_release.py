@@ -73,13 +73,52 @@ def installed_regression_summary(stderr:str)->dict:
             'synthetic_gates_are_not_mathematical_acceptance':True}
 
 
+def windows_job_process(command:list[str],**kwargs)->subprocess.Popen:
+    """Assign a waiting wrapper before it can create any actual command child."""
+    import ctypes
+    from ctypes import wintypes as w
+    class Basic(ctypes.Structure):
+        _fields_=[('process_time',ctypes.c_int64),('job_time',ctypes.c_int64),
+                  ('flags',w.DWORD),('minimum',ctypes.c_size_t),('maximum',ctypes.c_size_t),
+                  ('active',w.DWORD),('affinity',ctypes.c_size_t),('priority',w.DWORD),('scheduling',w.DWORD)]
+    class Extended(ctypes.Structure):
+        _fields_=[('basic',Basic),('io',ctypes.c_uint64*6),('process_memory',ctypes.c_size_t),
+                  ('job_memory',ctypes.c_size_t),('peak_process',ctypes.c_size_t),('peak_job',ctypes.c_size_t)]
+    kernel=ctypes.WinDLL('kernel32',use_last_error=True)
+    kernel.CreateJobObjectW.argtypes=[ctypes.c_void_p,w.LPCWSTR];kernel.CreateJobObjectW.restype=w.HANDLE
+    kernel.SetInformationJobObject.argtypes=[w.HANDLE,ctypes.c_int,ctypes.c_void_p,w.DWORD]
+    kernel.AssignProcessToJobObject.argtypes=[w.HANDLE,w.HANDLE]
+    kernel.TerminateJobObject.argtypes=[w.HANDLE,w.UINT]
+    kernel.CloseHandle.argtypes=[w.HANDLE]
+    job=kernel.CreateJobObjectW(None,None)
+    if not job:raise ctypes.WinError(ctypes.get_last_error())
+    proc=None
+    try:
+        limits=Extended();limits.basic.flags=0x2000  # JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE
+        if not kernel.SetInformationJobObject(job,9,ctypes.byref(limits),ctypes.sizeof(limits)):
+            raise ctypes.WinError(ctypes.get_last_error())
+        # No target code executes until the parent assigns this wrapper to its
+        # private job and communicate supplies GO. Descendants inherit the job.
+        wrapper="import subprocess,sys; token=sys.stdin.readline(); sys.exit(subprocess.call(sys.argv[1:]) if token=='GO\\n' else 125)"
+        proc=subprocess.Popen([sys.executable,'-I','-c',wrapper,*command],stdin=subprocess.PIPE,**kwargs)
+        if not kernel.AssignProcessToJobObject(job,w.HANDLE(int(proc._handle))):
+            raise ctypes.WinError(ctypes.get_last_error())
+        proc._verification_job=(kernel,job)
+        return proc
+    except BaseException:
+        if proc is not None:
+            proc.kill();proc.communicate(timeout=15)
+        kernel.CloseHandle(job)
+        raise
+
+
 def terminate_process_tree(proc:subprocess.Popen)->dict:
     """Terminate this check's own children as well as the Python/TeX parent."""
     if os.name=='nt':
-        done=subprocess.run(['taskkill','/PID',str(proc.pid),'/T','/F'],capture_output=True,
-                            text=True,encoding='utf-8',errors='replace',timeout=15)
-        return {'method':'taskkill /T /F','returncode':done.returncode,
-                'stdout':done.stdout,'stderr':done.stderr}
+        import ctypes
+        kernel,job=proc._verification_job
+        if not kernel.TerminateJobObject(job,1):raise ctypes.WinError(ctypes.get_last_error())
+        return {'method':'TerminateJobObject','returncode':0,'scope':'private wrapper and all command descendants'}
     try:
         os.killpg(proc.pid,signal.SIGKILL)
         return {'method':'killpg SIGKILL','returncode':0}
@@ -90,12 +129,11 @@ def terminate_process_tree(proc:subprocess.Popen)->dict:
 def run_check(command:list[str],cwd:Path,env:dict,report:dict,decode:bool=True,timeout:int=180,allowed_returncodes:tuple[int,...]=(0,))->dict:
     if timeout<=0:raise ValueError('Check timeout must be positive')
     start=time.monotonic()
-    proc=subprocess.Popen(command,cwd=cwd,env=env,stdout=subprocess.PIPE,stderr=subprocess.PIPE,
-                          text=True,encoding='utf-8',errors='replace',
-                          start_new_session=os.name!='nt',
-                          creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if os.name=='nt' else 0)
+    options=dict(cwd=cwd,env=env,stdout=subprocess.PIPE,stderr=subprocess.PIPE,
+                 text=True,encoding='utf-8',errors='replace',start_new_session=os.name!='nt')
+    proc=windows_job_process(command,**options) if os.name=='nt' else subprocess.Popen(command,**options)
     try:
-        stdout,stderr=proc.communicate(timeout=timeout)
+        stdout,stderr=proc.communicate(input='GO\n' if os.name=='nt' else None,timeout=timeout)
     except subprocess.TimeoutExpired as exc:
         def decoded(value):
             return value.decode('utf-8',errors='replace') if isinstance(value,bytes) else value or ''
@@ -107,12 +145,16 @@ def run_check(command:list[str],cwd:Path,env:dict,report:dict,decode:bool=True,t
             termination={'method':'process-tree termination','error':str(cleanup),'children_stopped':'UNCONFIRMED'}
             proc.kill()
             proc.wait(timeout=15)
-            for pipe in (proc.stdout,proc.stderr):
-                if pipe:pipe.close()
+            # Closing a pipe held by a surviving child can block on the reader
+            # thread lock. Preserve the failed cleanup instead of hiding it.
         report['checks'].append({'command':command,'cwd':str(cwd),'returncode':None,
                                 'timeout_seconds':timeout,'elapsed_seconds':time.monotonic()-start,
                                 'stdout':stdout,'stderr':stderr,'termination':termination,'expected_returncodes':list(allowed_returncodes)})
         raise subprocess.TimeoutExpired(command,timeout,output=stdout,stderr=stderr) from exc
+    finally:
+        if os.name=='nt':
+            kernel,job=proc._verification_job
+            kernel.CloseHandle(job)
     row={'command':command,'cwd':str(cwd),'returncode':proc.returncode,
          'timeout_seconds':timeout,'elapsed_seconds':time.monotonic()-start,
          'stdout':stdout,'stderr':stderr,'expected_returncodes':list(allowed_returncodes)}
@@ -131,8 +173,10 @@ def require_current_r3_semantics(result:dict)->dict:
     blocking=[];visual=[]
     for error in result.get('errors',[]):
         path=error.get('path','')
-        if error.get('code')=='VISUAL_REVIEW_INCOMPLETE' or (error.get('code')=='REVIEW_STALE'
-                and (path in visual_paths or path.startswith('evidence/pages/'))):
+        stale_visual_record=(error.get('code')=='REVIEW_STALE'
+                and re.fullmatch(r'Review .+ no longer matches this input',error.get('message',''))
+                and (path in visual_paths or path.startswith('evidence/pages/')))
+        if error.get('code')=='VISUAL_REVIEW_INCOMPLETE' or stale_visual_record:
             visual.append(error)
         else:blocking.append(error)
     if blocking:raise AssertionError({'r3_nonvisual_release_errors':blocking})

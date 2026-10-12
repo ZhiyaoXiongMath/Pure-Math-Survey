@@ -83,11 +83,12 @@ class R3VerifierContracts(unittest.TestCase):
         result={'artifacts':{'editorial_policy':verifier.EXPECTED_POLICY,'readiness':'READY',
                             'used_output_review_ids':['synthetic-semantic']},
                 'errors':[{'code':'VISUAL_REVIEW_INCOMPLETE','path':'evidence'},
-                          {'code':'REVIEW_STALE','path':'build/main.pdf'}]}
+                          {'code':'REVIEW_STALE','message':'Review old-visual no longer matches this input','path':'build/main.pdf'}]}
         verifier.require_current_r3_semantics(result)
         for error in ({'code':'OUTPUT_SEMANTIC_REVIEW_PENDING','path':'evidence'},
                       {'code':'REVIEW_STALE','path':'manuscript/main.tex'},
                       {'code':'MODE_SEMANTIC_REVIEW_PENDING','path':'evidence'},
+                      {'code':'REVIEW_STALE','message':'Rendered image bytes have changed','path':'evidence/pages/page-1.png'},
                       {'code':'DRAFT_NOT_RELEASABLE','path':'plan.json'}):
             bad=copy.deepcopy(result);bad['errors'].append(error)
             with self.subTest(error=error),self.assertRaises(AssertionError):verifier.require_current_r3_semantics(bad)
@@ -213,7 +214,7 @@ class R3VerifierContracts(unittest.TestCase):
                     "print('child spawned',flush=True);time.sleep(30)")
             report={'checks':[]}
             with self.assertRaises(subprocess.TimeoutExpired):
-                verifier.run_check([sys.executable,'-I','-u','-c',parent],base,os.environ.copy(),report,False,timeout=1)
+                verifier.run_check([sys.executable,'-I','-u','-c',parent],base,os.environ.copy(),report,False,timeout=3)
             pid=int(pid_file.read_text())
             if os.name=='nt':
                 import ctypes
@@ -238,6 +239,39 @@ class R3VerifierContracts(unittest.TestCase):
                     with self.assertRaises(ProcessLookupError):os.kill(pid,0)
             self.assertEqual(report['checks'][0]['termination']['returncode'],0)
             self.assertIn('child spawned',report['checks'][0]['stdout'])
+
+    @unittest.skipUnless(os.name=='nt','Windows Job Object lifetime contract')
+    def test_exited_parent_inherited_pipe_is_bounded_and_external_process_survives(self):
+        import ctypes
+        from ctypes import wintypes as w
+        with tempfile.TemporaryDirectory() as td:
+            base=Path(td);pidfile=base/'orphan.pid'
+            child="import time;print('child holds pipe',flush=True);time.sleep(30)"
+            parent=("import pathlib,subprocess,sys;p=subprocess.Popen([sys.executable,'-I','-u','-c',"+repr(child)+"]);"
+                    "pathlib.Path("+repr(str(pidfile))+").write_text(str(p.pid));print('parent exits',flush=True)")
+            unrelated=subprocess.Popen([sys.executable,'-I','-c','import time;time.sleep(30)'])
+            try:
+                report={'checks':[]};started=time.monotonic()
+                with self.assertRaises(subprocess.TimeoutExpired):
+                    verifier.run_check([sys.executable,'-I','-u','-c',parent],base,os.environ.copy(),report,False,timeout=3)
+                self.assertLess(time.monotonic()-started,10)
+                self.assertIsNone(unrelated.poll(),'An unrelated process was terminated')
+                self.assertIn('parent exits',report['checks'][0]['stdout'])
+                self.assertIn('child holds pipe',report['checks'][0]['stdout'])
+                self.assertEqual(report['checks'][0]['termination']['method'],'TerminateJobObject')
+                kernel=ctypes.WinDLL('kernel32',use_last_error=True)
+                kernel.OpenProcess.argtypes=[w.DWORD,w.BOOL,w.DWORD];kernel.OpenProcess.restype=w.HANDLE
+                kernel.GetExitCodeProcess.argtypes=[w.HANDLE,ctypes.POINTER(w.DWORD)]
+                kernel.CloseHandle.argtypes=[w.HANDLE]
+                handle=kernel.OpenProcess(0x1000,False,int(pidfile.read_text()))
+                if handle:
+                    try:
+                        code=w.DWORD();self.assertTrue(kernel.GetExitCodeProcess(handle,ctypes.byref(code)))
+                        self.assertNotEqual(code.value,259)
+                    finally:kernel.CloseHandle(handle)
+                else:self.assertEqual(ctypes.get_last_error(),87)
+            finally:
+                unrelated.terminate();unrelated.wait(timeout=10)
 
 
 if __name__=='__main__':unittest.main()
