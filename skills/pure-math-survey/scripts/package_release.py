@@ -75,6 +75,7 @@ REQUIRED_FILES = {
     'scripts/survey_core/common.py',
     'scripts/survey_core/dependencies.py',
     'scripts/survey_core/exports.py',
+    'scripts/survey_core/exposition.py',
     'scripts/survey_core/history.py',
     'scripts/survey_core/knowledge.py',
     'scripts/survey_core/models.py',

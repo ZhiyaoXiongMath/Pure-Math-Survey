@@ -169,6 +169,6 @@ class OutputReview(unittest.TestCase):
         unpacked=self.base/'installed'
         with zipfile.ZipFile(destination) as z:z.extractall(unpacked)
         skill=unpacked/'pure-math-survey'
-        code="import sys,json;sys.path.insert(0,"+repr(str(skill/'scripts'))+");from survey_core import tex,history,structure;print(json.dumps([tex.__file__,history.__file__,structure.__file__]))"
+        code="import sys,json;sys.path.insert(0,"+repr(str(skill/'scripts'))+");from survey_core import tex,history,structure,exposition;assert callable(exposition.check_exposition_design);print(json.dumps([m.__file__ for m in (tex,history,structure,exposition)]))"
         p=subprocess.run([sys.executable,'-I','-c',code],capture_output=True,text=True,cwd=self.base)
         self.assertEqual(p.returncode,0,p.stderr);self.assertTrue(all(Path(f).is_relative_to(skill) for f in json.loads(p.stdout)))
