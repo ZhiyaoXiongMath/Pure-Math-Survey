@@ -18,7 +18,8 @@
   list; installation packages still generate and verify their own checksum list.
 
 Rules/scaffolds are not mathematical, PDF, installed-runtime or real-reader acceptance.
-The integrated fixed candidate still needs actual content and critical review. Paper
+The integrated candidate includes the reviewed article prototypes. Integrated rebuilds,
+final installation checks and stage-critical review remain separate requirements. Paper
 defaults to DRAFT_UNVERIFIED; genuine originality/full research-proof quality is NOT VERIFIED.
 
 # Pure Math Survey 2.1.0 — release preparation
