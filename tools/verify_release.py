@@ -163,25 +163,84 @@ def run_check(command:list[str],cwd:Path,env:dict,report:dict,decode:bool=True,t
     return json.loads(stdout) if decode else row
 
 
-def require_current_r3_semantics(result:dict)->dict:
+def current_render_inputs(out:Path,result:dict)->tuple[set[str],dict[str,set[str]]]:
+    """Check current artifact bytes before deferring any older visual reading."""
+    import hashlib
+    from survey_core.common import safe,SurveyError
+    built=json.loads((out/'build/build-report.json').read_text(encoding='utf-8'))
+    render=json.loads((out/'evidence/render-manifest.json').read_text(encoding='utf-8'))
+    pdf=out/'build/main.pdf';pages=built.get('pages')
+    if (built.get('status')!='BUILT' or type(pages) is not int or pages<=0
+            or result.get('artifacts',{}).get('pages')!=pages or not pdf.is_file()
+            or hashlib.sha256(pdf.read_bytes()).hexdigest()!=built.get('pdf_sha256')
+            or render.get('pdf_sha256')!=built.get('pdf_sha256')):
+        raise AssertionError('Current PDF/build/render identities are invalid')
+    rows=render.get('pages')
+    if (not isinstance(rows,list) or any(not isinstance(row,dict) for row in rows)
+            or [row.get('page') for row in rows]!=list(range(1,pages+1))):
+        raise AssertionError('Current render manifest does not cover the entire PDF')
+    required={'build/main.pdf','build/build-report.json','evidence/render-manifest.json'}
+    for row in rows:
+        path=row.get('path');digest=row.get('sha256')
+        if (not isinstance(path,str) or not re.fullmatch(r'evidence/pages/page-[1-9][0-9]*\.png',path)
+                or path!=f"evidence/pages/page-{row['page']}.png"
+                or not isinstance(digest,str) or not re.fullmatch('[a-f0-9]{64}',digest)):
+            raise AssertionError('Current render manifest has an invalid page binding')
+        try:file=safe(out,path,True)
+        except SurveyError as exc:raise AssertionError('Current rendered page is missing or unsafe: '+path) from exc
+        if hashlib.sha256(file.read_bytes()).hexdigest()!=digest:
+            raise AssertionError('Current rendered image bytes have changed: '+path)
+        required.add(path)
+    visual_records={}
+    for file in (out/'evidence').rglob('*.json'):
+        record=json.loads(file.read_text(encoding='utf-8'))
+        if (isinstance(record,dict) and record.get('kind')=='visual'
+                and result['artifacts'].get('output_id') in record.get('scope',{}).get('output_ids',[])):
+            key=record.get('review_id')
+            if not isinstance(key,str) or key in visual_records:
+                raise AssertionError('Ambiguous visual review identity')
+            bindings=record.get('inputs')
+            if (not isinstance(bindings,list) or any(not isinstance(binding,dict)
+                    or not isinstance(binding.get('path'),str) for binding in bindings)):
+                raise AssertionError('Invalid visual review input bindings')
+            visual_records[key]={binding['path'] for binding in bindings}
+    return required,visual_records
+
+
+def require_current_r3_semantics(result:dict,out:Path|None=None)->dict:
     """Separate source/semantic acceptance from new-PDF visual work still to do."""
     artifacts=result.get('artifacts',{})
     if (artifacts.get('editorial_policy')!=EXPECTED_POLICY or artifacts.get('readiness')!='READY'
             or not artifacts.get('used_output_review_ids')):
         raise AssertionError('Actual r3 input lacks a current bound semantic review/readiness result')
     visual_paths={'build/main.pdf','build/build-report.json','evidence/render-manifest.json'}
+    visual_records={}
+    if out is not None:visual_paths,visual_records=current_render_inputs(out,result)
     blocking=[];visual=[]
     for error in result.get('errors',[]):
         path=error.get('path','')
-        stale_visual_record=(error.get('code')=='REVIEW_STALE'
-                and re.fullmatch(r'Review .+ no longer matches this input',error.get('message',''))
-                and (path in visual_paths or path.startswith('evidence/pages/')))
-        if error.get('code')=='VISUAL_REVIEW_INCOMPLETE' or stale_visual_record:
+        message=error.get('message','')
+        stale=re.fullmatch(r'Review (.+) no longer matches this input',message)
+        stale_visual_record=(error.get('code')=='REVIEW_STALE' and stale
+                and (path in visual_paths or (out is None and path.startswith('evidence/pages/')))
+                and (out is None or stale[1] in visual_records))
+        omitted=re.fullmatch(r'Review (.+) omits necessary inputs: (.+)',message)
+        missing=set(omitted[2].split(', ')) if omitted else set()
+        old_visual_scope=(out is not None and error.get('code')=='REVIEW_SCOPE_INSUFFICIENT'
+                and omitted and omitted[1] in visual_records and missing
+                and missing==visual_paths-visual_records[omitted[1]])
+        # A missing/invalid fresh manifest is a damaged build artifact, not an
+        # old visual-reading scope. current_render_inputs checks it explicitly.
+        pending_reading=(error.get('code')=='VISUAL_REVIEW_INCOMPLETE'
+                and path=='evidence')
+        if pending_reading or stale_visual_record or old_visual_scope:
             visual.append(error)
         else:blocking.append(error)
     if blocking:raise AssertionError({'r3_nonvisual_release_errors':blocking})
     return {'status':'CURRENT_BOUND_RECORDS_CHECKED','review_ids':artifacts['used_output_review_ids'],
             'new_pdf_visual_findings_pending':visual,
+            'visual_review_status':'NEW_VISUAL_REVIEW_REQUIRED' if visual else 'CURRENT_VISUAL_RECORDS_CHECKED',
+            'formal_release_authorized':False,
             'meaning':'Mechanical evidence/binding check; no new mathematical or page reading'}
 
 
@@ -249,7 +308,7 @@ def verify_r3_outputs(entries:list[dict],base:Path,check,exe:Path,entry:Path,env
                 row.update(build=built['status'],pages=built['artifacts']['pages'],render=rendered['status'])
                 if profile!='paper':
                     release=call('output','validate',project,'--output',oid,'--stage','release',allowed_returncodes=(0,3))
-                    row['semantic_validation']=require_current_r3_semantics(release)
+                    row['semantic_validation']=require_current_r3_semantics(release,out)
             else:row['build']='NOT EXECUTED (--no-build)'
             if profile=='paper':
                 release=call('output','validate',project,'--output',oid,'--stage','release',allowed_returncodes=(3,))

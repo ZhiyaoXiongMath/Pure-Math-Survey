@@ -3,6 +3,8 @@ from pathlib import Path
 import importlib.util
 import copy
 import json
+import hashlib
+import base64
 import time
 import os
 import subprocess
@@ -174,9 +176,12 @@ class R3VerifierContracts(unittest.TestCase):
                     self.assertEqual(kwargs['allowed_returncodes'],(3,))
                     return {'errors':[{'code':'DRAFT_NOT_RELEASABLE'}]}
                 if 'release' in command:
-                    return {'artifacts':{'editorial_policy':verifier.EXPECTED_POLICY,'readiness':'READY','used_output_review_ids':['synthetic']},'errors':[{'code':'VISUAL_REVIEW_INCOMPLETE','path':'evidence'}]}
+                    return {'artifacts':{'output_id':command[command.index('--output')+1],'pages':1,'editorial_policy':verifier.EXPECTED_POLICY,'readiness':'READY','used_output_review_ids':['synthetic']},'errors':[{'code':'VISUAL_REVIEW_INCOMPLETE','path':'evidence'}]}
                 if 'build' in command:return {'status':'BUILT','artifacts':{'pages':1}}
-                if 'render' in command:return {'status':'RENDERED_NOT_REVIEWED'}
+                if 'render' in command:
+                    output=Path(command[command.index('--output')-1])/'outputs'/command[command.index('--output')+1]
+                    CurrentVisualScope.write_artifacts(output,pages=1)
+                    return {'status':'RENDERED_NOT_REVIEWED'}
                 return {'status':'CHECKED'}
             result=verifier.verify_r3_outputs([{'path':project,'outputs':outputs}],base/'work',fake_check,
                 Path(sys.executable),Path('synthetic-entry.py'),{},900,True)
@@ -272,6 +277,96 @@ class R3VerifierContracts(unittest.TestCase):
                 else:self.assertEqual(ctypes.get_last_error(),87)
             finally:
                 unrelated.terminate();unrelated.wait(timeout=10)
+
+
+class CurrentVisualScope(unittest.TestCase):
+    """Synthetic byte-binding fixtures only, never page/mathematical acceptance."""
+    @staticmethod
+    def write_artifacts(out,pages=8):
+        (out/'build').mkdir(parents=True,exist_ok=True)
+        (out/'evidence/pages').mkdir(parents=True,exist_ok=True)
+        pdf=b'%PDF-1.4\nSynthetic artifact identity fixture, not a manuscript.\n'
+        (out/'build/main.pdf').write_bytes(pdf)
+        digest=hashlib.sha256(pdf).hexdigest()
+        (out/'build/build-report.json').write_text(json.dumps({'status':'BUILT','pages':pages,'pdf_sha256':digest}))
+        png=base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl6S1cAAAAASUVORK5CYII=')
+        rows=[]
+        for number in range(1,pages+1):
+            path=f'evidence/pages/page-{number}.png';(out/path).write_bytes(png)
+            rows.append({'page':number,'path':path,'sha256':hashlib.sha256(png).hexdigest()})
+        (out/'evidence/render-manifest.json').write_text(json.dumps({'pdf_sha256':digest,'pages':rows}))
+
+    def setUp(self):
+        self.temp=tempfile.TemporaryDirectory();self.out=Path(self.temp.name)
+        self.write_artifacts(self.out)
+        self.review={'review_id':'old-visual','kind':'visual','scope':{'output_ids':['example']},
+                     'inputs':[{'path':p} for p in ['build/main.pdf','build/build-report.json','evidence/render-manifest.json']+
+                               [f'evidence/pages/page-{n}.png' for n in range(1,8)]]}
+        (self.out/'evidence/old-visual.json').write_text(json.dumps(self.review))
+        self.result={'artifacts':{'output_id':'example','pages':8,'editorial_policy':verifier.EXPECTED_POLICY,
+                                 'readiness':'READY','used_output_review_ids':['synthetic-semantic']},
+                     'errors':[{'code':'REVIEW_SCOPE_INSUFFICIENT','path':'',
+                                'message':'Review old-visual omits necessary inputs: evidence/pages/page-8.png'},
+                               {'code':'VISUAL_REVIEW_INCOMPLETE','path':'evidence'}]}
+
+    def tearDown(self):self.temp.cleanup()
+
+    def test_new_page_from_old_visual_scope_requires_actual_new_review(self):
+        before={p:p.read_bytes() for p in self.out.rglob('*') if p.is_file()}
+        checked=verifier.require_current_r3_semantics(self.result,self.out)
+        self.assertEqual(checked['visual_review_status'],'NEW_VISUAL_REVIEW_REQUIRED')
+        self.assertFalse(checked['formal_release_authorized'])
+        self.assertEqual(len(checked['new_pdf_visual_findings_pending']),2)
+        self.assertEqual(before,{p:p.read_bytes() for p in before})
+
+    def test_insufficient_semantic_or_unknown_review_never_becomes_visual(self):
+        for message in ('Review synthetic-semantic omits necessary inputs: evidence/pages/page-8.png',
+                        'Review old-visual omits necessary inputs: manuscript/main.tex',
+                        'Semantic review omits consumed nodes: N-missing',
+                        'Review old-visual omits necessary inputs: evidence/pages/page-9.png'):
+            bad=copy.deepcopy(self.result);bad['errors'][0]['message']=message
+            with self.subTest(message=message),self.assertRaises(AssertionError):
+                verifier.require_current_r3_semantics(bad,self.out)
+
+    def test_missing_or_corrupt_current_png_cannot_hide_behind_old_visual_scope(self):
+        image=self.out/'evidence/pages/page-8.png';original=image.read_bytes()
+        for operation in ('missing','changed'):
+            if operation=='missing':image.unlink()
+            else:image.write_bytes(b'corrupt')
+            with self.subTest(operation=operation),self.assertRaises(AssertionError):
+                verifier.require_current_r3_semantics(self.result,self.out)
+            image.write_bytes(original)
+
+    def test_missing_invalid_or_stale_manifest_is_a_hard_failure(self):
+        manifest=self.out/'evidence/render-manifest.json';original=manifest.read_bytes()
+        for variant in (None,b'{',json.dumps({'pdf_sha256':'wrong','pages':[]}).encode(),
+                        json.dumps({'pdf_sha256':hashlib.sha256((self.out/'build/main.pdf').read_bytes()).hexdigest(),'pages':[]}).encode()):
+            if variant is None:manifest.unlink()
+            else:manifest.write_bytes(variant)
+            with self.subTest(variant=variant),self.assertRaises((OSError,ValueError,AssertionError)):
+                verifier.require_current_r3_semantics(self.result,self.out)
+            manifest.write_bytes(original)
+
+    def test_missing_or_changed_pdf_cannot_be_waived_as_visual_reading(self):
+        pdf=self.out/'build/main.pdf';original=pdf.read_bytes()
+        for operation in ('missing','changed'):
+            if operation=='missing':pdf.unlink()
+            else:pdf.write_bytes(b'%PDF-corrupt')
+            with self.subTest(operation=operation),self.assertRaises(AssertionError):
+                verifier.require_current_r3_semantics(self.result,self.out)
+            pdf.write_bytes(original)
+
+    def test_known_old_visual_stale_is_pending_but_unknown_or_corruption_is_blocking(self):
+        for message,allowed in (('Review old-visual no longer matches this input',True),
+                                ('Review synthetic-semantic no longer matches this input',False),
+                                ('Rendered image bytes have changed',False)):
+            changed=copy.deepcopy(self.result)
+            changed['errors'].append({'code':'REVIEW_STALE','path':'evidence/pages/page-1.png','message':message})
+            if allowed:
+                self.assertEqual(verifier.require_current_r3_semantics(changed,self.out)['visual_review_status'],
+                                 'NEW_VISUAL_REVIEW_REQUIRED')
+            else:
+                with self.assertRaises(AssertionError):verifier.require_current_r3_semantics(changed,self.out)
 
 
 if __name__=='__main__':unittest.main()
