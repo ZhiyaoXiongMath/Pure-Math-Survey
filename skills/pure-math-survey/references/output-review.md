@@ -85,6 +85,59 @@ and precise subsections; no manuscript is created to obtain article locations. K
 knowledge binding/reader contract separate from article evidence. This uses existing
 record shapes, not a newly promised typed route database or new CLI.
 
+### Knowledge-only coverage record
+
+Use the existing `review template PROJECT --kind coverage --id QUESTION --json`
+command. It creates a pending review, not an accepted reading. Knowledge and
+snapshots remain schema `2.0.0`; this policy-bearing review uses `schema_version:
+"2.2.0"`, `kind: "coverage"` and the following existing scope fields:
+
+```json
+{
+  "editorial_policy": "four-modes-2026-10-12-r3",
+  "question_ids": ["Q-density"],
+  "node_ids": ["Q-density", "N-density", "N-radial-change", "N-zero-boundary"],
+  "checks": ["obligation_coverage", "fast_route_reconstruction",
+             "slow_step_reproduction", "condition_transfer"]
+}
+```
+
+This is a scope example, not a review ready for acceptance. Replace its IDs with
+the actual question and all coverage-declared answer, mechanism and boundary
+nodes; bind any additionally reviewed node too. Keep `findings` as a list of
+strings, each beginning with its exact check name and a colon. For example, an
+actual reading could report the following forms, only after doing the work:
+
+- `obligation_coverage: Reconstructing the radial substitution exposed the missing Jacobian; the corrected derivation now supplies it [at the conversion](knowledge/nodes/N-radial-change.md#radial-jacobian).`
+- `fast_route_reconstruction: With the calculation hidden, I recovered the density from the stated symmetry and normalization; the support condition was missing from my first answer [in the fast route](knowledge/route.md#density-fast-route).`
+- `slow_step_reproduction: I evaluated the normalization integral from the declared change of variables and found the stated constant [in the calculation](knowledge/nodes/N-density.md#normalization).`
+- `condition_transfer: At the zero parameter the change of variables loses invertibility; this defeats this derivation and does not by itself disprove the claimed limit [at the boundary](knowledge/nodes/N-zero-boundary.md#zero-parameter).`
+
+These illustrative sentences are not evidence about a real project. Save the
+actual attempted answer/calculation, first failed step, repair and remaining
+uncertainty, rather than copying the sentences or changing a pending template to
+accepted. Preserve blocking unchecked items and use the actual reviewer mode/date.
+
+Every link is project-root-relative and resolves to an existing subsection. Use
+an ordinary ATX heading or put an explicit stable anchor on its own unindented
+line, outside frontmatter, comments, code and raw HTML blocks:
+
+```markdown
+<a id="radial-jacobian">
+
+## Radial Jacobian
+```
+
+The existing `inputs` list uses `{"path": "knowledge/route.md", "sha256":
+"ACTUAL_64_HEX_SHA256"}` entries. The shown hash is a placeholder, never a valid
+binding: compute each digest from the exact saved bytes. Include the route,
+overview, scoped node files and required project, coverage, scope and source
+inputs. The template supplies required coverage inputs; add every other cited
+route/node and source used by the reading. A revision string in
+`scope.evidence_basis` can aid provenance but cannot replace these file hashes.
+Missing links/anchors, unbound inputs or changed bytes invalidate the binding;
+passing those checks still does not establish mathematical truth or learning.
+
 For every page of the actual final PDF inspect the active 2–3 normal typeset-line target,
 usefulness of displays, local symbol definitions, hidden transformations and fragmentation.
 Record actual page/block/equation and corresponding source, finding, impact, repair or
