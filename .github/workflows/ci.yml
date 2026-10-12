@@ -34,7 +34,20 @@ jobs:
           python skills/pure-math-survey/scripts/validate_assets.py --json
           python skills/pure-math-survey/scripts/package_release.py --output "$RUNNER_TEMP/pure-math-survey-2.1.0.zip"
       - name: Verify clean isolated installation and actual benchmark builds
-        run: python tools/verify_release.py "$RUNNER_TEMP/pure-math-survey-2.1.0.zip" --report "$RUNNER_TEMP/clean-install.json"
+        run: python tools/verify_release.py "$RUNNER_TEMP/pure-math-survey-2.1.0.zip" --report "$RUNNER_TEMP/clean-install.json" --keep-work-directory --work-directory "$RUNNER_TEMP/pms-work"
+      - name: Retain rebuilt boundaries pages for independent review
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: boundaries-pages-python-${{ matrix.python }}-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/pms-work/pms-*/r3-projects/1/outputs/minimal-boundaries-r3/build/main.pdf
+            ${{ runner.temp }}/pms-work/pms-*/r3-projects/1/outputs/minimal-boundaries-r3/build/build-report.json
+            ${{ runner.temp }}/pms-work/pms-*/r3-projects/1/outputs/minimal-boundaries-r3/evidence/render-manifest.json
+            ${{ runner.temp }}/pms-work/pms-*/r3-projects/1/outputs/minimal-boundaries-r3/evidence/pages/*.png
+            ${{ runner.temp }}/clean-install.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Retain validation evidence (not a Release)
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
