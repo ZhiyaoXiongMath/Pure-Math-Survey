@@ -14,7 +14,8 @@ def consumption(inv: Inventory, plan: dict) -> set[str]:
     for obligation in plan['proof_obligations']:
         seeds.add(obligation['node_id']); seeds.update(obligation['imported_inputs'])
     for claim in plan.get('contributions', []):
-        seeds.update(claim['closest_prior_results']); seeds.update(claim['comparison_nodes'])
+        from .profiles import comparison_ids
+        seeds.update(claim['closest_prior_results']); seeds.update(comparison_ids(claim))
     return required_closure(inv.nodes, seeds, explain)
 
 def consumed_paths(inv: Inventory, plan: dict) -> set[str]:
@@ -109,8 +110,9 @@ def create_plan(root: Path, output_id: str, snapshot_id: str, profile: str='mini
             'question_ids':questions,'prerequisites':[],'selections':selections,'omissions':[],'proof_obligations':[],
             'limits':{'max_pages':max_pages,'page_review_threshold':None},'comparison_group':comparison_group,'draft':draft}
     from .profiles import OUTPUT_SCHEMA, POLICY, GOALS, PROOF_PROMPTS
+    from .exposition import DEFAULT_AUDIENCE
     plan.update(schema_version=OUTPUT_SCHEMA, editorial_policy=POLICY, contributions=[],
-                audience='General undergraduate mathematics and early doctoral background in the relevant field; specify the actual callable capabilities for this topic.',
+                audience=DEFAULT_AUDIENCE,
                 reader_goals=[GOALS.get(profile, 'Select a supported profile.')])
     # These are authoring prompts, not automatically satisfied mathematical promises.
     for selection in selections:
@@ -124,7 +126,7 @@ def create_plan(root: Path, output_id: str, snapshot_id: str, profile: str='mini
         plan['draft'] = True  # Promotion is a separate explicit, reviewed plan edit.
         plan['contributions'] = [{'node_id':key, 'classification':'unverified',
             'provenance':'PENDING: identify the authorized derivation or supplied manuscript; do not relabel known work.',
-            'authorization':'', 'closest_prior_results':[], 'comparison_nodes':[],
+            'authorization':'', 'closest_prior_results':[], 'comparison_bindings':[],
             'actual_difference':'', 'proof_status':'unverified',
             'gaps':['Contribution, closest prior work and proof closure have not been reviewed.']} for key in principals]
     target = safe(root, f'outputs/{output_id}/plan.json')

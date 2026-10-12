@@ -1,6 +1,6 @@
-# Pure Math Survey 2.1.0-rc1
+# Pure Math Survey 2.1.0-rc2
 
-> **2.1.0-rc1 是开发候选版，不是已发布版本。** 安装本开发分支的完整 `skills/pure-math-survey` 目录，或构建候选 ZIP；旧版 Release 链接仅供历史参考。四模式契约见[成文模式](references/editions.md)。
+> **2.1.0-rc2 是开发候选版，不是已发布版本。** 安装本开发分支的完整 `skills/pure-math-survey` 目录，或构建候选 ZIP；旧版 Release 链接仅供历史参考。四模式契约见[成文模式](references/editions.md)。
 > Minimal 严格三节；Thematic 核查路线比较；Lecture 兑现逐步证明；Paper 需授权原创贡献、最接近前人成果核查与闭合证明，默认只生成内部草稿。软件校验不保证数学正确、原创性或读者理解。
 > 知识 schema 为 2.0.0，新输出计划与新版政策审阅为 2.1.0；旧快照、正文和审阅不被静默迁移，历史 accepted 不构成新版政策验收。
 
@@ -19,7 +19,7 @@
 
 ## 安装与运行
 
-解压候选安装包 `pure-math-survey-2.1.0-rc1.zip`，将其中唯一的 `pure-math-survey/` 文件夹完整复制到宿主应用的技能目录。也可以直接运行脚本，无需安装 pip 包：
+解压候选安装包 `pure-math-survey-2.1.0-rc2.zip`，将其中唯一的 `pure-math-survey/` 文件夹完整复制到宿主应用的技能目录。也可以直接运行脚本，无需安装 pip 包：
 
 ```sh
 python pure-math-survey/scripts/survey.py --version --json

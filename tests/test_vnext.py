@@ -61,7 +61,11 @@ class VNext(unittest.TestCase):
             write_json(p,v)
         return p,v
     def authored(self,profile='minimal',oid='new',draft=True,view='integrated'):
-        p,v=self.make(profile,oid,draft,view=view);prepare_output(self.root,p)
+        p,v=self.make(profile,oid,draft,view=view)
+        v['audience']='Synthetic fixture reader can substitute real numbers and multiply.'
+        v['reader_goals']=['Reconstruct the substitution of zero in x times x; no research acceptance.']
+        write_json(p,v);prepare_output(self.root,p)
+        (p.parent/'outline.md').write_text('Synthetic design: multiply the assumed x=0 to obtain x squared=0. This is only a software fixture.\n')
         text=(p.parent/'manuscript/main.tex').read_text()
         # This synthetic manuscript is explicitly not a mathematical benchmark.
         import re
@@ -100,7 +104,7 @@ class VNext(unittest.TestCase):
         for key in ['N-prior','N-compare']:
             v['selections'].append({'node_id':key,'role':'background','statement_treatment':'full','proof_treatment':'citation','reason':SYNTH})
         v['contributions']=[dict(node_id='N-main',classification='original',provenance=SYNTH,authorization=SYNTH,
-            actual_difference=SYNTH,proof_status='complete',closest_prior_results=['N-prior'],comparison_nodes=['N-compare'],gaps=[])]
+            actual_difference=SYNTH,proof_status='complete',closest_prior_results=['N-prior'],comparison_bindings=[dict(comparison_node_id='N-compare',prior_result_id='N-prior')],gaps=[])]
         write_json(p,v)
         return p,v
 
@@ -272,7 +276,7 @@ class VNext(unittest.TestCase):
         self.assertIn('PAPER_ORIGINAL_CONTRIBUTION_MISSING',self.readiness(v))
     def test_V32_paper_requires_authorized_provenance_and_comparison_relation(self):
         p,v=self.paper();v['contributions'][0]['authorization']='';self.assertIn('PAPER_PROVENANCE_UNVERIFIED',self.readiness(v))
-        v['contributions'][0]['comparison_nodes']=['N-def'];self.failcode('CONTRIBUTION_INVALID',validate_plan,self.root,v)
+        v['contributions'][0]['comparison_bindings'][0]['comparison_node_id']='N-def';self.failcode('CONTRIBUTION_INVALID',validate_plan,self.root,v)
     def test_V33_paper_unknown_prior_and_self_prior_rejected(self):
         p,v=self.paper();c=v['contributions'][0];c['closest_prior_results']=['N-absent']
         # consumption may discover the unknown before profile checks; both reject, never ignore.
@@ -309,7 +313,7 @@ class VNext(unittest.TestCase):
             z.extractall(self.base/'installed')
         entry=self.base/'installed/pure-math-survey/scripts/survey.py'
         run=subprocess.run([sys.executable,'-I',str(entry),'--version','--json'],cwd=self.base,capture_output=True,text=True)
-        self.assertEqual(run.returncode,0,run.stdout);self.assertIn('2.1.0-rc1',run.stdout)
+        self.assertEqual(run.returncode,0,run.stdout);self.assertIn('2.1.0-rc2',run.stdout)
     def test_V38_generated_fragment_edit_still_rejected(self):
         p,v=self.authored();(p.parent/'generated/statements/N-main.tex').write_text('A supposedly improved theorem.')
         self.failcode('CANONICAL_STATEMENT_CHANGED',verify_generated,self.root,v)

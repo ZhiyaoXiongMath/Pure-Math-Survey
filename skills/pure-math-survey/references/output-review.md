@@ -12,7 +12,7 @@ Authoring materials are regenerated from the selected snapshot before verificati
 
 ## New-policy substantive readings
 
-A schema-2.1.0 output review binds the actual plan's editorial_policy. The seven existing
+A schema-2.2.0 output review binds the actual plan's editorial_policy. The seven existing
 whole-manuscript checks still apply; checking their names alone is not new-policy review.
 For each of the following mode_findings provide outcome, a concrete mathematical finding
 and actual manuscript path/line_start/line_end locations:

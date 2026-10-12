@@ -1,6 +1,6 @@
-# Pure Math Survey 2.1.0-rc1
+# Pure Math Survey 2.1.0-rc2
 
-> **2.1.0-rc1 is a development candidate, not a published release.** Install the complete skill directory from this branch or build its candidate ZIP. Historical release links below do not install vNext. See [four writing profiles](references/editions.md).
+> **2.1.0-rc2 is a development candidate, not a published release.** Install the complete skill directory from this branch or build its candidate ZIP. Historical release links below do not install vNext. See [four writing profiles](references/editions.md).
 > Minimal has exactly Main Results / Key Mathematical Ingredients / Connecting the Ingredients. Thematic requires supported synthesis, Lecture every promised derivation, and Paper authorized contribution, closest-prior-art and complete-proof reviews. Paper defaults to an unverified internal draft. Software cannot certify truth, originality or comprehension.
 > Knowledge schema is 2.0.0; new plans and policy-bearing reviews use 2.1.0. No historical snapshot, manuscript or review is automatically migrated or accepted under the new policy.
 
@@ -19,7 +19,7 @@ The [article example directory](https://github.com/ZhiyaoXiongMath/Pure-Math-Sur
 
 ## Install and run
 
-Extract the candidate `pure-math-survey-2.1.0-rc1.zip` and copy its single `pure-math-survey/` folder to the skill directory used by your host application. Or run its scripts directly without installing any pip package:
+Extract the candidate `pure-math-survey-2.1.0-rc2.zip` and copy its single `pure-math-survey/` folder to the skill directory used by your host application. Or run its scripts directly without installing any pip package:
 
 ```sh
 python pure-math-survey/scripts/survey.py --version --json

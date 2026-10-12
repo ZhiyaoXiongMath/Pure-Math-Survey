@@ -9,7 +9,7 @@ from .reviews import coverage_inputs,find_review,mathematical_inputs,reviews_in,
 def assess_readiness(root:Path,plan:dict|Path)->dict:
     if isinstance(plan,Path):plan=load_plan(plan)
     inv=validate_plan(root,plan); records=reviews_in(inv.root); ids=consumption(inv,plan)
-    from .profiles import current, profile_readiness_errors, statement_errors, statement_warnings
+    from .profiles import four_modes, profile_readiness_errors, statement_errors, statement_warnings
     errors=profile_readiness_errors(inv, plan);warnings=[];used=[]; valid_math={}
     principals={s['node_id'] for s in plan['selections'] if s['role']=='principal_answer'}
     obligations={o['node_id']:o for o in plan['proof_obligations']}
@@ -43,7 +43,7 @@ def assess_readiness(root:Path,plan:dict|Path)->dict:
         if m['mathematical_status']=='unassessed':add('MATHEMATICAL_REVIEW_PENDING','Node remains mathematically unassessed',n.path,key)
         if m['origin'] in {'supplied_manuscript','primary_source'} and not (m['origin']=='supplied_manuscript' and key in supplied_originals) and not any(s['role']=='support' and inv.sources[s['source_id']]['kind']=='primary' for s in m['sources']):
             add('SOURCE_REVIEW_MISSING','Imported/primary claim needs an original supporting source, not only an attachment',n.path,key)
-        principal_check = current(plan) and key in principals
+        principal_check = four_modes(plan) and key in principals
         if principal_check: warnings.extend(statement_warnings(key, n.statement))
         def candidate_check(r, key=key, n=n, principal_check=principal_check):
             # Select a review satisfying this plan, not merely the first valid

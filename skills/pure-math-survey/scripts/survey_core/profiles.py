@@ -1,6 +1,6 @@
 """Versioned exposition policy, not a mathematical decision procedure.
 
-Knowledge remains schema 2.0.0. New plans and policy-bearing reviews use 2.1.0;
+Knowledge remains schema 2.0.0. New plans and policy-bearing reviews use 2.2.0;
 legacy plans are read without mutation and are never called vNext-reviewed.
 All accepted findings below are accountable reader assertions, not inferred truth.
 """
@@ -9,9 +9,12 @@ from pathlib import Path
 import re
 from .common import diagnostic, require, sha, valid_date
 
-OUTPUT_SCHEMA = '2.1.0'
-POLICY = 'four-modes-2026-10-11-r2'
+OUTPUT_SCHEMA = '2.2.0'
+POLICY = 'four-modes-2026-10-12-rc2'
+RC1_SCHEMA = '2.1.0'
+RC1_POLICY = 'four-modes-2026-10-11-r2'
 LEGACY_POLICY = 'legacy-2.0.0'
+POLICIES = {'2.0.0': LEGACY_POLICY, RC1_SCHEMA: RC1_POLICY, OUTPUT_SCHEMA: POLICY}
 PROFILES = {'minimal', 'thematic', 'lecture', 'paper'}
 MINIMAL_SECTIONS = ['Main Results', 'Key Mathematical Ingredients', 'Connecting the Ingredients']
 STATEMENT_ASPECTS = ('objects', 'domain', 'fixed_and_variable', 'hypotheses',
@@ -43,11 +46,23 @@ def mapping(value: object) -> dict:
 
 
 def current(plan: dict) -> bool:
-    return plan.get('schema_version') == OUTPUT_SCHEMA
+    return plan.get('schema_version') == OUTPUT_SCHEMA and plan.get('editorial_policy') == POLICY
+
+
+def four_modes(plan: dict) -> bool:
+    return current(plan) or (plan.get('schema_version') == RC1_SCHEMA and plan.get('editorial_policy') == RC1_POLICY)
 
 
 def policy(plan: dict) -> str:
-    return POLICY if current(plan) else LEGACY_POLICY
+    validate_plan_contract(plan)
+    return POLICIES[plan['schema_version']]
+
+
+def comparison_ids(contribution: dict) -> list[str]:
+    """Read one contract, never infer comparison pairs for old records."""
+    if 'comparison_bindings' in contribution:
+        return list(dict.fromkeys(b['comparison_node_id'] for b in contribution['comparison_bindings']))
+    return contribution.get('comparison_nodes', [])
 
 
 def filled(value: object) -> bool:
@@ -58,15 +73,15 @@ def filled(value: object) -> bool:
 def validate_plan_contract(plan: dict) -> None:
     """Schema checks only; an incomplete, explicitly draft plan is legal."""
     version = plan.get('schema_version')
-    require(version in {'2.0.0', OUTPUT_SCHEMA}, 'SCHEMA_UNSUPPORTED', 'Unsupported output-plan schema', 'plan.json')
+    require(version in POLICIES, 'SCHEMA_UNSUPPORTED', 'Unsupported output-plan schema', 'plan.json')
     if version == '2.0.0':
         require(plan.get('profile') in PROFILES - {'paper'}, 'SCHEMA_UNSUPPORTED',
-                'Paper requires output schema 2.1.0; the legacy parser had only three profiles', 'plan.json')
+                'Paper requires an explicit four-mode schema; legacy has only three profiles', 'plan.json')
         require('editorial_policy' not in plan and 'contributions' not in plan,
                 'SCHEMA_UNSUPPORTED', 'Do not disguise new-policy fields as a legacy plan', 'plan.json')
         return
-    require(plan.get('editorial_policy') == POLICY, 'EDITORIAL_POLICY_UNSUPPORTED', 'Explicit supported editorial policy required', 'plan.json')
-    require(type(plan.get('contributions')) is list, 'CONTRACT_INVALID', '2.1.0 plans require contributions (empty outside Paper)', 'plan.json')
+    require(plan.get('editorial_policy') == POLICIES[version], 'EDITORIAL_POLICY_UNSUPPORTED', 'Schema and editorial policy must match exactly', 'plan.json')
+    require(type(plan.get('contributions')) is list, 'CONTRACT_INVALID', 'Four-mode plans require contributions (empty outside Paper)', 'plan.json')
     if plan['profile'] != 'paper':
         require(not plan['contributions'], 'CONTRACT_INVALID', 'Contribution claims belong only to Paper', 'plan.json')
     seen = set()
@@ -74,10 +89,23 @@ def validate_plan_contract(plan: dict) -> None:
         require(isinstance(item, dict), 'CONTRACT_INVALID', 'Contribution must be an object', 'plan.json')
         for key in ('node_id', 'classification', 'provenance', 'authorization', 'actual_difference', 'proof_status'):
             require(type(item.get(key)) is str, 'CONTRACT_INVALID', f'Contribution {key} must be text', 'plan.json')
-        for key in ('closest_prior_results', 'comparison_nodes', 'gaps'):
+        for key in ('closest_prior_results', 'gaps') + (('comparison_nodes',) if version == RC1_SCHEMA else ()):
             require(type(item.get(key)) is list and all(type(x) is str and x.strip() for x in item[key]),
                     'CONTRACT_INVALID', f'Contribution {key} must be a text list', 'plan.json')
             require(len(item[key]) == len(set(item[key])), 'DUPLICATE_ID', f'Duplicate contribution {key}', 'plan.json')
+        if version == OUTPUT_SCHEMA:
+            require('comparison_nodes' not in item, 'SCHEMA_UNSUPPORTED', 'rc2 uses comparison_bindings only', 'plan.json')
+            bindings = item.get('comparison_bindings')
+            require(isinstance(bindings, list), 'CONTRACT_INVALID', 'comparison_bindings must be a list', 'plan.json')
+            pairs = []
+            for binding in bindings:
+                require(isinstance(binding, dict) and set(binding) == {'comparison_node_id', 'prior_result_id'}
+                        and all(isinstance(v, str) and re.fullmatch(r'N-[A-Za-z0-9._-]+', v) for v in binding.values()),
+                        'CONTRACT_INVALID', 'Each comparison binding needs explicit relation and prior IDs', 'plan.json')
+                pairs.append((binding['comparison_node_id'], binding['prior_result_id']))
+            require(len(pairs) == len(set(pairs)), 'DUPLICATE_ID', 'Duplicate comparison binding', 'plan.json')
+        else:
+            require('comparison_bindings' not in item, 'SCHEMA_UNSUPPORTED', 'rc2 fields cannot be disguised as rc1', 'plan.json')
         require(item['node_id'] not in seen, 'DUPLICATE_ID', 'Duplicate contribution claim', 'plan.json'); seen.add(item['node_id'])
         require(item['classification'] in {'original', 'known', 'conjectural', 'unverified'}, 'CONTRACT_INVALID', 'Invalid contribution classification', 'plan.json')
         require(item['proof_status'] in {'complete', 'incomplete', 'unverified'}, 'CONTRACT_INVALID', 'Invalid contribution proof_status', 'plan.json')
@@ -85,7 +113,7 @@ def validate_plan_contract(plan: dict) -> None:
 
 def validate_profile_selection(inv, plan: dict) -> None:
     validate_plan_contract(plan)
-    if not current(plan):
+    if not four_modes(plan):
         return
     selected = {s['node_id']: s for s in plan['selections']}
     available = set(selected) | {p['node_id'] for p in plan['prerequisites'] if isinstance(p, dict)}
@@ -94,12 +122,12 @@ def validate_profile_selection(inv, plan: dict) -> None:
         require({c['node_id'] for c in plan['contributions']} == principals, 'CONTRIBUTION_COVERAGE_MISSING',
                 'Classify every Paper principal, including borrowed or unverified claims', 'plan.json')
         for c in plan['contributions']:
-            for key in c['closest_prior_results'] + c['comparison_nodes']:
+            for key in c['closest_prior_results'] + comparison_ids(c):
                 require(key in available and key in inv.nodes, 'CONTRIBUTION_INPUT_MISSING',
                         'Select or explicitly scope each prior-result/comparison node', 'plan.json', key)
             require(c['node_id'] not in c['closest_prior_results'], 'CONTRIBUTION_INVALID',
                     'A claim cannot be its own closest prior result', 'plan.json', c['node_id'])
-            for key in c['comparison_nodes']:
+            for key in comparison_ids(c):
                 require(inv.nodes[key].meta['kind'] == 'relation', 'CONTRIBUTION_INVALID',
                         'Nontrivial comparisons must be canonical relation nodes, not unsourced outline prose', 'plan.json', key)
 
@@ -112,7 +140,8 @@ def principal_template(statement: bytes) -> dict:
 def statement_errors(key: str, statement: bytes, review: dict) -> list[dict]:
     scope = mapping(review.get('scope'))
     entry = mapping(scope.get('statement_reviews')).get(key, {})
-    valid = (review.get('schema_version') == OUTPUT_SCHEMA and scope.get('editorial_policy') == POLICY
+    valid = (review.get('schema_version') in {RC1_SCHEMA, OUTPUT_SCHEMA}
+             and scope.get('editorial_policy') == POLICIES[review['schema_version']]
              and isinstance(entry, dict) and entry.get('outcome') == 'accepted'
              and entry.get('canonical_sha256') == sha(statement)
              and all(filled(entry.get(k)) for k in STATEMENT_ASPECTS))
@@ -132,7 +161,7 @@ def statement_warnings(key: str, statement: bytes) -> list[dict]:
 
 
 def profile_readiness_errors(inv, plan: dict) -> list[dict]:
-    if not current(plan):
+    if not four_modes(plan):
         return []
     errors = []
     def add(code, message, key=None):
@@ -162,7 +191,7 @@ def profile_readiness_errors(inv, plan: dict) -> list[dict]:
         if (c['proof_status'] != 'complete' or node.meta['mathematical_status'] != 'established'
                 or selected[key]['proof_treatment'] != 'complete' or obligations.get(key, {}).get('treatment') != 'complete'):
             add('PAPER_PROOF_NOT_CLOSED', 'Each original principal requires an established node and its own complete proof obligation.', key)
-        if not c['closest_prior_results'] or not c['comparison_nodes'] or not filled(c['actual_difference']):
+        if not c['closest_prior_results'] or not comparison_ids(c) or not filled(c['actual_difference']):
             add('PAPER_PRIOR_ART_MISSING', 'Identify closest prior-result nodes, supported comparison relations and the precise difference.', key)
         # A proved original result cannot import a conjecture as a proof premise.
         # Discussion-only frontier selections are not proof dependencies.
@@ -187,10 +216,10 @@ def profile_readiness_errors(inv, plan: dict) -> list[dict]:
 
 
 def review_scope_template(plan: dict) -> dict:
-    if not current(plan):
+    if not four_modes(plan):
         return {}
-    keys = COMMON_READINGS + MODE_READINGS[plan['profile']]
-    return {'editorial_policy': POLICY, 'statement_reviews': {},
+    keys = COMMON_READINGS + MODE_READINGS[plan['profile']] + (('exposition_design',) if current(plan) else ())
+    return {'editorial_policy': policy(plan), 'statement_reviews': {},
             'mode_findings': {k: {'outcome': 'not_performed', 'finding': '', 'locations': []} for k in keys},
             'proof_step_findings': {o['node_id']: {s: {'outcome': 'not_performed', 'finding': '', 'locations': []}
                                     for s in o['required_steps']} for o in plan['proof_obligations']},
@@ -201,21 +230,21 @@ def review_scope_template(plan: dict) -> dict:
                 for c in plan['contributions'] if c['classification'] == 'original'}}
 
 
-def semantic_profile_errors(out: Path, plan: dict, review: dict) -> list[dict]:
-    if not current(plan):
+def semantic_profile_errors(out: Path, plan: dict, review: dict, *, inspection=None) -> list[dict]:
+    if not four_modes(plan):
         return []
     from .tex import validate_locations
     from .common import safe
     scope = mapping(review.get('scope')); errors = []
-    if review.get('schema_version') != OUTPUT_SCHEMA or scope.get('editorial_policy') != POLICY:
+    if review.get('schema_version') != plan['schema_version'] or scope.get('editorial_policy') != policy(plan):
         errors.append(diagnostic('EDITORIAL_REVIEW_POLICY_MISMATCH', 'Historical accepted evidence is not a new-policy reading.', 'evidence'))
     def check_entry(entry, name, key=None):
         if not isinstance(entry, dict) or entry.get('outcome') != 'accepted' or not filled(entry.get('finding')):
             errors.append(diagnostic('MODE_SEMANTIC_REVIEW_PENDING', f'Located substantive reading required: {name}', 'evidence', key))
             return
-        errors.extend(validate_locations(out, entry.get('locations'), node_id=key))
+        errors.extend(validate_locations(out, entry.get('locations'), node_id=key, inspection=inspection))
     findings = mapping(scope.get('mode_findings'))
-    for name in COMMON_READINGS + MODE_READINGS[plan['profile']]:
+    for name in COMMON_READINGS + MODE_READINGS[plan['profile']] + (('exposition_design',) if current(plan) else ()):
         check_entry(findings.get(name), name)
     for s in plan['selections']:
         if s['role'] == 'principal_answer':
@@ -251,7 +280,7 @@ def semantic_profile_errors(out: Path, plan: dict, review: dict) -> list[dict]:
 
 
 def structure_errors(inv, plan: dict, nodes: dict, expanded: str) -> tuple[list[dict], list[dict]]:
-    if not current(plan):
+    if not four_modes(plan):
         return [], [diagnostic('LEGACY_EDITORIAL_POLICY', 'Only the historical 2.0.0 policy is being checked; this is not vNext acceptance.')]
     errors = []; warnings = []
     sections = inv['sections']; numbered = [s for s in sections if not s['starred']]
