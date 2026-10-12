@@ -5,6 +5,7 @@ No host skill installation, source changes or new accepted reviews are made.
 """
 from __future__ import annotations
 import argparse
+from contextlib import contextmanager
 import importlib
 import json
 import os
@@ -21,22 +22,51 @@ sys.path.insert(0,str(ROOT/'skills/pure-math-survey/scripts'))
 from package_release import verify_archive
 
 
+@contextmanager
+def verification_workspace(report:dict,parent:Path|None=None,keep:bool=False):
+    """Keep failed build inputs and logs available for diagnosis."""
+    if parent:parent.mkdir(parents=True,exist_ok=True)
+    base=Path(tempfile.mkdtemp(prefix='pms-',dir=parent))
+    workspace={'path':str(base.resolve()),'retained':keep}
+    report['workspace']=workspace
+    try:
+        yield base
+    except BaseException:
+        workspace['retained']=True
+        raise
+    finally:
+        if not workspace['retained']:shutil.rmtree(base)
+
+
+def run_check(command:list[str],cwd:Path,env:dict,report:dict,decode:bool=True,timeout:int=180)->dict:
+    try:
+        p=subprocess.run(command,cwd=cwd,env=env,capture_output=True,text=True,
+                         encoding='utf-8',errors='replace',timeout=timeout)
+    except subprocess.TimeoutExpired as exc:
+        def decoded(value):
+            return value.decode('utf-8',errors='replace') if isinstance(value,bytes) else value or ''
+        report['checks'].append({'command':command,'returncode':None,'timeout_seconds':timeout,
+                                'stdout':decoded(exc.stdout),'stderr':decoded(exc.stderr)})
+        raise
+    row={'command':command,'returncode':p.returncode,'stdout':p.stdout,'stderr':p.stderr}
+    report['checks'].append(row)
+    if p.returncode:raise RuntimeError(p.stdout+p.stderr)
+    return json.loads(p.stdout) if decode else row
+
+
 def main()->int:
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('archive',type=Path)
     ap.add_argument('--report',type=Path);ap.add_argument('--no-build',action='store_true',help='Explicitly skip external TeX; reported as NOT_EXECUTED.')
     ap.add_argument('--example-root',type=Path,help='Directory containing the authored schur and compactness projects (default: examples/vnext/projects).')
     ap.add_argument('--work-directory',type=Path,help='Parent of a short-lived staging directory; use a shallow path for deeply nested historical Windows artifacts.')
+    ap.add_argument('--keep-work-directory',action='store_true',help='Also retain successful installation/build artifacts. Failed verification artifacts are always retained.')
     args=ap.parse_args();report={'status':'RUNNING','checks':[],'archive':args.archive.name,'python':sys.version}
     def check(command:list[str],cwd:Path,env:dict,decode:bool=True)->dict:
-        p=subprocess.run(command,cwd=cwd,env=env,capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=180)
-        row={'command':command,'returncode':p.returncode,'stdout':p.stdout,'stderr':p.stderr};report['checks'].append(row)
-        if p.returncode:raise RuntimeError(p.stdout+p.stderr)
-        return json.loads(p.stdout) if decode else row
+        return run_check(command,cwd,env,report,decode)
     try:
         report['archive_verification']=verify_archive(args.archive)
-        if args.work_directory:args.work_directory.mkdir(parents=True,exist_ok=True)
-        with tempfile.TemporaryDirectory(prefix='pms-',dir=args.work_directory) as td:
-            base=Path(td);dest=base/'unpacked'
+        with verification_workspace(report,args.work_directory,args.keep_work_directory) as base:
+            dest=base/'unpacked'
             with zipfile.ZipFile(args.archive) as z:z.extractall(dest)
             venv.EnvBuilder(with_pip=False,system_site_packages=False).create(base/'venv')
             exe=base/'venv'/('Scripts/python.exe' if os.name=='nt' else 'bin/python')
