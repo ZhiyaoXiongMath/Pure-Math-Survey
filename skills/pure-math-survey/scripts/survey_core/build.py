@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 import os
 import math
+from decimal import Decimal
 import re
 import shutil
 import subprocess
@@ -34,7 +35,8 @@ def emergency_stretch_argument(value:float|None)->tuple[str,dict]:
     if value is None:return 'main.tex',{}
     require(type(value) in (int,float) and math.isfinite(value) and 0<value<=10,
             'CONTRACT_INVALID','emergency_stretch_em must be finite and in (0, 10]')
-    amount=format(value,'.6g')
+    amount=format(Decimal(str(value)),'f')
+    if '.' in amount:amount=amount.rstrip('0').rstrip('.')
     argument=(r'\AddToHook{begindocument/end}{\emergencystretch='+amount+
               r'em\typeout{PMS-EMERGENCY-STRETCH-PT: \the\emergencystretch}}\input{main.tex}')
     return argument,{'emergency_stretch_em':value,'application':'begindocument/end',

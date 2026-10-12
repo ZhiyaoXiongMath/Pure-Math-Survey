@@ -8,6 +8,7 @@ import argparse
 import hashlib
 import json
 import math
+from decimal import Decimal
 from pathlib import Path,PurePosixPath
 import re
 import shutil
@@ -29,7 +30,8 @@ def emergency_stretch_argument(value:float|None)->tuple[str,dict]:
     if value is None:return 'main.tex',{}
     if type(value) not in (int,float) or not math.isfinite(value) or not 0<value<=10:
         raise ValueError('emergency_stretch_em must be finite and in (0, 10]')
-    amount=format(value,'.6g')
+    amount=format(Decimal(str(value)),'f')
+    if '.' in amount:amount=amount.rstrip('0').rstrip('.')
     argument=(r'\AddToHook{begindocument/end}{\emergencystretch='+amount+
               r'em\typeout{PMS-EMERGENCY-STRETCH-PT: \the\emergencystretch}}\input{main.tex}')
     return argument,{'emergency_stretch_em':value,'application':'begindocument/end',

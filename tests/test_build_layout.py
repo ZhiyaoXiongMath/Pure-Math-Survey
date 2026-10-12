@@ -15,10 +15,15 @@ class OptionalLineBreaking(unittest.TestCase):
     def test_original_default_and_two_builders_share_one_parameter_contract(self):
         self.assertEqual(emergency_stretch_argument(None),('main.tex',{}))
         self.assertEqual(standalone.emergency_stretch_argument(None),('main.tex',{}))
-        for value in (0.5,2,2.0,10):
+        for value in (0.5,2,2.0,10,1e-6,5e-324):
             with self.subTest(value=value):
                 self.assertEqual(emergency_stretch_argument(value),standalone.emergency_stretch_argument(value))
                 self.assertEqual(emergency_stretch_argument(value)[1]['emergency_stretch_em'],value)
+
+    def test_tiny_parameter_is_plain_decimal_for_tex(self):
+        argument,_=emergency_stretch_argument(1e-6)
+        self.assertIn(r'\emergencystretch=0.000001em',argument)
+        self.assertNotIn('1e-',argument)
 
     def test_nonfinite_out_of_range_or_tex_text_cannot_enter_command(self):
         for value in (-1,0,10.1,float('nan'),float('inf'),True,'2em',r'2\input{other}'):
