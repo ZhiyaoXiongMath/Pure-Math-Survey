@@ -1,0 +1,66 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "R-coverage-N-Q-triangles-20261012",
+  "kind": "coverage",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "knowledge/coverage.json",
+      "sha256": "5c8ced8f611264ab52ae8b124a5ace8106dd606a4f99f0bfd4b9349d2f9dfff2"
+    },
+    {
+      "path": "knowledge/discovery.md",
+      "sha256": "60e8e6d6ef8ff81660505ff8b7814b281a2a55bea3de1a37fcff1449d64b7d98"
+    },
+    {
+      "path": "knowledge/nodes/N-E-global-reverse.md",
+      "sha256": "0dbe4d31c7d7f3a1585033ec3fec78498c4aedefdc719722a79e0618d91fcb54"
+    },
+    {
+      "path": "knowledge/nodes/N-E-local-equality.md",
+      "sha256": "e272fb303c804062da10c8b40fd981146bd0a8347db21fd8280df45161c82738"
+    },
+    {
+      "path": "knowledge/nodes/N-E-product.md",
+      "sha256": "42fe2f94a01e2306eac3d7025aeda5799ecb4a67e106d6241526d46be1cad484"
+    },
+    {
+      "path": "knowledge/nodes/N-M-toponogov.md",
+      "sha256": "a1721216f79dac1ee62fcf957c6809b8ad928289186a498d43dca495c5abaaa0"
+    },
+    {
+      "path": "knowledge/nodes/N-Q-triangles.md",
+      "sha256": "4191409c6ba720f08bf2d3738e803e819eb25a8c5758e85e65451011e7719236"
+    },
+    {
+      "path": "knowledge/nodes/N-R-toponogov.md",
+      "sha256": "d68688062cc3acd706d74aba1a09bdf8d183ea48cf8dad0e4a3feac95bca68f4"
+    },
+    {
+      "path": "knowledge/overview.md",
+      "sha256": "71b794a1447e39bc223259c33cd4193f25b1a02942d66f81fdb47facfe7050a4"
+    },
+    {
+      "path": "project.json",
+      "sha256": "87cb6a2485b7efddf37961eed6780208253c1ad4d14360462040c068379c799f"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "c803acf2b2ef8ba6ce4d6aed6555916b204ecb5b42d9dbac738b0b74fd0a706b"
+    }
+  ],
+  "scope": {
+    "question_ids": [
+      "N-Q-triangles"
+    ]
+  },
+  "findings": [
+    "The nondegenerate strict-perimeter theorem and its globalization route are checked against original and modern sources. The three comparison experiments and inequality directions are kept separate; broader endpoint coverage is pending.",
+    "Omission challenge returned to Toponogov1959 and HK1978, added splitting/rigidity/lower-volume nodes, and retained the stated gaps."
+  ],
+  "unchecked_items": [
+    "Degenerate triangles and the spherical perimeter endpoint 2D_k are discussed as source conventions but are not promoted to canonical statements."
+  ],
+  "disposition": "limited"
+}

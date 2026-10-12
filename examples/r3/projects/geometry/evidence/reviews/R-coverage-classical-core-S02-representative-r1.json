@@ -1,0 +1,257 @@
+{
+  "schema_version": "2.2.0",
+  "review_id": "R-coverage-classical-core-S02-representative-r1",
+  "kind": "coverage",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/S02-representative-tasks-20261012.md",
+      "sha256": "a50a9e4e475e8333ed91040a8ca22e52d7886d9ab988504e0091577c7e8f60d7"
+    },
+    {
+      "path": "evidence/source-checks/S-Bishop-2013v2.md",
+      "sha256": "2c1ba30026e51f901800ddab4d2f99900806a2b3ec596ff909b2921564c1e045"
+    },
+    {
+      "path": "evidence/source-checks/S-Eschenburg-1994.md",
+      "sha256": "9fb02b4fca1b61bce3f5d7f94bf154c8d3d44b694c4e964c420f2559b1d0f0c1"
+    },
+    {
+      "path": "evidence/source-checks/S-Lang-2026.md",
+      "sha256": "d7125587caa888a2352110c7f227ca1d061a8123a626307a7a5b749134e002dd"
+    },
+    {
+      "path": "evidence/source-checks/S-Toponogov-1959.md",
+      "sha256": "793a21eb4ef690d0706a19d0f0ed286dcf6a37062f2fcad1900d9171fb0f0468"
+    },
+    {
+      "path": "evidence/source-checks/S02-radial-route-20261012.md",
+      "sha256": "95b2278c8b15e815d33ccc1ac78ec60c24cd8d9f18ed817776889110b3220053"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "268c64561038d5effab8f49c86289e70a118bfb6e848389d3e00d426c32d4280"
+    },
+    {
+      "path": "knowledge/coverage.json",
+      "sha256": "3bf22af3d187b36918bcb53ec03734b67bc3fafb08b233e96ce625034face9ae"
+    },
+    {
+      "path": "knowledge/discovery.md",
+      "sha256": "d9ff46761ae250aac6ab7f53b04c5503f65f92cc7607c4ce0eaf3e16f62f8d3d"
+    },
+    {
+      "path": "knowledge/nodes/N-D-curvature.md",
+      "sha256": "0bdb9cc28f2d22e0cba21b77aa3d32111ad917927786330a87d0aa437f04543f"
+    },
+    {
+      "path": "knowledge/nodes/N-D-distance.md",
+      "sha256": "eb63cd05f332fe10c5fc845218ac504daf075792984b9da6d6095fa8db7a45e3"
+    },
+    {
+      "path": "knowledge/nodes/N-D-index.md",
+      "sha256": "15c663c6a7f0ed4b36c21118c6d78d55c80abcee320e95f7faf38cbd0961ca09"
+    },
+    {
+      "path": "knowledge/nodes/N-D-jacobi.md",
+      "sha256": "f6c3fccbe45de5534301c98b4dfafe11e334a244687cd80189fd57d65d16ef9b"
+    },
+    {
+      "path": "knowledge/nodes/N-D-model.md",
+      "sha256": "0f6d2a3add30a086aee33dbfe609f40645d68c9692f439165678d0c7ba709e39"
+    },
+    {
+      "path": "knowledge/nodes/N-D-riemannian.md",
+      "sha256": "f154ce4ec0bcdf0167a33339bbeaddd9c4f98081c6e71e9a9873c2dfc456f894"
+    },
+    {
+      "path": "knowledge/nodes/N-D-triangle.md",
+      "sha256": "ada7dbf8811aeb0bf2c4940f4b743efc3a9e6a274f3e833fcaa2364fadcacedb"
+    },
+    {
+      "path": "knowledge/nodes/N-E-collapse.md",
+      "sha256": "9244ae50f3169393daa84d292a06e8e5723bd5a74187a0d39a6e3cdec1175339"
+    },
+    {
+      "path": "knowledge/nodes/N-E-completeness.md",
+      "sha256": "d428753fd941edda521371d037a99c544be7e7e1fad9939552d396965773874d"
+    },
+    {
+      "path": "knowledge/nodes/N-E-cylinder.md",
+      "sha256": "95c6b56885407679ee183bae1cecf9b63d458fce16f937bc20482d76218516c4"
+    },
+    {
+      "path": "knowledge/nodes/N-E-global-reverse.md",
+      "sha256": "0dbe4d31c7d7f3a1585033ec3fec78498c4aedefdc719722a79e0618d91fcb54"
+    },
+    {
+      "path": "knowledge/nodes/N-E-models.md",
+      "sha256": "271ae0075e0ab7e02ec8b84b65c7e2943a56e0db545b8c36ec9a17d14e27e9d6"
+    },
+    {
+      "path": "knowledge/nodes/N-E-product.md",
+      "sha256": "42fe2f94a01e2306eac3d7025aeda5799ecb4a67e106d6241526d46be1cad484"
+    },
+    {
+      "path": "knowledge/nodes/N-E-rauch-cutoff.md",
+      "sha256": "913350e1ea82238319835358a76d08e045780326e2687a34d34d0011c07021ce"
+    },
+    {
+      "path": "knowledge/nodes/N-M-cut-integration.md",
+      "sha256": "868302ee7ff81de3a2caa765d0fac26fd405c172b5c0633631e331337d50c4ef"
+    },
+    {
+      "path": "knowledge/nodes/N-M-geometric-inputs.md",
+      "sha256": "6226286ba26809de98b276d43981466c4e833e652d97f71d84788e5c879f6ecb"
+    },
+    {
+      "path": "knowledge/nodes/N-M-hadamard.md",
+      "sha256": "70b2d98c3e04e2a85c2fa5363ad3a473b8dce74313e75c55849eaefbad17cdd4"
+    },
+    {
+      "path": "knowledge/nodes/N-M-myers.md",
+      "sha256": "b0d6d76f79b87601568739f3202549171bd54093b060b9ac40a79d3877483249"
+    },
+    {
+      "path": "knowledge/nodes/N-M-riccati.md",
+      "sha256": "d4bcffdcdbadb799bdbc4b2ff941cdde236fa30c6aa8f5d8b4ce6cff7873ffaa"
+    },
+    {
+      "path": "knowledge/nodes/N-M-toponogov.md",
+      "sha256": "5634aab040ef85fbd06cf045a3e199d15975c9182bc7e8251b398c4c7efdcf9d"
+    },
+    {
+      "path": "knowledge/nodes/N-M-trace.md",
+      "sha256": "944b4af3ddffcc6a4d83f7b933a65bd8a4b06112b1895c38f3cf2189c8e2b4d0"
+    },
+    {
+      "path": "knowledge/nodes/N-Q-classical-core.md",
+      "sha256": "89544430f78735453241457e854e60ffeba13007bc29b4bfdfd9c1b820a3ccaa"
+    },
+    {
+      "path": "knowledge/nodes/N-R-bishop-gromov.md",
+      "sha256": "380ada1c1079647ce68ee39baf0e7ad828211f95750d80ad66dd774fdd3a495e"
+    },
+    {
+      "path": "knowledge/nodes/N-R-hadamard.md",
+      "sha256": "eea45b83def02c634e501fd67de7712b34c019133fdd5b0bf0f43bb343cc9778"
+    },
+    {
+      "path": "knowledge/nodes/N-R-hessian.md",
+      "sha256": "795ed2b944f2dc3ee0e1141b1b4b7ae5a9be46b37dc29c5a1da8ce2eeac6694f"
+    },
+    {
+      "path": "knowledge/nodes/N-R-laplacian.md",
+      "sha256": "76b6d0e57e173c449f1b8b54f447745e03037f2f303ef2f54f8e729a58986bac"
+    },
+    {
+      "path": "knowledge/nodes/N-R-myers.md",
+      "sha256": "306a0dfee7caab23a1676654d471b8d1bf10bec9aa3105ab3ffe5abf50ad1f97"
+    },
+    {
+      "path": "knowledge/nodes/N-R-rauch.md",
+      "sha256": "c8d52635de56220f7b1cb26706299bb31c3ba506e4ca99d8d234ac9f8010e8dd"
+    },
+    {
+      "path": "knowledge/nodes/N-R-toponogov.md",
+      "sha256": "d5eb3012c420b338d3f9c81c393beeed720ab7b47e3fc97886c032c738c853e2"
+    },
+    {
+      "path": "knowledge/overview.md",
+      "sha256": "0cf6c3a58229fef4605968bf957fabd05fb22ad3108bbd750e93ab607f859c0e"
+    },
+    {
+      "path": "knowledge/sources/S-Bishop-2013v2.json",
+      "sha256": "91af1ad3ba11ca56e7a5d76750001865d97e910e9585833a6e050b99e49708ca"
+    },
+    {
+      "path": "knowledge/sources/S-Eschenburg-1994.json",
+      "sha256": "1f92d5dc453c3e34093844ee568224942dfba8f1e6158bd0d3177b5b12801df5"
+    },
+    {
+      "path": "knowledge/sources/S-Lang-2026.json",
+      "sha256": "692680e2507398c6f36959dc1c3b8d4e810ba0e63402855f4451cf547ed70362"
+    },
+    {
+      "path": "knowledge/sources/S-Toponogov-1959.json",
+      "sha256": "404fabe3bed83cc2042949fd76f1f66c4320e20cfb60508a0b561f4d5c815af2"
+    },
+    {
+      "path": "project.json",
+      "sha256": "87cb6a2485b7efddf37961eed6780208253c1ad4d14360462040c068379c799f"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "18ac48fe450c56b240941bce424c5c26e2e3e591d491cb80a83217a983e0a2dc"
+    }
+  ],
+  "scope": {
+    "editorial_policy": "four-modes-2026-10-12-r3",
+    "question_ids": [
+      "N-Q-classical-core"
+    ],
+    "node_ids": [
+      "N-D-curvature",
+      "N-D-distance",
+      "N-D-index",
+      "N-D-jacobi",
+      "N-D-model",
+      "N-D-riemannian",
+      "N-D-triangle",
+      "N-E-collapse",
+      "N-E-completeness",
+      "N-E-cylinder",
+      "N-E-global-reverse",
+      "N-E-models",
+      "N-E-product",
+      "N-E-rauch-cutoff",
+      "N-M-cut-integration",
+      "N-M-geometric-inputs",
+      "N-M-hadamard",
+      "N-M-myers",
+      "N-M-riccati",
+      "N-M-toponogov",
+      "N-M-trace",
+      "N-Q-classical-core",
+      "N-R-bishop-gromov",
+      "N-R-hadamard",
+      "N-R-hessian",
+      "N-R-laplacian",
+      "N-R-myers",
+      "N-R-rauch",
+      "N-R-toponogov"
+    ],
+    "checks": [
+      "obligation_coverage",
+      "fast_route_reconstruction",
+      "slow_step_reproduction",
+      "condition_transfer"
+    ],
+    "evidence_basis": "Actual S02 author tasks in evidence/S02-representative-tasks-20261012.md. Fixed radial representative r1, epoch 2, writer generation 3; original task input revision 7f255806167d71f5a5f5c9e84b91b25a27e333f7. Hashes bind the current file revision. All seven statements were reread, but this intermediate record deliberately withholds whole-route acceptance pending the two global mechanism revisions and independent reading."
+  },
+  "findings": [
+    "obligation_coverage: Reconstructed the radial route from the smooth-manifold baseline and canonical targets, then compared it with S01 obligations O01–O28. Actual repairs include the radial differential's t factor, current-to-initial inverse A^{-1}, Gram density, singular scalar boundary term, ball substitution, angular limit, absolute continuity and the independent spherical endpoint. O01–O20 now have explicit operations; O21–O25 await integration of the global candidate. The [reader entrance](knowledge/overview.md#reader-entrance-and-available-operations) and [density construction](knowledge/nodes/N-D-jacobi.md#from-the-radial-differential-to-volume-density) show the repair rather than merely naming it. Broader gaps retain their status.",
+    "fast_route_reconstruction: The actual answer recovered from the fast text was S to m to j/s_k^{n-1} to the zero-truncated angular average q to its positive weighted average; each transition has a reason. Matrix-order comparison is not a prerequisite for the Ricci trace route. Myers is needed only to close the positive-k endpoint. With k=0 the reader task yields Vol B(p,2r) <= 2^n Vol B(p,r), but no absolute lower volume constant. The [six-step route](knowledge/overview.md#ricci-lower-bounds-to-ball-volume) contains the evidence. This was author reconstruction with prior knowledge, not an observed novice test.",
+    "slow_step_reproduction: Recomputed dPhi(partial_t)=T and dPhi(w)=Aw, the block metric diag(1,A^T A), density |det A| and its positive sign before conjugacy. Recomputed mu~Ct^2 and u=O(t), hence mu(epsilon)u(epsilon)->0, yielding m <= (n-1)c_k. Finally N/W is locally absolutely continuous, F >= q and F'=(w/W)(q-F)<=0 almost everywhere. See [radial differential](knowledge/nodes/N-D-jacobi.md#radial-variation-and-the-exponential-differential), [singular comparison](knowledge/nodes/N-M-trace.md#singular-scalar-comparison-by-an-integrating-factor) and [weighted average](knowledge/nodes/N-M-cut-integration.md#a-positive-weighted-average). The separate [endpoint field calculation](knowledge/nodes/N-D-index.md#an-endpoint-field-calculation) was also reproduced from I(J,W)=0 and the model ODE.",
+    "condition_transfer: Under sectional-to-Ricci replacement the operator inequality fails first, while the trace route survives; S2xS2 supplies the actual directional counterexample. Under a Ricci upper bound, the term -Q prevents the required reverse scalar inequality. Without cut truncation a cylinder creates multiplicity in the ball substitution; under a reversed raywise lower estimate the downward cut jump destroys that estimate. At s_k=0 division stops and the terminal-sphere/saturation argument replaces it. See [trace failure](knowledge/nodes/N-M-trace.md#what-the-hypotheses-do-not-give), [geometric failures](knowledge/nodes/N-M-cut-integration.md#one-use-and-the-first-failing-conditions) and [positive endpoint](knowledge/nodes/N-M-cut-integration.md#the-positive-curvature-endpoint). The record distinguishes these failed proof operations from the concrete counterexamples."
+  ],
+  "unchecked_items": [
+    {
+      "item": "Full revised Hadamard and Toponogov mechanisms and their reader tasks have not yet been integrated in this fixed representative.",
+      "blocking": true,
+      "reason": "This is an early fixed packet for independent radial-route review and engineering interface use, not acceptance of the entire seven-theorem scope."
+    },
+    {
+      "item": "Independent nonauthor mathematical reading of this exact revision is pending.",
+      "blocking": true,
+      "reason": "Required by the current staged task; the author cannot substitute for this review."
+    },
+    {
+      "item": "Full proofs of foundational imports, broad equality classifications and named neighboring branches are outside the focused task.",
+      "blocking": false,
+      "reason": "The original explicit scope and broader coverage statuses are preserved."
+    }
+  ],
+  "disposition": "revise"
+}

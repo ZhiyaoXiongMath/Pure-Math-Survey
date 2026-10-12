@@ -1,0 +1,78 @@
+{
+  "schema_version": "2.2.0",
+  "review_id": "R-mathematical-N-R-bishop-gromov-20261012",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-Eschenburg-1994.md",
+      "sha256": "9fb02b4fca1b61bce3f5d7f94bf154c8d3d44b694c4e964c420f2559b1d0f0c1"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "268c64561038d5effab8f49c86289e70a118bfb6e848389d3e00d426c32d4280"
+    },
+    {
+      "path": "knowledge/nodes/N-D-curvature.md",
+      "sha256": "364213a5a4c5f279cf9e0c02891c0044b6677b0e6bb078b9495576a2346f4810"
+    },
+    {
+      "path": "knowledge/nodes/N-D-model.md",
+      "sha256": "0f6d2a3add30a086aee33dbfe609f40645d68c9692f439165678d0c7ba709e39"
+    },
+    {
+      "path": "knowledge/nodes/N-R-bishop-gromov.md",
+      "sha256": "2193b4f3b92c077025852693c33101018a7a543c14a5ca3a08a24e3874221e23"
+    },
+    {
+      "path": "knowledge/sources/S-Eschenburg-1994.json",
+      "sha256": "1f92d5dc453c3e34093844ee568224942dfba8f1e6158bd0d3177b5b12801df5"
+    },
+    {
+      "path": "project.json",
+      "sha256": "87cb6a2485b7efddf37961eed6780208253c1ad4d14360462040c068379c799f"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "c803acf2b2ef8ba6ce4d6aed6555916b204ecb5b42d9dbac738b0b74fd0a706b"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-R-bishop-gromov"
+    ],
+    "statement_reviews": {
+      "N-R-bishop-gromov": {
+        "canonical_sha256": "1a346db817216e145b2a070777a06f0dfca9ec831e49ef6dce9a60eb3e5c3f27",
+        "outcome": "accepted",
+        "objects": "Volumes of metric balls in complete smooth n-manifolds and the same-dimensional simply connected model.",
+        "domain": "All positive radii; spherical model volume is explicitly saturated.",
+        "fixed_and_variable": "Fixed metric and k, arbitrary p and ordered r<R.",
+        "hypotheses": "The normalized Ricci lower bound and completeness are retained.",
+        "equations": "Both ratio inequality and small-radius limit appear; no density sine continued past D_k.",
+        "quantifiers": "Every center and every pair 0<r<R; no absolute lower volume bound.",
+        "conclusion": "Nonincreasing ratio bounded above by one; equivalent growth inequality.",
+        "status": "Known result; equality assertions are separate nodes.",
+        "local_definitions": "Model V_k^n and its positive-curvature extension are locally identified."
+      }
+    },
+    "evidence_basis": "Actual canonical/body/source-section rereading; local deductions use the explicit argument and necessary dependencies named in this node.",
+    "proof_steps": {},
+    "editorial_policy": "four-modes-2026-10-12-rc2"
+  },
+  "findings": [
+    "The normalized Ricci lower bound and completeness are retained.",
+    "Nonincreasing ratio bounded above by one; equivalent growth inequality.",
+    "Known result; equality assertions are separate nodes.",
+    "The standalone canonical statement was reread with its bound definitions, sources and mathematical body. Observed repairs are recorded in evidence/author-reading.md."
+  ],
+  "unchecked_items": [
+    {
+      "item": "No complete independent reproof of every imported prerequisite.",
+      "blocking": false,
+      "reason": "This review certifies the scoped statement and recorded mechanism only; no output-specific complete proof has been promised."
+    }
+  ],
+  "disposition": "accepted"
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": "2.0.0",
+  "id": "S-Shapiro",
+  "kind": "primary",
+  "title": "The Arzela-Ascoli Theorem",
+  "authors": [
+    "Joel H. Shapiro"
+  ],
+  "publication_status": "unpublished",
+  "identifiers": {
+    "url": "https://www.joelshapiro.org/Pubvit/Downloads/ArzNotes/ArzNotes.pdf"
+  },
+  "version": "Math 829, Spring 1999",
+  "bibliography": {
+    "year": 1999
+  },
+  "access": {
+    "state": "full_text_read",
+    "checked_at": "2026-10-12",
+    "material_sha256": null,
+    "local_path": null,
+    "material_hash_unavailable_reason": "Original PDF text was read through the web document viewer; raw bytes were not downloaded.",
+    "reading_note": "evidence/source-checks/S-Shapiro.md"
+  }
+}

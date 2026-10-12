@@ -1,0 +1,82 @@
+{
+  "schema_version": "2.2.0",
+  "review_id": "R3-AUTHOR-N-S-main",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-Boyd.md",
+      "sha256": "1cf412c8111eaaa41d586105964641cd85e22d2a73233ab49e7b255bf9f42645"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "8e17ace33563d613860c89606b70c6b95a93cf077e4d21db9bff3ba08617bd63"
+    },
+    {
+      "path": "knowledge/nodes/N-S-boundary.md",
+      "sha256": "c9c3cb9fbe0d3c468a65407e0bf97d411a74f059bcb549a930471b0745486d71"
+    },
+    {
+      "path": "knowledge/nodes/N-S-main.md",
+      "sha256": "597522d0a67266ff67fcabe4288ee23d58155234107577bf8aa93b1d387b0f19"
+    },
+    {
+      "path": "knowledge/nodes/N-S-square.md",
+      "sha256": "19a8f7c2fbf6bf863a58147b1d52138b842bf7131d702c1029dd9d5d5437ed78"
+    },
+    {
+      "path": "knowledge/sources/S-Boyd.json",
+      "sha256": "ad18a2a1150b10172e9a8c0383e4e676adb07fe8a9893417a8519150e6bebc33"
+    },
+    {
+      "path": "project.json",
+      "sha256": "7477946aa36c1d422c055f0c3e0f0dcb875381993fc04e6265fea430aba03d83"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "3dd3b3a663967bb9e649114ebde3571061e0e376ab0c96911c5564260d1b5463"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-S-main"
+    ],
+    "editorial_policy": "four-modes-2026-10-12-r3",
+    "evidence_basis": "Actual author reconstruction: Checked sufficiency for all nonzero pairs and necessity by the particular vector x=-A^{-1}By for each nonzero y. The fixed-y minimum is zero in the z-term precisely at z=0. The main statement includes all matrix sizes, symmetry, the strict-positive definition and the unique minimizer. This is classical, not original.",
+    "proof_steps": {
+      "N-S-main": [
+        "Expand the square with A symmetric and invertible.",
+        "Invert the change of variables and prove both positivity directions.",
+        "Identify the unique fixed-y minimum using A>0.",
+        "Calculate the scalar model and the invertible-indefinite failure."
+      ]
+    },
+    "statement_reviews": {
+      "N-S-main": {
+        "canonical_sha256": "29bc4814b9879180f943c42664da82f388eb3f059ab48dd78de32316c8b7c215",
+        "outcome": "accepted",
+        "objects": "Fixed real symmetric blocks A,C and rectangular B; test vectors and a fixed-y minimizer.",
+        "domain": "p,q are positive integers; every real test vector of the stated sizes is allowed.",
+        "fixed_and_variable": "A,B,C are arbitrary fixed data; x,y vary and the minimum is in x for each y.",
+        "hypotheses": "A>0 and symmetry are explicit. Positivity supplies invertibility and a true minimum.",
+        "equations": "M,S and the minimum value and minimizer are displayed.",
+        "quantifiers": "For every block choice satisfying the hypotheses and every fixed y.",
+        "conclusion": "M>0 iff S>0 and the fixed-y minimum is attained uniquely.",
+        "status": "Known classical criterion, expressly not a new result.",
+        "local_definitions": "Positive definite is defined in the statement; ordinary transpose and inverse are in the declared baseline."
+      }
+    }
+  },
+  "findings": [
+    "Checked sufficiency for all nonzero pairs and necessity by the particular vector x=-A^{-1}By for each nonzero y. The fixed-y minimum is zero in the z-term precisely at z=0.",
+    "The main statement includes all matrix sizes, symmetry, the strict-positive definition and the unique minimizer. This is classical, not original."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "Author/AI rereading only. No external mathematical peer review, actual target-reader experiment or originality certification is claimed."
+    }
+  ],
+  "disposition": "accepted"
+}

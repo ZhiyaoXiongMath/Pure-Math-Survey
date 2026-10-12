@@ -50,6 +50,10 @@ python skills/pure-math-survey/scripts/package_release.py --output ../pure-math-
 
 ## 示例
 
+### r3：九篇文章与可编辑知识项目
+
+[r3 示例入口](examples/r3/README.md)包含比较几何 Minimal／Lecture、时间紧性 Thematic 与 methods／boundaries 配对稿，以及三个局部例子和明确标记的 Paper 草稿，共九篇、54 页。公开树保留经审阅的原始正文、知识快照、PDF 和页面图片。团队内非作者审阅不等于外部同行评审；重新构建及安装后的验证仍须针对新产物执行。
+
 ### dHYM：写作与排版参考
 
 这份六页的 balanced dHYM 综述由作者经过多轮专门润色，是主要的成文与排版参考。它从精确的可解性结论进入证明机制，再就地引入稳定性定义，并给出明确的等号边界例子。它的页数、提纲和结论数量不构成其他综述的要求。

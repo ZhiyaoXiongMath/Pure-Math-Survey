@@ -1,0 +1,1575 @@
+{
+  "schema_version": "2.2.0",
+  "review_id": "R-geometry-lecture-r3-author-semantic-r1",
+  "kind": "output_semantic",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "generated/conventions.tex",
+      "sha256": "268c64561038d5effab8f49c86289e70a118bfb6e848389d3e00d426c32d4280"
+    },
+    {
+      "path": "generated/manifest.json",
+      "sha256": "62148e4bb502c52d6c743d130bd2272b39dc1ab57b009f772c0e0af316e97037"
+    },
+    {
+      "path": "generated/references.bib",
+      "sha256": "e5098171bb1b0133a8230d2791a4e3e0c4e867c8b29fdb569113d0610302b0eb"
+    },
+    {
+      "path": "generated/statements/N-D-curvature.tex",
+      "sha256": "b12c0ce48780e877e5203ca802f7361bdbf3e328d930eac67bca04a83ddcd411"
+    },
+    {
+      "path": "generated/statements/N-D-distance.tex",
+      "sha256": "cce60954026fd500577989fbc20458c8168999c835613d0e01b498f41013f130"
+    },
+    {
+      "path": "generated/statements/N-D-index.tex",
+      "sha256": "957b4f4b5f8e5a82fcd5b8daa3ba9ecd4bd79032fa1bbb84a23d6f305a861716"
+    },
+    {
+      "path": "generated/statements/N-D-jacobi.tex",
+      "sha256": "788acf8e5713999a2c3990a6117cfb194c365fd8caf5537be97eac84c9accef7"
+    },
+    {
+      "path": "generated/statements/N-D-model.tex",
+      "sha256": "2c4aab53ab0a4a2960de66b1019abf0143591dd6733302c1479193ec0274c377"
+    },
+    {
+      "path": "generated/statements/N-D-riemannian.tex",
+      "sha256": "23b3f70d4edd9ddaed84a54b81550342ff5ddd2fb8140efdd1c85ba9bc594707"
+    },
+    {
+      "path": "generated/statements/N-D-triangle.tex",
+      "sha256": "aaf1e19b8f542c0146b3561d4bd5378a05fa88205662f59e874ae4590c1ec27b"
+    },
+    {
+      "path": "generated/statements/N-R-bishop-gromov.tex",
+      "sha256": "1a346db817216e145b2a070777a06f0dfca9ec831e49ef6dce9a60eb3e5c3f27"
+    },
+    {
+      "path": "generated/statements/N-R-gunther.tex",
+      "sha256": "cf43d2240e6282844c187ea52c2e7b77ad1e18493e7c06b7b936d99aa803d2ed"
+    },
+    {
+      "path": "generated/statements/N-R-hadamard.tex",
+      "sha256": "1c80d0b0ec5b422eb137ac31593c7ff1467ec5fbf3395a463c8a97d8e2f1a974"
+    },
+    {
+      "path": "generated/statements/N-R-hessian.tex",
+      "sha256": "59dbafb80fce2a9654aab19737889bb16b81694c70dc42a57e42c45a34c4a702"
+    },
+    {
+      "path": "generated/statements/N-R-laplacian.tex",
+      "sha256": "926f58f62a7d93074d39a15bb3c3f7869409e27c37c1aca49cc87705ce1813a0"
+    },
+    {
+      "path": "generated/statements/N-R-myers.tex",
+      "sha256": "9d340d975998005d6152a71d10342863bb286c01403ed7dbdf3d06f8e6be6e6d"
+    },
+    {
+      "path": "generated/statements/N-R-rauch.tex",
+      "sha256": "c49dca9c9ae2f43bb9744b1aa472a8d9927ea70df22c91ef74fc4acea582fc24"
+    },
+    {
+      "path": "generated/statements/N-R-toponogov.tex",
+      "sha256": "1534db289b6a4bf9051913c1d47184b129f9f8d470d11760442c6e0c816619e1"
+    },
+    {
+      "path": "manuscript/main.tex",
+      "sha256": "775ea6206f04b366c3ef16539ab396f72dff4fd492fb423d37a21e98a52eacb1"
+    },
+    {
+      "path": "manuscript/math-review.sty",
+      "sha256": "74de131250e3c6cf3561c43e79491d3a6e59bba28bc5f55c2495939e91ae9a3e"
+    },
+    {
+      "path": "materials/evidence/reviews/R-coverage-S03-r3.json",
+      "sha256": "73498cef3b15584cae20b7123e45b87751ceb17d94e5cb93abae43ae669f457b"
+    },
+    {
+      "path": "materials/evidence/reviews/R-mathematical-S03-r3.json",
+      "sha256": "5eb7a4b9f100ef49eec9bbd817f7785e0c8e3e0c550507039457c183e6a01389"
+    },
+    {
+      "path": "materials/evidence/reviews/R-source-S-Bishop-2013v2-S03-r3.json",
+      "sha256": "582432090370a31dc6bfd446a485a47678a3823d62ad92a3177cd976df8e78ed"
+    },
+    {
+      "path": "materials/evidence/reviews/R-source-S-Eschenburg-1994-S03-r3.json",
+      "sha256": "ce082119165b81116bd3c719c68aab5d791054bc7f0eb15ac2655ab2e749117d"
+    },
+    {
+      "path": "materials/evidence/reviews/R-source-S-Lang-2026-S03-r3.json",
+      "sha256": "7235ef78d93b3c7e9499f19c67905ab18be89fa899318c9916b3fe7088665484"
+    },
+    {
+      "path": "materials/evidence/reviews/R-source-S-Toponogov-1959-20261012.json",
+      "sha256": "6a53441e125553786ad15a6800c709dc806bc77eb57678384e752535d6e4dca0"
+    },
+    {
+      "path": "materials/evidence/source-checks/S-Bishop-2013v2-S03-r3.md",
+      "sha256": "42e3e895a0b2e901d5bd288d80c3a667808a0f784089bfd2d59ba2448b50aee9"
+    },
+    {
+      "path": "materials/evidence/source-checks/S-Eschenburg-1994-S03-r3.md",
+      "sha256": "6b6d0e3562369c26e81922a47bd4369fa27244d3397ad04099a6047b26b97663"
+    },
+    {
+      "path": "materials/evidence/source-checks/S-Lang-2026-S03-r3.md",
+      "sha256": "f3b61ad592d7a9b69993996b01f3a7a48e0386f19c67228fe3f4cc95a202fd0d"
+    },
+    {
+      "path": "materials/evidence/source-checks/S-Toponogov-1959.md",
+      "sha256": "793a21eb4ef690d0706a19d0f0ed286dcf6a37062f2fcad1900d9171fb0f0468"
+    },
+    {
+      "path": "materials/knowledge/conventions.tex",
+      "sha256": "268c64561038d5effab8f49c86289e70a118bfb6e848389d3e00d426c32d4280"
+    },
+    {
+      "path": "materials/knowledge/coverage.json",
+      "sha256": "d2d9b3fca597cca802c25e2825ae9fc2fbabb843aebfc989fc1186bb1e9ee3a0"
+    },
+    {
+      "path": "materials/knowledge/discovery.md",
+      "sha256": "d9ff46761ae250aac6ab7f53b04c5503f65f92cc7607c4ce0eaf3e16f62f8d3d"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-D-curvature.md",
+      "sha256": "0bdb9cc28f2d22e0cba21b77aa3d32111ad917927786330a87d0aa437f04543f"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-D-distance.md",
+      "sha256": "eb63cd05f332fe10c5fc845218ac504daf075792984b9da6d6095fa8db7a45e3"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-D-index.md",
+      "sha256": "15c663c6a7f0ed4b36c21118c6d78d55c80abcee320e95f7faf38cbd0961ca09"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-D-jacobi.md",
+      "sha256": "f6c3fccbe45de5534301c98b4dfafe11e334a244687cd80189fd57d65d16ef9b"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-D-model.md",
+      "sha256": "0f6d2a3add30a086aee33dbfe609f40645d68c9692f439165678d0c7ba709e39"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-D-riemannian.md",
+      "sha256": "f154ce4ec0bcdf0167a33339bbeaddd9c4f98081c6e71e9a9873c2dfc456f894"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-D-triangle.md",
+      "sha256": "ad628fb026df53962c1996d1e54f95be4eafd28c86f75bbbd6f0a00626a119a5"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-E-collapse.md",
+      "sha256": "9244ae50f3169393daa84d292a06e8e5723bd5a74187a0d39a6e3cdec1175339"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-E-completeness.md",
+      "sha256": "d428753fd941edda521371d037a99c544be7e7e1fad9939552d396965773874d"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-E-cylinder.md",
+      "sha256": "95c6b56885407679ee183bae1cecf9b63d458fce16f937bc20482d76218516c4"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-E-global-reverse.md",
+      "sha256": "0dbe4d31c7d7f3a1585033ec3fec78498c4aedefdc719722a79e0618d91fcb54"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-E-models.md",
+      "sha256": "271ae0075e0ab7e02ec8b84b65c7e2943a56e0db545b8c36ec9a17d14e27e9d6"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-E-product.md",
+      "sha256": "42fe2f94a01e2306eac3d7025aeda5799ecb4a67e106d6241526d46be1cad484"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-E-rauch-cutoff.md",
+      "sha256": "913350e1ea82238319835358a76d08e045780326e2687a34d34d0011c07021ce"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-M-cut-integration.md",
+      "sha256": "868302ee7ff81de3a2caa765d0fac26fd405c172b5c0633631e331337d50c4ef"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-M-geometric-inputs.md",
+      "sha256": "6226286ba26809de98b276d43981466c4e833e652d97f71d84788e5c879f6ecb"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-M-hadamard.md",
+      "sha256": "ec1b6f18ffa533df5005cad9aede8cb43964c7f1feb85ec81ab887cf5a6ce16d"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-M-myers.md",
+      "sha256": "b0d6d76f79b87601568739f3202549171bd54093b060b9ac40a79d3877483249"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-M-riccati.md",
+      "sha256": "d4bcffdcdbadb799bdbc4b2ff941cdde236fa30c6aa8f5d8b4ce6cff7873ffaa"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-M-toponogov.md",
+      "sha256": "5870b0e304ac4066643c846344f032c51ffd04cdf179258654fdef01c503acab"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-M-trace.md",
+      "sha256": "944b4af3ddffcc6a4d83f7b933a65bd8a4b06112b1895c38f3cf2189c8e2b4d0"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-Q-classical-core.md",
+      "sha256": "32412c1dbb77543bee2f99e8ff83f6516bed1a43976dcacfd84add817560ebfb"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-R-bishop-gromov.md",
+      "sha256": "380ada1c1079647ce68ee39baf0e7ad828211f95750d80ad66dd774fdd3a495e"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-R-gunther.md",
+      "sha256": "9dc6db326d931759d7ec0a3d64ff0094b2bd900b190d5b597ea442ad621931cf"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-R-hadamard.md",
+      "sha256": "eea45b83def02c634e501fd67de7712b34c019133fdd5b0bf0f43bb343cc9778"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-R-hessian.md",
+      "sha256": "795ed2b944f2dc3ee0e1141b1b4b7ae5a9be46b37dc29c5a1da8ce2eeac6694f"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-R-laplacian.md",
+      "sha256": "76b6d0e57e173c449f1b8b54f447745e03037f2f303ef2f54f8e729a58986bac"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-R-myers.md",
+      "sha256": "306a0dfee7caab23a1676654d471b8d1bf10bec9aa3105ab3ffe5abf50ad1f97"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-R-rauch.md",
+      "sha256": "c8d52635de56220f7b1cb26706299bb31c3ba506e4ca99d8d234ac9f8010e8dd"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-R-toponogov.md",
+      "sha256": "d5eb3012c420b338d3f9c81c393beeed720ab7b47e3fc97886c032c738c853e2"
+    },
+    {
+      "path": "materials/knowledge/overview.md",
+      "sha256": "2f033f02b6609014c3abc53a202918bcaf614fcedf44c25a93c95a9edfa336b4"
+    },
+    {
+      "path": "materials/knowledge/sources/S-Bishop-2013v2.json",
+      "sha256": "a093ca1dace73f35e30d7e9a3116ce31bc23ae4a089361fb5d3c878697f64b6a"
+    },
+    {
+      "path": "materials/knowledge/sources/S-Eschenburg-1994.json",
+      "sha256": "132e5c973a5752f8650bdae80e7e22a2fff2a3578b80ba27e6702943b8c16431"
+    },
+    {
+      "path": "materials/knowledge/sources/S-Lang-2026.json",
+      "sha256": "a4667a9eea8957f54563a6f370007aa04712eb19151b1b9c234efec048d9384e"
+    },
+    {
+      "path": "materials/knowledge/sources/S-Toponogov-1959.json",
+      "sha256": "404fabe3bed83cc2042949fd76f1f66c4320e20cfb60508a0b561f4d5c815af2"
+    },
+    {
+      "path": "materials/materials-manifest.json",
+      "sha256": "62148e4bb502c52d6c743d130bd2272b39dc1ab57b009f772c0e0af316e97037"
+    },
+    {
+      "path": "materials/project.json",
+      "sha256": "87cb6a2485b7efddf37961eed6780208253c1ad4d14360462040c068379c799f"
+    },
+    {
+      "path": "materials/scope.md",
+      "sha256": "a7145ee51f560a26de9d5a84af3af418c4c4dc92c9a39db2f72d4582724fc493"
+    },
+    {
+      "path": "outline.md",
+      "sha256": "92bdedf7cc8b7c2a4c507ebc6b66b473d5a7ab8856051ef96454ecd2fd673fac"
+    },
+    {
+      "path": "plan.json",
+      "sha256": "784286e6e4fd2682104debb3cf91946ce74622c7adc305bf329c281d4ece0498"
+    }
+  ],
+  "scope": {
+    "output_ids": [
+      "geometry-lecture-r3"
+    ],
+    "profile": "lecture",
+    "node_ids": [
+      "N-D-curvature",
+      "N-D-distance",
+      "N-D-index",
+      "N-D-jacobi",
+      "N-D-model",
+      "N-D-riemannian",
+      "N-D-triangle",
+      "N-E-collapse",
+      "N-E-completeness",
+      "N-E-cylinder",
+      "N-E-global-reverse",
+      "N-E-models",
+      "N-E-product",
+      "N-E-rauch-cutoff",
+      "N-M-cut-integration",
+      "N-M-geometric-inputs",
+      "N-M-hadamard",
+      "N-M-myers",
+      "N-M-riccati",
+      "N-M-toponogov",
+      "N-M-trace",
+      "N-Q-classical-core",
+      "N-R-bishop-gromov",
+      "N-R-gunther",
+      "N-R-hadamard",
+      "N-R-hessian",
+      "N-R-laplacian",
+      "N-R-myers",
+      "N-R-rauch",
+      "N-R-toponogov"
+    ],
+    "whole_manuscript": true,
+    "checks": [
+      "whole_manuscript",
+      "canonical_use",
+      "conditions_quantifiers",
+      "selection",
+      "attribution",
+      "proof_obligations",
+      "readability"
+    ],
+    "principal_locations": {
+      "N-R-rauch": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 393,
+          "line_end": 396
+        }
+      ],
+      "N-R-hessian": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 429,
+          "line_end": 432
+        }
+      ],
+      "N-R-laplacian": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 241,
+          "line_end": 244
+        }
+      ],
+      "N-R-bishop-gromov": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 19,
+          "line_end": 22
+        }
+      ],
+      "N-R-myers": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 321,
+          "line_end": 324
+        }
+      ],
+      "N-R-hadamard": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 455,
+          "line_end": 458
+        }
+      ],
+      "N-R-toponogov": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 490,
+          "line_end": 493
+        }
+      ]
+    },
+    "proof_steps": {
+      "N-D-riemannian": [
+        "metric_volume_connection",
+        "gradient_hessian_operations"
+      ],
+      "N-D-jacobi": [
+        "radial_variation_and_differential",
+        "gram_density_and_sign",
+        "taylor_pole_and_model"
+      ],
+      "N-M-riccati": [
+        "wronskian_and_riccati",
+        "singular_matrix_import",
+        "log_length_and_continuation"
+      ],
+      "N-M-geometric-inputs": [
+        "current_vector_hessian",
+        "precise_global_imports"
+      ],
+      "N-M-trace": [
+        "trace_and_eigenvalue_squares",
+        "singular_integrating_factor",
+        "normalized_density"
+      ],
+      "N-M-cut-integration": [
+        "uncut_ball_substitution",
+        "zero_extension_angular_limit",
+        "weighted_quotient",
+        "positive_endpoint",
+        "volume_application"
+      ],
+      "N-M-myers": [
+        "endpoint_sine_fields",
+        "negative_index_sum",
+        "compactness_and_finite_fiber"
+      ],
+      "N-M-hadamard": [
+        "jacobi_convexity",
+        "full_differential",
+        "pullback_completeness",
+        "covering_and_one_sheet"
+      ],
+      "N-M-toponogov": [
+        "comparison_experiments",
+        "local_map_and_contained_chord",
+        "uniform_centers",
+        "exact_gluing_import",
+        "shrinking_cauchy_limit",
+        "auxiliary_perimeter_chords"
+      ]
+    },
+    "proof_locations": {
+      "N-D-riemannian": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 35,
+          "line_end": 49
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 63,
+          "line_end": 73
+        }
+      ],
+      "N-D-jacobi": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 112,
+          "line_end": 133
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 146,
+          "line_end": 162
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 136,
+          "line_end": 143
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 165,
+          "line_end": 170
+        }
+      ],
+      "N-M-riccati": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 176,
+          "line_end": 191
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 399,
+          "line_end": 409
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 411,
+          "line_end": 422
+        }
+      ],
+      "N-M-geometric-inputs": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 194,
+          "line_end": 203
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 76,
+          "line_end": 89
+        }
+      ],
+      "N-M-trace": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 206,
+          "line_end": 219
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 222,
+          "line_end": 238
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 250,
+          "line_end": 260
+        }
+      ],
+      "N-M-cut-integration": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 266,
+          "line_end": 274
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 277,
+          "line_end": 287
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 290,
+          "line_end": 311
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 352,
+          "line_end": 359
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 362,
+          "line_end": 374
+        }
+      ],
+      "N-M-myers": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 327,
+          "line_end": 333
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 333,
+          "line_end": 342
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 342,
+          "line_end": 346
+        }
+      ],
+      "N-M-hadamard": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 461,
+          "line_end": 465
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 467,
+          "line_end": 471
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 471,
+          "line_end": 473
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 475,
+          "line_end": 481
+        }
+      ],
+      "N-M-toponogov": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 487,
+          "line_end": 487
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 497,
+          "line_end": 508
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 527,
+          "line_end": 527
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 511,
+          "line_end": 517
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 519,
+          "line_end": 525
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 530,
+          "line_end": 538
+        }
+      ]
+    },
+    "editorial_policy": "four-modes-2026-10-12-r3",
+    "statement_reviews": {
+      "N-R-bishop-gromov": {
+        "objects": "Volumes of metric balls are normalized by the volume of the simply connected constant-curvature model of the same dimension.",
+        "domain": "The manifold is connected and complete; the conclusion covers all finite positive radii, including the saturated positive-curvature model endpoint.",
+        "fixed_and_variable": "The constant k and dimension n are fixed; the center p and nested radii 0<r<R vary.",
+        "hypotheses": "The tensor inequality Ric >= (n-1)k g is the sole curvature bound. No positive injectivity-radius or noncollapse hypothesis is asserted.",
+        "equations": "The larger-radius normalized quotient is no greater than the smaller one, both at most one; the small-radius limit equals one.",
+        "quantifiers": "The inequalities hold for every center and every pair 0<r<R<infinity, with the positive-k model constant beyond pi/sqrt(k).",
+        "conclusion": "The equivalent relative-volume form is retained. The theorem gives an upper/relative estimate and no absolute lower-volume bound.",
+        "status": "Established borrowed result. The manuscript derives the radial-to-ball route relative to explicit cut-domain and completeness inputs.",
+        "local_definitions": "The exact statement names the model space and its saturation; the adjacent exposition defines the model integral and the sphere-area normalization.",
+        "outcome": "accepted",
+        "canonical_sha256": "1a346db817216e145b2a070777a06f0dfca9ec831e49ef6dce9a60eb3e5c3f27",
+        "manuscript_context": "Read in this Lecture: central Ricci-to-volume route is expanded; companion branch statement and imported proof boundary remain explicit."
+      },
+      "N-R-hadamard": {
+        "objects": "The exponential map from the full tangent space is first a covering, and only under an added topological hypothesis a diffeomorphism.",
+        "domain": "The base manifold is connected, complete and smooth with nonpositive sectional curvature.",
+        "fixed_and_variable": "The conclusion holds for every base point p, with the tangent variable unrestricted.",
+        "hypotheses": "Simple connectivity is needed only for the one-sheet conclusion; it is not silently inserted into the initial covering assertion.",
+        "equations": "The domain and codomain of exp_p are explicitly T_p M and M. No numerical comparison is hidden in a remote equation.",
+        "quantifiers": "Every base point gives the covering; under simple connectivity every pair of points has a unique minimizing geodesic.",
+        "conclusion": "The result includes the diffeomorphism with Euclidean space and unique minimization, with the covering alternative preserved.",
+        "status": "Established theorem; convexity, full differential and pullback completeness are explained relative to stated geometric/topological imports.",
+        "local_definitions": "Exponential maps and the curvature sign are already operationally defined; the added simple-connectivity condition is self-contained.",
+        "outcome": "accepted",
+        "canonical_sha256": "1c80d0b0ec5b422eb137ac31593c7ff1467ec5fbf3395a463c8a97d8e2f1a974",
+        "manuscript_context": "Read in this Lecture: central Ricci-to-volume route is expanded; companion branch statement and imported proof boundary remain explicit."
+      },
+      "N-R-hessian": {
+        "objects": "The Hessian is the bilinear form of the distance from p, acting on X in the current tangent space T_x M.",
+        "domain": "The chosen point excludes p and Cut(p), and its distance ell lies below the first positive model zero D_k.",
+        "fixed_and_variable": "The base point p, regular point x and model k are fixed. Every current vector X is tested.",
+        "hypotheses": "Completeness supplies the minimizing radial segment. The sectional inequality is imposed on every radial plane along that segment.",
+        "equations": "The right hand side is s prime/s times |X| squared minus dr(X) squared; the radial component therefore contributes zero.",
+        "quantifiers": "The conclusion is for all X at x. The upper-sectional alternative reverses the form inequality on the same regular domain.",
+        "conclusion": "The result is a pointwise quadratic-form estimate, with no assertion of classical smoothness at a cut point.",
+        "status": "Established comparison result; the current-vector conversion and matrix-comparison input are distinguished.",
+        "local_definitions": "Distance r, ell, the scalar ODE and D_k are defined in the statement; the adjacent prose explains the bilinear form versus endomorphism distinction.",
+        "outcome": "accepted",
+        "canonical_sha256": "59dbafb80fce2a9654aab19737889bb16b81694c70dc42a57e42c45a34c4a702",
+        "manuscript_context": "Read in this Lecture: central Ricci-to-volume route is expanded; companion branch statement and imported proof boundary remain explicit."
+      },
+      "N-R-laplacian": {
+        "objects": "The scalar Laplacian of the distance from an arbitrary base point is compared with the model logarithmic derivative.",
+        "domain": "Only regular distance points with 0<r<D_k are included, on a connected complete smooth manifold of dimension at least two.",
+        "fixed_and_variable": "Dimension and curvature constant k are fixed. The claim quantifies over every p and every admissible x.",
+        "hypotheses": "The lower Ricci bound is Ric >= (n-1)k g, not a bound on each radial sectional curvature.",
+        "equations": "The scalar model has initial derivative one, and Delta=div grad fixes the sign. The comparison retains the factor n-1.",
+        "quantifiers": "Every regular x in the model-positive interval is covered; no weak cut-locus extension is asserted.",
+        "conclusion": "The upper scalar trace estimate follows from eigenvalue Cauchy–Schwarz and a singular scalar integrating factor.",
+        "status": "Established theorem with its scalar operative proof displayed; no matrix-order import is needed for this step.",
+        "local_definitions": "The statement defines r,s,D_k and the Laplacian convention. The manuscript identifies Delta r with tr S before using the trace estimate.",
+        "outcome": "accepted",
+        "canonical_sha256": "926f58f62a7d93074d39a15bb3c3f7869409e27c37c1aca49cc87705ce1813a0",
+        "manuscript_context": "Read in this Lecture: central Ricci-to-volume route is expanded; companion branch statement and imported proof boundary remain explicit."
+      },
+      "N-R-myers": {
+        "objects": "A complete connected Riemannian manifold has diameter, compactness and a fundamental group to be bounded.",
+        "domain": "The manifold is smooth and without boundary, dimension at least two; the constant k is strictly positive.",
+        "fixed_and_variable": "One common k>0 works for every tangent vector at every point, rather than a pointwise varying positive lower bound.",
+        "hypotheses": "The unnormalized Ricci lower bound includes n-1. Completeness is explicit and later used through minimizing segments and properness.",
+        "equations": "The diameter bound is pi/sqrt(k); its normalization agrees with the first zero of the sine model.",
+        "quantifiers": "The tensor bound is tested for every x and v. The three conclusions all concern the entire connected manifold.",
+        "conclusion": "Compactness and finite pi_1 accompany the numerical diameter estimate; the covering argument supplies the final conclusion.",
+        "status": "Established theorem. The endpoint test-field calculation is performed while second variation and covering topology remain declared inputs.",
+        "local_definitions": "The tangent-vector norm and curvature normalization are explicit; endpoint fields and the index form are introduced immediately after the statement.",
+        "outcome": "accepted",
+        "canonical_sha256": "9d340d975998005d6152a71d10342863bb286c01403ed7dbdf3d06f8e6be6e6d",
+        "manuscript_context": "Read in this Lecture: central Ricci-to-volume route is expanded; companion branch statement and imported proof boundary remain explicit."
+      },
+      "N-R-rauch": {
+        "objects": "A normal Jacobi field along a specified unit speed geodesic is compared with a scalar constant-curvature solution.",
+        "domain": "The interval is strictly 0<t<min(T,D_k); the lower-sectional branch additionally excludes conjugate points through T.",
+        "fixed_and_variable": "The geodesic, curvature constant k and initial norm a>0 are fixed; t varies over the stated interval.",
+        "hypotheses": "Radial sectional bounds concern every plane containing the tangent, at every point on the geodesic. Completeness is not imposed on this local result.",
+        "equations": "The model ODE and both initial values occur in the statement. Upper sectional curvature gives the lower norm bound; lower sectional curvature gives the upper norm bound.",
+        "quantifiers": "Both inequalities hold at every permitted t; the two curvature alternatives are separate, not simultaneous requirements.",
+        "conclusion": "The estimate controls |J(t)| with the correct factor a. It does not assert a post-conjugate upper bound.",
+        "status": "This is an established borrowed theorem. The manuscript uses an imported singular matrix comparison rather than claiming a new proof of it.",
+        "local_definitions": "Normal field and curvature convention precede its use, and s,D_k,a are defined within the exact statement.",
+        "outcome": "accepted",
+        "canonical_sha256": "c49dca9c9ae2f43bb9744b1aa472a8d9927ea70df22c91ef74fc4acea582fc24",
+        "manuscript_context": "Read in this Lecture: central Ricci-to-volume route is expanded; companion branch statement and imported proof boundary remain explicit."
+      },
+      "N-R-toponogov": {
+        "objects": "A chosen geodesic triangle is compared with an SSS model triangle, a separate SAS model hinge, and matching points on two radial sides.",
+        "domain": "The manifold is complete, connected and without boundary with sec>=k. Side lengths satisfy strict triangle inequalities and perimeter<2D_k.",
+        "fixed_and_variable": "SSS fixes three side lengths. SAS fixes two lengths and their included angle. The chord clause varies u,v at equal radial distances.",
+        "hypotheses": "The exact strict perimeter restriction and minimizing choice of each side remain in the statement. No equality endpoint extension is assumed.",
+        "equations": "SSS angles and interior chord distances are at least the model values; the same-angle SAS opposite side is at most the model value.",
+        "quantifiers": "Each chosen triangle angle is compared, and the chord inequality holds for every matched u,v on the specified radial sides.",
+        "conclusion": "The three conclusions concern different fixed data and are not contradictory reversal claims. Global upper-curvature reversal is not asserted.",
+        "status": "Established theorem. The local contraction and shrinking argument are exposed, while Lang technical gluing and chord conversion are explicitly imported.",
+        "local_definitions": "D_k, both model configurations, matching radial distances and the complete simply connected model surface are defined in the statement.",
+        "outcome": "accepted",
+        "canonical_sha256": "1534db289b6a4bf9051913c1d47184b129f9f8d470d11760442c6e0c816619e1",
+        "manuscript_context": "Read in this Lecture: central Ricci-to-volume route is expanded; companion branch statement and imported proof boundary remain explicit."
+      }
+    },
+    "view": "integrated",
+    "mode_findings": {
+      "fast_path": {
+        "outcome": "accepted",
+        "finding": "The reader can recover curvature -> relative expansion -> trace -> normalized density -> weighted ball quotient, while the other global conclusions visibly call separate inputs.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 206,
+            "line_end": 219
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 266,
+            "line_end": 274
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 290,
+            "line_end": 311
+          }
+        ]
+      },
+      "reader_calibration": {
+        "outcome": "accepted",
+        "finding": "The stated reader knows smooth maps, linear algebra, calculus and elementary ODEs. Metric volume, connection operations, Jacobi fields, current-vector conversion and cut counting are supplied at use.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 35,
+            "line_end": 49
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 194,
+            "line_end": 203
+          }
+        ]
+      },
+      "points": {
+        "outcome": "accepted",
+        "finding": "The chosen working quantities are A for angular differential, S=A prime A inverse for relative speed, m for trace, j for density, h for cut truncation and q,F for angular and radial averaging. Each has an actual next consumer.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 206,
+            "line_end": 219
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 266,
+            "line_end": 274
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 290,
+            "line_end": 311
+          }
+        ]
+      },
+      "connections": {
+        "outcome": "accepted",
+        "finding": "Each arrow has an operation: inverse A converts current vectors, trace uses eigenvalue squares, log det converts trace to density, and two integrations convert raywise order to ball order.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 194,
+            "line_end": 203
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 206,
+            "line_end": 219
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 266,
+            "line_end": 274
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 290,
+            "line_end": 311
+          }
+        ]
+      },
+      "limits": {
+        "outcome": "accepted",
+        "finding": "The model zero, actual conjugacy, smooth cut complement and strict triangle perimeter are distinct restrictions. The thin cylinder tests absent noncollapse; the torus tests absent global reverse comparison.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 352,
+            "line_end": 359
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 362,
+            "line_end": 374
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 511,
+            "line_end": 517
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 540,
+            "line_end": 540
+          }
+        ]
+      },
+      "display_rhythm": {
+        "outcome": "accepted",
+        "finding": "Displays carry the ODE, operator conversion, scalar limit, ball integral and decisive bounds. Final PDF page observations record actual paragraph lengths and specific long-statement exceptions; source line counts are not used as rendered measurements.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 222,
+            "line_end": 238
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 290,
+            "line_end": 311
+          }
+        ]
+      },
+      "statement_context": {
+        "outcome": "accepted",
+        "finding": "Every principal is a literal canonical input. The surrounding text supplies object operations and separates conditional alternatives instead of shortening a theorem by dropping hypotheses.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 393,
+            "line_end": 396
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 429,
+            "line_end": 432
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 241,
+            "line_end": 244
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 19,
+            "line_end": 22
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 321,
+            "line_end": 324
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 455,
+            "line_end": 458
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 490,
+            "line_end": 493
+          }
+        ]
+      },
+      "motivation": {
+        "outcome": "accepted",
+        "finding": "The first theorem makes the infinitesimal-to-global question concrete. The next sections build exactly the objects needed to convert one radial deformation into a whole ball volume.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 10,
+            "line_end": 12
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 112,
+            "line_end": 133
+          }
+        ]
+      },
+      "worked_derivations": {
+        "outcome": "accepted",
+        "finding": "The radial variation, Gram determinant, Taylor pole, Wronskian, inverse derivative, trace inequality, scalar limit, cut substitution and weighted quotient are explicitly calculated. The route is complete relative to declared geometric inputs.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 112,
+            "line_end": 133
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 146,
+            "line_end": 162
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 206,
+            "line_end": 219
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 266,
+            "line_end": 274
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 290,
+            "line_end": 311
+          }
+        ]
+      },
+      "hypothesis_use": {
+        "outcome": "accepted",
+        "finding": "Ricci lower enters after trace; completeness supplies minimizing/cut facts and Myers; model positivity permits division; symmetry permits eigenvalue Cauchy–Schwarz; absolute continuity upgrades the derivative sign to monotonicity at every radius.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 206,
+            "line_end": 219
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 266,
+            "line_end": 274
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 290,
+            "line_end": 311
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 352,
+            "line_end": 359
+          }
+        ]
+      },
+      "imported_inputs": {
+        "outcome": "accepted",
+        "finding": "The Lecture states the cut-domain/null theorem and one-point Hopf–Rinow criterion before use. Fixed-end variation, singular matrix comparison and Lang technical gluing remain separately named imports.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 76,
+            "line_end": 89
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 399,
+            "line_end": 409
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 511,
+            "line_end": 517
+          }
+        ]
+      },
+      "model_boundary": {
+        "outcome": "accepted",
+        "finding": "The constant-curvature solution supplies the exact density and model zero. Thin cylinders test noncollapse, the anisotropy term locates Ricci reversal failure, and the terminal sphere argument closes positive curvature.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 136,
+            "line_end": 143
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 165,
+            "line_end": 170
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 352,
+            "line_end": 359
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 362,
+            "line_end": 374
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 511,
+            "line_end": 517
+          }
+        ]
+      },
+      "exposition_design": {
+        "outcome": "accepted",
+        "finding": "The manuscript follows its declared reader: one fully expanded Ricci-to-ball route and six complete companion statements with honest mechanism scope.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 10,
+            "line_end": 12
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 206,
+            "line_end": 219
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 266,
+            "line_end": 274
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 290,
+            "line_end": 311
+          }
+        ]
+      },
+      "view_focus": {
+        "outcome": "accepted",
+        "finding": "The integrated view tracks quantities from construction through consumption, including the actual condition where each branch stops. The shared radial tensor does not falsely merge the covering, index-form and triangle-globalization inputs.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 206,
+            "line_end": 219
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 266,
+            "line_end": 274
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 290,
+            "line_end": 311
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 475,
+            "line_end": 481
+          }
+        ],
+        "node_ids": [
+          "N-R-bishop-gromov",
+          "N-M-trace",
+          "N-M-cut-integration",
+          "N-M-hadamard",
+          "N-M-toponogov"
+        ]
+      },
+      "obligation_coverage": {
+        "outcome": "accepted",
+        "finding": "Before comparing the authored step list, I reconstructed the required links from the conclusion: geometric density, uncut multiplicity one, singular scalar start, all-radii monotonicity and positive endpoint. These are all present. The other six principals retain their own domain and operative route; no full foundational proof is promised.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 206,
+            "line_end": 219
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 266,
+            "line_end": 274
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 290,
+            "line_end": 311
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 352,
+            "line_end": 359
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 362,
+            "line_end": 374
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 511,
+            "line_end": 517
+          }
+        ]
+      },
+      "fast_route_reconstruction": {
+        "outcome": "accepted",
+        "finding": "Starting with the complete ball theorem, I traced m to log j, inserted the cut zero extension, averaged to q and differentiated F. The factor omega cancels and the endpoint is supplied by an independent sine-index argument. The route can be reconstructed without an unstated matrix theorem.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 206,
+            "line_end": 219
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 266,
+            "line_end": 274
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 290,
+            "line_end": 311
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 333,
+            "line_end": 342
+          }
+        ]
+      },
+      "slow_step_reproduction": {
+        "outcome": "accepted",
+        "finding": "I reproduced mu~Ct^2 with u=O(t), the product limit zero, F prime=(w/W)(q-F), the sine integral L/2 and the Cauchy tail 9P_0(4/5)^n. The signs, regularity and constants agree with the located text.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 222,
+            "line_end": 238
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 290,
+            "line_end": 311
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 333,
+            "line_end": 342
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 519,
+            "line_end": 525
+          }
+        ]
+      },
+      "condition_transfer": {
+        "outcome": "accepted",
+        "finding": "Replacing Ricci lower by upper leaves an uncontrolled negative anisotropy term; omitting cut truncation loses multiplicity one; omitting simple connectivity leaves a covering with many sheets. These are located failed operations, not unsupported universal impossibility claims.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 377,
+            "line_end": 385
+          }
+        ]
+      }
+    },
+    "proof_step_findings": {
+      "N-D-riemannian": {
+        "metric_volume_connection": {
+          "outcome": "accepted",
+          "finding": "The metric-volume determinant and connection rules are supplied before radial matrices are used. Parallel frames explain why the displayed matrix derivatives represent covariant derivatives.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 35,
+              "line_end": 49
+            }
+          ]
+        },
+        "gradient_hessian_operations": {
+          "outcome": "accepted",
+          "finding": "The gradient represents the differential, and differentiating it gives the Hessian form. The zero radial part is distinguished from the normal endomorphism S.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 63,
+              "line_end": 73
+            }
+          ]
+        }
+      },
+      "N-D-jacobi": {
+        "radial_variation_and_differential": {
+          "outcome": "accepted",
+          "finding": "The variation exp_p(t v(s)) has zero initial position and derivative w, giving A(t)w. A tangent vector at tv has image A(t)w/t; the factor t comes from differentiating t v(s). The Lecture writes the intermediate differentiation or limit, rather than only naming this transition.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 112,
+              "line_end": 133
+            }
+          ]
+        },
+        "gram_density_and_sign": {
+          "outcome": "accepted",
+          "finding": "Gauss orthogonality gives diag(1,A^T A), so the metric density is |det A|. The positive initial determinant and no zero before cut justify replacing the absolute value by det A. The Lecture writes the intermediate differentiation or limit, rather than only naming this transition.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 146,
+              "line_end": 162
+            }
+          ]
+        },
+        "taylor_pole_and_model": {
+          "outcome": "accepted",
+          "finding": "The initial equation gives A=tI+O(t^3), hence S=t^{-1}I+O(t). For constant curvature A=s_k I and the first model zero limits every division by s_k.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 136,
+              "line_end": 143
+            },
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 165,
+              "line_end": 170
+            }
+          ]
+        }
+      },
+      "N-M-riccati": {
+        "wronskian_and_riccati": {
+          "outcome": "accepted",
+          "finding": "The zero Wronskian, multiplied on opposite sides by inverse transposes, yields symmetry of S. Differentiating A prime A inverse gives S prime=-R-S squared with the recorded curvature sign.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 176,
+              "line_end": 191
+            }
+          ]
+        },
+        "singular_matrix_import": {
+          "outcome": "accepted",
+          "finding": "The comparison for t^{-1}I+O(t) data is specifically imported from Eschenburg Remark 3.2. It is not justified by inserting infinity into a regular initial-value theorem.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 399,
+              "line_end": 409
+            }
+          ]
+        },
+        "log_length_and_continuation": {
+          "outcome": "accepted",
+          "finding": "The derivative of log(|Aw|/(|w|s_k)) has the sign of S-c_k I and tends from initial quotient one. The upper-sectional lower estimate forbids an earlier zero, while the lower-sectional branch retains its conjugate restriction.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 411,
+              "line_end": 422
+            }
+          ]
+        }
+      },
+      "N-M-geometric-inputs": {
+        "current_vector_hessian": {
+          "outcome": "accepted",
+          "finding": "To prescribe current X, first solve w=A^{-1}X. Torsion freeness then gives grad_X grad r=A prime w=SX, and radial geodesicity removes the radial term.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 194,
+              "line_end": 203
+            }
+          ]
+        },
+        "precise_global_imports": {
+          "outcome": "accepted",
+          "finding": "Regular distance, cut-domain multiplicity one and null complement, Hopf–Rinow and covering topology have different stated uses. They are not claimed as consequences of the Riccati identity.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 76,
+              "line_end": 89
+            }
+          ]
+        }
+      },
+      "N-M-trace": {
+        "trace_and_eigenvalue_squares": {
+          "outcome": "accepted",
+          "finding": "Tracing gives m prime+tr(S squared)+Ric=0. Symmetry permits the real-eigenvalue Cauchy–Schwarz estimate tr(S squared)>=m squared/(n-1), giving the normalized scalar inequality.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 206,
+              "line_end": 219
+            }
+          ]
+        },
+        "singular_integrating_factor": {
+          "outcome": "accepted",
+          "finding": "For u=a-c_k, the factor mu has positive asymptotic C t squared and u=O(t). Thus mu u tends to zero; integrating from epsilon and then passing to zero gives a<=c_k. The Lecture writes the intermediate differentiation or limit, rather than only naming this transition.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 222,
+              "line_end": 238
+            }
+          ]
+        },
+        "normalized_density": {
+          "outcome": "accepted",
+          "finding": "Jacobi determinant differentiation gives (log j) prime=m. Subtracting (n-1)c_k proves monotonicity of j/s_k^{n-1}, whose initial limit is one.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 250,
+              "line_end": 260
+            }
+          ]
+        }
+      },
+      "N-M-cut-integration": {
+        "uncut_ball_substitution": {
+          "outcome": "accepted",
+          "finding": "On the uncut domain, the distance equals t. The preimage condition t<min(r,tau) and the imported null complement turn the local density into the displayed exact ball integral.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 266,
+              "line_end": 274
+            }
+          ]
+        },
+        "zero_extension_angular_limit": {
+          "outcome": "accepted",
+          "finding": "Extending j by zero at cut introduces only downward jumps in the normalized density. Angular averaging preserves monotonicity, and domination by one on the finite-measure sphere gives q(0+)=1.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 277,
+              "line_end": 287
+            }
+          ]
+        },
+        "weighted_quotient": {
+          "outcome": "accepted",
+          "finding": "A decreasing q is no larger than its earlier weighted average F. Positivity of W and local absolute continuity justify F prime=(w/W)(q-F)<=0 almost everywhere and then monotonicity at every radius. The Lecture writes the intermediate differentiation or limit, rather than only naming this transition.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 290,
+              "line_end": 311
+            }
+          ]
+        },
+        "positive_endpoint": {
+          "outcome": "accepted",
+          "finding": "The independent Myers calculation bounds the diameter by D_k. The terminal distance sphere lies in Cut(p), so its volume is zero; continuity and model saturation extend the ball ratio without division at s_k(D_k)=0.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 352,
+              "line_end": 359
+            }
+          ]
+        },
+        "volume_application": {
+          "outcome": "accepted",
+          "finding": "At k=0 the model growth gives doubling by 2^n. The thin flat cylinder has volume at most its circumference times the Euclidean transverse ball, so the same Ricci bound does not give absolute noncollapse.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 362,
+              "line_end": 374
+            }
+          ]
+        }
+      },
+      "N-M-myers": {
+        "endpoint_sine_fields": {
+          "outcome": "accepted",
+          "finding": "Each V_i=sin(pi t/L)E_i meets both endpoint conditions in the imported index-form inequality. A parallel orthonormal frame makes the derivative term explicit.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 327,
+              "line_end": 333
+            }
+          ]
+        },
+        "negative_index_sum": {
+          "outcome": "accepted",
+          "finding": "The n-1 curvature terms sum to Ricci; both squared sine and cosine integrals are L/2. The resulting (n-1)L/2 times ((pi/L)^2-k) is strictly negative when L>D_k.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 333,
+              "line_end": 342
+            }
+          ]
+        },
+        "compactness_and_finite_fiber": {
+          "outcome": "accepted",
+          "finding": "Hopf–Rinow turns the diameter bound into compactness. The lifted universal-cover metric is complete and has the same bound, so its closed discrete fiber is finite; the fiber identifies with pi_1 by the imported covering facts.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 342,
+              "line_end": 346
+            }
+          ]
+        }
+      },
+      "N-M-hadamard": {
+        "jacobi_convexity": {
+          "outcome": "accepted",
+          "finding": "One half the second derivative of |J| squared is |J prime| squared minus the radial curvature form, hence nonnegative. Two zeros force this nonnegative convex function to vanish, contradicting its nonzero initial derivative expansion.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 461,
+              "line_end": 465
+            }
+          ]
+        },
+        "full_differential": {
+          "outcome": "accepted",
+          "finding": "The exact radial/angular squared-norm identity includes the radial a squared term and t^{-2}|Aw| squared. Angular injectivity therefore gives the full differential, not merely its normal restriction.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 467,
+              "line_end": 471
+            }
+          ]
+        },
+        "pullback_completeness": {
+          "outcome": "accepted",
+          "finding": "Nonpositive curvature makes exp_p locally invertible; its pullback is a metric. All radial geodesics from zero exist for all time, so the stated one-point Hopf–Rinow criterion establishes completeness.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 471,
+              "line_end": 473
+            }
+          ]
+        },
+        "covering_and_one_sheet": {
+          "outcome": "accepted",
+          "finding": "The displayed normal-ball inverse section exists at every preimage. Reversing its lifted geodesics proves disjointness and exhaustion of sheets; simple connectivity reduces the connected covering to one sheet.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 475,
+              "line_end": 481
+            }
+          ]
+        }
+      },
+      "N-M-toponogov": {
+        "comparison_experiments": {
+          "outcome": "accepted",
+          "finding": "The local question first distinguishes SSS fixed side lengths from SAS fixed angle. This explains the opposite inequality directions before the complete triangle theorem is used.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 487,
+              "line_end": 487
+            }
+          ]
+        },
+        "local_map_and_contained_chord": {
+          "outcome": "accepted",
+          "finding": "The model-to-manifold radial map preserves radial speed and contracts angular speed. Its use on a minimizing chord is justified by the explicit bound min(a+s,b+L-s)<=a+b<R.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 497,
+              "line_end": 508
+            }
+          ]
+        },
+        "uniform_centers": {
+          "outcome": "accepted",
+          "finding": "The parameterized exponential map and inverse-function theorem provide a common normal radius for base points near the limiting point. Pointwise normal neighborhoods alone would not close the shrinking contradiction.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 527,
+              "line_end": 527
+            }
+          ]
+        },
+        "exact_gluing_import": {
+          "outcome": "accepted",
+          "finding": "Lang Proposition 5.14 is stated with balanced segments, minimizing pairs below D_k, perimeter<2D_k, and smaller perimeter<4P/5 with the specified endpoint condition. Degenerate auxiliary angles are distinguished from the strict principal hypothesis.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 511,
+              "line_end": 517
+            }
+          ]
+        },
+        "shrinking_cauchy_limit": {
+          "outcome": "accepted",
+          "finding": "The contrapositive gives P_j<(4/5)^j P_0 and displacement<(9/5)(4/5)^{j-1}P_0. Summing the geometric series yields the displayed 9P_0(4/5)^n tail, so completeness supplies a common limit.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 519,
+              "line_end": 525
+            }
+          ]
+        },
+        "auxiliary_perimeter_chords": {
+          "outcome": "accepted",
+          "finding": "The three-point perimeter sum cancels to a+b+c. This makes every auxiliary hinge admissible for the established angle theorem, after which the explicitly imported chord-conversion lemma applies.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 530,
+              "line_end": 538
+            }
+          ]
+        }
+      }
+    },
+    "contribution_reviews": {}
+  },
+  "findings": [
+    "Read the complete current lecture manuscript, its seven exact canonical inputs, and their adjacent domain/notation explanations. The review concerns these bound bytes.",
+    "Reconstructed the proof interfaces from the theorem conclusions before checking the listed obligations: differential to shape operator, trace to scalar comparison, density to multiplicity-one ball integration, and three distinct global arguments.",
+    "Recomputed the signs and n-1 factor, the singular integrating-factor limit, the weighted quotient derivative, the sine-field integral and the 4/5 shrinking tail. These agree with the current text.",
+    "Kept singular matrix comparison, the cut-domain/null theorem, Hopf–Rinow, fixed-end second variation, covering topology and Lang technical gluing as explicit imports.",
+    "The actual page inspection and rhythm exceptions are recorded separately against the final PDF and every page image. No software check is described as a mathematical or visual reading."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "This is an author reread. It does not claim independent manuscript review or a fresh rereading of every page of each original source."
+    }
+  ],
+  "disposition": "accepted",
+  "reviewer": "Geometry manuscript author",
+  "execution_configuration": {
+    "selected_model": "gpt-6-astra",
+    "selected_reasoning": "max",
+    "basis": "Actual saved creation receipt",
+    "effective_model": "not independently observable",
+    "effective_reasoning": "not independently observable",
+    "service_tier": "not observable"
+  }
+}

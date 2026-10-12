@@ -1,0 +1,78 @@
+{
+  "schema_version": "2.2.0",
+  "output_id": "lichnerowicz-minimal-r3",
+  "snapshot_id": "KB-c2ed8ff3a21ead694a517e29232103f956cc4f433ba75e22183482569542973b",
+  "profile": "minimal",
+  "view": "integrated",
+  "language": "en",
+  "title": "From Bochner to the Lichnerowicz bound",
+  "audience": "The reader uses a Riemannian gradient, covariant Hessian, orthonormal frames and the divergence theorem. The exact spectral existence and scalar Bochner identity are imported explicitly; trace Cauchy-Schwarz and their integral connection are derived here.",
+  "reader_goals": [
+    "Recover the complete normalized Lichnerowicz lower bound with the nonnegative Laplacian.",
+    "Execute the Bochner integration, trace estimate, eigenfunction substitution and justified division.",
+    "Identify the first failures in dimension one, with a boundary, or when the Hessian is discarded."
+  ],
+  "question_ids": [
+    "N-Q-lich"
+  ],
+  "prerequisites": [
+    "Smooth Riemannian gradient, Levi-Civita connection and orthonormal frame.",
+    "Integration of divergence on a closed manifold, interpreted using the volume density.",
+    "Finite-dimensional Cauchy-Schwarz inequality."
+  ],
+  "selections": [
+    {
+      "node_id": "N-L-main",
+      "role": "principal_answer",
+      "statement_treatment": "full",
+      "proof_treatment": "mechanism",
+      "reason": "Complete principal statement with the decisive proof developed in this local problem unit."
+    },
+    {
+      "node_id": "N-L-boundary",
+      "role": "boundary",
+      "statement_treatment": "explained_reference",
+      "proof_treatment": "none",
+      "reason": "This selected boundary is actually developed within the principal proof or its nearby application/boundary; the principal obligation enumerates the work."
+    },
+    {
+      "node_id": "N-L-connection",
+      "role": "essential_bridge",
+      "statement_treatment": "explained_reference",
+      "proof_treatment": "none",
+      "reason": "This selected essential_bridge is actually developed within the principal proof or its nearby application/boundary; the principal obligation enumerates the work."
+    },
+    {
+      "node_id": "N-L-inputs",
+      "role": "essential_bridge",
+      "statement_treatment": "full",
+      "proof_treatment": "citation",
+      "reason": "Exact imported spectral and Bochner interface consumed by the integral argument; its local proof is not claimed."
+    }
+  ],
+  "omissions": [],
+  "proof_obligations": [
+    {
+      "node_id": "N-L-main",
+      "treatment": "mechanism",
+      "required_steps": [
+        "State the precise spectral and Bochner imports with the nonnegative Laplacian convention.",
+        "Use the divergence theorem to derive the two integral identities.",
+        "Prove the Hessian trace inequality by Cauchy-Schwarz.",
+        "Substitute the eigenfunction and the normalized Ricci lower bound.",
+        "Divide only by the positive factors and identify the dimension and boundary limits."
+      ],
+      "imported_inputs": [
+        "N-L-inputs"
+      ]
+    }
+  ],
+  "limits": {
+    "max_pages": null,
+    "page_review_threshold": null
+  },
+  "comparison_group": null,
+  "draft": false,
+  "editorial_policy": "four-modes-2026-10-12-r3",
+  "contributions": []
+}

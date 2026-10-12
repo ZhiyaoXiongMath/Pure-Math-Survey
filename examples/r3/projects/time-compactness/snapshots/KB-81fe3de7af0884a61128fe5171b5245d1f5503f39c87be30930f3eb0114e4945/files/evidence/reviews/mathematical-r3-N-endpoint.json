@@ -1,0 +1,56 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "AUTHOR-R3-mathematical-N-endpoint",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-simon.md",
+      "sha256": "a4758bd5d649f85d32fc45c9114429956d7733f45450a97f96c02437c7d326fe"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "f46df710c1b856e2928bdd9d0144a8573dca5ed5d5ec1a6d50480ae6a0670f1c"
+    },
+    {
+      "path": "knowledge/nodes/N-endpoint.md",
+      "sha256": "595ab0f8deb64bd042887edfadb73108172ed39da10f67dcbfe2d3f4a6ab71ce"
+    },
+    {
+      "path": "knowledge/sources/S-simon.json",
+      "sha256": "4d6c3fc888384bb312fbdae564565b47d632a6dfa330f543665e499f1d2a3d62"
+    },
+    {
+      "path": "project.json",
+      "sha256": "2e380066197293b95f1877c7bd77a75b18e3749c9128afc1db0e60737d3b7a2d"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "bc5dc378f261923ade16ab6bfae349d0233c018eb96de07ed2c99fa55951f353"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-endpoint"
+    ],
+    "evidence_basis": "Actual original-source comparison and local derivation reread: Computed ||v_n||infinity=1 and ||v_n prime||L1=n(1/n)=1 for the nonnegative ramp. The finite-p error against the step is exactly 1/(n(p+1)). Any uniformly convergent subsequence would have the discontinuous pointwise limit and contradict continuity. For continuous differences sup equals essential sup, hence an L-infinity Cauchy subsequence would be uniformly Cauchy. The example lies in the ray with gauge absolute value and proves the excluded endpoint really can fail.",
+    "proof_steps": {
+      "N-endpoint": [
+        "Compute the ramp derivative bound and finite-p error.",
+        "Prove lack of L-infinity compactness from uniform-limit continuity or separated indices."
+      ]
+    }
+  },
+  "findings": [
+    "Computed ||v_n||infinity=1 and ||v_n prime||L1=n(1/n)=1 for the nonnegative ramp. The finite-p error against the step is exactly 1/(n(p+1)).",
+    "Any uniformly convergent subsequence would have the discontinuous pointwise limit and contradict continuity. For continuous differences sup equals essential sup, hence an L-infinity Cauchy subsequence would be uniformly Cauchy. The example lies in the ray with gauge absolute value and proves the excluded endpoint really can fail."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "No external peer review or real target-reader study is claimed. Raw originals are omitted from public distribution; source scope is recorded explicitly."
+    }
+  ],
+  "disposition": "accepted"
+}

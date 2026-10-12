@@ -50,6 +50,10 @@ New claims discovered during writing return to the knowledge project for review 
 
 ## Examples
 
+### r3: nine articles and editable knowledge projects
+
+The [r3 examples](examples/r3/README.md) contain the comparison-geometry Minimal/Lecture pair, time-compactness Thematic and methods/boundaries pair, three local examples and a visibly marked Paper draft: nine articles and 54 pages. The public tree preserves reviewed manuscript, knowledge-snapshot, PDF and page-image bytes. Non-author review within the AI team is not external peer review; rebuilt outputs and installed-runtime behavior still require their own verification.
+
 ### dHYM: writing and layout reference
 
 The six-page balanced dHYM survey, supplied by its author after multiple rounds of deliberate polishing, is the principal finished writing and layout reference. It moves from precise solvability results to proof mechanisms, local stability definitions and an explicit equality-wall example. Its length, outline and result counts are not requirements for other surveys.

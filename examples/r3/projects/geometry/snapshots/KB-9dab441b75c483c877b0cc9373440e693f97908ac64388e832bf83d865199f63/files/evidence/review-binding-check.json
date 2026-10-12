@@ -1,0 +1,167 @@
+{
+  "checked_at": "2026-10-12",
+  "status": "MATCHING",
+  "records": [
+    {
+      "path": "evidence/reviews/R-coverage-N-Q-extensions-20261012.json",
+      "kind": "coverage",
+      "disposition": "limited"
+    },
+    {
+      "path": "evidence/reviews/R-coverage-N-Q-global-20261012.json",
+      "kind": "coverage",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-coverage-N-Q-local-20261012.json",
+      "kind": "coverage",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-coverage-N-Q-triangles-20261012.json",
+      "kind": "coverage",
+      "disposition": "limited"
+    },
+    {
+      "path": "evidence/reviews/R-coverage-N-Q-volume-20261012.json",
+      "kind": "coverage",
+      "disposition": "limited"
+    },
+    {
+      "path": "evidence/reviews/R-mathematical-N-B-unassessed-20261012.json",
+      "kind": "mathematical",
+      "disposition": "limited"
+    },
+    {
+      "path": "evidence/reviews/R-mathematical-N-C-curvature-inputs-20261012.json",
+      "kind": "mathematical",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-mathematical-N-D-curvature-20261012.json",
+      "kind": "mathematical",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-mathematical-N-M-cheng-20261012.json",
+      "kind": "mathematical",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-mathematical-N-Q-extensions-20261012.json",
+      "kind": "mathematical",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-mathematical-N-R-bishop-gromov-20261012.json",
+      "kind": "mathematical",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-mathematical-N-R-cheng-20261012.json",
+      "kind": "mathematical",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-mathematical-N-R-gunther-20261012.json",
+      "kind": "mathematical",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-mathematical-N-R-hadamard-20261012.json",
+      "kind": "mathematical",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-mathematical-N-R-hessian-20261012.json",
+      "kind": "mathematical",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-mathematical-N-R-laplacian-20261012.json",
+      "kind": "mathematical",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-mathematical-N-R-myers-20261012.json",
+      "kind": "mathematical",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-mathematical-N-R-rauch-20261012.json",
+      "kind": "mathematical",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-mathematical-N-R-splitting-20261012.json",
+      "kind": "mathematical",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-mathematical-N-R-toponogov-20261012.json",
+      "kind": "mathematical",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-mathematical-N-R-volume-rigidity-20261012.json",
+      "kind": "mathematical",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-source-S-Bishop-2013v2-20261012.json",
+      "kind": "source",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-source-S-Cheeger-Gromoll-1971-20261012.json",
+      "kind": "source",
+      "disposition": "limited"
+    },
+    {
+      "path": "evidence/reviews/R-source-S-Cheng-1975-20261012.json",
+      "kind": "source",
+      "disposition": "limited"
+    },
+    {
+      "path": "evidence/reviews/R-source-S-Eschenburg-1994-20261012.json",
+      "kind": "source",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-source-S-Eschenburg-Heintze-1984-20261012.json",
+      "kind": "source",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-source-S-Eschenburg-Heintze-1990-20261012.json",
+      "kind": "source",
+      "disposition": "limited"
+    },
+    {
+      "path": "evidence/reviews/R-source-S-Heintze-Karcher-1978-20261012.json",
+      "kind": "source",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-source-S-Lang-2026-20261012.json",
+      "kind": "source",
+      "disposition": "accepted"
+    },
+    {
+      "path": "evidence/reviews/R-source-S-Myers-1941-20261012.json",
+      "kind": "source",
+      "disposition": "limited"
+    },
+    {
+      "path": "evidence/reviews/R-source-S-Rauch-1951-20261012.json",
+      "kind": "source",
+      "disposition": "limited"
+    },
+    {
+      "path": "evidence/reviews/R-source-S-Toponogov-1959-20261012.json",
+      "kind": "source",
+      "disposition": "accepted"
+    }
+  ],
+  "note": "Input identity and review schema checks only; not automated mathematical certification or output readiness."
+}

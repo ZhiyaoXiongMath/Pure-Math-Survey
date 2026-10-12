@@ -1,0 +1,26 @@
+{
+  "schema_version": "2.0.0",
+  "id": "S-simon",
+  "kind": "primary",
+  "title": "Compact sets in the space Lp(0,T;B)",
+  "authors": [
+    "Jacques Simon"
+  ],
+  "publication_status": "published",
+  "identifiers": {
+    "url": "https://www.karlin.mff.cuni.cz/~kaplicky/pages/pages/2012z/b2.pdf",
+    "doi": "10.1007/BF01762360"
+  },
+  "version": "Journal text, Ann. Mat. Pura Appl. 146, pp. 65--96, DOI 10.1007/BF01762360; publisher issue date December 1986 (frequently cited as 1987)",
+  "bibliography": {
+    "year": 1986
+  },
+  "access": {
+    "state": "full_text_read",
+    "checked_at": "2026-10-12",
+    "material_sha256": "fa84da0e9869e20d7dd6e51b26366cba7f4a8e67cbc7e7f1556f1a3555f73608",
+    "local_path": null,
+    "reading_note": "evidence/source-checks/S-simon.md",
+    "material_hash_unavailable_reason": "The exact original PDF was reacquired and read for this r3 project; its raw SHA-256 is retained. Source bytes are held privately and are not redistributed. Public identity and locators permit reacquisition; project-local raw-byte verification is unavailable."
+  }
+}

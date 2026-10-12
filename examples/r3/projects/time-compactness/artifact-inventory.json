@@ -1,0 +1,176 @@
+{
+  "schema": "artifact-report-inventory-v1",
+  "at": "2026-10-12T22:20:12.266403+08:00",
+  "project_id": "time-compactness-r3",
+  "snapshot_id": "KB-81fe3de7af0884a61128fe5171b5245d1f5503f39c87be30930f3eb0114e4945",
+  "comparison_group": "time-compactness-r3-common-spine",
+  "outputs": [
+    {
+      "output_id": "thematic-r3",
+      "snapshot_id": "KB-81fe3de7af0884a61128fe5171b5245d1f5503f39c87be30930f3eb0114e4945",
+      "profile": "thematic",
+      "view": "integrated",
+      "files": [
+        {
+          "path": "outputs/thematic-r3/plan.json",
+          "sha256": "96f54eddee62489ccf238bb16b98c3537a76b9fc20c37e08ab763033cd64b739"
+        },
+        {
+          "path": "outputs/thematic-r3/manuscript/main.tex",
+          "sha256": "b9cb9a5319e0d2b5dc746a9c8c0762200e8ec0e1d1fc6a7a6dc81b2c96eaf28e"
+        },
+        {
+          "path": "outputs/thematic-r3/build/main.pdf",
+          "sha256": "10fd917359d97aa768b7151cdcf9b00d9208b5bbe3fd1dd8b08a7e270d676f92"
+        },
+        {
+          "path": "outputs/thematic-r3/build/build-report.json",
+          "sha256": "e5b52218ace52ee7672d3cea240b005c099c1de2ed5069e8202c30c6a0ea8371"
+        },
+        {
+          "path": "outputs/thematic-r3/evidence/render-manifest.json",
+          "sha256": "6ae1e372e878c9a52dd590ed24bd7b0dafce4e492d0f66a39037d3a7650a064e"
+        },
+        {
+          "path": "outputs/thematic-r3/evidence/author-semantic-r3.json",
+          "sha256": "a4b6f9c4b6d23d651b2005df9ff26906824bd8ebcf0a387a8411388ef9cf40f2"
+        },
+        {
+          "path": "outputs/thematic-r3/evidence/author-visual-r3.json",
+          "sha256": "f7a7b99af1e1edc686ceb71aa2d3e8001465d9ac68a5b4fd9ff7c5e416fd8595"
+        }
+      ],
+      "pages": 8,
+      "actual_status": "RELEASABLE",
+      "readiness": "READY",
+      "errors": [],
+      "warning_codes": [
+        "SOURCE_RAW_BYTES_NOT_RETAINED",
+        "SOURCE_RAW_BYTES_NOT_RETAINED",
+        "SOURCE_RAW_BYTES_NOT_RETAINED",
+        "NO_INDEPENDENT_REVIEW"
+      ],
+      "review_mode": "author_reread",
+      "all_page_images_actually_opened": true
+    },
+    {
+      "output_id": "minimal-methods-r3",
+      "snapshot_id": "KB-81fe3de7af0884a61128fe5171b5245d1f5503f39c87be30930f3eb0114e4945",
+      "profile": "minimal",
+      "view": "methods",
+      "files": [
+        {
+          "path": "outputs/minimal-methods-r3/plan.json",
+          "sha256": "15ee8db0ffbde1f9ee472c05e2570e8d37c8fc2548c5998c632754d789f3b206"
+        },
+        {
+          "path": "outputs/minimal-methods-r3/manuscript/main.tex",
+          "sha256": "18b7928b63f5c8dd300405b8500fbcca82d3215a11c816f2c2212d61aae62e1b"
+        },
+        {
+          "path": "outputs/minimal-methods-r3/build/main.pdf",
+          "sha256": "bbec3e185f42c15d2fe697bc8af809a88135d091e4b44db97f055c2e9bd0ef7f"
+        },
+        {
+          "path": "outputs/minimal-methods-r3/build/build-report.json",
+          "sha256": "fd8917ae3e2d3426f8a74002f61d489388ae0d2417b0202e26137fac0cc90a0d"
+        },
+        {
+          "path": "outputs/minimal-methods-r3/evidence/render-manifest.json",
+          "sha256": "3580222864505c58f3005b5868c0a6728f5cadc6b806396a9b30698411571b1e"
+        },
+        {
+          "path": "outputs/minimal-methods-r3/evidence/author-semantic-r3.json",
+          "sha256": "fea584cb5b0abb33100c97091da03a30ac391efb9dd6892b49a75f10d181a802"
+        },
+        {
+          "path": "outputs/minimal-methods-r3/evidence/author-visual-r3.json",
+          "sha256": "559c290871605e02fee4946c00f012479fb2689233fccfae36dbb717a03605ce"
+        }
+      ],
+      "pages": 7,
+      "actual_status": "RELEASABLE",
+      "readiness": "READY",
+      "errors": [],
+      "warning_codes": [
+        "SOURCE_RAW_BYTES_NOT_RETAINED",
+        "SOURCE_RAW_BYTES_NOT_RETAINED",
+        "SOURCE_RAW_BYTES_NOT_RETAINED",
+        "NO_INDEPENDENT_REVIEW"
+      ],
+      "review_mode": "author_reread",
+      "all_page_images_actually_opened": true
+    },
+    {
+      "output_id": "minimal-boundaries-r3",
+      "snapshot_id": "KB-81fe3de7af0884a61128fe5171b5245d1f5503f39c87be30930f3eb0114e4945",
+      "profile": "minimal",
+      "view": "boundaries",
+      "files": [
+        {
+          "path": "outputs/minimal-boundaries-r3/plan.json",
+          "sha256": "14f1b6ac9d128262c4c298eb2d5f97beff53aec44d786af2022dca0d96914896"
+        },
+        {
+          "path": "outputs/minimal-boundaries-r3/manuscript/main.tex",
+          "sha256": "bde5cc763d9aeca976a032c26885ffedbaf2c0c54eb10e70e0f21954a171f0fa"
+        },
+        {
+          "path": "outputs/minimal-boundaries-r3/build/main.pdf",
+          "sha256": "97022eea8e1982d133c8ccec1b95000048dc3c69dc8d600545888e1b441eb492"
+        },
+        {
+          "path": "outputs/minimal-boundaries-r3/build/build-report.json",
+          "sha256": "b032d0d6308fd7a210cde9adcb3b0353f9aefacc051271602e58852baf28199d"
+        },
+        {
+          "path": "outputs/minimal-boundaries-r3/evidence/render-manifest.json",
+          "sha256": "f0df0f97e0e0e3f10cbd3af12659fdb4ceb5b11411583e389311509c65141738"
+        },
+        {
+          "path": "outputs/minimal-boundaries-r3/evidence/author-semantic-r3.json",
+          "sha256": "b448ccc07f39a5b359149aedb6a01107b90d41215429a5c9fea2b237f89e9e5c"
+        },
+        {
+          "path": "outputs/minimal-boundaries-r3/evidence/author-visual-r3.json",
+          "sha256": "041701717723224ca676fd8a2c0fc0a136f8ffd283276421764b6ac0244d37b1"
+        }
+      ],
+      "pages": 7,
+      "actual_status": "RELEASABLE",
+      "readiness": "READY",
+      "errors": [],
+      "warning_codes": [
+        "SOURCE_RAW_BYTES_NOT_RETAINED",
+        "SOURCE_RAW_BYTES_NOT_RETAINED",
+        "SOURCE_RAW_BYTES_NOT_RETAINED",
+        "NO_INDEPENDENT_REVIEW"
+      ],
+      "review_mode": "author_reread",
+      "all_page_images_actually_opened": true
+    }
+  ],
+  "reports": [
+    {
+      "path": "reports/release-minimal-boundaries-r3.json",
+      "sha256": "44504ec23c146d9ce5bd38738fb7978c92f84d1ada83c23b2c6168f1570a8952"
+    },
+    {
+      "path": "reports/release-minimal-methods-r3.json",
+      "sha256": "275b055e398eacaeb414907a71f50f9ed4e083447ff51b356f05b61a26c246d9"
+    },
+    {
+      "path": "reports/release-thematic-r3.json",
+      "sha256": "8e73af379e1cb4d0867e4a90b176e34057de9cf3281f558cb39ec9ff1c3f6975"
+    },
+    {
+      "path": "reports/same-core-r3.json",
+      "sha256": "d30d02d4674684a90151dc44ebb17a71ed5771e1626eccc9fc40c7625ab01669"
+    }
+  ],
+  "review_limitations": [
+    "Raw source PDFs omitted from distributable project; exact private originals are retained.",
+    "Current runtime article evidence is author_reread, with separate nonauthor stage review outside this project.",
+    "Independent controller article gate is not claimed by this author inventory."
+  ]
+}

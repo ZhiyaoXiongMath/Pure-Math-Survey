@@ -1,0 +1,48 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "AUTHOR-R3-source-S-simon",
+  "kind": "source",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-simon.md",
+      "sha256": "a4758bd5d649f85d32fc45c9114429956d7733f45450a97f96c02437c7d326fe"
+    },
+    {
+      "path": "knowledge/sources/S-simon.json",
+      "sha256": "4d6c3fc888384bb312fbdae564565b47d632a6dfa330f543665e499f1d2a3d62"
+    }
+  ],
+  "scope": {
+    "source_ids": [
+      "S-simon"
+    ],
+    "source_reading": {
+      "S-simon": {
+        "mode": "original_text_online",
+        "version": "Journal text, Ann. Mat. Pura Appl. 146, pp. 65--96, DOI 10.1007/BF01762360; publisher issue date December 1986 (frequently cited as 1987)",
+        "locators": [
+          "Corollary 4, pp. 85--86; Proposition 3, p. 94",
+          "Lemma 4, pp. 77--78; Corollary 4, p. 85",
+          "Lemmas 8--9 and proof of Theorem 5, pp. 84--85",
+          "Section 3, pp. 71--73; Section 8, p. 84",
+          "Theorem 1 and proof, pp. 71--73",
+          "Theorem 5, pp. 84--85"
+        ],
+        "raw_bytes_unavailable_reason": "Exact raw bytes were downloaded privately and matched historical hashes; redistribution omits them. Public source record retains their real hash and reacquisition URL. Current and reused reading scopes are separated in the new note."
+      }
+    }
+  },
+  "findings": [
+    "Read the current original supporting passages recorded in evidence/source-checks/S-simon.md; the newly acquired original exactly matches its recorded raw SHA-256.",
+    "Verified the full exponent range on the scan; the sufficient interval-integral criterion, endpoint representatives and Ehrling upgrade are kept distinct. Derivative and ramp explanations are recalculated, with matching-hash historical source support disclosed."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "No external peer review or real target-reader study is claimed. Raw originals are omitted from public distribution; source scope is recorded explicitly."
+    }
+  ],
+  "disposition": "accepted"
+}

@@ -1,0 +1,52 @@
+{
+  "operation": "output.release",
+  "status": "NEEDS_WORK",
+  "errors": [
+    {
+      "code": "PAPER_ORIGINAL_CONTRIBUTION_MISSING",
+      "path": "plan.json",
+      "node_id": null,
+      "message": "Known theorems or synthetic fixtures cannot establish an original research contribution."
+    },
+    {
+      "code": "PAPER_PROOF_GAP",
+      "path": "plan.json",
+      "node_id": "N-S-main",
+      "message": "Unverified claims and disclosed unresolved gaps remain internal-draft material."
+    },
+    {
+      "code": "DRAFT_NOT_RELEASABLE",
+      "path": "plan.json",
+      "node_id": null,
+      "message": "Internal unverified drafts cannot be packaged as formal output"
+    }
+  ],
+  "warnings": [
+    {
+      "code": "SOURCE_RAW_BYTES_NOT_RETAINED",
+      "path": "knowledge/sources/S-Boyd.json",
+      "node_id": null,
+      "message": "A raw-source hash is recorded, but no in-project copy is available to rehash; source reading is documented with this retention limitation."
+    },
+    {
+      "code": "NO_INDEPENDENT_REVIEW",
+      "path": "",
+      "node_id": null,
+      "message": "No scoped independent mathematical reading of this manuscript is claimed. Author reread is not independent review."
+    }
+  ],
+  "artifacts": {
+    "output_id": "paper-r3-draft",
+    "snapshot_id": "KB-c2ed8ff3a21ead694a517e29232103f956cc4f433ba75e22183482569542973b",
+    "pages": 2,
+    "editorial_policy": "four-modes-2026-10-12-r3",
+    "recorded_policy": "four-modes-2026-10-12-r3",
+    "evaluated_policy": "four-modes-2026-10-12-r3",
+    "release_authorized": false,
+    "used_output_review_ids": [
+      "author-paper-r3-draft-semantic-r1",
+      "author-paper-r3-draft-visual-r1"
+    ],
+    "readiness": "NEEDS_WORK"
+  }
+}

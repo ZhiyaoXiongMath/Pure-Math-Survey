@@ -1,0 +1,4 @@
+# Current source reading: Boyd and Vandenberghe
+Read Appendix A.5.5, printed pp.650-651 (PDF pp.664-665), including block elimination, minimization and positivity. The authors assume A invertible to define S, then A strictly positive for a finite minimum. This supports the separation between the algebraic identity and positivity. The singular extension on p.651 additionally needs a range condition; it is excluded here.
+
+The new local derivation expands the square and proves both implications with explicit vectors. It does not merely repeat a source conclusion. The historical local example was consulted for scope, but its reviews are not copied. Original bytes were privately downloaded and hashed on 2026-10-12; only this authored reading note and public source identity are distributed. The author-hosted book is available for reading; that fact is not a redistribution license.

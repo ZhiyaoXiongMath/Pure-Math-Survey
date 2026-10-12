@@ -1,0 +1,45 @@
+{
+  "operation": "output.release",
+  "status": "RELEASABLE",
+  "errors": [],
+  "warnings": [
+    {
+      "code": "SOURCE_RAW_BYTES_NOT_RETAINED",
+      "path": "knowledge/sources/S-barrett-suli.json",
+      "node_id": null,
+      "message": "A raw-source hash is recorded, but no in-project copy is available to rehash; source reading is documented with this retention limitation."
+    },
+    {
+      "code": "SOURCE_RAW_BYTES_NOT_RETAINED",
+      "path": "knowledge/sources/S-maitre.json",
+      "node_id": null,
+      "message": "A raw-source hash is recorded, but no in-project copy is available to rehash; source reading is documented with this retention limitation."
+    },
+    {
+      "code": "SOURCE_RAW_BYTES_NOT_RETAINED",
+      "path": "knowledge/sources/S-simon.json",
+      "node_id": null,
+      "message": "A raw-source hash is recorded, but no in-project copy is available to rehash; source reading is documented with this retention limitation."
+    },
+    {
+      "code": "NO_INDEPENDENT_REVIEW",
+      "path": "",
+      "node_id": null,
+      "message": "No scoped independent mathematical reading of this manuscript is claimed. Author reread is not independent review."
+    }
+  ],
+  "artifacts": {
+    "output_id": "minimal-boundaries-r3",
+    "snapshot_id": "KB-81fe3de7af0884a61128fe5171b5245d1f5503f39c87be30930f3eb0114e4945",
+    "pages": 7,
+    "editorial_policy": "four-modes-2026-10-12-r3",
+    "recorded_policy": "four-modes-2026-10-12-r3",
+    "evaluated_policy": "four-modes-2026-10-12-r3",
+    "release_authorized": true,
+    "used_output_review_ids": [
+      "AUTHOR-R3-SEMANTIC-minimal-boundaries-r3",
+      "AUTHOR-R3-VISUAL-minimal-boundaries-r3"
+    ],
+    "readiness": "READY"
+  }
+}

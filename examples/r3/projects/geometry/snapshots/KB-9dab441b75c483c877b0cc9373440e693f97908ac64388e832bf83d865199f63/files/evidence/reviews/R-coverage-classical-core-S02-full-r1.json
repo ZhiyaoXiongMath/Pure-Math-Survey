@@ -1,0 +1,278 @@
+{
+  "schema_version": "2.2.0",
+  "review_id": "R-coverage-classical-core-S02-full-r1",
+  "kind": "coverage",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/S02-full-route-tasks-20261012.md",
+      "sha256": "f72b2f8148731333eb3a79aaecbf083bdb10d51435c51c2ce80cc8b216bfb82f"
+    },
+    {
+      "path": "evidence/S02-global-reader-tasks-20261012.md",
+      "sha256": "634fbf65f82046da6cf9768bc8034a05ff3a0358e705d838bde059b9eec76d25"
+    },
+    {
+      "path": "evidence/S02-representative-tasks-20261012.md",
+      "sha256": "a50a9e4e475e8333ed91040a8ca22e52d7886d9ab988504e0091577c7e8f60d7"
+    },
+    {
+      "path": "evidence/source-checks/S-Bishop-2013v2.md",
+      "sha256": "2c1ba30026e51f901800ddab4d2f99900806a2b3ec596ff909b2921564c1e045"
+    },
+    {
+      "path": "evidence/source-checks/S-Eschenburg-1994.md",
+      "sha256": "9fb02b4fca1b61bce3f5d7f94bf154c8d3d44b694c4e964c420f2559b1d0f0c1"
+    },
+    {
+      "path": "evidence/source-checks/S-Lang-2026.md",
+      "sha256": "d7125587caa888a2352110c7f227ca1d061a8123a626307a7a5b749134e002dd"
+    },
+    {
+      "path": "evidence/source-checks/S-Toponogov-1959.md",
+      "sha256": "793a21eb4ef690d0706a19d0f0ed286dcf6a37062f2fcad1900d9171fb0f0468"
+    },
+    {
+      "path": "evidence/source-checks/S02-global-route-20261012.md",
+      "sha256": "91f9775431e534f9da19b2b3756e4f71e2dcda019a1b5070b56f580ba68d8af8"
+    },
+    {
+      "path": "evidence/source-checks/S02-radial-route-20261012.md",
+      "sha256": "95b2278c8b15e815d33ccc1ac78ec60c24cd8d9f18ed817776889110b3220053"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "268c64561038d5effab8f49c86289e70a118bfb6e848389d3e00d426c32d4280"
+    },
+    {
+      "path": "knowledge/coverage.json",
+      "sha256": "d2d9b3fca597cca802c25e2825ae9fc2fbabb843aebfc989fc1186bb1e9ee3a0"
+    },
+    {
+      "path": "knowledge/discovery.md",
+      "sha256": "d9ff46761ae250aac6ab7f53b04c5503f65f92cc7607c4ce0eaf3e16f62f8d3d"
+    },
+    {
+      "path": "knowledge/nodes/N-C-curvature-inputs.md",
+      "sha256": "371c68fa09b4517e9376576765f2f208cf0f9956f5876c3f7f995e8d0619cfef"
+    },
+    {
+      "path": "knowledge/nodes/N-D-curvature.md",
+      "sha256": "0bdb9cc28f2d22e0cba21b77aa3d32111ad917927786330a87d0aa437f04543f"
+    },
+    {
+      "path": "knowledge/nodes/N-D-distance.md",
+      "sha256": "eb63cd05f332fe10c5fc845218ac504daf075792984b9da6d6095fa8db7a45e3"
+    },
+    {
+      "path": "knowledge/nodes/N-D-index.md",
+      "sha256": "15c663c6a7f0ed4b36c21118c6d78d55c80abcee320e95f7faf38cbd0961ca09"
+    },
+    {
+      "path": "knowledge/nodes/N-D-jacobi.md",
+      "sha256": "f6c3fccbe45de5534301c98b4dfafe11e334a244687cd80189fd57d65d16ef9b"
+    },
+    {
+      "path": "knowledge/nodes/N-D-model.md",
+      "sha256": "0f6d2a3add30a086aee33dbfe609f40645d68c9692f439165678d0c7ba709e39"
+    },
+    {
+      "path": "knowledge/nodes/N-D-riemannian.md",
+      "sha256": "f154ce4ec0bcdf0167a33339bbeaddd9c4f98081c6e71e9a9873c2dfc456f894"
+    },
+    {
+      "path": "knowledge/nodes/N-D-triangle.md",
+      "sha256": "ad628fb026df53962c1996d1e54f95be4eafd28c86f75bbbd6f0a00626a119a5"
+    },
+    {
+      "path": "knowledge/nodes/N-E-collapse.md",
+      "sha256": "9244ae50f3169393daa84d292a06e8e5723bd5a74187a0d39a6e3cdec1175339"
+    },
+    {
+      "path": "knowledge/nodes/N-E-completeness.md",
+      "sha256": "d428753fd941edda521371d037a99c544be7e7e1fad9939552d396965773874d"
+    },
+    {
+      "path": "knowledge/nodes/N-E-cylinder.md",
+      "sha256": "95c6b56885407679ee183bae1cecf9b63d458fce16f937bc20482d76218516c4"
+    },
+    {
+      "path": "knowledge/nodes/N-E-global-reverse.md",
+      "sha256": "0dbe4d31c7d7f3a1585033ec3fec78498c4aedefdc719722a79e0618d91fcb54"
+    },
+    {
+      "path": "knowledge/nodes/N-E-models.md",
+      "sha256": "271ae0075e0ab7e02ec8b84b65c7e2943a56e0db545b8c36ec9a17d14e27e9d6"
+    },
+    {
+      "path": "knowledge/nodes/N-E-product.md",
+      "sha256": "42fe2f94a01e2306eac3d7025aeda5799ecb4a67e106d6241526d46be1cad484"
+    },
+    {
+      "path": "knowledge/nodes/N-E-rauch-cutoff.md",
+      "sha256": "913350e1ea82238319835358a76d08e045780326e2687a34d34d0011c07021ce"
+    },
+    {
+      "path": "knowledge/nodes/N-M-cut-integration.md",
+      "sha256": "868302ee7ff81de3a2caa765d0fac26fd405c172b5c0633631e331337d50c4ef"
+    },
+    {
+      "path": "knowledge/nodes/N-M-geometric-inputs.md",
+      "sha256": "6226286ba26809de98b276d43981466c4e833e652d97f71d84788e5c879f6ecb"
+    },
+    {
+      "path": "knowledge/nodes/N-M-hadamard.md",
+      "sha256": "ec1b6f18ffa533df5005cad9aede8cb43964c7f1feb85ec81ab887cf5a6ce16d"
+    },
+    {
+      "path": "knowledge/nodes/N-M-myers.md",
+      "sha256": "b0d6d76f79b87601568739f3202549171bd54093b060b9ac40a79d3877483249"
+    },
+    {
+      "path": "knowledge/nodes/N-M-riccati.md",
+      "sha256": "d4bcffdcdbadb799bdbc4b2ff941cdde236fa30c6aa8f5d8b4ce6cff7873ffaa"
+    },
+    {
+      "path": "knowledge/nodes/N-M-toponogov.md",
+      "sha256": "5870b0e304ac4066643c846344f032c51ffd04cdf179258654fdef01c503acab"
+    },
+    {
+      "path": "knowledge/nodes/N-M-trace.md",
+      "sha256": "944b4af3ddffcc6a4d83f7b933a65bd8a4b06112b1895c38f3cf2189c8e2b4d0"
+    },
+    {
+      "path": "knowledge/nodes/N-Q-classical-core.md",
+      "sha256": "32412c1dbb77543bee2f99e8ff83f6516bed1a43976dcacfd84add817560ebfb"
+    },
+    {
+      "path": "knowledge/nodes/N-R-bishop-gromov.md",
+      "sha256": "380ada1c1079647ce68ee39baf0e7ad828211f95750d80ad66dd774fdd3a495e"
+    },
+    {
+      "path": "knowledge/nodes/N-R-gunther.md",
+      "sha256": "9dc6db326d931759d7ec0a3d64ff0094b2bd900b190d5b597ea442ad621931cf"
+    },
+    {
+      "path": "knowledge/nodes/N-R-hadamard.md",
+      "sha256": "eea45b83def02c634e501fd67de7712b34c019133fdd5b0bf0f43bb343cc9778"
+    },
+    {
+      "path": "knowledge/nodes/N-R-hessian.md",
+      "sha256": "795ed2b944f2dc3ee0e1141b1b4b7ae5a9be46b37dc29c5a1da8ce2eeac6694f"
+    },
+    {
+      "path": "knowledge/nodes/N-R-laplacian.md",
+      "sha256": "76b6d0e57e173c449f1b8b54f447745e03037f2f303ef2f54f8e729a58986bac"
+    },
+    {
+      "path": "knowledge/nodes/N-R-myers.md",
+      "sha256": "306a0dfee7caab23a1676654d471b8d1bf10bec9aa3105ab3ffe5abf50ad1f97"
+    },
+    {
+      "path": "knowledge/nodes/N-R-rauch.md",
+      "sha256": "c8d52635de56220f7b1cb26706299bb31c3ba506e4ca99d8d234ac9f8010e8dd"
+    },
+    {
+      "path": "knowledge/nodes/N-R-toponogov.md",
+      "sha256": "d5eb3012c420b338d3f9c81c393beeed720ab7b47e3fc97886c032c738c853e2"
+    },
+    {
+      "path": "knowledge/overview.md",
+      "sha256": "1e2e8a46a0cae484b6ff9bc8159c7d2de79b11159b8a8303e1621090584493a6"
+    },
+    {
+      "path": "knowledge/sources/S-Bishop-2013v2.json",
+      "sha256": "91af1ad3ba11ca56e7a5d76750001865d97e910e9585833a6e050b99e49708ca"
+    },
+    {
+      "path": "knowledge/sources/S-Eschenburg-1994.json",
+      "sha256": "1f92d5dc453c3e34093844ee568224942dfba8f1e6158bd0d3177b5b12801df5"
+    },
+    {
+      "path": "knowledge/sources/S-Lang-2026.json",
+      "sha256": "692680e2507398c6f36959dc1c3b8d4e810ba0e63402855f4451cf547ed70362"
+    },
+    {
+      "path": "knowledge/sources/S-Toponogov-1959.json",
+      "sha256": "404fabe3bed83cc2042949fd76f1f66c4320e20cfb60508a0b561f4d5c815af2"
+    },
+    {
+      "path": "project.json",
+      "sha256": "87cb6a2485b7efddf37961eed6780208253c1ad4d14360462040c068379c799f"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "4c99507b0fb43f1f736dee236857bdd3e761f148576b8cf04d9ad48f26aa8a19"
+    }
+  ],
+  "scope": {
+    "editorial_policy": "four-modes-2026-10-12-r3",
+    "question_ids": [
+      "N-Q-classical-core"
+    ],
+    "node_ids": [
+      "N-C-curvature-inputs",
+      "N-D-curvature",
+      "N-D-distance",
+      "N-D-index",
+      "N-D-jacobi",
+      "N-D-model",
+      "N-D-riemannian",
+      "N-D-triangle",
+      "N-E-collapse",
+      "N-E-completeness",
+      "N-E-cylinder",
+      "N-E-global-reverse",
+      "N-E-models",
+      "N-E-product",
+      "N-E-rauch-cutoff",
+      "N-M-cut-integration",
+      "N-M-geometric-inputs",
+      "N-M-hadamard",
+      "N-M-myers",
+      "N-M-riccati",
+      "N-M-toponogov",
+      "N-M-trace",
+      "N-Q-classical-core",
+      "N-R-bishop-gromov",
+      "N-R-gunther",
+      "N-R-hadamard",
+      "N-R-hessian",
+      "N-R-laplacian",
+      "N-R-myers",
+      "N-R-rauch",
+      "N-R-toponogov"
+    ],
+    "checks": [
+      "obligation_coverage",
+      "fast_route_reconstruction",
+      "slow_step_reproduction",
+      "condition_transfer"
+    ],
+    "evidence_basis": "Actual seven-interface author reread after global candidate integration; tasks in evidence/S02-full-route-tasks-20261012.md, evidence/S02-representative-tasks-20261012.md and evidence/S02-global-reader-tasks-20261012.md. This is author-side evidence, not the separately required nonauthor stage gate."
+  },
+  "findings": [
+    "obligation_coverage: Reconstructed the operations demanded by the seven canonical targets and the smooth-manifold baseline, then challenged them against S01 O01–O28. The current route contains all decisive constructions: metric/curvature entrance, radial differential and Taylor term, current-vector Hessian, Riccati/trace, singular scalar boundary, Gram density, uncut substitution, angular limit, absolutely continuous weighted average, Myers endpoint, index trial fields, complete exponential covering and triangle globalization. The [reader entrance](knowledge/overview.md#reader-entrance-and-available-operations) precedes use; the [auxiliary-perimeter check](knowledge/nodes/N-M-toponogov.md#global-hinge-and-chord-comparison) closes the additional input needed by chord conversion. Technical gluing and foundational theorems remain precise imports, while [wider branches](knowledge/overview.md#wider-branches-and-evidence-status) retain their old limits.",
+    "fast_route_reconstruction: Recovered S -> tr S -> j/s_k^{n-1} -> zero-truncated angular q -> weighted ball ratio from the [six-step Ricci route](knowledge/overview.md#ricci-lower-bounds-to-ball-volume), including why matrix comparison is not needed for trace and why Myers enters only at positive-k saturation. Recovered the [sectional route](knowledge/overview.md#sectional-bounds-to-jacobi-length-and-hessian) from operator order to Hessian and logarithmic Jacobi length, and obtained the usable k=0 conclusions Delta r <= (n-1)/r and volume doubling 2^n. This is the author's actual reconstruction with prior knowledge, not a measured novice outcome.",
+    "fast_route_reconstruction: From the [Myers route](knowledge/overview.md#myers-from-endpoint-fields-to-global-finiteness), obtained a negative endpoint-zero index sum followed by compactness and a finite universal-cover fiber. From the [Hadamard route](knowledge/overview.md#hadamard-from-local-invertibility-to-a-global-cover), separated local nonsingularity, completeness of the pullback metric, covering and one sheet. From the [Toponogov route](knowledge/overview.md#toponogov-from-local-lengths-to-global-triangles), recovered the distinction between SSS and SAS data and the need for local chord containment, moving-center uniformity and a separate global shrinking argument.",
+    "slow_step_reproduction: Recomputed dPhi(w)=Aw, the Gram matrix diag(1,A^T A), and positive j=det A before conjugacy at the [density construction](knowledge/nodes/N-D-jacobi.md#from-the-radial-differential-to-volume-density). Recomputed the [scalar pole calculation](knowledge/nodes/N-M-trace.md#singular-scalar-comparison-by-an-integrating-factor): u=O(t), mu~Ct^2, so the initial product vanishes. Recomputed the [weighted quotient](knowledge/nodes/N-M-cut-integration.md#a-positive-weighted-average): F>=q, local absolute continuity and F'=(w/W)(q-F)<=0. The geometric numerator/denominator and small-radius limit were checked, not assumed.",
+    "slow_step_reproduction: At the [endpoint index calculation](knowledge/nodes/N-D-index.md#an-endpoint-field-calculation), integration by parts gives I(J,W)=0 for endpoint-zero W; the trial field fE gives integral [ff'] and c_k(L)|X|^2. The [Myers sine calculation](knowledge/nodes/N-M-myers.md#the-sine-field-calculation) gives (n-1)L((pi/L)^2-k)/2<0. The [full exponential differential](knowledge/nodes/N-M-hadamard.md#the-radial-and-angular-parts-of-the-differential) gives squared norm a^2+|J_w|^2/t^2, and the [inverse branches](knowledge/nodes/N-M-hadamard.md#why-the-local-isometry-is-a-covering) are disjoint and exhaustive by reversed radial lifts.",
+    "slow_step_reproduction: For the [model chord](knowledge/nodes/N-M-toponogov.md#from-angular-and-radial-speeds-to-length), min(a+s,b+L-s)<R keeps the entire curve in the domain before integrating the speed inequality. For the [shrinking hinges](knowledge/nodes/N-M-toponogov.md#shrinking-hinges-and-the-cauchy-limit), the 9/5 consecutive-displacement estimate sums to 9P_0(4/5)^n, making vertices Cauchy; endpoints follow because their distance to the vertex is at most P_n. The [uniform nearby-center radius](knowledge/nodes/N-M-toponogov.md#a-uniform-local-neighborhood-for-moving-centers) supplies the final contradiction. The [chord-conversion perimeter sum](knowledge/nodes/N-M-toponogov.md#global-hinge-and-chord-comparison) is exactly bounded by the original P.",
+    "condition_transfer: Sectional-to-Ricci replacement loses the radial operator bound first; the [product example](knowledge/nodes/N-E-product.md#explanation-and-evidence) gives an actual mixed-direction Hessian and hinge failure. Ricci-upper reversal fails at the uncontrolled -Q term in the [trace equation](knowledge/nodes/N-M-trace.md#what-the-hypotheses-do-not-give). Omitting cut truncation loses bijective ball counting; reversing a raywise bound loses it at the downward jump; setting s_k=0 loses division, repaired by the [terminal sphere and saturation](knowledge/nodes/N-M-cut-integration.md#the-positive-curvature-endpoint). These are differentiated from broader unproved assertions.",
+    "condition_transfer: Removing completeness can prevent exp from being defined on all tangent vectors, while removing simple connectivity leaves the flat cylinder's many-sheet covering; see [Hadamard's final steps](knowledge/nodes/N-M-hadamard.md#one-sheet-and-unique-minimizing-geodesics). Letting the model comparison curve leave its normal domain, dropping uniformity in the moving vertex, using nonminimizing sides, or reaching perimeter 2D_k invalidates a stated input in the [triangle boundary analysis](knowledge/nodes/N-M-toponogov.md#first-failures-when-conditions-are-changed). The [flat torus calculation](knowledge/nodes/N-E-global-reverse.md#explanation-and-evidence) separately disproves unrestricted reverse global hinge comparison."
+  ],
+  "unchecked_items": [
+    {
+      "item": "Independent nonauthor stage review and real target-reader uptake are not certified by this author review.",
+      "blocking": false,
+      "reason": "This record accepts only the actual author-side coverage work. The staged task separately requires nonauthor acceptance before its final snapshot/handoff gate; a real-reader experiment was not performed."
+    },
+    {
+      "item": "Full foundational/gluing proofs and broader equality, endpoint and extension classifications are not supplied.",
+      "blocking": false,
+      "reason": "They are outside the explicitly preserved focused scope; exact imported interfaces and broader pending statuses are stated."
+    }
+  ],
+  "disposition": "accepted"
+}

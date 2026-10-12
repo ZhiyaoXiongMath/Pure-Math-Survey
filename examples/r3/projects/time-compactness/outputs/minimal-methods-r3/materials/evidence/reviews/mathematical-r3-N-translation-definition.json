@@ -1,0 +1,65 @@
+{
+  "schema_version": "2.2.0",
+  "review_id": "AUTHOR-R3-mathematical-N-translation-definition",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-simon.md",
+      "sha256": "a4758bd5d649f85d32fc45c9114429956d7733f45450a97f96c02437c7d326fe"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "f46df710c1b856e2928bdd9d0144a8573dca5ed5d5ec1a6d50480ae6a0670f1c"
+    },
+    {
+      "path": "knowledge/nodes/N-translation-definition.md",
+      "sha256": "b76cfd3fd51fc2e7f351fe0e626d3e0ba9545b6456fd25284112890f151f4a13"
+    },
+    {
+      "path": "knowledge/sources/S-simon.json",
+      "sha256": "4d6c3fc888384bb312fbdae564565b47d632a6dfa330f543665e499f1d2a3d62"
+    },
+    {
+      "path": "project.json",
+      "sha256": "2e380066197293b95f1877c7bd77a75b18e3749c9128afc1db0e60737d3b7a2d"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "bc5dc378f261923ade16ab6bfae349d0233c018eb96de07ed2c99fa55951f353"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-translation-definition"
+    ],
+    "editorial_policy": "four-modes-2026-10-12-r3",
+    "statement_reviews": {
+      "N-translation-definition": {
+        "canonical_sha256": "9082cfbb458738ef3da5da088c737d6bff1966f1b3ceb15d14484399b14a1bd6",
+        "outcome": "accepted",
+        "objects": "Banach E and trajectories f.",
+        "domain": "Fixed finite interval and 1<=p<=infinity.",
+        "fixed_and_variable": "E,T,p fixed; h and f vary.",
+        "hypotheses": "Lp membership; strong measurability and usual Bochner norm.",
+        "equations": "tau_h f(t)=f(t+h), with t in (0,T-h).",
+        "quantifiers": "Uniform supremum over the entire family precedes the limit.",
+        "conclusion": "Defines uniform translations and compact linear injections.",
+        "status": "Definition consistent with the source.",
+        "local_definitions": "The same statement explains the essential-supremum convention."
+      }
+    },
+    "evidence_basis": "Actual original-source comparison and local derivation reread: Checked the order lim(h down to zero) sup(f in F); the domain is (0,T-h). The norm at infinity is essential supremum, so continuity must be supplied by an argument, not by the equivalence-class definition. Compact injections concern bounded sequences and may have limits outside X."
+  },
+  "findings": [
+    "Checked the order lim(h down to zero) sup(f in F); the domain is (0,T-h). The norm at infinity is essential supremum, so continuity must be supplied by an argument, not by the equivalence-class definition. Compact injections concern bounded sequences and may have limits outside X."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "No external peer review or real target-reader study is claimed. Raw originals are omitted from public distribution; source scope is recorded explicitly."
+    }
+  ],
+  "disposition": "accepted"
+}

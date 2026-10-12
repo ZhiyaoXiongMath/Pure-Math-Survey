@@ -1,4 +1,4 @@
-# r3 policy preparation — software 2.1.0, not a published release
+# r3 integrated development candidate — software 2.1.0, not a published release
 
 - Specify KB-native fast/slow routes at overview/problem/node scales, one canonical,
   precise bidirectional entrances and reviewed reusable-explanation return.
@@ -10,12 +10,23 @@
   rejection, stop/recovery and late-candidate handling using ordinary existing records.
 - Keep software 2.1.0, KB 2.0.0 and output/review 2.2.0; add r3 policy identity without
   rewriting historical artifacts. Formal tag/Release publication remains paused.
+- Include the nine reviewed S03 prototype articles and their exact public source
+  trees under `examples/r3`; subsequent integrated rebuilds require their own checks.
+- Normalize Windows history I/O roots for long paths while preserving stored
+  relative names, immutable history identities and all byte-integrity checks.
+- Keep runtime text on LF checkouts and refresh the source resource checksum
+  list; installation packages still generate and verify their own checksum list.
 
 Rules/scaffolds are not mathematical, PDF, installed-runtime or real-reader acceptance.
 The integrated fixed candidate still needs actual content and critical review. Paper
 defaults to DRAFT_UNVERIFIED; genuine originality/full research-proof quality is NOT VERIFIED.
 
 # Pure Math Survey 2.1.0 — release preparation
+
+**Historical rc2 preparation record.** The statements below describe the earlier
+rc2 candidate, before the r3 knowledge and workflow changes above. In particular,
+the two-layer implementation statement is retained as historical text, not as the
+current r3 status. Its original verification and publication limits still apply.
 
 Software release preparation for the four-profile workflow and rc2 hardening.
 The `v2.1.0` tag and GitHub Release have not been published. This prepares the

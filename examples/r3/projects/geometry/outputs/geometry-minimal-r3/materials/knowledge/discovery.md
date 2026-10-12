@@ -1,0 +1,46 @@
+# Discovery log
+
+Search/read date: 2026-10-12 (Asia/Shanghai). Scope: comparison theory in smooth Riemannian geometry; knowledge-only. Searches were performed by the root and three research assistants. Assistance is not independent review. No article length or theorem-count limit was used as a research cutoff.
+
+## Actual searches
+
+The following query strings or explicitly listed query variants were run; this is a record of searches, not a claim that every hit was read.
+
+| Route | Actual queries | Outcome |
+|---|---|---|
+| Overall field and volume | `Riemannian geometry comparison theorems Bishop Gromov volume comparison Riccati lecture notes Petersen pdf`; `Bishop 1963 volume comparison theorem original volume riemannian manifold Ricci curvature`; `Bishop Gromov volume comparison original proof pdf` | Located Eschenburg 1994, Bishop arXiv:1303.5390, modern teaching sources and historical references. Adopted the actually read original author texts, with historical status distinguished. |
+| Sectional/Jacobi | `Rauch comparison theorem Hessian comparison Cartan Hadamard lecture notes pdf Jacobi fields`; `Eschenburg comparison geometry lecture notes pdf Hessian Rauch`; `Cartan Hadamard theorem lecture notes author pdf covering exponential`; `"Eschenburg" "Lecture notes" "Comparison" pdf`; `"Hessian comparison" "Wang" lecture pdf` | Eschenburg's Riccati route and Moore/Datar author expositions examined. Conservative model Rauch and regular-distance Hessian statements selected. |
+| Historical Rauch/Riccati | `Rauch 1951 contribution differential geometry large pdf 9 28`; `"A contribution to differential geometry in the large" "1951" "doi"`; `"Rauch" "A contribution" "38-55" pdf`; `Eschenburg Heintze elementary proof Rauch comparison theorem 1980 pdf`; `"Comparison theory for Riccati equations" pdf`; `site.opus.bibliothek.uni-augsburg.de "Comparison theory for Riccati"` | Registered Rauch1951 and EH1990 metadata; original full texts not obtained. The initial Rauch query contained unverified page guesses; verified identity is 38–55, not the query's numbers. |
+| Toponogov | `Toponogov triangle comparison theorem perimeter 2pi lecture notes pdf`; `Toponogov 1959 Riemannian spaces curvature bounded below diameter theorem pdf`; `"Eschenburg" "Comparison Theorems in Riemannian Geometry" "1994"`; `"Toponogov" "triangle" "Ricci" counterexample product sphere` | Obtained original Russian Toponogov1959 and Lang2026. Checked directions, strict perimeter range and globalization. Product counterexample independently calculated. |
+| Myers | `Myers 1941 Riemannian manifolds positive mean curvature pdf Duke`; `"Riemannian manifolds with positive mean curvature" pdf`; `Myers 1941 401 404 pdf geometry`; `"Myers" "positive mean" filetype:pdf`; `"Myers" "1941" "positive mean curvature" -site:scribd.com -site:researchgate.net -site:scirp.org` | Original identity located; Project Euclid security pages prevented original reading. Bishop/Eschenburg statements and the explicit sine-index calculation control the KB. |
+| Splitting | `Cheeger Gromoll splitting theorem nonnegative Ricci curvature 1971 pdf`; `"Cheeger" "Gromoll" "119" "projecteuclid" splitting`; `"The splitting theorem for manifolds of nonnegative Ricci curvature"`; `"splitting" "1214430220" pdf`; `Cheeger Gromoll 1971 splitting filetype:pdf site:edu`; `"An elementary proof of the Cheeger-Gromoll splitting theorem" pdf`; `Eschenburg Heintze elementary proof Cheeger Gromoll splitting theorem 1984 pdf` | Original1971 blocked; original alternative proof EH1984 obtained from Augsburg and read. Printed support-sign and finite-radius trace issues explicitly recorded. |
+| Omission challenge | `"Cheng" "Eigenvalue comparison theorems" "1975" pdf`; `"Cheng" "Eigenvalue comparison theorems" "pdf" 1975`; `"Cheng" "BF01214381" pdf`; `"Heintze Karcher" "general comparison theorem" 1978 pdf`; `site.math ethz Lang differential geometry lecture notes 2026 Toponogov comparison` | Cheng metadata verified but original access blocked. Heintze–Karcher original introduction/§2 read, making tube comparison an explicit pending branch. Spectral/isoperimetric and quantitative extensions remain named gaps. |
+
+## Controlling versions and candidates
+
+The registered, actually read sources are [[S-Bishop-2013v2]], [[S-Eschenburg-1994]], [[S-Lang-2026]], [[S-Toponogov-1959]], [[S-Eschenburg-Heintze-1984]] and [[S-Heintze-Karcher-1978]]. Only their recorded sections were read; no record implies a complete reading of unrelated sections. PDFs were downloaded and hashed in a private cache; the authoritative corpus and snapshot contain source identities, hashes and reading notes, not redistributed originals.
+
+Registered metadata-only historical sources are [[S-Rauch-1951]], [[S-Myers-1941]], [[S-Cheeger-Gromoll-1971]], [[S-Cheng-1975]] and [[S-Eschenburg-Heintze-1990]]. They supply provenance candidates, not theorem support. No preprint was upgraded to published status without checked metadata. Bishop v2 is fixed by its actual version history; an older Li-note excerpt was not misrepresented as a reading of its newer version.
+
+Additional author expositions checked by the sectional assistant: [John D. Moore, June 5, 2009, §§3.1/3.4, pp.133,138–139](https://web.math.ucsb.edu/~moore/riemanniangeometry.pdf), and [Ved Datar, Lecture23, undated handwritten PDF in the f19 directory, pp.1–7](https://math.iisc.ac.in/~vvdatar/courses/f19/Lecture_Notes/Lecture-23.pdf). They are cross-checks, not controlling sources for the present canonical nodes. The Datar proof has endpoint-normalization/transport slips and its printed strict conjugate-distance corollary fails in the model equality case; that corollary was not imported. Xinze Li arXiv:2404.09792 was a candidate, but selective v1 excerpts were not adopted as evidence for v2.
+
+Wikipedia, Scribd, generic summaries and search snippets were excluded as controlling mathematical evidence. Abstracts helped locate sources but did not establish delicate radius, equality or quantifier conditions. No source redistributability was inferred from public accessibility.
+
+## Omission challenge and boundaries
+
+Returning to the original Toponogov statements and Heintze–Karcher introduction changed the candidate map: the seven standard names alone miss normal-submanifold comparison, spectral/isoperimetric comparison and rigidity. Splitting and maximal-diameter rigidity were added with exact evidence limitations. Günther-type lower volume comparison was added as a local deduction from reviewed Hessian comparison with its necessary injectivity restriction.
+
+The checked triangle statement is nondegenerate and has perimeter strictly below 2D_k. Degenerate/antipodal endpoint conventions and the full original Toponogov rigidity proofs remain unpromoted. Volume equality is the maximal-model-volume open-ball result, not an assertion about all possible equal-ratio annular configurations. Full weak/distributional equivalences, PDE regularity and the technical triangle gluing lemmas are imported interfaces, not independent proofs in this KB.
+
+The pending branches are maintained in [[N-B-unassessed]] and the fifth coverage question. Their status is unassessed, not open. Weighted/integral/synthetic/non-Riemannian generalizations require different definitions and are outside the first checked smooth pointwise-curvature core, while remaining visible in the broad project.
+
+## Stopping reason
+
+The first investigation closes a connected classical chain from curvature through Jacobi/Riccati estimates to ball volumes, diameter, triangles and rigidity, with exact statements, mechanisms and decisive failure examples. The original-source omission challenge identified the next distinct inputs rather than suggesting another theorem from the same chain. Further expansion now requires a separate spectral, isoperimetric or submanifold apparatus and additional source readings. The knowledge base therefore freezes this useful classical core while keeping those branches explicitly pending. This is neither an exhaustive field survey nor a claim of publication readiness.
+
+
+## Focused output investigation, 2026-10-12
+
+The new minimal-survey request prompted a reader-assumption audit, not a new claim to exhaustive coverage. The prior discovery candidate set was challenged against the selected chain: Günther, volume/diameter rigidity and splitting are genuine neighboring answers already in the KB; focal, spectral and isoperimetric directions remain named incorporation tasks. They are not needed to answer the explicitly scoped classical-core question and remain in the broad project. Triangle endpoint and general ratio-equality gaps have not been relabelled resolved.
+
+Additional actual reading: Bishop's original author PDF, metric/connection/geodesic/Hessian sections and Gauss/Hopf–Rinow inputs listed in the updated source record. Rechecked Eschenburg pp.12–20 and Lang pp.63–70 for the singular, cut-integration and shrinking-hinge interfaces. No new internet query was needed to recover these already cached controlling texts. Stopping reason: the selected statements, foundational entrance, six connecting mechanisms and decisive boundary examples have direct source or local-derivation support; deeper imported proofs are disclosed, and unrelated broad branches remain pending.

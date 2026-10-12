@@ -1,0 +1,69 @@
+{
+  "schema_version": "2.2.0",
+  "review_id": "AUTHOR-R3-mathematical-N-simon",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-simon.md",
+      "sha256": "a4758bd5d649f85d32fc45c9114429956d7733f45450a97f96c02437c7d326fe"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "f46df710c1b856e2928bdd9d0144a8573dca5ed5d5ec1a6d50480ae6a0670f1c"
+    },
+    {
+      "path": "knowledge/nodes/N-simon.md",
+      "sha256": "cbfaf57cb8052d97595b49315cf26186d13a5cdf1871cdcbd9b4e4ef8a98dff0"
+    },
+    {
+      "path": "knowledge/nodes/N-translation-definition.md",
+      "sha256": "b76cfd3fd51fc2e7f351fe0e626d3e0ba9545b6456fd25284112890f151f4a13"
+    },
+    {
+      "path": "knowledge/sources/S-simon.json",
+      "sha256": "4d6c3fc888384bb312fbdae564565b47d632a6dfa330f543665e499f1d2a3d62"
+    },
+    {
+      "path": "project.json",
+      "sha256": "2e380066197293b95f1877c7bd77a75b18e3749c9128afc1db0e60737d3b7a2d"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "bc5dc378f261923ade16ab6bfae349d0233c018eb96de07ed2c99fa55951f353"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-simon"
+    ],
+    "editorial_policy": "four-modes-2026-10-12-r3",
+    "statement_reviews": {
+      "N-simon": {
+        "canonical_sha256": "3f456cbe9f894e64e297f61dafbf12f2178d80f7e5ee6b1da73cac7756018478",
+        "outcome": "accepted",
+        "objects": "Banach spaces X,B,Y and a family F of trajectories.",
+        "domain": "Fixed (0,T), T>0; 1<=p<=infinity.",
+        "fixed_and_variable": "T,p and injections are fixed; f varies over F.",
+        "hypotheses": "Continuous linear injections X->B->Y; X->B compact; uniform Lp(X) bound; uniform Lp(Y) translation decay.",
+        "equations": "Both family bounds and the exact (0,T-h) translation norm appear in the canonical display.",
+        "quantifiers": "The limit takes h down to zero after supremum over all f in F; no family-dependent constants.",
+        "conclusion": "Relative compactness in Lp(B), or continuous B representatives compact in C at p=infinity.",
+        "status": "Established journal theorem, not a new result.",
+        "local_definitions": "Compact injection is explained adjacent to use; the complete embedding chain is inside the statement."
+      }
+    },
+    "evidence_basis": "Actual original-source comparison and local derivation reread: Read journal Theorem 5 on pp. 84--85. The principal repeats T, Banach spaces, both fixed injections, the compact first injection, uniform Lp(X) bound and uniform Lp(Y) translations. The p=infinity branch retains continuous B representatives; no reflexivity assumption was added."
+  },
+  "findings": [
+    "Read journal Theorem 5 on pp. 84--85. The principal repeats T, Banach spaces, both fixed injections, the compact first injection, uniform Lp(X) bound and uniform Lp(Y) translations. The p=infinity branch retains continuous B representatives; no reflexivity assumption was added."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "No external peer review or real target-reader study is claimed. Raw originals are omitted from public distribution; source scope is recorded explicitly."
+    }
+  ],
+  "disposition": "accepted"
+}

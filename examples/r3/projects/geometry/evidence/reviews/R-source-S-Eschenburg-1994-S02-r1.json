@@ -1,0 +1,53 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "R-source-S-Eschenburg-1994-S02-r1",
+  "kind": "source",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-Eschenburg-1994.md",
+      "sha256": "9fb02b4fca1b61bce3f5d7f94bf154c8d3d44b694c4e964c420f2559b1d0f0c1"
+    },
+    {
+      "path": "evidence/source-checks/S02-global-route-20261012.md",
+      "sha256": "91f9775431e534f9da19b2b3756e4f71e2dcda019a1b5070b56f580ba68d8af8"
+    },
+    {
+      "path": "evidence/source-checks/S02-radial-route-20261012.md",
+      "sha256": "95b2278c8b15e815d33ccc1ac78ec60c24cd8d9f18ed817776889110b3220053"
+    },
+    {
+      "path": "knowledge/sources/S-Eschenburg-1994.json",
+      "sha256": "1f92d5dc453c3e34093844ee568224942dfba8f1e6158bd0d3177b5b12801df5"
+    }
+  ],
+  "scope": {
+    "source_ids": [
+      "S-Eschenburg-1994"
+    ],
+    "source_reading": {
+      "S-Eschenburg-1994": {
+        "mode": "original_text_online",
+        "version": "September 1994 lecture notes, Toronto-hosted 77-page PDF",
+        "locators": [
+          "Main reread of printed pp. 3–4, 6–8, 12–20; actual p.20 image inspection."
+        ],
+        "raw_bytes_unavailable_reason": "Original author-hosted PDF was actually read from the identified private downloaded cache. Its material hash is in the source record and notes; raw PDF is deliberately not retained in the authoritative corpus or public packet. This is a retention boundary, not lack of source access."
+      }
+    }
+  },
+  "findings": [
+    "Read the actual author text at the bounded locators recorded here, using the versioned PDF hash and page mapping in the new source notes. The legacy source record and wider old reading note were preserved, not rewritten as this session's work.",
+    "The source supports the exact interfaces identified in S02-radial-route-20261012.md and S02-global-route-20261012.md. Locally supplied differential, averaging, endpoint-field, covering and perimeter calculations are distinguished from imported theorems.",
+    "Author exposition is not reclassified as the historical original discovery paper. Visual evidence is used before reporting source typography; Lang's fraction extraction error is corrected in the new mechanism, and no whole-source certification is asserted."
+  ],
+  "unchecked_items": [
+    {
+      "item": "Original source PDF is absent from authoritative/snapshot content.",
+      "blocking": false,
+      "reason": "Actual private source bytes were read and hashed; raw redistribution is not required and was not authorized as a new deliverable."
+    }
+  ],
+  "disposition": "accepted"
+}

@@ -1,0 +1,43 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "R3-AUTHOR-S-Boyd",
+  "kind": "source",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-Boyd.md",
+      "sha256": "1cf412c8111eaaa41d586105964641cd85e22d2a73233ab49e7b255bf9f42645"
+    },
+    {
+      "path": "knowledge/sources/S-Boyd.json",
+      "sha256": "ad18a2a1150b10172e9a8c0383e4e676adb07fe8a9893417a8519150e6bebc33"
+    }
+  ],
+  "scope": {
+    "source_ids": [
+      "S-Boyd"
+    ],
+    "source_reading": {
+      "S-Boyd": {
+        "mode": "original_text_online",
+        "version": "2004; author-hosted PDF accessed 2026-10-12",
+        "locators": [
+          "Appendix A.5.5, pp.650-651"
+        ],
+        "raw_bytes_unavailable_reason": "Original bytes were downloaded and hashed but are not retained in this distributable project; no redistribution permission is inferred."
+      }
+    }
+  },
+  "findings": [
+    "Read the invertibility definition, fixed-variable minimization, strict-positivity criterion and singular range-condition extension. The new criterion retains A>0; the separate identity needs only symmetric invertibility.",
+    "Privately obtained PDF bytes match the recorded SHA256; public absence of raw bytes is intentional. The book is source evidence, not redistributed content."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "Author/AI rereading only. No external mathematical peer review, actual target-reader experiment or originality certification is claimed."
+    }
+  ],
+  "disposition": "accepted"
+}

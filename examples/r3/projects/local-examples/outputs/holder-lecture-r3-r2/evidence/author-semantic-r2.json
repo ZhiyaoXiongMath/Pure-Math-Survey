@@ -1,0 +1,641 @@
+{
+  "schema_version": "2.2.0",
+  "review_id": "AUTHOR-HOLDER-R3-R2-SEMANTIC",
+  "kind": "output_semantic",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "generated/conventions.tex",
+      "sha256": "8e17ace33563d613860c89606b70c6b95a93cf077e4d21db9bff3ba08617bd63"
+    },
+    {
+      "path": "generated/manifest.json",
+      "sha256": "8046136576f57069ddcf47c4fe9d73a9b1add6372c096bcc82d956236ecd9567"
+    },
+    {
+      "path": "generated/references.bib",
+      "sha256": "6405dd262e28c6f75a660c9eede0952458f85d90c6ab98941428844ad3793df6"
+    },
+    {
+      "path": "generated/statements/N-H-main.tex",
+      "sha256": "6ec8cc21fac4e500295066f7b60dc9f1144d56690d11eb76818ad4ae55b4935f"
+    },
+    {
+      "path": "generated/statements/N-H-norm.tex",
+      "sha256": "e9bbec593dae25aa9f44b88f73f6f0dd742f1f39e84d5d7b8cd594ec40cf812d"
+    },
+    {
+      "path": "manuscript/localrefs.bst",
+      "sha256": "e569197b21d5885aab6d54fd30955e93ac11bbfa4aed65697a5d2ea92db0a047"
+    },
+    {
+      "path": "manuscript/main.tex",
+      "sha256": "2c4640fb9e8a7c8cbed822c4fd24db135954534ca02ddedf3b87e315d902df70"
+    },
+    {
+      "path": "manuscript/math-review.sty",
+      "sha256": "74de131250e3c6cf3561c43e79491d3a6e59bba28bc5f55c2495939e91ae9a3e"
+    },
+    {
+      "path": "materials/evidence/reviews/a-h-bound-proof-r3.json",
+      "sha256": "42c87ff0744d09719586fae24ae50c965664a3fe6cc53a48fa10fa9be485c30e"
+    },
+    {
+      "path": "materials/evidence/reviews/a-h-main-proof-r3.json",
+      "sha256": "d44c0b34b4fe56b5370e455049e541e43575146925121cf84317303cb075fb9b"
+    },
+    {
+      "path": "materials/evidence/reviews/author-N-H-compact.json",
+      "sha256": "df449a3bf4204b7f68485d710fc4304060a4eea4bf69be93a49b78a84105b598"
+    },
+    {
+      "path": "materials/evidence/reviews/author-N-H-norm.json",
+      "sha256": "4fdcb257d4f6e11abe0171320689e4c69ba7d36824cc8f013b42dd4876d24dc1"
+    },
+    {
+      "path": "materials/evidence/reviews/author-N-Q-holder.json",
+      "sha256": "44a5dd244cf5831bbd22056923be477b76ee22d1734a31fc09f716cdf06b2e7e"
+    },
+    {
+      "path": "materials/evidence/reviews/author-S-Shapiro.json",
+      "sha256": "f4bf6b362363892ddabb4f0e79034abfbe52c8c239f6b06b3c1949ab676cc21d"
+    },
+    {
+      "path": "materials/evidence/reviews/h-cover-r2.json",
+      "sha256": "f0864b85e037a6d9851c5f78c8f08e40ae9561d31ce33e66cf36af4cff8ec823"
+    },
+    {
+      "path": "materials/evidence/source-checks/S-Shapiro.md",
+      "sha256": "3809bae5e2ca7cda7b6688c5bd52e3e1687f223f50b6ca355c76b6f3c1e10e7a"
+    },
+    {
+      "path": "materials/knowledge/conventions.tex",
+      "sha256": "8e17ace33563d613860c89606b70c6b95a93cf077e4d21db9bff3ba08617bd63"
+    },
+    {
+      "path": "materials/knowledge/coverage.json",
+      "sha256": "74a153b3ba40c6d15e594f866f993b71fd1666d436aeecce75c4c02be38c5456"
+    },
+    {
+      "path": "materials/knowledge/discovery.md",
+      "sha256": "396f4321f019b18a21e80a39b52bbf92ed712884dd986b8f6a25c0e0e2642d83"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-H-boundary.md",
+      "sha256": "4fa99eec256edd74c71aafc418ed74b91b48e6e61a5d77d7a0aecf81853175b9"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-H-compact.md",
+      "sha256": "d765e9f8daa10b2c42411d0d750e96859977f386f46de62f828da6881b0f0a5f"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-H-main.md",
+      "sha256": "4f21c64477c1b3ce2e23c6ffc22ba371ad5740862c433f65575031cb47658fa2"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-H-norm.md",
+      "sha256": "cd462d3ca5f275e07171958bd23cff4b0ae726658a58e21ca25e7c5600d40409"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-Q-holder.md",
+      "sha256": "dceb0b868048532c69c5243ead0d4ff69c0b7bcf946a0da380cf4dee28b1deeb"
+    },
+    {
+      "path": "materials/knowledge/overview.md",
+      "sha256": "f76e0e612e2b8ec44bb4252d24276a3dbee58755817c0214798351b0792847fb"
+    },
+    {
+      "path": "materials/knowledge/sources/S-Shapiro.json",
+      "sha256": "4b9680442eca30970ee56defc2eabecce441ea594a7645e5f7622e65d6b51a95"
+    },
+    {
+      "path": "materials/materials-manifest.json",
+      "sha256": "8046136576f57069ddcf47c4fe9d73a9b1add6372c096bcc82d956236ecd9567"
+    },
+    {
+      "path": "materials/project.json",
+      "sha256": "7477946aa36c1d422c055f0c3e0f0dcb875381993fc04e6265fea430aba03d83"
+    },
+    {
+      "path": "materials/scope.md",
+      "sha256": "3dd3b3a663967bb9e649114ebde3571061e0e376ab0c96911c5564260d1b5463"
+    },
+    {
+      "path": "outline.md",
+      "sha256": "ea0613ed6e6d074ce5906c1490a6a0f6f7df37994136ea7c9fb7a94cc1f01506"
+    },
+    {
+      "path": "plan.json",
+      "sha256": "d782fe6eb57b91a44ba0187ffe9204a48c5ba7ae383a829777767b2b6b00675b"
+    }
+  ],
+  "scope": {
+    "output_ids": [
+      "holder-lecture-r3-r2"
+    ],
+    "profile": "lecture",
+    "node_ids": [
+      "N-H-boundary",
+      "N-H-compact",
+      "N-H-main",
+      "N-H-norm",
+      "N-Q-holder"
+    ],
+    "whole_manuscript": true,
+    "checks": [
+      "whole_manuscript",
+      "canonical_use",
+      "conditions_quantifiers",
+      "selection",
+      "attribution",
+      "proof_obligations",
+      "readability"
+    ],
+    "principal_locations": {
+      "N-H-main": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 18,
+          "line_end": 23
+        }
+      ]
+    },
+    "proof_steps": {
+      "N-H-main": [
+        "Localize in fixed charts and obtain uniform moduli for every derivative through order two.",
+        "Extract on a countable dense set and use finite nets to obtain uniform convergence.",
+        "Pass the line-segment integral identity and glue compatible C2 derivatives.",
+        "Preserve the alpha bound and prove beta convergence by the interpolation inequality.",
+        "Pass the uniform matrix margin before applying joint continuity of F.",
+        "Check normalization and a concrete nonlinear C0 passage, and distinguish local exhaustion.",
+        "Calculate loss-of-margin and endpoint-exponent boundaries.",
+        "Define weak L2 convergence, derive coefficient decay from orthonormality and the finite projection identity, and test squared sines against constant one."
+      ]
+    },
+    "proof_locations": {
+      "N-H-main": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 33,
+          "line_end": 42
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 44,
+          "line_end": 61
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 63,
+          "line_end": 76
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 78,
+          "line_end": 109
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 111,
+          "line_end": 122
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 123,
+          "line_end": 159
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 161,
+          "line_end": 183
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 185,
+          "line_end": 191
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 193,
+          "line_end": 209
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 211,
+          "line_end": 217
+        }
+      ]
+    },
+    "editorial_policy": "four-modes-2026-10-12-r3",
+    "statement_reviews": {
+      "N-H-main": {
+        "canonical_sha256": "6ec8cc21fac4e500295066f7b60dc9f1144d56690d11eb76818ad4ae55b4935f",
+        "outcome": "accepted",
+        "objects": "Read the principal together with its immediately preceding Definition 1.1: M, the finite atlas, cutoffs, background metric and exact localized Holder norm are fixed; A takes values in continuous symmetric r by r matrices.",
+        "domain": "M is compact without boundary, d,r>=1, and 0<beta<alpha<1. F has domain [0,1] times U and target C^0(M); its evaluated parameters therefore lie in [0,1], as does their limit.",
+        "fixed_and_variable": "Charts, cutoffs, C and delta>0 do not vary with j. The sequence (t_j,u_j) varies, while u_* is obtained after subsequence extraction. The same defined norm measures input and output bounds.",
+        "hypotheses": "The exact uniform C^{2,alpha} bound and matrix margin A(u_j)>=delta I are displayed for every j,x. A is continuous in the stated operator norm and F is jointly continuous in the displayed topology.",
+        "equations": "The equation F(t_j,u_j)=0, all bounds, U and the limiting equation are present. The separate norm definition is directly adjacent, with no intervening prose or remote reference.",
+        "quantifiers": "Only some subsequence is claimed. The positive margin is uniform over both index and manifold; this is stronger than a separate positive lower bound for each function.",
+        "conclusion": "The subsequence converges strongly in C^{2,beta}; its limit has a bounded C^{2,alpha} norm, remains in U and solves the limiting equation. C^{2,alpha} convergence and higher regularity are expressly excluded.",
+        "status": "This is a proved conditional compactness-and-passage theorem. It does not assert the input estimates, existence of the sequence, or a new PDE existence theorem.",
+        "local_definitions": "Definition 1.1 immediately supplies the multi-index, zero extension and seminorm convention. The principal defines the matrix-valued map, U and the nonlinear residual before using them."
+      }
+    },
+    "view": "methods",
+    "mode_findings": {
+      "fast_path": {
+        "outcome": "accepted",
+        "finding": "The target theorem follows its exact norm definition. The prose route retains the exponent gap, common bound, fixed atlas, uniform positive matrix margin and continuity before outlining the three conversions.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 9,
+            "line_end": 31
+          }
+        ]
+      },
+      "reader_calibration": {
+        "outcome": "accepted",
+        "finding": "Freshly reread the complete new manuscript. Calculus and scalar subsequences are assumed; extraction and interpolation are derived. The boundary now explicitly defines real-L2 weak convergence, the inner product and norm, and proves the sine test via a finite orthonormal expansion rather than requiring Fourier coefficient theory.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 14,
+            "line_end": 16
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 33,
+            "line_end": 109
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 185,
+            "line_end": 217
+          }
+        ]
+      },
+      "points": {
+        "outcome": "accepted",
+        "finding": "The executed points are dense-set/finite-net extraction, interpolation with exponent 1-beta/alpha, closure of the delta-positive matrix cone, and the finite projection-error identity. The last point is used only to prove the separate weak-square failure model.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 44,
+            "line_end": 61
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 84,
+            "line_end": 122
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 185,
+            "line_end": 217
+          }
+        ]
+      },
+      "connections": {
+        "outcome": "accepted",
+        "finding": "Compatibility turns scalar derivative limits into a C^2 function. Interpolation upgrades uniform convergence to the exact input topology of A and F. The matrix margin first places the limit inside F's domain, after which continuity passes the equation.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 63,
+            "line_end": 122
+          }
+        ]
+      },
+      "limits": {
+        "outcome": "accepted",
+        "finding": "The local/global, positive-margin and endpoint-exponent models are unchanged and reread. The weak-input failure now includes every L2 test for the original sequence and a particular constant-one test for its squares. It rules out weak convergence of the squares to zero, not all possible weak limits.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 144,
+            "line_end": 217
+          }
+        ]
+      },
+      "display_rhythm": {
+        "outcome": "accepted",
+        "finding": "Opened all four final page images. The new weak-L2 proof and bibliography fit together on page 4 after rewriting repeated explanation and placing the short definitions and final test conversion inline. Ordinary blocks occupy 1-3 normal lines; core product and projection identities remain displayed. Full principal and norm definition remain adjacent on page 1. No font or spacing override was introduced.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 18,
+            "line_end": 31
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 185,
+            "line_end": 217
+          }
+        ]
+      },
+      "statement_context": {
+        "outcome": "accepted",
+        "finding": "Definition 1.1 immediately precedes the theorem with no remote norm reference. The subsequent paragraph explicitly identifies C and delta as assumed estimates whose PDE-specific derivation is outside scope.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 18,
+            "line_end": 31
+          }
+        ]
+      },
+      "motivation": {
+        "outcome": "accepted",
+        "finding": "The opening explains why an a priori estimate must specify topology and constants. The proof then separates compactness from preservation of admissibility and passing the residual.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 9,
+            "line_end": 31
+          }
+        ]
+      },
+      "worked_derivations": {
+        "outcome": "accepted",
+        "finding": "Reread the original finite-net, segment-integral, interpolation, margin and cubic calculations. Also re-expanded the finite projection error: its cross term is -2 sum a_n^2 and its orthonormal sum norm is sum a_n^2, leaving ||g||^2-sum a_n^2. This supplies the missing coefficient-decay bridge.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 53,
+            "line_end": 72
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 84,
+            "line_end": 142
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 193,
+            "line_end": 217
+          }
+        ]
+      },
+      "hypothesis_use": {
+        "outcome": "accepted",
+        "finding": "Fixed finite charts give finitely many families and common supports; alpha>beta gives a positive interpolation exponent; delta>0 retains strict admissibility; joint continuity yields the limiting residual only afterward.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 33,
+            "line_end": 42
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 92,
+            "line_end": 122
+          }
+        ]
+      },
+      "imported_inputs": {
+        "outcome": "accepted",
+        "finding": "The declared scalar compactness and partition-of-unity prerequisites remain sufficient for the strong proof. The weak-convergence example now supplies its own real-L2 test definition, trigonometric orthonormality and finite projection identity. No Fourier completeness or coefficient-decay theorem is imported.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 14,
+            "line_end": 16
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 44,
+            "line_end": 76
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 185,
+            "line_end": 217
+          }
+        ]
+      },
+      "model_boundary": {
+        "outcome": "accepted",
+        "finding": "The cubic residual is verified in strong C0 topology. Constants 1/j and the endpoint cosine quotient diagnose their separate failures. For weak input, the normalized sines give every real-L2 test tending to zero, while the constant test 1 pairs with their squares to pi.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 130,
+            "line_end": 217
+          }
+        ]
+      },
+      "exposition_design": {
+        "outcome": "accepted",
+        "finding": "The five sections track the actual learner task: exact conditional statement, construction, weaker exponent, legal equation passage, then localization and failure. Norms and all strong conclusions remain explicit.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 13,
+            "line_end": 31
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 33,
+            "line_end": 217
+          }
+        ]
+      },
+      "view_focus": {
+        "outcome": "accepted",
+        "finding": "The methods view follows N-H-compact and N-H-norm through all operations, including the quantitative interpolation exponent and the matrix quadratic form. N-H-boundary tests which conversions survive changed inputs.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 33,
+            "line_end": 217
+          }
+        ],
+        "node_ids": [
+          "N-H-main",
+          "N-H-norm",
+          "N-H-compact",
+          "N-H-boundary"
+        ]
+      },
+      "obligation_coverage": {
+        "outcome": "accepted",
+        "finding": "Independently reconstructed the desired strong limit and all illustrative boundary claims, then checked eight actual plan obligations. The previous weak-example omission is repaired by an explicit test definition, normalized orthonormal family, finite projection-error identity, coefficient decay, and constant-one square test. Every reconstructed step now appears in the body; the strong theorem and its assumptions did not change.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 33,
+            "line_end": 217
+          }
+        ]
+      },
+      "fast_route_reconstruction": {
+        "outcome": "accepted",
+        "finding": "The strong route remains extraction -> compatible derivatives -> beta interpolation -> retained delta -> continuity of F. The distinct weak-input route is now also visible: orthonormal sines -> bounded coefficient-square sums -> every test tends to zero, but squared sines retain their pairing pi with test 1.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 33,
+            "line_end": 122
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 185,
+            "line_end": 217
+          }
+        ]
+      },
+      "slow_step_reproduction": {
+        "outcome": "accepted",
+        "finding": "Reproduced the finite-net inequality and the interpolation cancellation with theta=beta/alpha. For the repaired example, trigonometric integration gives <e_n,e_m>=delta_nm. Expanding each finite projection error leaves ||g||^2-sum|a_n|^2>=0, so the square-summable coefficients tend to zero; multiplication by sqrt(pi) is exactly the required sine test.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 53,
+            "line_end": 61
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 84,
+            "line_end": 109
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 193,
+            "line_end": 209
+          }
+        ]
+      },
+      "condition_transfer": {
+        "outcome": "accepted",
+        "finding": "Loss of delta lets constant solutions 1/j leave U; loss of the exponent gap leaves the cosine alpha quotient nonzero. Changing strong convergence to weak-L2 input is insufficient for squaring: every sine test vanishes by the new finite projection proof, but the square test against 1 remains pi.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 161,
+            "line_end": 217
+          }
+        ]
+      }
+    },
+    "proof_step_findings": {
+      "N-H-main": {
+        "Localize in fixed charts and obtain uniform moduli for every derivative through order two.": {
+          "outcome": "accepted",
+          "finding": "Fixed compact chart supports and the exact norm give bounded derivatives through order two. The top derivatives share an alpha modulus; the next-derivative bound gives Lipschitz moduli for lower ones.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 33,
+              "line_end": 42
+            }
+          ]
+        },
+        "Extract on a countable dense set and use finite nets to obtain uniform convergence.": {
+          "outcome": "accepted",
+          "finding": "Enumerating finitely many families over countable dense sets permits nested subsequences and one diagonal. The displayed three-term estimate and a finite net make the result uniformly Cauchy.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 44,
+              "line_end": 61
+            }
+          ]
+        },
+        "Pass the line-segment integral identity and glue compatible C2 derivatives.": {
+          "outcome": "accepted",
+          "finding": "The line-segment identity survives uniform convergence and identifies both first and second derivatives. Smooth fixed transition rules and the partition of unity glue the resulting pieces.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 63,
+              "line_end": 76
+            }
+          ]
+        },
+        "Preserve the alpha bound and prove beta convergence by the interpolation inequality.": {
+          "outcome": "accepted",
+          "finding": "Pointwise Holder quotients survive the limit; taking their suprema and the finite sum preserves the input bound by lower semicontinuity. The min inequality yields beta convergence, since 1-beta/alpha>0 and the difference alpha seminorm is bounded by 2C.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 78,
+              "line_end": 109
+            }
+          ]
+        },
+        "Pass the uniform matrix margin before applying joint continuity of F.": {
+          "outcome": "accepted",
+          "finding": "For every fixed x,v, uniform matrix convergence preserves v^T A(u_j)v>=delta|v|^2. Thus u_* is in U before F is invoked. Joint continuity then gives its zero C^0 residual.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 111,
+              "line_end": 122
+            }
+          ]
+        },
+        "Check normalization and a concrete nonlinear C0 passage, and distinguish local exhaustion.": {
+          "outcome": "accepted",
+          "finding": "The integral estimate passes mean-zero normalization. Factoring the cubic yields 3R^2 times the sup difference, while derivative and parameter terms converge separately. On an exhaustion, a second diagonal gives only local convergence; translated bumps refute a global upgrade.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 123,
+              "line_end": 159
+            }
+          ]
+        },
+        "Calculate loss-of-margin and endpoint-exponent boundaries.": {
+          "outcome": "accepted",
+          "finding": "The constants 1/j lose the uniform positive margin. The cosine second-derivative quotient at 0 and pi/n equals 2/pi^alpha, so the endpoint topology fails despite uniform derivative convergence.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 161,
+              "line_end": 183
+            }
+          ]
+        },
+        "Define weak L2 convergence, derive coefficient decay from orthonormality and the finite projection identity, and test squared sines against constant one.": {
+          "outcome": "accepted",
+          "finding": "The real-L2 test condition is defined first. The sine product identity proves orthonormality after normalization by sqrt(pi). For arbitrary g, the finite squared-norm expansion bounds every coefficient-square partial sum, so a_n tends to zero and all sine tests vanish. The constant test 1 has pairing pi with every squared sine, disproving weak convergence of the squares to zero.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 185,
+              "line_end": 191
+            },
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 193,
+              "line_end": 209
+            },
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 211,
+              "line_end": 217
+            }
+          ]
+        }
+      }
+    },
+    "contribution_reviews": {}
+  },
+  "findings": [
+    "Read the complete new manuscript, the unchanged canonical principal and its immediately adjacent norm definition, and the newly frozen boundary node. The source before the weak subsection is unchanged and was reread; the final weak subsection was reread after the last prose/layout revision.",
+    "The controller-identified omission is repaired by actual mathematics in the body, not a new acceptance label: explicit weak real-L2 definition, normalized trigonometric orthonormality, finite projection-error calculation, coefficient decay and the constant-one square test.",
+    "All eight promised steps are separately located and checked. No new original theorem is claimed, and the weak example remains separate from the strong nonlinear passage.",
+    "The new output uses the accepted repaired node from a new immutable snapshot. Three unaffected articles and the superseded original Holder output retain all old bytes and snapshots. The metadata-only proof-basis completion and its rejected preparation snapshot are recorded separately."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "This is author rereading only. The original nonauthor reviewer must separately inspect the new final article; no external peer review or human learner experiment is claimed."
+    }
+  ],
+  "disposition": "accepted",
+  "reviewer": "Local mathematical author, fresh complete reread; not independent review"
+}

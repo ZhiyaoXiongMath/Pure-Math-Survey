@@ -1,3 +1,9 @@
+# Runtime text has deterministic bytes on Windows and Unix so the source
+# resource checksum list remains verifiable after checkout. Binary and
+# explicitly preserved reference/example files retain their original bytes.
+skills/pure-math-survey/** text=auto eol=lf
+
+skills/pure-math-survey/assets/reference-samples/** -text
 skills/pure-math-survey/assets/reference-samples/dhym-balanced/dhym-survey-revised.* -text
 skills/pure-math-survey/assets/reference-samples/dhym-balanced/references.bib -text
 skills/pure-math-survey/assets/reference-samples/dhym-balanced/math-review.sty -text
@@ -5,4 +11,4 @@ examples/dhym-balanced/dhym-survey-revised.tex -text
 
 # Example snapshots, materials and reviews contain hashes of exact stored bytes.
 # Preserve their Git blob bytes on Windows as well as Unix checkouts.
-examples/** -text
+examples/** -text whitespace=cr-at-eol

@@ -1,0 +1,33 @@
+{
+  "schema_version": "2.0.0",
+  "id": "S-Lang-2026",
+  "kind": "primary",
+  "title": "Riemannian and Metric Geometry",
+  "authors": [
+    "Urs Lang"
+  ],
+  "publication_status": "unpublished",
+  "identifiers": {
+    "url": "https://people.math.ethz.ch/~lang/RG.pdf"
+  },
+  "version": "Preliminary and incomplete version, 5 January 2026",
+  "access": {
+    "state": "full_text_read",
+    "checked_at": "2026-10-12",
+    "material_sha256": "931ce2b70009721e37fdf4454c8687990894f403086c933e94547020eddb0e2e",
+    "local_path": null,
+    "reading_note": "evidence/source-checks/S-Lang-2026-S03-r3.md",
+    "material_hash_unavailable_reason": "Original PDF downloaded and hashed in a private, non-authoritative reading cache. No raw source is included in the authoritative knowledge corpus or frozen snapshot; source redistribution rights were not established. This is nonretention in the corpus, not failed access."
+  },
+  "evidence_category": "author_written_exposition",
+  "bibliography": {
+    "year": 2026
+  },
+  "reading_scope": [
+    "Sections 5.1–5.3, pp. 63–70",
+    "Definition 5.7, Lemmas 5.8–5.9, pp. 66–67",
+    "Theorem 5.12, Propositions 5.13–5.14, Theorem 5.15 and Remark 5.16, pp. 67–70"
+  ],
+  "classification_note": "The schema kind primary denotes the actual author text; evidence_category distinguishes historical research originals from later expositions. Exposition is not claimed to be the original discovery paper.",
+  "current_reading_note": "evidence/source-checks/S-Lang-2026-S03-r3.md"
+}

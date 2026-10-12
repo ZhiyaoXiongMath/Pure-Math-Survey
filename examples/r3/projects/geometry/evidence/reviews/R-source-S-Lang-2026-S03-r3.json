@@ -1,0 +1,50 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "R-source-S-Lang-2026-S03-r3",
+  "kind": "source",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-Lang-2026-S03-r3.md",
+      "sha256": "f3b61ad592d7a9b69993996b01f3a7a48e0386f19c67228fe3f4cc95a202fd0d"
+    },
+    {
+      "path": "knowledge/sources/S-Lang-2026.json",
+      "sha256": "a4667a9eea8957f54563a6f370007aa04712eb19151b1b9c234efec048d9384e"
+    }
+  ],
+  "scope": {
+    "source_ids": [
+      "S-Lang-2026"
+    ],
+    "source_reading": {
+      "S-Lang-2026": {
+        "mode": "original_text_online",
+        "version": "Preliminary and incomplete version, 5 January 2026",
+        "locators": [
+          "Definition 5.7 and Lemma 5.8, p. 66",
+          "Lemma 5.9, Definition 5.10 and Theorem 5.12, pp. 67–68",
+          "Propositions 5.13–5.14, pp. 68–70",
+          "Theorem 5.15 and proof, p. 70"
+        ],
+        "raw_bytes_unavailable_reason": "The original PDF was actually read and its hash checked against the inherited edition, but it is retained outside this public corpus. This is nonretention, not a failed download.",
+        "reading_method": "Newly extracted original PDF sections; Lang p. 70 additionally opened as a full-page image. Earlier bounded source readings are reused only at matching hashes and their original scope."
+      }
+    }
+  },
+  "findings": [
+    "Read on 2026-10-12 by the geometry author. Controlling edition: Riemannian and Metric Geometry, preliminary and incomplete version dated 5 January 2026, 144-page PDF. Public source: https://people.math.ethz.ch/~lang/RG.pdf . Original PDF SHA-256: 931ce2b70009721e37fdf4454c8687990894f403086c933e94547020eddb0e2e.",
+    "The current reading covered printed pp. 66–70: Definition 5.7, Lemmas 5.8–5.9, Definition 5.10, Theorem 5.12, Propositions 5.13–5.14 and Theorem 5.15 with its proof. Printed p. 70 was also rendered and opened as a full-page image. The earlier S02 reading of pp. 14 and 43–44 is reused at the identical PDF hash, with no claim of a fresh reading of those pages here.",
+    "The SSS experiment fixes three side lengths and gives lower bounds on actual angles and matching internal chords. The SAS experiment fixes two sides and the included angle and gives an upper bound on the actual opposite distance. Lemma 5.9 consumes angle comparison for all auxiliary hinges, not just one initial triangle. Balanced sides in the smooth setting follow from opposite tangent vectors. Our inherited auxiliary-perimeter estimate checks all those uses stay below 2D_k.",
+    "Proposition 5.14 assumes balanced segments and existence of minimizing segments at distance below D_k. It turns a violation into a smaller violating hinge with a radial-side endpoint on the previous designated side or endpoint. The shrinking factor on the printed page is 4/5 throughout, although extraction orders one fraction as 5/4. The inherited displacement bound 9P_0(4/5)^j is calculated directly from the endpoint relation. Completeness keeps the Cauchy limit inside the manifold; uniform normal neighborhoods for nearby vertices then contradict the local comparison.",
+    "The technical gluing proof, the thin-hinge proposition and angle-to-chord conversion are cited imports. The new outputs expose their usable interfaces, derive the map/speed/contained-chord connection, and identify where the shrinking argument uses completeness. This does not claim a new full foundational proof of Toponogov. Degenerate or perimeter-endpoint extensions are outside the principal statement. Raw source PDF, extraction and page image are not redistributed; the material hash identifies the actually read original bytes with access.local_path null for nonretention."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "No external mathematician review or target-student study is claimed. Imported foundational theorems retain their stated proof boundaries."
+    }
+  ],
+  "disposition": "accepted"
+}

@@ -1,0 +1,548 @@
+\documentclass[12pt,reqno]{amsart}
+\usepackage{math-review}
+\usepackage{needspace}
+\input{../generated/conventions.tex}
+\title{From Ricci curvature to ball volume}
+\author{}
+\date{}
+\begin{document}
+\raggedbottom
+\maketitle
+
+\section{The target and the route}
+\label{sec:target}
+Curvature is measured infinitesimally, while a metric ball collects geodesics in every direction and stops counting them when they cease to minimize. This lecture explains the transitions needed to compare those two scales.
+
+The central result is the following volume inequality. We fully derive the Ricci-to-volume route from stated inputs. Six companion comparisons retain their complete statements and operative mechanisms.
+
+\begin{samepage}
+\begin{theorem}[Bishop--Gromov]
+\label{thm:volume}
+\input{../generated/statements/N-R-bishop-gromov.tex}
+\end{theorem}
+\end{samepage}
+
+We assume smooth manifolds, differentiation of maps, linear algebra, elementary ODEs and basic integration. We recall connection operations and build the Jacobi tensors, geometric density and scalar comparison as we need them.
+
+The proof first measures transverse deformation along one ray. Its relative rate of change has trace controlled by Ricci. Dividing by the model density then gives a monotone quotient; truncation at cut time and weighted averaging convert it into the ball ratio.
+
+The principal sources are Eschenburg's comparison notes and Bishop's geometry notes \cite{S-Eschenburg-1994,S-Bishop-2013v2}. All manifolds in this account are smooth and without boundary; global results state completeness separately.
+
+\section{The geometric operations we need}
+\label{sec:operations}
+
+\subsection{Metric volume and the connection}
+A Riemannian metric is a smoothly varying positive-definite inner product. In coordinates its matrix \((g_{ij})\) defines
+\[
+|X|_g^2=\sum_{i,j}g_{ij}X^iX^j,
+\qquad d\operatorname{Vol}_g=\sqrt{\det(g_{ij})}\,|dx^1\cdots dx^n|.
+\]
+The determinant measures the volume of the coordinate parallelepiped. We will apply this familiar rule to the radial map rather than assume its volume factor in advance.
+
+Curve length is \(L(\gamma)=\int|\dot\gamma|\), and distance is the infimum of lengths with fixed endpoints. We import existence and uniqueness of the Levi--Civita connection, characterized by
+\[
+X\langle Y,Z\rangle=\langle\nabla_XY,Z\rangle+\langle Y,\nabla_XZ\rangle,
+\qquad \nabla_XY-\nabla_YX=[X,Y].
+\]
+These are the product rule and torsion-free rule used below. Along a curve, write \(D_t=\nabla_{\dot\gamma}\). A parallel frame satisfies \(D_tE_i=0\); it remains orthonormal by the first rule.
+
+In that frame, \(J=\sum a_iE_i\) has derivative \(D_tJ=\sum a_i'E_i\). Thus our matrix ODEs are ordinary component equations. A geodesic satisfies \(D_t\dot\gamma=0\); ODE uniqueness defines \(\exp_p(tv)=\gamma_v(t)\).
+
+\subsection{Curvature, gradient and Hessian}
+The curvature operator records the failure of two covariant derivatives to commute:
+\[
+R(X,Y)Z=\nabla_X\nabla_YZ-\nabla_Y\nabla_XZ-\nabla_{[X,Y]}Z.
+\]
+For unit \(T\), the map \(\mathcal R_T X=R(X,T)T\) on \(T^\perp\) is symmetric. We use the usual curvature symmetries as algebraic input; they give
+\[
+\langle\mathcal R_TX,X\rangle=K(T\wedge X)|X|^2,
+\qquad \operatorname{tr}\mathcal R_T=\operatorname{Ric}(T,T).
+\]
+The trace has \(n-1\) normal directions. This fixes our unnormalized Ricci convention and explains the factor \(n-1\) in the hypothesis.
+
+For a function \(f\), the gradient represents its differential. Differentiating it gives the Hessian endomorphism and bilinear form:
+\[
+\langle\nabla f,X\rangle=df(X),\qquad
+H_fX=\nabla_X\nabla f,\qquad
+\nabla^2f(X,Y)=\langle H_fX,Y\rangle,\qquad \Delta f=\operatorname{tr}H_f.
+\]
+Our sign is \(\Delta=\operatorname{div}\nabla\). For Euclidean \(r=|x|\), setting \(u=x/r\) and differentiating \(u\) gives
+\[
+H_rX=\frac{X-\langle X,u\rangle u}{r},\qquad \Delta r=\frac{n-1}{r}.
+\]
+There is no radial expansion and the normal relative expansion is \(1/r\). This provides a concrete model for the operator we next construct.
+
+\subsection{Exact global imports and the model}
+We import Hopf--Rinow for connected Riemannian manifolds: metric and geodesic completeness are equivalent, and completeness gives minimizing segments and compact closed bounded sets \cite[Section 8]{S-Bishop-2013v2}.
+
+We also use its one-point criterion: if all geodesics from one point extend for all time, the manifold is complete. This will apply to the pullback metric in Section~\ref{sec:hadamard}.
+
+Fix a base point \(p\). For \(|v|=1\), define the cut time and its endpoints by
+\[
+\tau_p(v)=\sup\{t>0:d(p,\exp_p(tv))=t\},
+\qquad \operatorname{Cut}(p)=\{\exp_p(\tau_p(v)v):\tau_p(v)<\infty\}.
+\]
+The cut-domain theorem is also imported: cut time is measurable, and \(\exp_p\) maps \(0<t<\tau_p(v)\) diffeomorphically onto the complement of \(p\) and its cut locus. The omitted set has volume zero, and no conjugate point occurs before cut.
+
+Here a conjugate point means a nontrivial Jacobi field vanishing at both endpoints. The cut theorem additionally gives smooth distance and a unique minimizing ray on this domain \cite[Section 5]{S-Eschenburg-1994}. We will derive the ball substitution from these inputs.
+
+The constant-curvature transverse factor and its positive interval are
+\[
+s_k(t)=\begin{cases}
+\sin(\sqrt{k}t)/\sqrt{k},&k>0,\\t,&k=0,\\
+\sinh(\sqrt{-k}t)/\sqrt{-k},&k<0,
+\end{cases}
+\qquad
+D_k=\begin{cases}\pi/\sqrt{k},&k>0,\\\infty,&k\le0.\end{cases}
+\]
+For \(0<t<D_k\), put \(c_k=s_k'/s_k\). Direct differentiation gives
+\[
+c_k'+c_k^2+k=0,\qquad c_k=t^{-1}+O(t),\qquad s_k=t+O(t^3).
+\]
+If \(\omega_{n-1}\) is the area of the Euclidean unit sphere, the model volume is
+\[
+V_k^n(r)=\omega_{n-1}\int_0^{\min(r,D_k)}s_k(t)^{n-1}\,dt.
+\]
+For positive curvature the integral stops at the antipode. We never divide by the model density at that endpoint.
+
+\section{Build the transverse deformation and its volume}
+\label{sec:jacobi}
+
+\subsection{Differentiate the radial map}
+Fix \(v\in S_pM\) and \(w\perp v\). Choose a curve \(v(s)\) in the unit sphere with \(v'(0)=w\), and consider
+\[
+F(s,t)=\exp_p(tv(s)),\qquad T=\partial_tF,\qquad J=\partial_sF\big|_{s=0}.
+\]
+Each longitudinal curve is a geodesic. Since the coordinate fields commute, torsion freeness gives \(\nabla_TJ=\nabla_JT\). The curvature definition then yields
+\[
+D_t^2J=\nabla_T\nabla_JT
+=\nabla_J\nabla_TT+R(T,J)T=-R(J,T)T.
+\]
+The initial point is fixed and the initial velocity varies with derivative \(w\), so \(J(0)=0\), \(D_tJ(0)=w\). Also \(\langle J,T\rangle''=0\); its value and first derivative at zero vanish, hence \(J\perp T\).
+
+Identify normal spaces by parallel transport. Uniqueness of this linear ODE gives
+\[
+J_w(t)=A(t)w,
+\qquad A''+\mathcal RA=0,\qquad A(0)=0,\quad A'(0)=I.
+\]
+For \(\Phi(t,v)=\exp_p(tv)\), direct differentiation now gives
+\[
+d\Phi(\partial_t)=T,\qquad d\Phi(w)=A(t)w,
+\qquad d(\exp_p)_{tv}(w)=t^{-1}A(t)w\quad(w\perp v).
+\]
+The last factor appears because differentiating \(tv(s)\) gives \(tw\). Keeping angular and tangent-space vectors distinct will matter again in the global exponential-map comparison.
+
+\subsection{The initial expansion and absence of zeros}
+At zero, the equation gives \(A''(0)=0\). Differentiating it once gives \(A'''(0)=-\mathcal R(0)\). Therefore
+\[
+A(t)=tI-\frac{t^3}{6}\mathcal R(0)+O(t^4),
+\qquad A'(t)=I-\frac{t^2}{2}\mathcal R(0)+O(t^3).
+\]
+In particular \(\det A/t^{n-1}\to1\) and \(A'A^{-1}=t^{-1}I+O(t)\). Smooth dependence on the initial direction and compactness of \(S_pM\) make these estimates uniform near zero.
+
+A kernel vector of \(A(t)\) produces a nontrivial Jacobi field vanishing at \(0,t\). Thus the imported absence of conjugate points before cut makes \(A\) invertible on \(0<t<\tau_p(v)\).
+
+\subsection{Derive the polar volume factor}
+Gauss lemma says that \(T\) is unit and orthogonal to angular variations. In an orthonormal angular basis for the standard sphere measure \(dv\), the pullback metric has Gram matrix
+\[
+\Phi^*g=\begin{pmatrix}1&0\\0&A^TA\end{pmatrix}.
+\]
+Applying the coordinate metric-volume rule, its density is
+\[
+\sqrt{\det(A^TA)}=|\det A|.
+\]
+The determinant starts positive by the Taylor expansion and cannot change sign without a zero. Hence, before cut,
+\[
+j(t,v)=\det A_v(t)>0,\qquad d\operatorname{Vol}_g=j(t,v)\,dt\,dv.
+\]
+Equivalently, Euclidean polar coordinates \(x=tv\) give \(|dx|=t^{n-1}dt\,dv\), so
+\[
+j(t,v)=t^{n-1}\sqrt{\det(g_{ij}(tv))}.
+\]
+This identifies the Jacobi determinant with geometric volume. It is still a local formula; counting every point of a ball exactly once will use the cut-domain theorem later.
+
+\subsection{Execute the model calculation}
+In constant curvature, \(\mathcal R=kI\). The initial-value problem gives \(A=s_kI\), so the same Gram calculation yields
+\[
+g=dt^2+s_k^2g_{S^{n-1}},\qquad
+j_k=s_k^{n-1},\qquad S_k=c_kI,\qquad \operatorname{tr}S_k=(n-1)c_k.
+\]
+These formulas hold for \(0<t<D_k\). They explain both the density used in \(V_k^n\) and the normalization that will remove the model's own expansion.
+
+\section{Relative expansion and the Ricci trace}
+\label{sec:trace}
+
+\subsection{Why the relative operator is symmetric}
+The derivative \(A'\) acts on an initial normal vector. For a current vector \(X=Aw\), first recover \(w=A^{-1}X\); its velocity is therefore \(A'A^{-1}X\). Define \(S=A'A^{-1}\).
+
+The Wronskian has derivative
+\[
+\begin{aligned}
+\bigl(A^TA'-(A')^TA\bigr)'
+&=A^TA''-(A'')^TA\\
+&=-A^T\mathcal RA+A^T\mathcal R^TA=0.
+\end{aligned}
+\]
+Its initial value is zero. Multiplying by \(A^{-T}\) on the left and \(A^{-1}\) on the right gives \(S-S^T=0\). Differentiating the inverse gives
+\[
+S'=A''A^{-1}-A'A^{-1}A'A^{-1}
+=-\mathcal R-S^2.
+\]
+Thus curvature governs relative, rather than absolute, transverse change.
+
+\subsection{Identify the distance Hessian}
+On the uncut domain, Gauss lemma gives \(\nabla r=T\). In a radial variation the coordinate fields commute, so
+\[
+\nabla_{J_w}\nabla r=\nabla_{J_w}T=\nabla_TJ_w=J_w'=SJ_w.
+\]
+Invertibility makes these fields span the current normal space. Hence
+\[
+\nabla^2r(X,Y)=\langle SX,Y\rangle\quad(X,Y\perp T),
+\qquad \nabla^2r(T,\cdot)=0,\qquad \Delta r=\operatorname{tr}S.
+\]
+The radial identity follows from \(\nabla_TT=0\). This separates the Hessian bilinear form from its associated endomorphism and specifies their common domain.
+
+\subsection{Use only the information Ricci controls}
+Let \(m=\operatorname{tr}S\). Tracing the Riccati equation gives
+\[
+m'+\operatorname{tr}(S^2)+\operatorname{Ric}(T,T)=0.
+\]
+If \(\sigma_1,\ldots,\sigma_{n-1}\) are the real eigenvalues of the symmetric operator \(S\), Cauchy--Schwarz gives
+\[
+\operatorname{tr}(S^2)=\sum_i\sigma_i^2
+\ge\frac{(\sum_i\sigma_i)^2}{n-1}=\frac{m^2}{n-1}.
+\]
+Under \(\operatorname{Ric}\ge(n-1)kg\), the normalized trace \(a=m/(n-1)\) therefore obeys
+\[
+a'+a^2+k\le0,\qquad a=t^{-1}+O(t).
+\]
+This is exactly where the Ricci lower bound is consumed. We have discarded directional information, so the result will not estimate each eigenvalue separately.
+
+\subsection{Resolve the singular initial comparison}
+Work on \(0<t<\min\{\tau_p(v),D_k\}\), where both quantities are defined. Put \(u=a-c_k\). Subtracting the model equation gives
+\[
+u'+(a+c_k)u\le0.
+\]
+Choose an interior \(t_*\), and set
+\[
+\mu(t)=\exp\left(\int_{t_*}^t(a(s)+c_k(s))\,ds\right)>0.
+\]
+Since \(a+c_k=2/t+O(t)\), the integral differs from \(2\log t\) by a finite limit. Thus \(\mu(t)/t^2\to C>0\). Also \(u=O(t)\), so \(\mu(t)u(t)\to0\).
+
+For \(0<\varepsilon<t\), integrate the ordinary differential inequality:
+\[
+(\mu u)'\le0,
+\qquad \mu(t)u(t)\le\mu(\varepsilon)u(\varepsilon)
+\longrightarrow0\quad(\varepsilon\downarrow0).
+\]
+Positivity of \(\mu\) gives \(a\le c_k\). The proof never substitutes an infinite initial value into a regular comparison theorem.
+
+\begin{samepage}
+\begin{theorem}[Laplacian comparison]
+\label{thm:laplacian}
+\input{../generated/statements/N-R-laplacian.tex}
+\end{theorem}
+\end{samepage}
+
+We have proved this statement from the preceding imports, because every regular point has its uncut minimizing ray and \(\Delta r=m\). No matrix-order theorem was needed.
+
+\subsection{Normalize the geometric density}
+Jacobi's determinant formula and cyclicity of trace give
+\[
+j'=j\operatorname{tr}(A^{-1}A')=jm,
+\qquad \left(\log\frac{j}{s_k^{n-1}}\right)'=m-(n-1)c_k\le0.
+\]
+The Taylor expansions imply
+\[
+\lambda(t,v)=\frac{j(t,v)}{s_k(t)^{n-1}}\longrightarrow1,
+\qquad 0<\lambda(t,v)\le1.
+\]
+Thus \(\lambda\) is nonincreasing on each uncut ray in the model-positive interval. We now know both what is monotone and why its denominator is geometrically natural.
+
+\section{From uncut rays to the volume of balls}
+\label{sec:integration}
+
+\subsection{Apply the global change of variables}
+On the cut domain, \(r(\exp_p(tv))=t\). Consequently the inverse image of the open ball is precisely the set of radial parameters satisfying
+\[
+0<t<r,\qquad t<\tau_p(v).
+\]
+The diffeomorphism and null complement in the imported cut theorem permit change of variables with the density already derived. We obtain
+\[
+\operatorname{Vol}B(p,r)=\int_{S_pM}\int_0^{\min\{r,\tau_p(v)\}}j(t,v)\,dt\,dv.
+\]
+This step counts each point once. Integrating the unrestricted exponential map would not have that property after cut, even if its differential remained nonsingular.
+
+\subsection{Truncate first, then average in direction}
+To use a common radial integration interval, define
+\[
+h(t,v)=\begin{cases}j(t,v),&0<t<\tau_p(v),\\0,&t\ge\tau_p(v).\end{cases}
+\]
+For \(0<t<D_k\), its normalized value \(h/s_k^{n-1}\) decreases before cut, can only jump downward there, and remains zero afterwards. Therefore
+\[
+q(t)=\frac1{\omega_{n-1}}\int_{S_pM}\frac{h(t,v)}{s_k(t)^{n-1}}\,dv
+\]
+is nonincreasing and belongs to \([0,1]\). Measurability comes from the smooth radial density and measurable cut time.
+
+Each direction has positive cut time, so its normalized truncated density tends to one at zero. The integrand is bounded by one and the sphere has finite measure. Dominated convergence therefore gives \(q(0+)=1\).
+
+\subsection{Prove the weighted-average step}
+We isolate the remaining one-variable argument. Suppose \(q\ge0\) is nonincreasing, \(w>0\) almost everywhere, and \(w,qw\) are integrable on each interval \((0,r)\). Set
+\[
+N(r)=\int_0^r q(t)w(t)\,dt,\qquad
+W(r)=\int_0^r w(t)\,dt>0,\qquad F(r)=N(r)/W(r).
+\]
+Because \(q(t)\ge q(r)\) for \(t<r\), integration gives \(N(r)\ge q(r)W(r)\), hence \(F(r)\ge q(r)\).
+
+On a compact \([a,b]\) with \(a>0\), both integrals are absolutely continuous and \(W(r)\ge W(a)>0\). Their quotient is absolutely continuous, and differentiation almost everywhere gives
+\[
+F'(r)=\frac{q(r)w(r)W(r)-N(r)w(r)}{W(r)^2}
+=\frac{w(r)}{W(r)}\bigl(q(r)-F(r)\bigr)\le0.
+\]
+The fundamental theorem for absolutely continuous functions now proves monotonicity for every pair of radii. A derivative sign almost everywhere, without this regularity, would not suffice.
+
+If \(q(0+)=1\), then for each \(\varepsilon>0\), all sufficiently small \(t>0\) satisfy \(|q(t)-1|<\varepsilon\). Positive weighted averaging preserves these bounds, so \(F(0+)=1\).
+
+For the geometric application, choose \(w=s_k^{n-1}\) and \(r<D_k\). Tonelli's theorem applies to the nonnegative density; the ball formula becomes
+\[
+\frac{\operatorname{Vol}B(p,r)}{V_k^n(r)}
+=\frac{\int_0^r q(t)s_k(t)^{n-1}\,dt}{\int_0^r s_k(t)^{n-1}\,dt}.
+\]
+All hypotheses hold: \(q\) is bounded and measurable, the model density is positive and integrable down to zero, and its integral is nonzero. This proves Theorem~\ref{thm:volume} for radii below \(D_k\).
+
+\subsection{What still remains at the positive endpoint}
+If \(k\le0\), then \(D_k=\infty\) and the proof covers every finite radius. If \(k>0\), we need a global diameter estimate before continuing past the zero of \(s_k\).
+
+The next section derives that estimate independently by endpoint test fields. It uses no ball-volume comparison, so its later use to close Theorem~\ref{thm:volume} is not circular.
+\section{Why does positive Ricci force a diameter bound?}
+\label{sec:myers}
+
+\begin{samepage}
+\begin{theorem}[Bonnet--Myers]
+\label{thm:myers}
+\input{../generated/statements/N-R-myers.tex}
+\end{theorem}
+\end{samepage}
+
+The input is fixed-end second variation: along a minimizing unit-speed segment \(\gamma:[0,L]\to M\), every normal field with \(V(0)=V(L)=0\) satisfies
+\[
+I(V,V)=\int_0^L\bigl(|D_tV|^2-\langle R(V,\dot\gamma)\dot\gamma,V\rangle\bigr)dt\ge0.
+\]
+This is an imported variational formula \cite[Section 7.1]{S-Bishop-2013v2}. Its test fields and the following integral are the operative proof.
+
+Choose a parallel orthonormal normal frame and put \(V_i=\sin(\pi t/L)E_i\). These fields meet both endpoint conditions. Summing the curvature terms produces Ricci, so
+\[
+\begin{aligned}
+\sum_{i=1}^{n-1}I(V_i,V_i)
+&\le(n-1)\int_0^L\left[\frac{\pi^2}{L^2}\cos^2\frac{\pi t}{L}
+-k\sin^2\frac{\pi t}{L}\right]dt\\
+&=\frac{(n-1)L}{2}\left(\frac{\pi^2}{L^2}-k\right).
+\end{aligned}
+\]
+For \(L>D_k\) the sum is negative, contradicting nonnegativity of every term. Hopf--Rinow supplies a minimizing segment between each pair and compactness of closed bounded subsets; hence the diameter bound makes \(M\) compact.
+
+The universal cover with the lifted metric is complete: project, extend and lift each geodesic. It has the same Ricci lower bound, so it too is compact. Its fiber is closed and discrete, hence finite, and identifies with \(\pi_1(M)\).
+
+These covering facts are imported topology. The open round hemisphere shows why completeness matters for compactness. A family of spheres of radius \(R\to\infty\) has positive Ricci but no uniform diameter bound without one common positive \(k\).
+
+
+\section{Close the volume theorem and test its boundaries}
+\label{sec:volume-endpoint}
+
+For \(k>0\), Theorem~\ref{thm:myers} gives \(\operatorname{diam}M\le D_k\). A minimizing ray to a point at distance \(D_k\) cannot minimize beyond it: that would violate the diameter bound.
+
+Thus the terminal distance sphere is contained in \(\operatorname{Cut}(p)\) and has zero volume. Continuity from below for open balls gives
+\[
+\lim_{r\uparrow D_k}\operatorname{Vol}B(p,r)
+=\operatorname{Vol}B(p,D_k)=\operatorname{Vol}M.
+\]
+The model integral also tends to its full-sphere volume, and both volumes remain constant for larger radii. The monotone quotient therefore extends to all positive radii. This completes Theorem~\ref{thm:volume} without dividing by \(s_k(D_k)=0\).
+
+\subsection{Use the result once}
+When \(\operatorname{Ric}\ge0\), the model volume is \(V_0^n(r)=\omega_{n-1}r^n/n\). For \(0<r<R\), comparison gives
+\[
+\operatorname{Vol}B(p,R)\le (R/r)^n\operatorname{Vol}B(p,r),
+\qquad \operatorname{Vol}B(p,2r)\le2^n\operatorname{Vol}B(p,r).
+\]
+Taking the small-radius limit also gives \(\operatorname{Vol}B(p,R)\le\omega_{n-1}R^n/n\). The upper estimate and relative growth estimate have different logical content from an absolute lower volume bound.
+
+On \(M_\varepsilon=S^1_\varepsilon\times\mathbb R^{n-1}\) with its flat metric,
+\[
+B_{M_\varepsilon}(p,r)\subset S^1_\varepsilon\times B_{\mathbb R^{n-1}}(0,r),
+\qquad \operatorname{Vol}B(p,r)\le2\pi\varepsilon\,b_{n-1}r^{n-1}\longrightarrow0.
+\]
+Here \(b_{n-1}\) is the volume of the Euclidean unit \((n-1)\)-ball. Every manifold is complete with \(\operatorname{Ric}=0\); no positive unit-ball lower bound follows from the fixed Ricci hypothesis.
+
+\subsection{Locate the first failed operation}
+With a Ricci upper bound, write \(Q=\operatorname{tr}(S^2)-m^2/(n-1)\ge0\). The exact equation is
+\[
+m'=-\frac{m^2}{n-1}-Q-\operatorname{Ric}(T,T).
+\]
+The uncontrolled negative term \(-Q\) prevents reversal of the scalar estimate. This is a failure of the inference, not a claim that all statements under upper Ricci bounds are false.
+
+Omitting cut truncation fails later: it loses one-to-one counting. On the flat cylinder, angular lifts differing by a circumference have the same image. Jacobi fields never vanish, but integrating all such lifts would count points repeatedly.
+
+A lower density estimate also cannot survive a downward jump to zero. This explains the injectivity-radius restriction in lower-volume comparison under sectional upper bounds. The obstruction is already visible in the thin flat cylinders above.
+
+\section{Directional information: Rauch and Hessian comparison}
+\label{sec:directional}
+
+The trace argument sufficed for volume. To estimate individual normal directions we need the stronger hypothesis \(\mathcal R\ge kI\) or \(\mathcal R\le kI\), which means a bound on every radial sectional curvature.
+
+\begin{samepage}
+\begin{theorem}[Rauch]
+\label{thm:rauch}
+\input{../generated/statements/N-R-rauch.tex}
+\end{theorem}
+\end{samepage}
+
+The new input is singular matrix Riccati comparison \cite[Remark 3.2]{S-Eschenburg-1994}: smooth symmetric curvature operators \(\mathcal R_1\ge\mathcal R_2\) give \(S_1\le S_2\) for their radial solutions \(S_i=t^{-1}I+O(t)\), while both exist.
+
+To explain its relation to ordinary matrix order, on a regular interval put \(U=S_2-S_1\), \(X=-(S_1+S_2)/2\). Direct subtraction gives
+\[
+U'=XU+UX+(\mathcal R_1-\mathcal R_2).
+\]
+Choose the invertible fundamental matrix \(G'=XG\). Substitution \(U=GZG^T\) yields
+\[
+Z'=G^{-1}(\mathcal R_1-\mathcal R_2)G^{-T}\ge0.
+\]
+Congruence preserves positive semidefiniteness, so initial regular order propagates. Extending this argument to the singular initial point is precisely the imported part; we have not reproved it by a formal substitution at zero.
+
+Compare with \(c_kI\). Under the sectional lower bound, \(S\le c_kI\). For \(J=Aw\ne0\),
+\[
+\frac d{dt}\log\frac{|J|}{|w|s_k}
+=\frac{\langle SJ,J\rangle}{|J|^2}-c_k\le0,
+\qquad \frac{|J|}{|w|s_k}\longrightarrow1.
+\]
+Integration from \(\varepsilon\) and passage to zero gives the upper length estimate. Under the upper curvature bound the inequalities reverse. An earlier conjugate time \(t_0<D_k\) would then give
+\[
+0=|A(t_0)w|\ge s_k(t_0)|w|>0
+\quad\text{for some }w\ne0,
+\]
+which is impossible. This proves continuation in that branch; the other branch keeps its actual-conjugate restriction.
+
+The distinction is real. Fields with unit initial derivative in curvatures \(2\) and \(1\) have norms \(|\sin(\sqrt2t)|/\sqrt2\) and \(|\sin t|\). Near \(\pi\), after the former's first zero, the proposed lower-curvature ordering fails.
+
+The current-vector calculation from Section~\ref{sec:trace} turns the same matrix estimate into the following complete statement.
+
+\begin{samepage}
+\begin{theorem}[Hessian comparison]
+\label{thm:hessian}
+\input{../generated/statements/N-R-hessian.tex}
+\end{theorem}
+\end{samepage}
+
+Indeed, \(X^\perp=X-dr(X)T\) and the zero radial Hessian give
+\[
+\nabla^2r(X,X)=\langle SX^\perp,X^\perp\rangle
+\le c_k(r)\bigl(|X|^2-dr(X)^2\bigr).
+\]
+Replacing the lower sectional bound reverses the estimate on the same regular domain. For a family of admissible initial directions \(v(u)\), Rauch also gives
+\[
+\left|\frac d{du}\exp_p(tv(u))\right|\le s_k(t)|v'(u)|.
+\]
+Integrating gives a curve-length estimate; all rays must remain before their first conjugate point. This estimate is the input to the local triangle map below, not yet a global triangle theorem.
+
+The smooth-distance restriction is independent of conjugacy. On a cylinder of radius \(a\),
+\[
+r([\theta],z)=\min_{m\in\mathbb Z}\sqrt{(\theta+2\pi am)^2+z^2}.
+\]
+At \((\pi a,0)\), opposite one-sided angular derivatives prevent smoothness. Yet the Jacobi fields are \(tE\), so no conjugate point occurs. A classical Hessian statement cannot cross this cut point.
+\section{When are global exponential coordinates possible?}
+\label{sec:hadamard}
+
+\begin{samepage}
+\begin{theorem}[Cartan--Hadamard]
+\label{thm:hadamard}
+\input{../generated/statements/N-R-hadamard.tex}
+\end{theorem}
+\end{samepage}
+
+For a normal Jacobi field with \(J(0)=0\), metric compatibility and the Jacobi equation give
+\[
+\frac12(|J|^2)''=|J'|^2-\langle R(J,\dot\gamma)\dot\gamma,J\rangle\ge0.
+\]
+The sectional sign is used here. If \(J'(0)\ne0\), a second zero would force this nonnegative convex function to vanish between its zeros, contradicting \(J(t)=tJ'(0)+O(t^3)\).
+
+Thus the angular tensor has no kernel. For \(w\perp v\), Gauss lemma also retains the radial direction:
+\[
+|d(\exp_p)_{tv}(av+w)|^2=a^2+t^{-2}|A(t)w|^2.
+\]
+The differential is invertible, including at zero. Completeness makes \(\exp_p\) defined on the whole tangent space, where \(h=\exp_p^*g\) is now a positive-definite metric.
+
+Every \(h\)-geodesic from zero is a radial line: its image is the geodesic with the same initial velocity, and local-isometry preservation and ODE uniqueness identify the lift. All these lines are entire, so the one-point Hopf--Rinow criterion makes \((T_pM,h)\) complete.
+
+For clarity, the complete-local-isometry covering input has the following mechanism. Over a small normal ball about \(y\), every \(x\in\exp_p^{-1}(y)\) supplies the inverse section
+\[
+z\longmapsto\exp_x^h\left((d\exp_p|_x)^{-1}(\exp_y^g)^{-1}(z)\right).
+\]
+Completeness defines the lifted radial segments. Reversing them and using geodesic uniqueness proves that these sections have disjoint images and exhaust the preimage of the ball. Thus they are full covering sheets.
+
+A connected cover over a simply connected base has one sheet. Applying the result at every base point gives unique minimizing geodesics. On the flat cylinder the covering has many sheets, locating exactly where the extra topological hypothesis is needed.
+
+\Needspace{24\baselineskip}
+\section{How does local comparison become a triangle theorem?}
+\label{sec:toponogov}
+
+An SSS comparison fixes three side lengths. A same-angle, or SAS, hinge fixes two lengths and their included angle. These different fixed data explain the apparently opposite inequalities in the following theorem \cite{S-Lang-2026,S-Toponogov-1959}.
+
+\begin{samepage}
+\begin{theorem}[Toponogov]
+\label{thm:toponogov}
+\input{../generated/statements/N-R-toponogov.tex}
+\end{theorem}
+\end{samepage}
+
+\subsection*{The local map and its permitted curve}
+Choose a common normal radius \(R<D_k\) and a linear tangent-space isometry \(I\) from the \(n\)-dimensional model to \(M\). The map
+\[
+F=\exp_p\circ I\circ(\exp_o^k)^{-1}:B_k(o,R)\longrightarrow B_M(p,R)
+\]
+preserves radial speed and contracts angular Jacobi fields by Rauch. Gauss lemma therefore gives \(|dF(U)|\le|U|\), including mixed radial and angular vectors.
+
+Take endpoints with radial lengths \(a,b<R/2\), and a minimizing model chord of length \(L\le a+b\). At arclength \(s\) along that chord,
+\[
+d_k(o,\bar\sigma(s))\le\min(a+s,b+L-s)
+\le\frac{a+b+L}{2}\le a+b<R.
+\]
+The chord remains inside the map's domain. Integrating speed proves the local SAS distance inequality; the strictly increasing model opposite-side function of the included angle gives local SSS angle comparison.
+
+\subsection*{The global input and the shrinking contradiction}
+We import Lang's Proposition 5.14. Its hypotheses are balanced segments and existence of minimizing segments for pairs at distance below \(D_k\).
+
+Balanced means that angles to the two opposite directions on a segment sum to \(\pi\). This holds for smooth tangent angles; Hopf--Rinow supplies the required segments.
+
+For a hinge \(H_p(x,y)\) with nonzero sides and perimeter \(P<2D_k\), if every hinge of perimeter below \(4P/5\), with a radial-side endpoint in \(px\cup\{y\}\), has SSS angle comparison, then \(H_p(x,y)\) does too.
+
+Auxiliary degenerate triples use their continuous comparison angles. The principal theorem keeps strict triangle inequalities. This gluing statement is a technical input, not a consequence of the local map alone.
+
+If comparison failed, the contrapositive would produce violating hinges with
+\[
+P_j<(4/5)^jP_0,\qquad
+d(p_j,p_{j-1})\le P_j+P_{j-1}
+<\tfrac95(4/5)^{j-1}P_0.
+\]
+The shared endpoint gives the second estimate. Summing yields \(d(p_m,p_n)\le9P_0(4/5)^n\), so completeness supplies a limit \(q\); the endpoints approach it as well.
+
+Local comparison must hold uniformly at the moving vertices. The inverse function theorem applied to \((p,\xi)\mapsto(p,\exp_p\xi)\), followed by Gauss lemma, supplies one normal radius for all \(p\) near \(q\). The small violating hinges eventually lie there, a contradiction.
+
+\subsection*{Why the chord conclusion needs more than one angle}
+We also import Lang's Lemma 5.9: angle comparison for all auxiliary hinges connecting points of \(px\cup py\) implies SSS chord comparison.
+
+This technical conversion still requires a perimeter check before the global angle result can be applied to its auxiliary hinges.
+
+Let \(u_1,u_2\in px\) have distances \(r_1\le r_2\) from \(p\), and \(v\in py\) have distance \(s\). With \(a=d(p,x)\), \(b=d(p,y)\), \(c=d(x,y)\),
+\[
+P(u_1,u_2,v)\le(r_2-r_1)+(r_1+s)+(a-r_2+c+b-s)=a+b+c.
+\]
+Every triple has two points on one side, so the global angle theorem covers all required auxiliary hinges. Completeness and balanced sides supply the other inputs. This proves the claimed chord comparison with its exact strict perimeter boundary.
+
+For \(k=0\), the SAS conclusion reads \(d(x,y)^2\le a^2+b^2-2ab\cos\theta\). It cannot simply be reversed under \(\sec\le0\): on \(\mathbb R^2/\mathbb Z^2\), lifts \((0.4,0.1)\), \((-0.4,0.1)\) give model distance \(0.8\) but torus distance \(0.2\).
+
+The Ricci-to-volume route supplies the full representative derivation. The directional and triangle routes retain the stated matrix and gluing inputs.
+
+The seven comparisons consume different global facts. General rigidity, the spherical perimeter endpoint, weighted curvature and synthetic extensions require additional statements and are outside this account.
+
+\bibliographystyle{amsplain}
+\bibliography{../generated/references}
+\end{document}

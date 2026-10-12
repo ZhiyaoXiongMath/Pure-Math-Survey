@@ -1,0 +1,384 @@
+{
+  "format": "r3-local-examples-artifact-inventory-1",
+  "project_path": "examples/r3/projects/local-examples",
+  "snapshot_id": "KB-c2ed8ff3a21ead694a517e29232103f956cc4f433ba75e22183482569542973b",
+  "snapshot_status": "VERIFIED",
+  "snapshot_manifest": {
+    "path": "snapshots/KB-c2ed8ff3a21ead694a517e29232103f956cc4f433ba75e22183482569542973b/manifest.json",
+    "sha256": "8eba5abd4a2cc76a500a8be88c8c7af42fb60d2a99fd4821cbbeb9264538e3a5"
+  },
+  "outputs": [
+    {
+      "output_id": "schur-minimal-r3",
+      "profile": "minimal",
+      "view": "integrated",
+      "editorial_policy": "four-modes-2026-10-12-r3",
+      "snapshot_id": "KB-c2ed8ff3a21ead694a517e29232103f956cc4f433ba75e22183482569542973b",
+      "draft": false,
+      "build_status": "BUILT",
+      "pages": 2,
+      "actual_all_pages_inspected": true,
+      "reviewer_mode": "author_reread",
+      "release_status": "RELEASABLE",
+      "release_error_codes": [],
+      "release_warning_codes": [
+        "SOURCE_RAW_BYTES_NOT_RETAINED",
+        "NO_INDEPENDENT_REVIEW"
+      ],
+      "package_status": "NOT_ATTEMPTED_CONTROLLER_DISTRIBUTION_SEPARATE",
+      "history_status": "VERIFIED",
+      "files": [
+        {
+          "path": "outputs/schur-minimal-r3/plan.json",
+          "bytes": 2526,
+          "sha256": "29c5920a3a70eae7a44b964b5f6b30b3813d2e0d875b05174dc79f20d6a8e05c"
+        },
+        {
+          "path": "outputs/schur-minimal-r3/outline.md",
+          "bytes": 776,
+          "sha256": "99482ad7c76827d3a636d801974da3249c2cc39a1ee18eb73f66148e661a4fb4"
+        },
+        {
+          "path": "outputs/schur-minimal-r3/manuscript/main.tex",
+          "bytes": 3144,
+          "sha256": "f58dbc698ad2a2925910fb1abc1b785c55703a2c7e3c3a6a30ba9e68fe3623bc"
+        },
+        {
+          "path": "outputs/schur-minimal-r3/manuscript/math-review.sty",
+          "bytes": 2939,
+          "sha256": "74de131250e3c6cf3561c43e79491d3a6e59bba28bc5f55c2495939e91ae9a3e"
+        },
+        {
+          "path": "outputs/schur-minimal-r3/manuscript/localrefs.bst",
+          "bytes": 22669,
+          "sha256": "e569197b21d5885aab6d54fd30955e93ac11bbfa4aed65697a5d2ea92db0a047"
+        },
+        {
+          "path": "outputs/schur-minimal-r3/build/main.pdf",
+          "bytes": 659681,
+          "sha256": "d3322348184ae0958d73db0ce1f006a3de518dde444d2a5724782e3b5bff1823"
+        },
+        {
+          "path": "outputs/schur-minimal-r3/build/build-report.json",
+          "bytes": 31453,
+          "sha256": "3fb59a3d4040509590fabe7bf03b809c236697e406617ea3d6c2d25aa1d61af7"
+        },
+        {
+          "path": "outputs/schur-minimal-r3/evidence/render-manifest.json",
+          "bytes": 876,
+          "sha256": "a826c735532578933e5f85adb4f0d3394791a9daefd3eff1cfebddccb946ce40"
+        },
+        {
+          "path": "outputs/schur-minimal-r3/evidence/author-semantic-r1.json",
+          "bytes": 19017,
+          "sha256": "7267d5034b93b459e63fb1a20a96ddf3c0faa40542a08bd098a0c7e948fc9ada"
+        },
+        {
+          "path": "outputs/schur-minimal-r3/evidence/author-visual-r1.json",
+          "bytes": 3501,
+          "sha256": "ec8a36304e747d58439f7f448abda905e550b35cdc2e9849cafc46cfa9539596"
+        },
+        {
+          "path": "outputs/schur-minimal-r3/evidence/release-assessment-r1.json",
+          "bytes": 1149,
+          "sha256": "48868aa9a36ddb7ab1267b066b7b48dae462109988bdeed68a2c254c1b963ba4"
+        },
+        {
+          "path": "outputs/schur-minimal-r3/evidence/pages/page-1.png",
+          "bytes": 182925,
+          "sha256": "1fc24b75f740699bee5d3309f064d08726533d136d540d7a60f9b51ece83fead"
+        },
+        {
+          "path": "outputs/schur-minimal-r3/evidence/pages/page-2.png",
+          "bytes": 168154,
+          "sha256": "e93271fecc4cccc639daa2483d9b1a75207730a4f33ee1ba3719e2b644683076"
+        }
+      ]
+    },
+    {
+      "output_id": "holder-lecture-r3",
+      "profile": "lecture",
+      "view": "methods",
+      "editorial_policy": "four-modes-2026-10-12-r3",
+      "snapshot_id": "KB-c2ed8ff3a21ead694a517e29232103f956cc4f433ba75e22183482569542973b",
+      "draft": false,
+      "build_status": "BUILT",
+      "pages": 4,
+      "actual_all_pages_inspected": true,
+      "reviewer_mode": "author_reread",
+      "release_status": "RELEASABLE",
+      "release_error_codes": [],
+      "release_warning_codes": [
+        "SOURCE_RAW_HASH_UNAVAILABLE",
+        "NO_INDEPENDENT_REVIEW"
+      ],
+      "package_status": "NOT_ATTEMPTED_CONTROLLER_DISTRIBUTION_SEPARATE",
+      "history_status": "VERIFIED",
+      "files": [
+        {
+          "path": "outputs/holder-lecture-r3/plan.json",
+          "bytes": 3516,
+          "sha256": "2cbf4b25583d47230b66f5a1cfe6507c38df56404a9286be02743786eeaa6968"
+        },
+        {
+          "path": "outputs/holder-lecture-r3/outline.md",
+          "bytes": 1019,
+          "sha256": "433f266a00e35775d5168034bf428f0f695f7c842a4974d9d034e3358c7fe0f6"
+        },
+        {
+          "path": "outputs/holder-lecture-r3/manuscript/main.tex",
+          "bytes": 7915,
+          "sha256": "6ca5271176e431b715103257a159bc9a85c2c974fbbb440a86171ae0319579b9"
+        },
+        {
+          "path": "outputs/holder-lecture-r3/manuscript/math-review.sty",
+          "bytes": 2939,
+          "sha256": "74de131250e3c6cf3561c43e79491d3a6e59bba28bc5f55c2495939e91ae9a3e"
+        },
+        {
+          "path": "outputs/holder-lecture-r3/manuscript/localrefs.bst",
+          "bytes": 22669,
+          "sha256": "e569197b21d5885aab6d54fd30955e93ac11bbfa4aed65697a5d2ea92db0a047"
+        },
+        {
+          "path": "outputs/holder-lecture-r3/build/main.pdf",
+          "bytes": 687024,
+          "sha256": "1e406a913db9b2dd0bcc0dd9c35239da8827dd45d1b9421c8d600194c5243752"
+        },
+        {
+          "path": "outputs/holder-lecture-r3/build/build-report.json",
+          "bytes": 32040,
+          "sha256": "96ecc8dc08ee3e14f58c510c9443fbe3f3dd189c24141cdcce7f3571d01f01ff"
+        },
+        {
+          "path": "outputs/holder-lecture-r3/evidence/render-manifest.json",
+          "bytes": 1188,
+          "sha256": "bc31bc3d238e884b95e056a19607286dcdf7203931608bf36daac080d241c9ec"
+        },
+        {
+          "path": "outputs/holder-lecture-r3/evidence/author-semantic-r1.json",
+          "bytes": 25024,
+          "sha256": "eeedce6fc7c5fc6c886d45434403405571cd0009064e842707cc6123ab782fec"
+        },
+        {
+          "path": "outputs/holder-lecture-r3/evidence/author-visual-r1.json",
+          "bytes": 4880,
+          "sha256": "2d861be50d90178ef9355cdb6afedf7f9898bc3f8a09cec76c306b1051d98adc"
+        },
+        {
+          "path": "outputs/holder-lecture-r3/evidence/release-assessment-r1.json",
+          "bytes": 1100,
+          "sha256": "d70c46b4a7f71607c9d561d91e63a52f64659a02a03f753590b6f151f391babc"
+        },
+        {
+          "path": "outputs/holder-lecture-r3/evidence/pages/page-1.png",
+          "bytes": 242202,
+          "sha256": "aeabbec37fbd8f9fed4c00d9534dd1f7b2c9a111af77d644c38be22cb4d85ccf"
+        },
+        {
+          "path": "outputs/holder-lecture-r3/evidence/pages/page-2.png",
+          "bytes": 252565,
+          "sha256": "fac8671c81bf5b4cbf13510b28aefc707a7e3e5927a16d7fafddc20446cfa743"
+        },
+        {
+          "path": "outputs/holder-lecture-r3/evidence/pages/page-3.png",
+          "bytes": 234301,
+          "sha256": "066c159a776a5e99ff8553b50b49c569e94ed57b077336bbbebf99743f41417b"
+        },
+        {
+          "path": "outputs/holder-lecture-r3/evidence/pages/page-4.png",
+          "bytes": 144602,
+          "sha256": "f5c76d31bec6b6cbc99a4fc5f204b73b15c60eb70f7b8459c828792683f80bbe"
+        }
+      ]
+    },
+    {
+      "output_id": "lichnerowicz-minimal-r3",
+      "profile": "minimal",
+      "view": "integrated",
+      "editorial_policy": "four-modes-2026-10-12-r3",
+      "snapshot_id": "KB-c2ed8ff3a21ead694a517e29232103f956cc4f433ba75e22183482569542973b",
+      "draft": false,
+      "build_status": "BUILT",
+      "pages": 2,
+      "actual_all_pages_inspected": true,
+      "reviewer_mode": "author_reread",
+      "release_status": "RELEASABLE",
+      "release_error_codes": [],
+      "release_warning_codes": [
+        "SOURCE_RAW_BYTES_NOT_RETAINED",
+        "NO_INDEPENDENT_REVIEW"
+      ],
+      "package_status": "NOT_ATTEMPTED_CONTROLLER_DISTRIBUTION_SEPARATE",
+      "history_status": "VERIFIED_WITH_EXTENDED_WINDOWS_PATH",
+      "files": [
+        {
+          "path": "outputs/lichnerowicz-minimal-r3/plan.json",
+          "bytes": 3243,
+          "sha256": "a279fee67a51f3ab99c2922da750cfddf3ada435371ece0eec21082e6127b360"
+        },
+        {
+          "path": "outputs/lichnerowicz-minimal-r3/outline.md",
+          "bytes": 797,
+          "sha256": "20c892d485080cac62792c772ee90aa5ba8b075fa176732ce350213c533998a5"
+        },
+        {
+          "path": "outputs/lichnerowicz-minimal-r3/manuscript/main.tex",
+          "bytes": 3803,
+          "sha256": "754d3c4ae590b5c18fb9c2cbad786c806a07c600de58fec8fdf8be5b3c992ecc"
+        },
+        {
+          "path": "outputs/lichnerowicz-minimal-r3/manuscript/math-review.sty",
+          "bytes": 2939,
+          "sha256": "74de131250e3c6cf3561c43e79491d3a6e59bba28bc5f55c2495939e91ae9a3e"
+        },
+        {
+          "path": "outputs/lichnerowicz-minimal-r3/manuscript/localrefs.bst",
+          "bytes": 22669,
+          "sha256": "e569197b21d5885aab6d54fd30955e93ac11bbfa4aed65697a5d2ea92db0a047"
+        },
+        {
+          "path": "outputs/lichnerowicz-minimal-r3/build/main.pdf",
+          "bytes": 662755,
+          "sha256": "c2fe745b5165aad0a7b3bcb8d90608148110035d2b5d6f7a0d80740988c28ee0"
+        },
+        {
+          "path": "outputs/lichnerowicz-minimal-r3/build/build-report.json",
+          "bytes": 31334,
+          "sha256": "b14a80c0f355ab70324d200b107b82d8df24c60c18f10f6e9862eaa2a150525c"
+        },
+        {
+          "path": "outputs/lichnerowicz-minimal-r3/evidence/render-manifest.json",
+          "bytes": 876,
+          "sha256": "5dabc81c2f3e8c3c1266b8dbd248e3844119f64f0c43f5db758e541f4d50d893"
+        },
+        {
+          "path": "outputs/lichnerowicz-minimal-r3/evidence/author-semantic-r1.json",
+          "bytes": 20365,
+          "sha256": "7c2f809cbb70b233ed80d56862e59d15b83b09d81c68d8e41f8ce480ce5b9afb"
+        },
+        {
+          "path": "outputs/lichnerowicz-minimal-r3/evidence/author-visual-r1.json",
+          "bytes": 3570,
+          "sha256": "8fe6a6d431a939d3c937957ecdbfd046149320948842163910c7d18a7b48096f"
+        },
+        {
+          "path": "outputs/lichnerowicz-minimal-r3/evidence/release-assessment-r1.json",
+          "bytes": 1171,
+          "sha256": "02b840748041d6010c8644ca3ff7ea28eeb9f25aa83081425c8649f607975d2b"
+        },
+        {
+          "path": "outputs/lichnerowicz-minimal-r3/evidence/pages/page-1.png",
+          "bytes": 259922,
+          "sha256": "8a4b1258be7d591f75a981a346109450a67a255470f500b93cd91da524443fa1"
+        },
+        {
+          "path": "outputs/lichnerowicz-minimal-r3/evidence/pages/page-2.png",
+          "bytes": 180395,
+          "sha256": "3931bb00529feaadeadabe2a3f8a97c014fdfa91ad1eefc34db7357f9a292ab9"
+        }
+      ]
+    },
+    {
+      "output_id": "paper-r3-draft",
+      "profile": "paper",
+      "view": "integrated",
+      "editorial_policy": "four-modes-2026-10-12-r3",
+      "snapshot_id": "KB-c2ed8ff3a21ead694a517e29232103f956cc4f433ba75e22183482569542973b",
+      "draft": true,
+      "build_status": "BUILT",
+      "pages": 2,
+      "actual_all_pages_inspected": true,
+      "reviewer_mode": "author_reread",
+      "release_status": "NEEDS_WORK",
+      "release_error_codes": [
+        "PAPER_ORIGINAL_CONTRIBUTION_MISSING",
+        "PAPER_PROOF_GAP",
+        "DRAFT_NOT_RELEASABLE"
+      ],
+      "release_warning_codes": [
+        "SOURCE_RAW_BYTES_NOT_RETAINED",
+        "NO_INDEPENDENT_REVIEW"
+      ],
+      "package_status": "DENIED_DRAFT_NOT_RELEASABLE_NO_ARCHIVE",
+      "history_status": "VERIFIED",
+      "files": [
+        {
+          "path": "outputs/paper-r3-draft/plan.json",
+          "bytes": 3410,
+          "sha256": "d4b20d7d1185d6e3c1b0bbec9177fe89515d087af38bfa7b012d1bdd8b9cc57b"
+        },
+        {
+          "path": "outputs/paper-r3-draft/outline.md",
+          "bytes": 793,
+          "sha256": "e9ec2c8a2034d4a53c240bc327a57ccdeb788e386c496b74f36b245a018ac8ed"
+        },
+        {
+          "path": "outputs/paper-r3-draft/manuscript/main.tex",
+          "bytes": 3773,
+          "sha256": "6ce7a8cb2c90ea9d14f5738078a811788b48f01928f1d84db8b2b2a913b5a092"
+        },
+        {
+          "path": "outputs/paper-r3-draft/manuscript/math-review.sty",
+          "bytes": 2939,
+          "sha256": "74de131250e3c6cf3561c43e79491d3a6e59bba28bc5f55c2495939e91ae9a3e"
+        },
+        {
+          "path": "outputs/paper-r3-draft/manuscript/localrefs.bst",
+          "bytes": 22669,
+          "sha256": "e569197b21d5885aab6d54fd30955e93ac11bbfa4aed65697a5d2ea92db0a047"
+        },
+        {
+          "path": "outputs/paper-r3-draft/build/main.pdf",
+          "bytes": 656555,
+          "sha256": "8c2c873371f0a97bb50186e70ff7de24777ff7ec3f59316f6a0999546209f381"
+        },
+        {
+          "path": "outputs/paper-r3-draft/build/build-report.json",
+          "bytes": 31122,
+          "sha256": "76644133e027600045a18882f6999126c41db6f19d8c3c749f96edfa354c19ac"
+        },
+        {
+          "path": "outputs/paper-r3-draft/evidence/render-manifest.json",
+          "bytes": 876,
+          "sha256": "4d0d162890d54fe771f95f932d66381530c710e6d7b345859b1eb8e32d62352b"
+        },
+        {
+          "path": "outputs/paper-r3-draft/evidence/author-semantic-r1.json",
+          "bytes": 20384,
+          "sha256": "8e650d2c27c0cdaaa29051c61de76227bf8a4ca68fb49c666f50312acc9e6b49"
+        },
+        {
+          "path": "outputs/paper-r3-draft/evidence/author-visual-r1.json",
+          "bytes": 3530,
+          "sha256": "6e1dce9eb1fd84a1ee5566fedd34b7cbf716830f857afaa966dc5b300f80028d"
+        },
+        {
+          "path": "outputs/paper-r3-draft/evidence/release-assessment-r1.json",
+          "bytes": 1778,
+          "sha256": "f8caa8473672c4dc94476774e832610526dd46733c5c9314f6f99c7386234f6c"
+        },
+        {
+          "path": "outputs/paper-r3-draft/evidence/pages/page-1.png",
+          "bytes": 205577,
+          "sha256": "87ff9ef3fc71f10b5185bfdf4dd757702d57b5f5b3634216bc75c5ef829f1d7c"
+        },
+        {
+          "path": "outputs/paper-r3-draft/evidence/pages/page-2.png",
+          "bytes": 200392,
+          "sha256": "9b21f7c4eaf2e70bc7216956f25b9e16db5077ff46c7852df426719ca37c3b79"
+        },
+        {
+          "path": "outputs/paper-r3-draft/evidence/package-denial-r1.json",
+          "bytes": 417,
+          "sha256": "34ad649427eb7b74ead3b1bf2eaa198c6bb8ab9476fd6bf13b6bc6d13fe75927"
+        }
+      ]
+    }
+  ],
+  "current_math_scope": "Three classical local mathematical units plus an explicitly unverified research-paper demonstration; no original theorem claimed.",
+  "nonauthor_article_gate": "Controller review is separate; author evidence does not impersonate independent review.",
+  "source_boundary": "No original source PDFs are stored in this project. Boyd/Datar raw hashes identify privately read source bytes; Shapiro has an explicit online-reading/raw-hash limitation.",
+  "distribution_boundary": "The controller prepares a separate clean distribution. Original build and render evidence remains intact here, including machine-specific tool paths; it must not be silently sanitized or relabelled.",
+  "history_boundary": "All immutable histories verify. On long Windows paths the Lichnerowicz history command needs an extended-path project argument; the initial false HISTORY_TAMPERED result is retained privately."
+}

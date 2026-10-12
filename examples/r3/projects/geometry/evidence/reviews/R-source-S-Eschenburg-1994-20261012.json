@@ -1,0 +1,50 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "R-source-S-Eschenburg-1994-20261012",
+  "kind": "source",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-Eschenburg-1994.md",
+      "sha256": "9fb02b4fca1b61bce3f5d7f94bf154c8d3d44b694c4e964c420f2559b1d0f0c1"
+    },
+    {
+      "path": "knowledge/sources/S-Eschenburg-1994.json",
+      "sha256": "1f92d5dc453c3e34093844ee568224942dfba8f1e6158bd0d3177b5b12801df5"
+    }
+  ],
+  "scope": {
+    "source_ids": [
+      "S-Eschenburg-1994"
+    ],
+    "source_reading": {
+      "S-Eschenburg-1994": {
+        "mode": "original_text_online",
+        "version": "September 1994 lecture notes, Toronto-hosted 77-page PDF",
+        "locators": [
+          "Introduction and Section 1, pp. 1–4",
+          "Section 2, pp. 6–11",
+          "Section 3, Theorems 3.1/3.3, Remark 3.2, Rauch I, pp. 12–14",
+          "Sections 4–5, pp. 15–20",
+          "Section 6, pp. 21–25",
+          "Section 12, pp. 59–64"
+        ],
+        "raw_bytes_unavailable_reason": "Original PDF downloaded and hashed in a private, non-authoritative reading cache. No raw source is included in the authoritative knowledge corpus or frozen snapshot; source redistribution rights were not established. This is nonretention in the corpus, not failed access."
+      }
+    }
+  },
+  "findings": [
+    "Checked September 1994 lecture notes, Toronto-hosted 77-page PDF against the actual reading/access record. Category: author_written_exposition.",
+    "The recorded reading scope is Introduction and Section 1, pp. 1–4; Section 2, pp. 6–11; Section 3, Theorems 3.1/3.3, Remark 3.2, Rauch I, pp. 12–14; Sections 4–5, pp. 15–20; Section 6, pp. 21–25; Section 12, pp. 59–64.",
+    "The bound source-check note records controlling notation, support limits and any observed discrepancies; metadata-only originals are not accepted theorem support."
+  ],
+  "unchecked_items": [
+    {
+      "item": "No raw original source included in authoritative corpus or snapshot.",
+      "blocking": false,
+      "reason": "Actual original PDF hash is recorded; supporting sections were read from the linked author/journal text via private downloaded cache. This is a disclosed retention limit, not fabricated raw evidence."
+    }
+  ],
+  "disposition": "accepted"
+}

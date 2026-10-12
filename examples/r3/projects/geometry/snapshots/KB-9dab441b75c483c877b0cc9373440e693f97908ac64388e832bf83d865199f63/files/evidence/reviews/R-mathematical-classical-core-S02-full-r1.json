@@ -1,0 +1,392 @@
+{
+  "schema_version": "2.2.0",
+  "review_id": "R-mathematical-classical-core-S02-full-r1",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/S02-full-route-tasks-20261012.md",
+      "sha256": "f72b2f8148731333eb3a79aaecbf083bdb10d51435c51c2ce80cc8b216bfb82f"
+    },
+    {
+      "path": "evidence/S02-global-reader-tasks-20261012.md",
+      "sha256": "634fbf65f82046da6cf9768bc8034a05ff3a0358e705d838bde059b9eec76d25"
+    },
+    {
+      "path": "evidence/S02-representative-tasks-20261012.md",
+      "sha256": "a50a9e4e475e8333ed91040a8ca22e52d7886d9ab988504e0091577c7e8f60d7"
+    },
+    {
+      "path": "evidence/source-checks/S-Bishop-2013v2.md",
+      "sha256": "2c1ba30026e51f901800ddab4d2f99900806a2b3ec596ff909b2921564c1e045"
+    },
+    {
+      "path": "evidence/source-checks/S-Eschenburg-1994.md",
+      "sha256": "9fb02b4fca1b61bce3f5d7f94bf154c8d3d44b694c4e964c420f2559b1d0f0c1"
+    },
+    {
+      "path": "evidence/source-checks/S-Lang-2026.md",
+      "sha256": "d7125587caa888a2352110c7f227ca1d061a8123a626307a7a5b749134e002dd"
+    },
+    {
+      "path": "evidence/source-checks/S-Toponogov-1959.md",
+      "sha256": "793a21eb4ef690d0706a19d0f0ed286dcf6a37062f2fcad1900d9171fb0f0468"
+    },
+    {
+      "path": "evidence/source-checks/S02-global-route-20261012.md",
+      "sha256": "91f9775431e534f9da19b2b3756e4f71e2dcda019a1b5070b56f580ba68d8af8"
+    },
+    {
+      "path": "evidence/source-checks/S02-radial-route-20261012.md",
+      "sha256": "95b2278c8b15e815d33ccc1ac78ec60c24cd8d9f18ed817776889110b3220053"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "268c64561038d5effab8f49c86289e70a118bfb6e848389d3e00d426c32d4280"
+    },
+    {
+      "path": "knowledge/nodes/N-C-curvature-inputs.md",
+      "sha256": "371c68fa09b4517e9376576765f2f208cf0f9956f5876c3f7f995e8d0619cfef"
+    },
+    {
+      "path": "knowledge/nodes/N-D-curvature.md",
+      "sha256": "0bdb9cc28f2d22e0cba21b77aa3d32111ad917927786330a87d0aa437f04543f"
+    },
+    {
+      "path": "knowledge/nodes/N-D-distance.md",
+      "sha256": "eb63cd05f332fe10c5fc845218ac504daf075792984b9da6d6095fa8db7a45e3"
+    },
+    {
+      "path": "knowledge/nodes/N-D-index.md",
+      "sha256": "15c663c6a7f0ed4b36c21118c6d78d55c80abcee320e95f7faf38cbd0961ca09"
+    },
+    {
+      "path": "knowledge/nodes/N-D-jacobi.md",
+      "sha256": "f6c3fccbe45de5534301c98b4dfafe11e334a244687cd80189fd57d65d16ef9b"
+    },
+    {
+      "path": "knowledge/nodes/N-D-model.md",
+      "sha256": "0f6d2a3add30a086aee33dbfe609f40645d68c9692f439165678d0c7ba709e39"
+    },
+    {
+      "path": "knowledge/nodes/N-D-riemannian.md",
+      "sha256": "f154ce4ec0bcdf0167a33339bbeaddd9c4f98081c6e71e9a9873c2dfc456f894"
+    },
+    {
+      "path": "knowledge/nodes/N-D-triangle.md",
+      "sha256": "ad628fb026df53962c1996d1e54f95be4eafd28c86f75bbbd6f0a00626a119a5"
+    },
+    {
+      "path": "knowledge/nodes/N-E-collapse.md",
+      "sha256": "9244ae50f3169393daa84d292a06e8e5723bd5a74187a0d39a6e3cdec1175339"
+    },
+    {
+      "path": "knowledge/nodes/N-E-completeness.md",
+      "sha256": "d428753fd941edda521371d037a99c544be7e7e1fad9939552d396965773874d"
+    },
+    {
+      "path": "knowledge/nodes/N-E-cylinder.md",
+      "sha256": "95c6b56885407679ee183bae1cecf9b63d458fce16f937bc20482d76218516c4"
+    },
+    {
+      "path": "knowledge/nodes/N-E-global-reverse.md",
+      "sha256": "0dbe4d31c7d7f3a1585033ec3fec78498c4aedefdc719722a79e0618d91fcb54"
+    },
+    {
+      "path": "knowledge/nodes/N-E-models.md",
+      "sha256": "271ae0075e0ab7e02ec8b84b65c7e2943a56e0db545b8c36ec9a17d14e27e9d6"
+    },
+    {
+      "path": "knowledge/nodes/N-E-product.md",
+      "sha256": "42fe2f94a01e2306eac3d7025aeda5799ecb4a67e106d6241526d46be1cad484"
+    },
+    {
+      "path": "knowledge/nodes/N-E-rauch-cutoff.md",
+      "sha256": "913350e1ea82238319835358a76d08e045780326e2687a34d34d0011c07021ce"
+    },
+    {
+      "path": "knowledge/nodes/N-M-cut-integration.md",
+      "sha256": "868302ee7ff81de3a2caa765d0fac26fd405c172b5c0633631e331337d50c4ef"
+    },
+    {
+      "path": "knowledge/nodes/N-M-geometric-inputs.md",
+      "sha256": "6226286ba26809de98b276d43981466c4e833e652d97f71d84788e5c879f6ecb"
+    },
+    {
+      "path": "knowledge/nodes/N-M-hadamard.md",
+      "sha256": "ec1b6f18ffa533df5005cad9aede8cb43964c7f1feb85ec81ab887cf5a6ce16d"
+    },
+    {
+      "path": "knowledge/nodes/N-M-myers.md",
+      "sha256": "b0d6d76f79b87601568739f3202549171bd54093b060b9ac40a79d3877483249"
+    },
+    {
+      "path": "knowledge/nodes/N-M-riccati.md",
+      "sha256": "d4bcffdcdbadb799bdbc4b2ff941cdde236fa30c6aa8f5d8b4ce6cff7873ffaa"
+    },
+    {
+      "path": "knowledge/nodes/N-M-toponogov.md",
+      "sha256": "5870b0e304ac4066643c846344f032c51ffd04cdf179258654fdef01c503acab"
+    },
+    {
+      "path": "knowledge/nodes/N-M-trace.md",
+      "sha256": "944b4af3ddffcc6a4d83f7b933a65bd8a4b06112b1895c38f3cf2189c8e2b4d0"
+    },
+    {
+      "path": "knowledge/nodes/N-Q-classical-core.md",
+      "sha256": "32412c1dbb77543bee2f99e8ff83f6516bed1a43976dcacfd84add817560ebfb"
+    },
+    {
+      "path": "knowledge/nodes/N-R-bishop-gromov.md",
+      "sha256": "380ada1c1079647ce68ee39baf0e7ad828211f95750d80ad66dd774fdd3a495e"
+    },
+    {
+      "path": "knowledge/nodes/N-R-gunther.md",
+      "sha256": "9dc6db326d931759d7ec0a3d64ff0094b2bd900b190d5b597ea442ad621931cf"
+    },
+    {
+      "path": "knowledge/nodes/N-R-hadamard.md",
+      "sha256": "eea45b83def02c634e501fd67de7712b34c019133fdd5b0bf0f43bb343cc9778"
+    },
+    {
+      "path": "knowledge/nodes/N-R-hessian.md",
+      "sha256": "795ed2b944f2dc3ee0e1141b1b4b7ae5a9be46b37dc29c5a1da8ce2eeac6694f"
+    },
+    {
+      "path": "knowledge/nodes/N-R-laplacian.md",
+      "sha256": "76b6d0e57e173c449f1b8b54f447745e03037f2f303ef2f54f8e729a58986bac"
+    },
+    {
+      "path": "knowledge/nodes/N-R-myers.md",
+      "sha256": "306a0dfee7caab23a1676654d471b8d1bf10bec9aa3105ab3ffe5abf50ad1f97"
+    },
+    {
+      "path": "knowledge/nodes/N-R-rauch.md",
+      "sha256": "c8d52635de56220f7b1cb26706299bb31c3ba506e4ca99d8d234ac9f8010e8dd"
+    },
+    {
+      "path": "knowledge/nodes/N-R-toponogov.md",
+      "sha256": "d5eb3012c420b338d3f9c81c393beeed720ab7b47e3fc97886c032c738c853e2"
+    },
+    {
+      "path": "knowledge/sources/S-Bishop-2013v2.json",
+      "sha256": "91af1ad3ba11ca56e7a5d76750001865d97e910e9585833a6e050b99e49708ca"
+    },
+    {
+      "path": "knowledge/sources/S-Eschenburg-1994.json",
+      "sha256": "1f92d5dc453c3e34093844ee568224942dfba8f1e6158bd0d3177b5b12801df5"
+    },
+    {
+      "path": "knowledge/sources/S-Lang-2026.json",
+      "sha256": "692680e2507398c6f36959dc1c3b8d4e810ba0e63402855f4451cf547ed70362"
+    },
+    {
+      "path": "knowledge/sources/S-Toponogov-1959.json",
+      "sha256": "404fabe3bed83cc2042949fd76f1f66c4320e20cfb60508a0b561f4d5c815af2"
+    },
+    {
+      "path": "project.json",
+      "sha256": "87cb6a2485b7efddf37961eed6780208253c1ad4d14360462040c068379c799f"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "4c99507b0fb43f1f736dee236857bdd3e761f148576b8cf04d9ad48f26aa8a19"
+    }
+  ],
+  "scope": {
+    "editorial_policy": "four-modes-2026-10-12-r3",
+    "node_ids": [
+      "N-C-curvature-inputs",
+      "N-D-curvature",
+      "N-D-distance",
+      "N-D-index",
+      "N-D-jacobi",
+      "N-D-model",
+      "N-D-riemannian",
+      "N-D-triangle",
+      "N-E-collapse",
+      "N-E-completeness",
+      "N-E-cylinder",
+      "N-E-global-reverse",
+      "N-E-models",
+      "N-E-product",
+      "N-E-rauch-cutoff",
+      "N-M-cut-integration",
+      "N-M-geometric-inputs",
+      "N-M-hadamard",
+      "N-M-myers",
+      "N-M-riccati",
+      "N-M-toponogov",
+      "N-M-trace",
+      "N-Q-classical-core",
+      "N-R-bishop-gromov",
+      "N-R-gunther",
+      "N-R-hadamard",
+      "N-R-hessian",
+      "N-R-laplacian",
+      "N-R-myers",
+      "N-R-rauch",
+      "N-R-toponogov"
+    ],
+    "statement_reviews": {
+      "N-R-rauch": {
+        "canonical_sha256": "c49dca9c9ae2f43bb9744b1aa472a8d9927ea70df22c91ef74fc4acea582fc24",
+        "outcome": "accepted",
+        "objects": "Normal Jacobi field J along a specified unit-speed geodesic in a smooth n-manifold.",
+        "domain": "0<t<min(T,D_k); the lower-sectional branch additionally excludes actual conjugate points through T.",
+        "fixed_and_variable": "Fix the metric, geodesic, n, k and positive initial-derivative norm a; the time and field obey those data.",
+        "hypotheses": "Every radial two-plane has the stated sectional bound; no global completeness is needed for this fixed-geodesic statement.",
+        "equations": "J(0)=0 and |J'(0)|=a>0; the unit-normalized s solves s''+ks=0.",
+        "quantifiers": "The radial curvature bound covers the whole segment and the conclusion every indicated time, separately in its two cases.",
+        "conclusion": "Upper sectional curvature gives |J|>=a s; lower gives |J|<=a s on the actual-conjugate-restricted interval.",
+        "status": "Known constant-model specialization; the new text derives its operational use, not an original theorem.",
+        "local_definitions": "Normal Jacobi field is defined locally in N-D-jacobi; s and D_k are defined in this statement."
+      },
+      "N-R-hessian": {
+        "canonical_sha256": "59dbafb80fce2a9654aab19737889bb16b81694c70dc42a57e42c45a34c4a702",
+        "outcome": "accepted",
+        "objects": "The Hessian of r=d(p,.) on a connected complete smooth n-manifold.",
+        "domain": "x is neither p nor a cut point, and 0<r(x)<D_k.",
+        "fixed_and_variable": "Fix metric, p, k and x; quantify every tangent X at x.",
+        "hypotheses": "Only planes containing the tangent to the unique minimizing segment need the sectional bound; completeness and regularity are explicit.",
+        "equations": "Quadratic-form bound uses c_k(r)(|X|^2-dr(X)^2), retaining the zero radial component.",
+        "quantifiers": "All tangent vectors are covered and the sectional upper/lower cases are stated separately.",
+        "conclusion": "Lower sectional gives the upper Hessian form; upper sectional reverses it.",
+        "status": "Classical smooth-domain comparison; no extension through the cut locus is asserted.",
+        "local_definitions": "r, s and D_k are specified within the block; the Hessian operation is supplied by the preceding entry."
+      },
+      "N-R-laplacian": {
+        "canonical_sha256": "926f58f62a7d93074d39a15bb3c3f7869409e27c37c1aca49cc87705ce1813a0",
+        "outcome": "accepted",
+        "objects": "Scalar Laplacian of distance on a connected complete smooth n-manifold.",
+        "domain": "Every x outside p and Cut(p), with 0<r(x)<D_k.",
+        "fixed_and_variable": "Fix the metric and k; p and each regular x are arbitrary.",
+        "hypotheses": "Ric >= (n-1)k g globally; the claim does not require sectional lower curvature.",
+        "equations": "Delta=div grad and the bound is (n-1)s'/s with unnormalized Ricci.",
+        "quantifiers": "For every base point and every regular point in the displayed range.",
+        "conclusion": "A scalar upper bound; no full directional Hessian or Ricci-upper reversal follows.",
+        "status": "Known comparison; the singular scalar boundary argument is explicitly supplied.",
+        "local_definitions": "r, s, D_k and Laplacian sign are fixed in the block."
+      },
+      "N-R-bishop-gromov": {
+        "canonical_sha256": "1a346db817216e145b2a070777a06f0dfca9ec831e49ef6dce9a60eb3e5c3f27",
+        "outcome": "accepted",
+        "objects": "Volumes of concentric open metric balls and balls in the complete simply connected n-dimensional space form.",
+        "domain": "All finite radii 0<r<R; positive-curvature model volume is constant at and beyond D_k.",
+        "fixed_and_variable": "Fix the metric, n and k; choose any center p and then any ordered pair of radii.",
+        "hypotheses": "Connected complete smooth manifold and Ric >= (n-1)k g.",
+        "equations": "The ratio is nonincreasing, bounded above by 1 and tends to 1 at zero; the equivalent growth ratio is stated.",
+        "quantifiers": "Every center and every positive ordered pair are included.",
+        "conclusion": "Absolute upper comparison and relative growth control, without an absolute noncollapse claim.",
+        "status": "Known theorem; general ratio-equality classification remains outside this block.",
+        "local_definitions": "V_k^n and its spherical saturation are defined in the statement; no sine density is extended past its zero."
+      },
+      "N-R-myers": {
+        "canonical_sha256": "9d340d975998005d6152a71d10342863bb286c01403ed7dbdf3d06f8e6be6e6d",
+        "outcome": "accepted",
+        "objects": "Connected complete smooth n-manifold without boundary, n>=2.",
+        "domain": "The entire manifold and its fundamental group.",
+        "fixed_and_variable": "One constant k>0 must work before quantifying all points and tangent vectors.",
+        "hypotheses": "Uniform positive Ricci lower bound with unnormalized factor n-1.",
+        "equations": "diam(M)<=pi/sqrt(k).",
+        "quantifiers": "The curvature inequality explicitly quantifies every x and v.",
+        "conclusion": "Compactness, diameter bound and finite fundamental group.",
+        "status": "Classical theorem; the current proof uses a strict negative-index contradiction and a complete universal cover.",
+        "local_definitions": "Ricci is defined in the curvature node; the block has no undefined model-volume or endpoint conventions."
+      },
+      "N-R-hadamard": {
+        "canonical_sha256": "1c80d0b0ec5b422eb137ac31593c7ff1467ec5fbf3395a463c8a97d8e2f1a974",
+        "outcome": "accepted",
+        "objects": "Exponential map at every point of a connected complete smooth manifold with sec<=0.",
+        "domain": "The entire tangent vector space maps onto M; manifolds are without boundary under the shared scope.",
+        "fixed_and_variable": "Fix the metric; every p is permitted. Simple connectivity is a separate conditional hypothesis.",
+        "hypotheses": "Nonpositive sectional curvature and completeness, with simple connectivity only for the stronger conclusions.",
+        "equations": "exp_p:T_pM -> M is displayed; no local-domain restriction is left implicit.",
+        "quantifiers": "For every p, covering holds; under simple connectivity, every pair has a unique minimizing geodesic.",
+        "conclusion": "Covering first, global diffeomorphism and diffeomorphism with R^n in the simply connected case.",
+        "status": "Known theorem; no substitution of Ricci nonpositivity is asserted.",
+        "local_definitions": "The exponential map is introduced in the operational entry; covering and simple connectivity are distinguished in the mechanism."
+      },
+      "N-R-toponogov": {
+        "canonical_sha256": "1534db289b6a4bf9051913c1d47184b129f9f8d470d11760442c6e0c816619e1",
+        "outcome": "accepted",
+        "objects": "Chosen minimizing triangle and its constant-curvature model surface; matching internal side points.",
+        "domain": "Distinct vertices, strict triangle inequalities and original perimeter below 2D_k.",
+        "fixed_and_variable": "Fix k and chosen actual sides; SSS fixes three lengths while SAS separately fixes two lengths and included angle.",
+        "hypotheses": "Connected complete smooth n-manifold without boundary and global sec>=k.",
+        "equations": "SSS angles >= model, SAS opposite distance <= model, SSS matching chord distance >= model.",
+        "quantifiers": "Every chosen angle and all matching u,v on the specified sides are included.",
+        "conclusion": "Three compatible inequalities for distinct fixed-data experiments, with no injectivity-radius condition on the global triangle.",
+        "status": "Classical strict-domain formulation; degenerate and spherical endpoint extensions are not promoted.",
+        "local_definitions": "D_k, model surface, model hinge and radial matching are specified inside the block."
+      }
+    },
+    "evidence_basis": "Current canonical blocks read in isolation, then each current mechanism/body and its actual prerequisites read after integration. Local equations and failure examples recomputed as recorded in S02-full-route-tasks-20261012.md. Source texts read from identified original PDF bytes; role is author_reread.",
+    "proof_steps": {
+      "N-M-riccati": [
+        "Compute W'=0 and S'=-R-S^2; verify radial asymptotics.",
+        "Use the precisely imported singular matrix order; identify current-vector Hessian.",
+        "Integrate logarithmic Jacobi length and exclude earlier conjugacy under the upper curvature bound."
+      ],
+      "N-M-trace": [
+        "Take the trace and prove the eigenvalue square bound.",
+        "Apply the singular integrating factor and its zero boundary product.",
+        "Differentiate the actual density determinant and normalize by the model density."
+      ],
+      "N-M-cut-integration": [
+        "Use the uncut diffeomorphism to substitute the ball integral.",
+        "Zero-extend and angularly average with dominated convergence.",
+        "Prove the weighted quotient's absolute continuity and derivative sign.",
+        "Apply independent Myers and null terminal sphere for spherical saturation."
+      ],
+      "N-M-myers": [
+        "Construct endpoint-zero sine fields and compute the Ricci sum and negative integral.",
+        "Use complete minimization and bounded compactness, then apply the same argument to the universal cover."
+      ],
+      "N-M-hadamard": [
+        "Compute convexity and exclude a second normal Jacobi zero.",
+        "Include radial differential and build the positive pullback metric.",
+        "Verify all radial geodesics from zero extend and apply Hopf--Rinow.",
+        "Construct evenly covered balls and use simple connectivity for one sheet."
+      ],
+      "N-M-toponogov": [
+        "Define the local model-to-manifold map and control radial/angular speed.",
+        "Keep the model chord in the normal domain and convert length to angle.",
+        "Verify uniform nearby-center radius and exact gluing hypotheses.",
+        "Iterate 4/5 contraction, sum vertex displacement and contradict local angle comparison.",
+        "Check all connecting-hinge perimeters before invoking chord conversion."
+      ],
+      "N-D-index": [
+        "Realize endpoint-zero fields by fixed-end variations and use half-energy second variation.",
+        "Compute the endpoint Jacobi cross term and trial-field integral."
+      ]
+    }
+  },
+  "findings": [
+    "All seven exact canonical blocks retain their mathematical strength and domains. The isolated statement findings bind each block hash and identify all nine required aspects.",
+    "The connection/curvature entrance, actual radial variation, factor-t differential, cubic Taylor term and Gram determinant were recomputed. j is derived as a geometric density, with positive sign before conjugacy; it is not merely a renamed determinant.",
+    "The current-vector inverse A^{-1}, metric identification of Hessian, zero radial direction, Wronskian symmetry and Riccati sign agree. The regular matrix congruence uses an invertible fundamental matrix, not a falsely symmetric one; the singular order theorem remains explicitly imported.",
+    "The scalar trace proof uses no matrix-order theorem. Cauchy--Schwarz, u'+(a+c)u<=0, mu~Ct^2 and u=O(t) justify the zero-boundary comparison and density normalization. The -Q term precisely identifies the failure of the Ricci-upper reversal.",
+    "The cut-domain theorem is applied to the actual preimage t<min(r,tau); the null set is removed only after that identification. Downward zero extension, angular dominated convergence and local absolute continuity of the weighted quotient justify all finite positive radii below D_k. The independent Myers proof and terminal cut sphere handle k>0 at and beyond D_k.",
+    "The restricted index lemma follows from I(J,W)=0 and I(W,W)>=0 for endpoint-zero W. The model trial field yields [ff']; the distinct Myers fields yield (n-1)L((pi/L)^2-k)/2<0. Completeness of the universal cover and finiteness of a compact discrete fiber were checked.",
+    "Hadamard's convexity gives no angular kernel, and the radial differential closes the full local-invertibility claim. The pullback metric has entire radial geodesics for every initial velocity at zero; the one-point completeness criterion applies. Explicit radial inverse branches are disjoint and exhaustive. Simple connectivity is used only for one sheet.",
+    "Toponogov's local map is well typed using the n-dimensional model; the actual and model normal domains exclude conjugacy and s_k=0. The model chord stays in the map's domain, the model cosine law gives angle comparison, and a uniform nearby-center radius is supplied before passing to a moving-vertex limit.",
+    "Lang's exact 5.14 endpoint and balanced/minimizing assumptions were reread from the original text. Contraposition yields P_j<(4/5)^jP_0; the 9/5 consecutive-displacement estimate sums to a Cauchy tail 9P_0(4/5)^n. All auxiliary hinges needed for lower-curvature chord conversion have perimeter <= the original P. Technical gluing/conversion proofs remain imports.",
+    "Boundary computations were checked: S2xS2 mixed planes and Hessian/hinge failure, the flat cylinder's cut points without conjugacy, round-sphere Rauch cutoff, thin-cylinder volume collapse, incomplete Euclidean ball/hemisphere, and torus opposite distance 0.2 versus model 0.8. Günther is included only as the uncut lower-volume consequence required by the collapse boundary, not as an eighth promised principal.",
+    "Source image verification removes the false Lang 5/4 typo claim; the printed recurrence is 4/5. Bishop's printed missing factor 2 in Jacobi convexity is not copied: the local derivative has both factors 2."
+  ],
+  "unchecked_items": [
+    {
+      "item": "Independent nonauthor stage review and real target-reader uptake are not certified by this author review.",
+      "blocking": false,
+      "reason": "This record accepts only the actual author-side coverage work. The staged task separately requires nonauthor acceptance before its final snapshot/handoff gate; a real-reader experiment was not performed."
+    },
+    {
+      "item": "Full foundational/gluing proofs and broader equality, endpoint and extension classifications are not supplied.",
+      "blocking": false,
+      "reason": "They are outside the explicitly preserved focused scope; exact imported interfaces and broader pending statuses are stated."
+    }
+  ],
+  "disposition": "accepted"
+}

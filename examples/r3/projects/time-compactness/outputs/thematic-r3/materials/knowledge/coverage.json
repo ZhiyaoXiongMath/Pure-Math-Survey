@@ -1,0 +1,36 @@
+{
+  "schema_version": "2.0.0",
+  "questions": [
+    {
+      "question_id": "N-question",
+      "answer_nodes": [
+        "N-simon",
+        "N-maitre",
+        "N-cone"
+      ],
+      "mechanism_nodes": [
+        "N-linear-mechanism",
+        "N-truncation",
+        "N-translations",
+        "N-cone-mechanism",
+        "N-homogeneous-transfer"
+      ],
+      "boundary_nodes": [
+        "N-endpoint",
+        "N-image-only"
+      ],
+      "gaps": [
+        {
+          "disposition": "resolved",
+          "reason": "The initially deferred cone branch is now covered by verified statement and Lemma 1, a complete local reconstruction using Simon, and a restricted homogeneous-map comparison. The source passage after (2.8) is not used."
+        },
+        {
+          "disposition": "outside_explicit_scope",
+          "reason": "Current-strength Chen--Liu, discrete/fractional and PDE-existence extensions are identified in discovery. The exact historical-mechanism survey does not claim optimality or a complete field review."
+        }
+      ],
+      "assessment": "adequate",
+      "rationale": "Three original papers supply genuinely different interfaces; all principal hypotheses, two-point transfer and decisive endpoint examples are explicit, with source proof limits disclosed."
+    }
+  ]
+}

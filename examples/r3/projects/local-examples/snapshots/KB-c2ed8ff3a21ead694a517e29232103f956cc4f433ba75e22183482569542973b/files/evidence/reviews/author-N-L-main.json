@@ -1,0 +1,87 @@
+{
+  "schema_version": "2.2.0",
+  "review_id": "R3-AUTHOR-N-L-main",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-12",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/S-Datar.md",
+      "sha256": "cb543e1b156f8c7ed3086cdea32e8c9933da98da0f93d02acc560ecbda21ef69"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "8e17ace33563d613860c89606b70c6b95a93cf077e4d21db9bff3ba08617bd63"
+    },
+    {
+      "path": "knowledge/nodes/N-L-boundary.md",
+      "sha256": "e7edf0f1be29f3311fa0f31ff910b424946a83e5953e3b585c208952afea63a2"
+    },
+    {
+      "path": "knowledge/nodes/N-L-connection.md",
+      "sha256": "72b03a7bd3f966a4b63a9ed64e85018aa15a338d51944ef95e42106def9154ce"
+    },
+    {
+      "path": "knowledge/nodes/N-L-inputs.md",
+      "sha256": "71a786bcc6bac98d544fde57f9b98f9e917ab7888004acce66197513692ed55a"
+    },
+    {
+      "path": "knowledge/nodes/N-L-main.md",
+      "sha256": "2ace93d0da59d64d17bc042977e515b196f85ac4d038db0c194dac208b76bf81"
+    },
+    {
+      "path": "knowledge/sources/S-Datar.json",
+      "sha256": "780107e7726b78836c4a359adc07cc93d05f247dfcff940f4cb60a603244bf71"
+    },
+    {
+      "path": "project.json",
+      "sha256": "7477946aa36c1d422c055f0c3e0f0dcb875381993fc04e6265fea430aba03d83"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "3dd3b3a663967bb9e649114ebde3571061e0e376ab0c96911c5564260d1b5463"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-L-main"
+    ],
+    "editorial_policy": "four-modes-2026-10-12-r3",
+    "evidence_basis": "Actual author reconstruction: Set I=integral f^2>0 and derived lambda^2 I>=lambda^2 I/m+(m-1)lambda I. All three divisors (m-1),lambda,I are positive by distinct stated hypotheses. The source extra lambda factor is absent. The theorem asserts the lower bound alone.",
+    "proof_steps": {
+      "N-L-main": [
+        "State the precise spectral and Bochner imports with the nonnegative Laplacian convention.",
+        "Use the divergence theorem to derive the two integral identities.",
+        "Prove the Hessian trace inequality by Cauchy-Schwarz.",
+        "Substitute the eigenfunction and the normalized Ricci lower bound.",
+        "Divide only by the positive factors and identify the dimension and boundary limits."
+      ]
+    },
+    "statement_reviews": {
+      "N-L-main": {
+        "canonical_sha256": "7931de1c7c8373ee0b2054e88f5b1134dac2d76cece17af9493bcde8e3ceab48",
+        "outcome": "accepted",
+        "objects": "A smooth Riemannian m-manifold and the first positive scalar eigenvalue.",
+        "domain": "Closed connected manifold, m>=2.",
+        "fixed_and_variable": "M and g are arbitrary fixed data satisfying the pointwise curvature inequality.",
+        "hypotheses": "For every point and tangent vector, Ric(v,v)>=(m-1)g(v,v).",
+        "equations": "The normalized tensor inequality and Delta=-div grad are explicit.",
+        "quantifiers": "Every such manifold has lambda_1>=m, with no stronger equality conclusion.",
+        "conclusion": "The first positive eigenvalue is at least the dimension.",
+        "status": "Classical Lichnerowicz lower bound.",
+        "local_definitions": "Closed, connected, first positive eigenvalue and the Laplacian sign are local and unambiguous."
+      }
+    }
+  },
+  "findings": [
+    "Set I=integral f^2>0 and derived lambda^2 I>=lambda^2 I/m+(m-1)lambda I. All three divisors (m-1),lambda,I are positive by distinct stated hypotheses.",
+    "The source extra lambda factor is absent. The theorem asserts the lower bound alone."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "Author/AI rereading only. No external mathematical peer review, actual target-reader experiment or originality certification is claimed."
+    }
+  ],
+  "disposition": "accepted"
+}
