@@ -1,2 +1,4 @@
 """Pure Math Survey: local knowledge-first authoring. No Studio bridge."""
-__version__ = "2.0.4"
+from .common import SOFTWARE_VERSION
+
+__version__ = SOFTWARE_VERSION

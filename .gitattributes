@@ -2,3 +2,7 @@ skills/pure-math-survey/assets/reference-samples/dhym-balanced/dhym-survey-revis
 skills/pure-math-survey/assets/reference-samples/dhym-balanced/references.bib -text
 skills/pure-math-survey/assets/reference-samples/dhym-balanced/math-review.sty -text
 examples/dhym-balanced/dhym-survey-revised.tex -text
+
+# Example snapshots, materials and reviews contain hashes of exact stored bytes.
+# Preserve their Git blob bytes on Windows as well as Unix checkouts.
+examples/** -text
