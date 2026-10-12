@@ -1,0 +1,3506 @@
+{
+  "reviewed_at": "2026-10-12",
+  "pr": "https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/2",
+  "base_sha": "7bf87324071de6ea221ef5f491148debb31ccba0",
+  "head_sha": "968d3d3e2b3206499c56bdd2c6ddebf36ebf0f38",
+  "complete_paginated_inventory": true,
+  "pages": 5,
+  "changed_files": 498,
+  "deleted_files": 0,
+  "source_tree_verified": "a3152c4d47142dbc3638a54ede33244e2d17fb10",
+  "review_method": [
+    "Read changed runtime behavior, templates, contract/version routing, tests, installation and CI changes.",
+    "Read complete four new manuscripts, canonical statements and scoped source/proof limitations; inspect all 28 final pages.",
+    "Mechanically verify frozen/generated/material copies and stored review bindings; repeated copied evidence is not claimed as additional independent reading.",
+    "Compare all 399 original example blobs to the ed8a1a0 remote tree: unchanged."
+  ],
+  "finding": "Called custom environment control was not inspected. LOC13 reproduced a failure; LOC13/LOC14 now test the narrow repair and release/package rejection. Final source/install/remote reruns are recorded separately.",
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "status": "modified",
+      "additions": 4,
+      "deletions": 4,
+      "sha": "224c0a36edf2a20ed7f9d8e9678d5eaf62a7f2fb"
+    },
+    {
+      "path": ".github/workflows/rc2-audit.yml",
+      "status": "added",
+      "additions": 40,
+      "deletions": 0,
+      "sha": "b1e31a6e0cd62570e2b912c5385735f00f7b97b7"
+    },
+    {
+      "path": ".github/workflows/vnext-audit.yml",
+      "status": "modified",
+      "additions": 3,
+      "deletions": 3,
+      "sha": "bcbb529fd2ccc5d21765382cf045e3bed41d8ab2"
+    },
+    {
+      "path": ".gitignore",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 0,
+      "sha": "b03706d2224ee469e0f3cfc6225b6880aa0452f8"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "status": "modified",
+      "additions": 10,
+      "deletions": 0,
+      "sha": "b65b643fc3b0f80e701ce4713127ca9f302cbc12"
+    },
+    {
+      "path": "README.en.md",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 6,
+      "sha": "fcacc0e9ed7ab4296692dbae1343f447515d78f2"
+    },
+    {
+      "path": "README.md",
+      "status": "modified",
+      "additions": 14,
+      "deletions": 6,
+      "sha": "a30a5bc0a934b6e53c2bec9bd3afeb2c82a28ee3"
+    },
+    {
+      "path": "docs/rc2/BASELINE.md",
+      "status": "added",
+      "additions": 35,
+      "deletions": 0,
+      "sha": "926d367f4be26727f238299b4e7717a50cd9785f"
+    },
+    {
+      "path": "docs/rc2/CANDIDATE.md",
+      "status": "added",
+      "additions": 138,
+      "deletions": 0,
+      "sha": "ed2bdf41b92f889fdf6baabe9e4d42132e4de013"
+    },
+    {
+      "path": "docs/rc2/CONTINUATION.md",
+      "status": "added",
+      "additions": 162,
+      "deletions": 0,
+      "sha": "f8b36ca2301c6679f9e684bcb4f76a5f42e3f2f8"
+    },
+    {
+      "path": "docs/rc2/historical-integrity.json",
+      "status": "added",
+      "additions": 6,
+      "deletions": 0,
+      "sha": "2eb94d2f0c99a702638e355b1f37750161ae66b5"
+    },
+    {
+      "path": "docs/rc2/real-acceptance/time-compactness-authoring-log.md",
+      "status": "added",
+      "additions": 17,
+      "deletions": 0,
+      "sha": "c1716d81b057e5cf1d9a6bf1c964452ffec72bdb"
+    },
+    {
+      "path": "docs/rc2/real-acceptance/time-compactness-increment-diff.json",
+      "status": "added",
+      "additions": 155,
+      "deletions": 0,
+      "sha": "bdeb2b512fbe20346e73709e0289ab83b701baf5"
+    },
+    {
+      "path": "docs/rc2/real-acceptance/time-compactness-initial-plan-sha256.txt",
+      "status": "added",
+      "additions": 1,
+      "deletions": 0,
+      "sha": "405763f1326028e99bcec4b385006f4577dcfe15"
+    },
+    {
+      "path": "docs/rc2/real-acceptance/time-compactness-release.json",
+      "status": "added",
+      "additions": 248,
+      "deletions": 0,
+      "sha": "8182eef576afce4dcaaabb43dcc11baf357e522f"
+    },
+    {
+      "path": "docs/rc2/real-acceptance/time-compactness-report.md",
+      "status": "added",
+      "additions": 75,
+      "deletions": 0,
+      "sha": "92ac41d844a56ee072c971c917be5c2179714a30"
+    },
+    {
+      "path": "docs/rc2/real-acceptance/time-compactness-staging-cleanup.json",
+      "status": "added",
+      "additions": 2265,
+      "deletions": 0,
+      "sha": "fda426d345cef412ad28f0702b2ea0385def05f9"
+    },
+    {
+      "path": "docs/rc2/schur-lecture-release.json",
+      "status": "added",
+      "additions": 27,
+      "deletions": 0,
+      "sha": "295e5e040940169540d9d18454faec2fac89701e"
+    },
+    {
+      "path": "docs/rc2/schur-lecture.md",
+      "status": "added",
+      "additions": 62,
+      "deletions": 0,
+      "sha": "b69c1f1af51796556b7198b55bda060d48657ab3"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/README.md",
+      "status": "added",
+      "additions": 27,
+      "deletions": 0,
+      "sha": "f050c6e97f7441c34d046b6a12775b585040b220"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/proof-step-catalog.json",
+      "status": "added",
+      "additions": 36,
+      "deletions": 0,
+      "sha": "1761996c4f4b3bb1df5a9b490358af6f31ddf8f4"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/coverage-cone-increment.json",
+      "status": "added",
+      "additions": 90,
+      "deletions": 0,
+      "sha": "8007f23a53294fcccbfdde091d37b24e97dd9977"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/coverage-initial.json",
+      "status": "added",
+      "additions": 77,
+      "deletions": 0,
+      "sha": "20be3f8e51f4a1c5608bade9da794dd2c4db9303"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/date-correction-N-cone-definition.json",
+      "status": "added",
+      "additions": 51,
+      "deletions": 0,
+      "sha": "b53a3c9b020d7a5008efac3d967bf4222b7399a8"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/date-correction-N-cone-ehrling.json",
+      "status": "added",
+      "additions": 60,
+      "deletions": 0,
+      "sha": "593672340c97e1edc59b89549257c647c79bb769"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/date-correction-N-cone-mechanism.json",
+      "status": "added",
+      "additions": 100,
+      "deletions": 0,
+      "sha": "995d19a16850b004963d93b884df63a7de9b6fc2"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/date-correction-N-cone.json",
+      "status": "added",
+      "additions": 71,
+      "deletions": 0,
+      "sha": "70530d1257733b92e5a9621581703d6ba39f7701"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/date-correction-N-homogeneous-transfer.json",
+      "status": "added",
+      "additions": 95,
+      "deletions": 0,
+      "sha": "055360ebeee2eb4000d212e49292d6153940bcf3"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/date-correction-N-image-only.json",
+      "status": "added",
+      "additions": 55,
+      "deletions": 0,
+      "sha": "9227e1bace04474a88b672683047c6b98770c8c2"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/date-correction-N-maitre.json",
+      "status": "added",
+      "additions": 79,
+      "deletions": 0,
+      "sha": "7174ff0bb06791ab687ba5a3e81d2ebaca64e978"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/date-correction-N-translations.json",
+      "status": "added",
+      "additions": 66,
+      "deletions": 0,
+      "sha": "eb7367823fd4db28122a9f273551be7e69d459c6"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/date-correction-N-truncation.json",
+      "status": "added",
+      "additions": 75,
+      "deletions": 0,
+      "sha": "7d1d4a40f145c9a1951648976041fcd212b9db51"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/date-correction-S-barrett-suli.json",
+      "status": "added",
+      "additions": 55,
+      "deletions": 0,
+      "sha": "d5c24b78566a2e756afafb6fce8339a80a9e7333"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/date-correction-S-maitre.json",
+      "status": "added",
+      "additions": 47,
+      "deletions": 0,
+      "sha": "5d52ac6c8044bc6c3e0476d1a2d098fe0394d5e3"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/math-cone-increment-N-cone-definition.json",
+      "status": "added",
+      "additions": 50,
+      "deletions": 0,
+      "sha": "eb0e94b72715fcd668ccaec1048bd4b4747ed221"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/math-cone-increment-N-cone-ehrling.json",
+      "status": "added",
+      "additions": 59,
+      "deletions": 0,
+      "sha": "853cc1caeae5b53719c5ba245b6644fff8babd34"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/math-cone-increment-N-cone-mechanism.json",
+      "status": "added",
+      "additions": 99,
+      "deletions": 0,
+      "sha": "ad134d501c54922a9b91d0baf32fd9924afbbef3"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/math-cone-increment-N-cone.json",
+      "status": "added",
+      "additions": 70,
+      "deletions": 0,
+      "sha": "dbbfd827839e78d397f4306cf0f2ac11586e4d8f"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/math-cone-increment-N-homogeneous-transfer.json",
+      "status": "added",
+      "additions": 94,
+      "deletions": 0,
+      "sha": "a1e88168307a8b14c9f1edefdb857360df7fd60b"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/math-initial-N-endpoint.json",
+      "status": "added",
+      "additions": 56,
+      "deletions": 0,
+      "sha": "2fe7b73308f48b991b81089671a3386599196faf"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/math-initial-N-image-only.json",
+      "status": "added",
+      "additions": 54,
+      "deletions": 0,
+      "sha": "145bfb2a5c1d0ba53f306bdc565ce84706d2f9af"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/math-initial-N-linear-mechanism.json",
+      "status": "added",
+      "additions": 64,
+      "deletions": 0,
+      "sha": "2d6a7845fb22d035ee6cdaa94f2a41e737c7e86a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/math-initial-N-maitre.json",
+      "status": "added",
+      "additions": 78,
+      "deletions": 0,
+      "sha": "7410eb0369ce0fe8befa8e4f0b6dde0f98e500c0"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/math-initial-N-question.json",
+      "status": "added",
+      "additions": 41,
+      "deletions": 0,
+      "sha": "a92ffd95fab858634999e3400350eb95f9b89944"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/math-initial-N-simon-criterion.json",
+      "status": "added",
+      "additions": 53,
+      "deletions": 0,
+      "sha": "f86b54cf64a4bc502b040aff7d395cff8bae08e2"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/math-initial-N-simon.json",
+      "status": "added",
+      "additions": 70,
+      "deletions": 0,
+      "sha": "25a0eeeb6377c83a65d59a216550ee7708b84def"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/math-initial-N-translation-definition.json",
+      "status": "added",
+      "additions": 49,
+      "deletions": 0,
+      "sha": "1e593bc8b4d32e4c18a62967973b2cd013eb6225"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/math-initial-N-translations.json",
+      "status": "added",
+      "additions": 65,
+      "deletions": 0,
+      "sha": "dffcd92ee8b6dedf8a454986e0516e5fe4d3a226"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/math-initial-N-truncation.json",
+      "status": "added",
+      "additions": 74,
+      "deletions": 0,
+      "sha": "5fbe002778304d6e408989b8dc9c55fb00b5dcbf"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/source-cone-increment.json",
+      "status": "added",
+      "additions": 54,
+      "deletions": 0,
+      "sha": "db1be1557ac42d5ff0c5fa94514f80d205cf72e3"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/source-initial-S-maitre.json",
+      "status": "added",
+      "additions": 46,
+      "deletions": 0,
+      "sha": "3a3ff44f4829e305b8ef7ceeec5c90f829d4d51b"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/reviews/source-initial-S-simon.json",
+      "status": "added",
+      "additions": 47,
+      "deletions": 0,
+      "sha": "55af880c05b4b08f7a88bc080f9a5f5ca6eea341"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/source-checks/S-barrett-suli.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "379c7a7a561e4b2fe2b80dc13b751a96afa20525"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/source-checks/S-maitre.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "b2ba7163ce84fe6b75fa4d6f8186b8882278f8a7"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/evidence/source-checks/S-simon.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "17710e52ced5bcbd70a29bb372a690cf33c8f1be"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/conventions.tex",
+      "status": "added",
+      "additions": 5,
+      "deletions": 0,
+      "sha": "f1c97a611ef1dadf19fd70e248231a6da9481b78"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/coverage.json",
+      "status": "added",
+      "additions": 36,
+      "deletions": 0,
+      "sha": "47d76465b9799634ce431deb448512b4d5993b88"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/discovery.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "f1729f3ddb73df0a0d696d6ca40137ed4d543555"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/nodes/N-cone-definition.md",
+      "status": "added",
+      "additions": 47,
+      "deletions": 0,
+      "sha": "c1217bb2e6f9c01b27477201cc9f2eea2df86838"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/nodes/N-cone-ehrling.md",
+      "status": "added",
+      "additions": 50,
+      "deletions": 0,
+      "sha": "c9207a770e97ddaac4ae73f5e731dba97f576a1f"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/nodes/N-cone-mechanism.md",
+      "status": "added",
+      "additions": 66,
+      "deletions": 0,
+      "sha": "cdf2255a8f03b43f6f7d403791ea8dcd91e1bc44"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/nodes/N-cone.md",
+      "status": "added",
+      "additions": 62,
+      "deletions": 0,
+      "sha": "da71675fa90546f09ac3f9e252de73a4fdcc8127"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/nodes/N-endpoint.md",
+      "status": "added",
+      "additions": 35,
+      "deletions": 0,
+      "sha": "1e1fdaa7111feccd420a26d0b9cfdf274ee920d4"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/nodes/N-homogeneous-transfer.md",
+      "status": "added",
+      "additions": 81,
+      "deletions": 0,
+      "sha": "57e2b1209722d4a9c9c6426f3fb39a826ebacef1"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/nodes/N-image-only.md",
+      "status": "added",
+      "additions": 29,
+      "deletions": 0,
+      "sha": "7b2368e833f4b5fb6ba4a9000ea83d7d34864bed"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/nodes/N-linear-mechanism.md",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0,
+      "sha": "40fd24a653f2b5afcf06740a1446f83ca4e23346"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/nodes/N-maitre.md",
+      "status": "added",
+      "additions": 58,
+      "deletions": 0,
+      "sha": "5066d1ffbf311eb785695eaefaf4b19fbb8535e5"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/nodes/N-question.md",
+      "status": "added",
+      "additions": 23,
+      "deletions": 0,
+      "sha": "ca683fcd3072e566440300bb88ac0d250699d6d7"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/nodes/N-simon-criterion.md",
+      "status": "added",
+      "additions": 54,
+      "deletions": 0,
+      "sha": "92684b91778e8d33abea77b0afb942621916c4e1"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/nodes/N-simon.md",
+      "status": "added",
+      "additions": 58,
+      "deletions": 0,
+      "sha": "fffd254ff2154e4a59764079248f42e3ecf44b92"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/nodes/N-translation-definition.md",
+      "status": "added",
+      "additions": 45,
+      "deletions": 0,
+      "sha": "13b03491fe88f76254b3742b2bd2961ff1d3799d"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/nodes/N-translations.md",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0,
+      "sha": "578bd9d22a9a7368ed5bac30293c8b50edc09c1a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/nodes/N-truncation.md",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0,
+      "sha": "f5edb31f6b8257567c17dd7d767198eedde392f9"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/overview.md",
+      "status": "added",
+      "additions": 17,
+      "deletions": 0,
+      "sha": "2e2adcd289ab6b142f6a03366c224cfe26767365"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/sources/S-barrett-suli.json",
+      "status": "added",
+      "additions": 26,
+      "deletions": 0,
+      "sha": "a7fe47965c7eb41112468db0ec6646834c5ecf15"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/sources/S-maitre.json",
+      "status": "added",
+      "additions": 26,
+      "deletions": 0,
+      "sha": "bf1e9cf34df6eb2e39ac85e33a9cea68d922764a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/knowledge/sources/S-simon.json",
+      "status": "added",
+      "additions": 26,
+      "deletions": 0,
+      "sha": "b9d336631801357cc09f7ae293be918a8bedc078"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/initial-two-paper/outline.md",
+      "status": "added",
+      "additions": 3,
+      "deletions": 0,
+      "sha": "24025045cc5eff93bc3b110539843f266a6665ab"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/initial-two-paper/plan.json",
+      "status": "added",
+      "additions": 154,
+      "deletions": 0,
+      "sha": "545996d92299ec92d66e268a9bd5f147d2dc7d54"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/evidence/author-semantic-bibgroup.json",
+      "status": "added",
+      "additions": 1026,
+      "deletions": 0,
+      "sha": "1f66affe6e49bb7f9e2bb1f35e0440a096ad0fb0"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/evidence/author-semantic.json",
+      "status": "added",
+      "additions": 1025,
+      "deletions": 0,
+      "sha": "1eacc2e4c25d1abf694a03d7df776ea92482ff4a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/evidence/render-manifest.json",
+      "status": "added",
+      "additions": 60,
+      "deletions": 0,
+      "sha": "ab46f3e49ac965082eb49053d2be15b98f14a1bc"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/evidence/root-page-review.json",
+      "status": "added",
+      "additions": 109,
+      "deletions": 0,
+      "sha": "ab61ea28cd8f07afcabf8f4ccc1e664e5bb9e776"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/generated/conventions.tex",
+      "status": "added",
+      "additions": 5,
+      "deletions": 0,
+      "sha": "f1c97a611ef1dadf19fd70e248231a6da9481b78"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/generated/manifest.json",
+      "status": "added",
+      "additions": 215,
+      "deletions": 0,
+      "sha": "f756241690257f45667793b99f763932fbffea18"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/generated/references.bib",
+      "status": "added",
+      "additions": 25,
+      "deletions": 0,
+      "sha": "0c1b404b34da524b482b2a4910226527cfb2df56"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/generated/statements/N-cone-definition.tex",
+      "status": "added",
+      "additions": 9,
+      "deletions": 0,
+      "sha": "05b5a00653ca0fdd1c2d2339245f365f95bb3079"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/generated/statements/N-cone-ehrling.tex",
+      "status": "added",
+      "additions": 8,
+      "deletions": 0,
+      "sha": "6a3e493629119528b5d87a09626feabe1b141eb4"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/generated/statements/N-cone.tex",
+      "status": "added",
+      "additions": 16,
+      "deletions": 0,
+      "sha": "6738917e1c42b4a93e4a82a4bd90ff3c7dd16419"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/generated/statements/N-homogeneous-transfer.tex",
+      "status": "added",
+      "additions": 12,
+      "deletions": 0,
+      "sha": "f0bcd6e586b3bbe4230dd140fbc4a81a2964291b"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/generated/statements/N-maitre.tex",
+      "status": "added",
+      "additions": 12,
+      "deletions": 0,
+      "sha": "a7e44e2df8c4710882d02684e010d581e5c55932"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/generated/statements/N-simon-criterion.tex",
+      "status": "added",
+      "additions": 11,
+      "deletions": 0,
+      "sha": "334c7a5dd5912741ca3ee020744f4627f4915cd5"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/generated/statements/N-simon.tex",
+      "status": "added",
+      "additions": 12,
+      "deletions": 0,
+      "sha": "4c9c4d4d7bcee3c3eed3d9543c663b4264437fc5"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/generated/statements/N-translation-definition.tex",
+      "status": "added",
+      "additions": 8,
+      "deletions": 0,
+      "sha": "7f4193434d7ef1e90524bac78f278f71dbfc9394"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/manuscript/main.tex",
+      "status": "added",
+      "additions": 202,
+      "deletions": 0,
+      "sha": "e1c625749b8c0b5bce24fa8dac3aaf8dcd6aed80"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/manuscript/math-review.sty",
+      "status": "added",
+      "additions": 63,
+      "deletions": 0,
+      "sha": "1a5710e1885e6b81d1e6e17c5b2ee6d1d55442fe"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/reviews/coverage-cone-increment.json",
+      "status": "added",
+      "additions": 90,
+      "deletions": 0,
+      "sha": "8007f23a53294fcccbfdde091d37b24e97dd9977"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/reviews/date-correction-N-cone-definition.json",
+      "status": "added",
+      "additions": 51,
+      "deletions": 0,
+      "sha": "b53a3c9b020d7a5008efac3d967bf4222b7399a8"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/reviews/date-correction-N-cone-ehrling.json",
+      "status": "added",
+      "additions": 60,
+      "deletions": 0,
+      "sha": "593672340c97e1edc59b89549257c647c79bb769"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/reviews/date-correction-N-cone-mechanism.json",
+      "status": "added",
+      "additions": 100,
+      "deletions": 0,
+      "sha": "995d19a16850b004963d93b884df63a7de9b6fc2"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/reviews/date-correction-N-cone.json",
+      "status": "added",
+      "additions": 71,
+      "deletions": 0,
+      "sha": "70530d1257733b92e5a9621581703d6ba39f7701"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/reviews/date-correction-N-homogeneous-transfer.json",
+      "status": "added",
+      "additions": 95,
+      "deletions": 0,
+      "sha": "055360ebeee2eb4000d212e49292d6153940bcf3"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/reviews/date-correction-N-image-only.json",
+      "status": "added",
+      "additions": 55,
+      "deletions": 0,
+      "sha": "9227e1bace04474a88b672683047c6b98770c8c2"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/reviews/date-correction-N-maitre.json",
+      "status": "added",
+      "additions": 79,
+      "deletions": 0,
+      "sha": "7174ff0bb06791ab687ba5a3e81d2ebaca64e978"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/reviews/date-correction-N-translations.json",
+      "status": "added",
+      "additions": 66,
+      "deletions": 0,
+      "sha": "eb7367823fd4db28122a9f273551be7e69d459c6"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/reviews/date-correction-N-truncation.json",
+      "status": "added",
+      "additions": 75,
+      "deletions": 0,
+      "sha": "7d1d4a40f145c9a1951648976041fcd212b9db51"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/reviews/date-correction-S-barrett-suli.json",
+      "status": "added",
+      "additions": 55,
+      "deletions": 0,
+      "sha": "d5c24b78566a2e756afafb6fce8339a80a9e7333"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/reviews/date-correction-S-maitre.json",
+      "status": "added",
+      "additions": 47,
+      "deletions": 0,
+      "sha": "5d52ac6c8044bc6c3e0476d1a2d098fe0394d5e3"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/reviews/math-initial-N-endpoint.json",
+      "status": "added",
+      "additions": 56,
+      "deletions": 0,
+      "sha": "2fe7b73308f48b991b81089671a3386599196faf"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/reviews/math-initial-N-linear-mechanism.json",
+      "status": "added",
+      "additions": 64,
+      "deletions": 0,
+      "sha": "2d6a7845fb22d035ee6cdaa94f2a41e737c7e86a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/reviews/math-initial-N-question.json",
+      "status": "added",
+      "additions": 41,
+      "deletions": 0,
+      "sha": "a92ffd95fab858634999e3400350eb95f9b89944"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/reviews/math-initial-N-simon-criterion.json",
+      "status": "added",
+      "additions": 53,
+      "deletions": 0,
+      "sha": "f86b54cf64a4bc502b040aff7d395cff8bae08e2"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/reviews/math-initial-N-simon.json",
+      "status": "added",
+      "additions": 70,
+      "deletions": 0,
+      "sha": "25a0eeeb6377c83a65d59a216550ee7708b84def"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/reviews/math-initial-N-translation-definition.json",
+      "status": "added",
+      "additions": 49,
+      "deletions": 0,
+      "sha": "1e593bc8b4d32e4c18a62967973b2cd013eb6225"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/reviews/source-initial-S-simon.json",
+      "status": "added",
+      "additions": 47,
+      "deletions": 0,
+      "sha": "55af880c05b4b08f7a88bc080f9a5f5ca6eea341"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/source-checks/S-barrett-suli.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "379c7a7a561e4b2fe2b80dc13b751a96afa20525"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/source-checks/S-maitre.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "b2ba7163ce84fe6b75fa4d6f8186b8882278f8a7"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/evidence/source-checks/S-simon.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "17710e52ced5bcbd70a29bb372a690cf33c8f1be"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/conventions.tex",
+      "status": "added",
+      "additions": 5,
+      "deletions": 0,
+      "sha": "f1c97a611ef1dadf19fd70e248231a6da9481b78"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/coverage.json",
+      "status": "added",
+      "additions": 36,
+      "deletions": 0,
+      "sha": "47d76465b9799634ce431deb448512b4d5993b88"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/discovery.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "f1729f3ddb73df0a0d696d6ca40137ed4d543555"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/nodes/N-cone-definition.md",
+      "status": "added",
+      "additions": 47,
+      "deletions": 0,
+      "sha": "c1217bb2e6f9c01b27477201cc9f2eea2df86838"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/nodes/N-cone-ehrling.md",
+      "status": "added",
+      "additions": 50,
+      "deletions": 0,
+      "sha": "c9207a770e97ddaac4ae73f5e731dba97f576a1f"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/nodes/N-cone-mechanism.md",
+      "status": "added",
+      "additions": 66,
+      "deletions": 0,
+      "sha": "cdf2255a8f03b43f6f7d403791ea8dcd91e1bc44"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/nodes/N-cone.md",
+      "status": "added",
+      "additions": 62,
+      "deletions": 0,
+      "sha": "da71675fa90546f09ac3f9e252de73a4fdcc8127"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/nodes/N-endpoint.md",
+      "status": "added",
+      "additions": 35,
+      "deletions": 0,
+      "sha": "1e1fdaa7111feccd420a26d0b9cfdf274ee920d4"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/nodes/N-homogeneous-transfer.md",
+      "status": "added",
+      "additions": 81,
+      "deletions": 0,
+      "sha": "57e2b1209722d4a9c9c6426f3fb39a826ebacef1"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/nodes/N-image-only.md",
+      "status": "added",
+      "additions": 29,
+      "deletions": 0,
+      "sha": "7b2368e833f4b5fb6ba4a9000ea83d7d34864bed"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/nodes/N-linear-mechanism.md",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0,
+      "sha": "40fd24a653f2b5afcf06740a1446f83ca4e23346"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/nodes/N-maitre.md",
+      "status": "added",
+      "additions": 58,
+      "deletions": 0,
+      "sha": "5066d1ffbf311eb785695eaefaf4b19fbb8535e5"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/nodes/N-question.md",
+      "status": "added",
+      "additions": 23,
+      "deletions": 0,
+      "sha": "ca683fcd3072e566440300bb88ac0d250699d6d7"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/nodes/N-simon-criterion.md",
+      "status": "added",
+      "additions": 54,
+      "deletions": 0,
+      "sha": "92684b91778e8d33abea77b0afb942621916c4e1"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/nodes/N-simon.md",
+      "status": "added",
+      "additions": 58,
+      "deletions": 0,
+      "sha": "fffd254ff2154e4a59764079248f42e3ecf44b92"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/nodes/N-translation-definition.md",
+      "status": "added",
+      "additions": 45,
+      "deletions": 0,
+      "sha": "13b03491fe88f76254b3742b2bd2961ff1d3799d"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/nodes/N-translations.md",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0,
+      "sha": "578bd9d22a9a7368ed5bac30293c8b50edc09c1a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/nodes/N-truncation.md",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0,
+      "sha": "f5edb31f6b8257567c17dd7d767198eedde392f9"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/overview.md",
+      "status": "added",
+      "additions": 17,
+      "deletions": 0,
+      "sha": "2e2adcd289ab6b142f6a03366c224cfe26767365"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/sources/S-barrett-suli.json",
+      "status": "added",
+      "additions": 26,
+      "deletions": 0,
+      "sha": "a7fe47965c7eb41112468db0ec6646834c5ecf15"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/sources/S-maitre.json",
+      "status": "added",
+      "additions": 26,
+      "deletions": 0,
+      "sha": "bf1e9cf34df6eb2e39ac85e33a9cea68d922764a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/knowledge/sources/S-simon.json",
+      "status": "added",
+      "additions": 26,
+      "deletions": 0,
+      "sha": "b9d336631801357cc09f7ae293be918a8bedc078"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/materials-manifest.json",
+      "status": "added",
+      "additions": 215,
+      "deletions": 0,
+      "sha": "f756241690257f45667793b99f763932fbffea18"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/project.json",
+      "status": "added",
+      "additions": 9,
+      "deletions": 0,
+      "sha": "dcc610ceff530b0cb7c8eb7f156ba49fdbe33954"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/materials/scope.md",
+      "status": "added",
+      "additions": 19,
+      "deletions": 0,
+      "sha": "ffdcaaa6adf2e387aa30ba547c109486afd592f6"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/outline.md",
+      "status": "added",
+      "additions": 9,
+      "deletions": 0,
+      "sha": "db33a13b5b1cac3275d6bc2d03bd61de475fbf56"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-boundaries/plan.json",
+      "status": "added",
+      "additions": 228,
+      "deletions": 0,
+      "sha": "f44b1f1b90fab5ab2637139a380e13102e40a006"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/evidence/author-semantic-bibgroup.json",
+      "status": "added",
+      "additions": 1021,
+      "deletions": 0,
+      "sha": "102c566908047572637ff1cf6c6506c6dfe4a1ab"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/evidence/author-semantic.json",
+      "status": "added",
+      "additions": 1020,
+      "deletions": 0,
+      "sha": "c5aa856f24ccdf0d183d006ccd253e12351fb7b5"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/evidence/render-manifest.json",
+      "status": "added",
+      "additions": 60,
+      "deletions": 0,
+      "sha": "30477cfb1c181ae8befee785feed188dfb93dfcb"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/evidence/root-page-review.json",
+      "status": "added",
+      "additions": 109,
+      "deletions": 0,
+      "sha": "ddd40916f8c09871d04b548bd4304af22f446e2b"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/generated/conventions.tex",
+      "status": "added",
+      "additions": 5,
+      "deletions": 0,
+      "sha": "f1c97a611ef1dadf19fd70e248231a6da9481b78"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/generated/manifest.json",
+      "status": "added",
+      "additions": 215,
+      "deletions": 0,
+      "sha": "9ea9f9a1b02055ce22be2b8a220a85015c48714c"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/generated/references.bib",
+      "status": "added",
+      "additions": 25,
+      "deletions": 0,
+      "sha": "0c1b404b34da524b482b2a4910226527cfb2df56"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/generated/statements/N-cone-definition.tex",
+      "status": "added",
+      "additions": 9,
+      "deletions": 0,
+      "sha": "05b5a00653ca0fdd1c2d2339245f365f95bb3079"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/generated/statements/N-cone-ehrling.tex",
+      "status": "added",
+      "additions": 8,
+      "deletions": 0,
+      "sha": "6a3e493629119528b5d87a09626feabe1b141eb4"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/generated/statements/N-cone.tex",
+      "status": "added",
+      "additions": 16,
+      "deletions": 0,
+      "sha": "6738917e1c42b4a93e4a82a4bd90ff3c7dd16419"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/generated/statements/N-homogeneous-transfer.tex",
+      "status": "added",
+      "additions": 12,
+      "deletions": 0,
+      "sha": "f0bcd6e586b3bbe4230dd140fbc4a81a2964291b"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/generated/statements/N-maitre.tex",
+      "status": "added",
+      "additions": 12,
+      "deletions": 0,
+      "sha": "a7e44e2df8c4710882d02684e010d581e5c55932"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/generated/statements/N-simon-criterion.tex",
+      "status": "added",
+      "additions": 11,
+      "deletions": 0,
+      "sha": "334c7a5dd5912741ca3ee020744f4627f4915cd5"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/generated/statements/N-simon.tex",
+      "status": "added",
+      "additions": 12,
+      "deletions": 0,
+      "sha": "4c9c4d4d7bcee3c3eed3d9543c663b4264437fc5"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/generated/statements/N-translation-definition.tex",
+      "status": "added",
+      "additions": 8,
+      "deletions": 0,
+      "sha": "7f4193434d7ef1e90524bac78f278f71dbfc9394"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/manuscript/main.tex",
+      "status": "added",
+      "additions": 202,
+      "deletions": 0,
+      "sha": "b7b6dbd30ad2635fd2d7e835ececffd2e9875a93"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/manuscript/math-review.sty",
+      "status": "added",
+      "additions": 63,
+      "deletions": 0,
+      "sha": "1a5710e1885e6b81d1e6e17c5b2ee6d1d55442fe"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/reviews/coverage-cone-increment.json",
+      "status": "added",
+      "additions": 90,
+      "deletions": 0,
+      "sha": "8007f23a53294fcccbfdde091d37b24e97dd9977"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/reviews/date-correction-N-cone-definition.json",
+      "status": "added",
+      "additions": 51,
+      "deletions": 0,
+      "sha": "b53a3c9b020d7a5008efac3d967bf4222b7399a8"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/reviews/date-correction-N-cone-ehrling.json",
+      "status": "added",
+      "additions": 60,
+      "deletions": 0,
+      "sha": "593672340c97e1edc59b89549257c647c79bb769"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/reviews/date-correction-N-cone-mechanism.json",
+      "status": "added",
+      "additions": 100,
+      "deletions": 0,
+      "sha": "995d19a16850b004963d93b884df63a7de9b6fc2"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/reviews/date-correction-N-cone.json",
+      "status": "added",
+      "additions": 71,
+      "deletions": 0,
+      "sha": "70530d1257733b92e5a9621581703d6ba39f7701"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/reviews/date-correction-N-homogeneous-transfer.json",
+      "status": "added",
+      "additions": 95,
+      "deletions": 0,
+      "sha": "055360ebeee2eb4000d212e49292d6153940bcf3"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/reviews/date-correction-N-image-only.json",
+      "status": "added",
+      "additions": 55,
+      "deletions": 0,
+      "sha": "9227e1bace04474a88b672683047c6b98770c8c2"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/reviews/date-correction-N-maitre.json",
+      "status": "added",
+      "additions": 79,
+      "deletions": 0,
+      "sha": "7174ff0bb06791ab687ba5a3e81d2ebaca64e978"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/reviews/date-correction-N-translations.json",
+      "status": "added",
+      "additions": 66,
+      "deletions": 0,
+      "sha": "eb7367823fd4db28122a9f273551be7e69d459c6"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/reviews/date-correction-N-truncation.json",
+      "status": "added",
+      "additions": 75,
+      "deletions": 0,
+      "sha": "7d1d4a40f145c9a1951648976041fcd212b9db51"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/reviews/date-correction-S-barrett-suli.json",
+      "status": "added",
+      "additions": 55,
+      "deletions": 0,
+      "sha": "d5c24b78566a2e756afafb6fce8339a80a9e7333"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/reviews/date-correction-S-maitre.json",
+      "status": "added",
+      "additions": 47,
+      "deletions": 0,
+      "sha": "5d52ac6c8044bc6c3e0476d1a2d098fe0394d5e3"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/reviews/math-initial-N-endpoint.json",
+      "status": "added",
+      "additions": 56,
+      "deletions": 0,
+      "sha": "2fe7b73308f48b991b81089671a3386599196faf"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/reviews/math-initial-N-linear-mechanism.json",
+      "status": "added",
+      "additions": 64,
+      "deletions": 0,
+      "sha": "2d6a7845fb22d035ee6cdaa94f2a41e737c7e86a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/reviews/math-initial-N-question.json",
+      "status": "added",
+      "additions": 41,
+      "deletions": 0,
+      "sha": "a92ffd95fab858634999e3400350eb95f9b89944"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/reviews/math-initial-N-simon-criterion.json",
+      "status": "added",
+      "additions": 53,
+      "deletions": 0,
+      "sha": "f86b54cf64a4bc502b040aff7d395cff8bae08e2"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/reviews/math-initial-N-simon.json",
+      "status": "added",
+      "additions": 70,
+      "deletions": 0,
+      "sha": "25a0eeeb6377c83a65d59a216550ee7708b84def"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/reviews/math-initial-N-translation-definition.json",
+      "status": "added",
+      "additions": 49,
+      "deletions": 0,
+      "sha": "1e593bc8b4d32e4c18a62967973b2cd013eb6225"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/reviews/source-initial-S-simon.json",
+      "status": "added",
+      "additions": 47,
+      "deletions": 0,
+      "sha": "55af880c05b4b08f7a88bc080f9a5f5ca6eea341"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/source-checks/S-barrett-suli.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "379c7a7a561e4b2fe2b80dc13b751a96afa20525"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/source-checks/S-maitre.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "b2ba7163ce84fe6b75fa4d6f8186b8882278f8a7"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/evidence/source-checks/S-simon.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "17710e52ced5bcbd70a29bb372a690cf33c8f1be"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/conventions.tex",
+      "status": "added",
+      "additions": 5,
+      "deletions": 0,
+      "sha": "f1c97a611ef1dadf19fd70e248231a6da9481b78"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/coverage.json",
+      "status": "added",
+      "additions": 36,
+      "deletions": 0,
+      "sha": "47d76465b9799634ce431deb448512b4d5993b88"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/discovery.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "f1729f3ddb73df0a0d696d6ca40137ed4d543555"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/nodes/N-cone-definition.md",
+      "status": "added",
+      "additions": 47,
+      "deletions": 0,
+      "sha": "c1217bb2e6f9c01b27477201cc9f2eea2df86838"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/nodes/N-cone-ehrling.md",
+      "status": "added",
+      "additions": 50,
+      "deletions": 0,
+      "sha": "c9207a770e97ddaac4ae73f5e731dba97f576a1f"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/nodes/N-cone-mechanism.md",
+      "status": "added",
+      "additions": 66,
+      "deletions": 0,
+      "sha": "cdf2255a8f03b43f6f7d403791ea8dcd91e1bc44"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/nodes/N-cone.md",
+      "status": "added",
+      "additions": 62,
+      "deletions": 0,
+      "sha": "da71675fa90546f09ac3f9e252de73a4fdcc8127"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/nodes/N-endpoint.md",
+      "status": "added",
+      "additions": 35,
+      "deletions": 0,
+      "sha": "1e1fdaa7111feccd420a26d0b9cfdf274ee920d4"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/nodes/N-homogeneous-transfer.md",
+      "status": "added",
+      "additions": 81,
+      "deletions": 0,
+      "sha": "57e2b1209722d4a9c9c6426f3fb39a826ebacef1"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/nodes/N-image-only.md",
+      "status": "added",
+      "additions": 29,
+      "deletions": 0,
+      "sha": "7b2368e833f4b5fb6ba4a9000ea83d7d34864bed"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/nodes/N-linear-mechanism.md",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0,
+      "sha": "40fd24a653f2b5afcf06740a1446f83ca4e23346"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/nodes/N-maitre.md",
+      "status": "added",
+      "additions": 58,
+      "deletions": 0,
+      "sha": "5066d1ffbf311eb785695eaefaf4b19fbb8535e5"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/nodes/N-question.md",
+      "status": "added",
+      "additions": 23,
+      "deletions": 0,
+      "sha": "ca683fcd3072e566440300bb88ac0d250699d6d7"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/nodes/N-simon-criterion.md",
+      "status": "added",
+      "additions": 54,
+      "deletions": 0,
+      "sha": "92684b91778e8d33abea77b0afb942621916c4e1"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/nodes/N-simon.md",
+      "status": "added",
+      "additions": 58,
+      "deletions": 0,
+      "sha": "fffd254ff2154e4a59764079248f42e3ecf44b92"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/nodes/N-translation-definition.md",
+      "status": "added",
+      "additions": 45,
+      "deletions": 0,
+      "sha": "13b03491fe88f76254b3742b2bd2961ff1d3799d"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/nodes/N-translations.md",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0,
+      "sha": "578bd9d22a9a7368ed5bac30293c8b50edc09c1a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/nodes/N-truncation.md",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0,
+      "sha": "f5edb31f6b8257567c17dd7d767198eedde392f9"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/overview.md",
+      "status": "added",
+      "additions": 17,
+      "deletions": 0,
+      "sha": "2e2adcd289ab6b142f6a03366c224cfe26767365"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/sources/S-barrett-suli.json",
+      "status": "added",
+      "additions": 26,
+      "deletions": 0,
+      "sha": "a7fe47965c7eb41112468db0ec6646834c5ecf15"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/sources/S-maitre.json",
+      "status": "added",
+      "additions": 26,
+      "deletions": 0,
+      "sha": "bf1e9cf34df6eb2e39ac85e33a9cea68d922764a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/knowledge/sources/S-simon.json",
+      "status": "added",
+      "additions": 26,
+      "deletions": 0,
+      "sha": "b9d336631801357cc09f7ae293be918a8bedc078"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/materials-manifest.json",
+      "status": "added",
+      "additions": 215,
+      "deletions": 0,
+      "sha": "9ea9f9a1b02055ce22be2b8a220a85015c48714c"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/project.json",
+      "status": "added",
+      "additions": 9,
+      "deletions": 0,
+      "sha": "dcc610ceff530b0cb7c8eb7f156ba49fdbe33954"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/materials/scope.md",
+      "status": "added",
+      "additions": 19,
+      "deletions": 0,
+      "sha": "ffdcaaa6adf2e387aa30ba547c109486afd592f6"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/outline.md",
+      "status": "added",
+      "additions": 7,
+      "deletions": 0,
+      "sha": "3803d5c268ccbda845f14c72a080949ade4e33b3"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/minimal-methods/plan.json",
+      "status": "added",
+      "additions": 228,
+      "deletions": 0,
+      "sha": "c419b02d2e44aa4fed64a4c1a09502d591e90fe5"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/evidence/author-semantic.json",
+      "status": "added",
+      "additions": 1046,
+      "deletions": 0,
+      "sha": "02940ccc72bc1476cf5a1625cd9cfc160200f0da"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/evidence/render-manifest.json",
+      "status": "added",
+      "additions": 60,
+      "deletions": 0,
+      "sha": "6dde571ad53d66492eebc1e5ceb962e8adec7bdb"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/evidence/root-page-review.json",
+      "status": "added",
+      "additions": 109,
+      "deletions": 0,
+      "sha": "86ec4d982dfae39f3851c9639edf4943804ebe09"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/generated/conventions.tex",
+      "status": "added",
+      "additions": 5,
+      "deletions": 0,
+      "sha": "f1c97a611ef1dadf19fd70e248231a6da9481b78"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/generated/manifest.json",
+      "status": "added",
+      "additions": 215,
+      "deletions": 0,
+      "sha": "2e87a9e3d7469bebba34be7f46b4cc2dd60cb07e"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/generated/references.bib",
+      "status": "added",
+      "additions": 25,
+      "deletions": 0,
+      "sha": "0c1b404b34da524b482b2a4910226527cfb2df56"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/generated/statements/N-cone-definition.tex",
+      "status": "added",
+      "additions": 9,
+      "deletions": 0,
+      "sha": "05b5a00653ca0fdd1c2d2339245f365f95bb3079"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/generated/statements/N-cone-ehrling.tex",
+      "status": "added",
+      "additions": 8,
+      "deletions": 0,
+      "sha": "6a3e493629119528b5d87a09626feabe1b141eb4"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/generated/statements/N-cone.tex",
+      "status": "added",
+      "additions": 16,
+      "deletions": 0,
+      "sha": "6738917e1c42b4a93e4a82a4bd90ff3c7dd16419"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/generated/statements/N-homogeneous-transfer.tex",
+      "status": "added",
+      "additions": 12,
+      "deletions": 0,
+      "sha": "f0bcd6e586b3bbe4230dd140fbc4a81a2964291b"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/generated/statements/N-maitre.tex",
+      "status": "added",
+      "additions": 12,
+      "deletions": 0,
+      "sha": "a7e44e2df8c4710882d02684e010d581e5c55932"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/generated/statements/N-simon-criterion.tex",
+      "status": "added",
+      "additions": 11,
+      "deletions": 0,
+      "sha": "334c7a5dd5912741ca3ee020744f4627f4915cd5"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/generated/statements/N-simon.tex",
+      "status": "added",
+      "additions": 12,
+      "deletions": 0,
+      "sha": "4c9c4d4d7bcee3c3eed3d9543c663b4264437fc5"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/generated/statements/N-translation-definition.tex",
+      "status": "added",
+      "additions": 8,
+      "deletions": 0,
+      "sha": "7f4193434d7ef1e90524bac78f278f71dbfc9394"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/manuscript/main.tex",
+      "status": "added",
+      "additions": 213,
+      "deletions": 0,
+      "sha": "930f1c39d7206788420d70bd55fb506f47e716f4"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/manuscript/math-review.sty",
+      "status": "added",
+      "additions": 63,
+      "deletions": 0,
+      "sha": "1a5710e1885e6b81d1e6e17c5b2ee6d1d55442fe"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/reviews/coverage-cone-increment.json",
+      "status": "added",
+      "additions": 90,
+      "deletions": 0,
+      "sha": "8007f23a53294fcccbfdde091d37b24e97dd9977"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/reviews/date-correction-N-cone-definition.json",
+      "status": "added",
+      "additions": 51,
+      "deletions": 0,
+      "sha": "b53a3c9b020d7a5008efac3d967bf4222b7399a8"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/reviews/date-correction-N-cone-ehrling.json",
+      "status": "added",
+      "additions": 60,
+      "deletions": 0,
+      "sha": "593672340c97e1edc59b89549257c647c79bb769"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/reviews/date-correction-N-cone-mechanism.json",
+      "status": "added",
+      "additions": 100,
+      "deletions": 0,
+      "sha": "995d19a16850b004963d93b884df63a7de9b6fc2"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/reviews/date-correction-N-cone.json",
+      "status": "added",
+      "additions": 71,
+      "deletions": 0,
+      "sha": "70530d1257733b92e5a9621581703d6ba39f7701"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/reviews/date-correction-N-homogeneous-transfer.json",
+      "status": "added",
+      "additions": 95,
+      "deletions": 0,
+      "sha": "055360ebeee2eb4000d212e49292d6153940bcf3"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/reviews/date-correction-N-image-only.json",
+      "status": "added",
+      "additions": 55,
+      "deletions": 0,
+      "sha": "9227e1bace04474a88b672683047c6b98770c8c2"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/reviews/date-correction-N-maitre.json",
+      "status": "added",
+      "additions": 79,
+      "deletions": 0,
+      "sha": "7174ff0bb06791ab687ba5a3e81d2ebaca64e978"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/reviews/date-correction-N-translations.json",
+      "status": "added",
+      "additions": 66,
+      "deletions": 0,
+      "sha": "eb7367823fd4db28122a9f273551be7e69d459c6"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/reviews/date-correction-N-truncation.json",
+      "status": "added",
+      "additions": 75,
+      "deletions": 0,
+      "sha": "7d1d4a40f145c9a1951648976041fcd212b9db51"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/reviews/date-correction-S-barrett-suli.json",
+      "status": "added",
+      "additions": 55,
+      "deletions": 0,
+      "sha": "d5c24b78566a2e756afafb6fce8339a80a9e7333"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/reviews/date-correction-S-maitre.json",
+      "status": "added",
+      "additions": 47,
+      "deletions": 0,
+      "sha": "5d52ac6c8044bc6c3e0476d1a2d098fe0394d5e3"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/reviews/math-initial-N-endpoint.json",
+      "status": "added",
+      "additions": 56,
+      "deletions": 0,
+      "sha": "2fe7b73308f48b991b81089671a3386599196faf"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/reviews/math-initial-N-linear-mechanism.json",
+      "status": "added",
+      "additions": 64,
+      "deletions": 0,
+      "sha": "2d6a7845fb22d035ee6cdaa94f2a41e737c7e86a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/reviews/math-initial-N-question.json",
+      "status": "added",
+      "additions": 41,
+      "deletions": 0,
+      "sha": "a92ffd95fab858634999e3400350eb95f9b89944"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/reviews/math-initial-N-simon-criterion.json",
+      "status": "added",
+      "additions": 53,
+      "deletions": 0,
+      "sha": "f86b54cf64a4bc502b040aff7d395cff8bae08e2"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/reviews/math-initial-N-simon.json",
+      "status": "added",
+      "additions": 70,
+      "deletions": 0,
+      "sha": "25a0eeeb6377c83a65d59a216550ee7708b84def"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/reviews/math-initial-N-translation-definition.json",
+      "status": "added",
+      "additions": 49,
+      "deletions": 0,
+      "sha": "1e593bc8b4d32e4c18a62967973b2cd013eb6225"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/reviews/source-initial-S-simon.json",
+      "status": "added",
+      "additions": 47,
+      "deletions": 0,
+      "sha": "55af880c05b4b08f7a88bc080f9a5f5ca6eea341"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/source-checks/S-barrett-suli.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "379c7a7a561e4b2fe2b80dc13b751a96afa20525"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/source-checks/S-maitre.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "b2ba7163ce84fe6b75fa4d6f8186b8882278f8a7"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/evidence/source-checks/S-simon.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "17710e52ced5bcbd70a29bb372a690cf33c8f1be"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/conventions.tex",
+      "status": "added",
+      "additions": 5,
+      "deletions": 0,
+      "sha": "f1c97a611ef1dadf19fd70e248231a6da9481b78"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/coverage.json",
+      "status": "added",
+      "additions": 36,
+      "deletions": 0,
+      "sha": "47d76465b9799634ce431deb448512b4d5993b88"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/discovery.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "f1729f3ddb73df0a0d696d6ca40137ed4d543555"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/nodes/N-cone-definition.md",
+      "status": "added",
+      "additions": 47,
+      "deletions": 0,
+      "sha": "c1217bb2e6f9c01b27477201cc9f2eea2df86838"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/nodes/N-cone-ehrling.md",
+      "status": "added",
+      "additions": 50,
+      "deletions": 0,
+      "sha": "c9207a770e97ddaac4ae73f5e731dba97f576a1f"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/nodes/N-cone-mechanism.md",
+      "status": "added",
+      "additions": 66,
+      "deletions": 0,
+      "sha": "cdf2255a8f03b43f6f7d403791ea8dcd91e1bc44"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/nodes/N-cone.md",
+      "status": "added",
+      "additions": 62,
+      "deletions": 0,
+      "sha": "da71675fa90546f09ac3f9e252de73a4fdcc8127"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/nodes/N-endpoint.md",
+      "status": "added",
+      "additions": 35,
+      "deletions": 0,
+      "sha": "1e1fdaa7111feccd420a26d0b9cfdf274ee920d4"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/nodes/N-homogeneous-transfer.md",
+      "status": "added",
+      "additions": 81,
+      "deletions": 0,
+      "sha": "57e2b1209722d4a9c9c6426f3fb39a826ebacef1"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/nodes/N-image-only.md",
+      "status": "added",
+      "additions": 29,
+      "deletions": 0,
+      "sha": "7b2368e833f4b5fb6ba4a9000ea83d7d34864bed"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/nodes/N-linear-mechanism.md",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0,
+      "sha": "40fd24a653f2b5afcf06740a1446f83ca4e23346"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/nodes/N-maitre.md",
+      "status": "added",
+      "additions": 58,
+      "deletions": 0,
+      "sha": "5066d1ffbf311eb785695eaefaf4b19fbb8535e5"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/nodes/N-question.md",
+      "status": "added",
+      "additions": 23,
+      "deletions": 0,
+      "sha": "ca683fcd3072e566440300bb88ac0d250699d6d7"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/nodes/N-simon-criterion.md",
+      "status": "added",
+      "additions": 54,
+      "deletions": 0,
+      "sha": "92684b91778e8d33abea77b0afb942621916c4e1"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/nodes/N-simon.md",
+      "status": "added",
+      "additions": 58,
+      "deletions": 0,
+      "sha": "fffd254ff2154e4a59764079248f42e3ecf44b92"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/nodes/N-translation-definition.md",
+      "status": "added",
+      "additions": 45,
+      "deletions": 0,
+      "sha": "13b03491fe88f76254b3742b2bd2961ff1d3799d"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/nodes/N-translations.md",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0,
+      "sha": "578bd9d22a9a7368ed5bac30293c8b50edc09c1a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/nodes/N-truncation.md",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0,
+      "sha": "f5edb31f6b8257567c17dd7d767198eedde392f9"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/overview.md",
+      "status": "added",
+      "additions": 17,
+      "deletions": 0,
+      "sha": "2e2adcd289ab6b142f6a03366c224cfe26767365"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/sources/S-barrett-suli.json",
+      "status": "added",
+      "additions": 26,
+      "deletions": 0,
+      "sha": "a7fe47965c7eb41112468db0ec6646834c5ecf15"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/sources/S-maitre.json",
+      "status": "added",
+      "additions": 26,
+      "deletions": 0,
+      "sha": "bf1e9cf34df6eb2e39ac85e33a9cea68d922764a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/knowledge/sources/S-simon.json",
+      "status": "added",
+      "additions": 26,
+      "deletions": 0,
+      "sha": "b9d336631801357cc09f7ae293be918a8bedc078"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/materials-manifest.json",
+      "status": "added",
+      "additions": 215,
+      "deletions": 0,
+      "sha": "2e87a9e3d7469bebba34be7f46b4cc2dd60cb07e"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/project.json",
+      "status": "added",
+      "additions": 9,
+      "deletions": 0,
+      "sha": "dcc610ceff530b0cb7c8eb7f156ba49fdbe33954"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/materials/scope.md",
+      "status": "added",
+      "additions": 19,
+      "deletions": 0,
+      "sha": "ffdcaaa6adf2e387aa30ba547c109486afd592f6"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/outline.md",
+      "status": "added",
+      "additions": 9,
+      "deletions": 0,
+      "sha": "cb6dd2fd91d67db0f427d15346bf39c8256d1b7b"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/outputs/thematic/plan.json",
+      "status": "added",
+      "additions": 228,
+      "deletions": 0,
+      "sha": "086136b08390f0a593fbe7462f3c34c717be58a6"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/project.json",
+      "status": "added",
+      "additions": 9,
+      "deletions": 0,
+      "sha": "dcc610ceff530b0cb7c8eb7f156ba49fdbe33954"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/scope.md",
+      "status": "added",
+      "additions": 19,
+      "deletions": 0,
+      "sha": "ffdcaaa6adf2e387aa30ba547c109486afd592f6"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/proof-step-catalog.json",
+      "status": "added",
+      "additions": 36,
+      "deletions": 0,
+      "sha": "1761996c4f4b3bb1df5a9b490358af6f31ddf8f4"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/reviews/coverage-cone-increment.json",
+      "status": "added",
+      "additions": 90,
+      "deletions": 0,
+      "sha": "8007f23a53294fcccbfdde091d37b24e97dd9977"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/reviews/coverage-initial.json",
+      "status": "added",
+      "additions": 77,
+      "deletions": 0,
+      "sha": "20be3f8e51f4a1c5608bade9da794dd2c4db9303"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/reviews/math-cone-increment-N-cone-definition.json",
+      "status": "added",
+      "additions": 50,
+      "deletions": 0,
+      "sha": "eb0e94b72715fcd668ccaec1048bd4b4747ed221"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/reviews/math-cone-increment-N-cone-ehrling.json",
+      "status": "added",
+      "additions": 59,
+      "deletions": 0,
+      "sha": "853cc1caeae5b53719c5ba245b6644fff8babd34"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/reviews/math-cone-increment-N-cone-mechanism.json",
+      "status": "added",
+      "additions": 99,
+      "deletions": 0,
+      "sha": "ad134d501c54922a9b91d0baf32fd9924afbbef3"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/reviews/math-cone-increment-N-cone.json",
+      "status": "added",
+      "additions": 70,
+      "deletions": 0,
+      "sha": "dbbfd827839e78d397f4306cf0f2ac11586e4d8f"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/reviews/math-cone-increment-N-homogeneous-transfer.json",
+      "status": "added",
+      "additions": 94,
+      "deletions": 0,
+      "sha": "a1e88168307a8b14c9f1edefdb857360df7fd60b"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/reviews/math-initial-N-endpoint.json",
+      "status": "added",
+      "additions": 56,
+      "deletions": 0,
+      "sha": "2fe7b73308f48b991b81089671a3386599196faf"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/reviews/math-initial-N-image-only.json",
+      "status": "added",
+      "additions": 54,
+      "deletions": 0,
+      "sha": "145bfb2a5c1d0ba53f306bdc565ce84706d2f9af"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/reviews/math-initial-N-linear-mechanism.json",
+      "status": "added",
+      "additions": 64,
+      "deletions": 0,
+      "sha": "2d6a7845fb22d035ee6cdaa94f2a41e737c7e86a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/reviews/math-initial-N-maitre.json",
+      "status": "added",
+      "additions": 78,
+      "deletions": 0,
+      "sha": "7410eb0369ce0fe8befa8e4f0b6dde0f98e500c0"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/reviews/math-initial-N-question.json",
+      "status": "added",
+      "additions": 41,
+      "deletions": 0,
+      "sha": "a92ffd95fab858634999e3400350eb95f9b89944"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/reviews/math-initial-N-simon-criterion.json",
+      "status": "added",
+      "additions": 53,
+      "deletions": 0,
+      "sha": "f86b54cf64a4bc502b040aff7d395cff8bae08e2"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/reviews/math-initial-N-simon.json",
+      "status": "added",
+      "additions": 70,
+      "deletions": 0,
+      "sha": "25a0eeeb6377c83a65d59a216550ee7708b84def"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/reviews/math-initial-N-translation-definition.json",
+      "status": "added",
+      "additions": 49,
+      "deletions": 0,
+      "sha": "1e593bc8b4d32e4c18a62967973b2cd013eb6225"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/reviews/math-initial-N-translations.json",
+      "status": "added",
+      "additions": 65,
+      "deletions": 0,
+      "sha": "dffcd92ee8b6dedf8a454986e0516e5fe4d3a226"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/reviews/math-initial-N-truncation.json",
+      "status": "added",
+      "additions": 74,
+      "deletions": 0,
+      "sha": "5fbe002778304d6e408989b8dc9c55fb00b5dcbf"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/reviews/source-cone-increment.json",
+      "status": "added",
+      "additions": 54,
+      "deletions": 0,
+      "sha": "db1be1557ac42d5ff0c5fa94514f80d205cf72e3"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/reviews/source-initial-S-maitre.json",
+      "status": "added",
+      "additions": 46,
+      "deletions": 0,
+      "sha": "3a3ff44f4829e305b8ef7ceeec5c90f829d4d51b"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/reviews/source-initial-S-simon.json",
+      "status": "added",
+      "additions": 47,
+      "deletions": 0,
+      "sha": "55af880c05b4b08f7a88bc080f9a5f5ca6eea341"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/source-checks/S-barrett-suli.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "e6a221e5de0ead8b60d19824bca509a99171f11d"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/source-checks/S-maitre.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "32a818d7765039bacfdeb3da0bbcef0bcf828322"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/evidence/source-checks/S-simon.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "17710e52ced5bcbd70a29bb372a690cf33c8f1be"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/conventions.tex",
+      "status": "added",
+      "additions": 5,
+      "deletions": 0,
+      "sha": "f1c97a611ef1dadf19fd70e248231a6da9481b78"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/coverage.json",
+      "status": "added",
+      "additions": 36,
+      "deletions": 0,
+      "sha": "47d76465b9799634ce431deb448512b4d5993b88"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/discovery.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "f1729f3ddb73df0a0d696d6ca40137ed4d543555"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/nodes/N-cone-definition.md",
+      "status": "added",
+      "additions": 47,
+      "deletions": 0,
+      "sha": "c1217bb2e6f9c01b27477201cc9f2eea2df86838"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/nodes/N-cone-ehrling.md",
+      "status": "added",
+      "additions": 50,
+      "deletions": 0,
+      "sha": "c9207a770e97ddaac4ae73f5e731dba97f576a1f"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/nodes/N-cone-mechanism.md",
+      "status": "added",
+      "additions": 66,
+      "deletions": 0,
+      "sha": "cdf2255a8f03b43f6f7d403791ea8dcd91e1bc44"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/nodes/N-cone.md",
+      "status": "added",
+      "additions": 62,
+      "deletions": 0,
+      "sha": "da71675fa90546f09ac3f9e252de73a4fdcc8127"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/nodes/N-endpoint.md",
+      "status": "added",
+      "additions": 35,
+      "deletions": 0,
+      "sha": "1e1fdaa7111feccd420a26d0b9cfdf274ee920d4"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/nodes/N-homogeneous-transfer.md",
+      "status": "added",
+      "additions": 81,
+      "deletions": 0,
+      "sha": "57e2b1209722d4a9c9c6426f3fb39a826ebacef1"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/nodes/N-image-only.md",
+      "status": "added",
+      "additions": 29,
+      "deletions": 0,
+      "sha": "7b2368e833f4b5fb6ba4a9000ea83d7d34864bed"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/nodes/N-linear-mechanism.md",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0,
+      "sha": "40fd24a653f2b5afcf06740a1446f83ca4e23346"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/nodes/N-maitre.md",
+      "status": "added",
+      "additions": 58,
+      "deletions": 0,
+      "sha": "5066d1ffbf311eb785695eaefaf4b19fbb8535e5"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/nodes/N-question.md",
+      "status": "added",
+      "additions": 23,
+      "deletions": 0,
+      "sha": "ca683fcd3072e566440300bb88ac0d250699d6d7"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/nodes/N-simon-criterion.md",
+      "status": "added",
+      "additions": 54,
+      "deletions": 0,
+      "sha": "92684b91778e8d33abea77b0afb942621916c4e1"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/nodes/N-simon.md",
+      "status": "added",
+      "additions": 58,
+      "deletions": 0,
+      "sha": "fffd254ff2154e4a59764079248f42e3ecf44b92"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/nodes/N-translation-definition.md",
+      "status": "added",
+      "additions": 45,
+      "deletions": 0,
+      "sha": "13b03491fe88f76254b3742b2bd2961ff1d3799d"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/nodes/N-translations.md",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0,
+      "sha": "578bd9d22a9a7368ed5bac30293c8b50edc09c1a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/nodes/N-truncation.md",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0,
+      "sha": "f5edb31f6b8257567c17dd7d767198eedde392f9"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/overview.md",
+      "status": "added",
+      "additions": 17,
+      "deletions": 0,
+      "sha": "2e2adcd289ab6b142f6a03366c224cfe26767365"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/sources/S-barrett-suli.json",
+      "status": "added",
+      "additions": 26,
+      "deletions": 0,
+      "sha": "a7fe47965c7eb41112468db0ec6646834c5ecf15"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/sources/S-maitre.json",
+      "status": "added",
+      "additions": 26,
+      "deletions": 0,
+      "sha": "bf1e9cf34df6eb2e39ac85e33a9cea68d922764a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/knowledge/sources/S-simon.json",
+      "status": "added",
+      "additions": 26,
+      "deletions": 0,
+      "sha": "b9d336631801357cc09f7ae293be918a8bedc078"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/project.json",
+      "status": "added",
+      "additions": 9,
+      "deletions": 0,
+      "sha": "dcc610ceff530b0cb7c8eb7f156ba49fdbe33954"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/files/scope.md",
+      "status": "added",
+      "additions": 19,
+      "deletions": 0,
+      "sha": "ffdcaaa6adf2e387aa30ba547c109486afd592f6"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-208032d0e85fbb7b2b1f504697e203afc1903848c9f1279d2238d816200a133e/manifest.json",
+      "status": "added",
+      "additions": 247,
+      "deletions": 0,
+      "sha": "dd9a4f17c8a1331fa63218b5b7355d320f70d545"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/proof-step-catalog.json",
+      "status": "added",
+      "additions": 36,
+      "deletions": 0,
+      "sha": "1761996c4f4b3bb1df5a9b490358af6f31ddf8f4"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/coverage-cone-increment.json",
+      "status": "added",
+      "additions": 90,
+      "deletions": 0,
+      "sha": "8007f23a53294fcccbfdde091d37b24e97dd9977"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/coverage-initial.json",
+      "status": "added",
+      "additions": 77,
+      "deletions": 0,
+      "sha": "20be3f8e51f4a1c5608bade9da794dd2c4db9303"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/date-correction-N-cone-definition.json",
+      "status": "added",
+      "additions": 51,
+      "deletions": 0,
+      "sha": "b53a3c9b020d7a5008efac3d967bf4222b7399a8"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/date-correction-N-cone-ehrling.json",
+      "status": "added",
+      "additions": 60,
+      "deletions": 0,
+      "sha": "593672340c97e1edc59b89549257c647c79bb769"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/date-correction-N-cone-mechanism.json",
+      "status": "added",
+      "additions": 100,
+      "deletions": 0,
+      "sha": "995d19a16850b004963d93b884df63a7de9b6fc2"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/date-correction-N-cone.json",
+      "status": "added",
+      "additions": 71,
+      "deletions": 0,
+      "sha": "70530d1257733b92e5a9621581703d6ba39f7701"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/date-correction-N-homogeneous-transfer.json",
+      "status": "added",
+      "additions": 95,
+      "deletions": 0,
+      "sha": "055360ebeee2eb4000d212e49292d6153940bcf3"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/date-correction-N-image-only.json",
+      "status": "added",
+      "additions": 55,
+      "deletions": 0,
+      "sha": "9227e1bace04474a88b672683047c6b98770c8c2"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/date-correction-N-maitre.json",
+      "status": "added",
+      "additions": 79,
+      "deletions": 0,
+      "sha": "7174ff0bb06791ab687ba5a3e81d2ebaca64e978"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/date-correction-N-translations.json",
+      "status": "added",
+      "additions": 66,
+      "deletions": 0,
+      "sha": "eb7367823fd4db28122a9f273551be7e69d459c6"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/date-correction-N-truncation.json",
+      "status": "added",
+      "additions": 75,
+      "deletions": 0,
+      "sha": "7d1d4a40f145c9a1951648976041fcd212b9db51"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/date-correction-S-barrett-suli.json",
+      "status": "added",
+      "additions": 55,
+      "deletions": 0,
+      "sha": "d5c24b78566a2e756afafb6fce8339a80a9e7333"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/date-correction-S-maitre.json",
+      "status": "added",
+      "additions": 47,
+      "deletions": 0,
+      "sha": "5d52ac6c8044bc6c3e0476d1a2d098fe0394d5e3"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/math-cone-increment-N-cone-definition.json",
+      "status": "added",
+      "additions": 50,
+      "deletions": 0,
+      "sha": "eb0e94b72715fcd668ccaec1048bd4b4747ed221"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/math-cone-increment-N-cone-ehrling.json",
+      "status": "added",
+      "additions": 59,
+      "deletions": 0,
+      "sha": "853cc1caeae5b53719c5ba245b6644fff8babd34"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/math-cone-increment-N-cone-mechanism.json",
+      "status": "added",
+      "additions": 99,
+      "deletions": 0,
+      "sha": "ad134d501c54922a9b91d0baf32fd9924afbbef3"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/math-cone-increment-N-cone.json",
+      "status": "added",
+      "additions": 70,
+      "deletions": 0,
+      "sha": "dbbfd827839e78d397f4306cf0f2ac11586e4d8f"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/math-cone-increment-N-homogeneous-transfer.json",
+      "status": "added",
+      "additions": 94,
+      "deletions": 0,
+      "sha": "a1e88168307a8b14c9f1edefdb857360df7fd60b"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/math-initial-N-endpoint.json",
+      "status": "added",
+      "additions": 56,
+      "deletions": 0,
+      "sha": "2fe7b73308f48b991b81089671a3386599196faf"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/math-initial-N-image-only.json",
+      "status": "added",
+      "additions": 54,
+      "deletions": 0,
+      "sha": "145bfb2a5c1d0ba53f306bdc565ce84706d2f9af"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/math-initial-N-linear-mechanism.json",
+      "status": "added",
+      "additions": 64,
+      "deletions": 0,
+      "sha": "2d6a7845fb22d035ee6cdaa94f2a41e737c7e86a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/math-initial-N-maitre.json",
+      "status": "added",
+      "additions": 78,
+      "deletions": 0,
+      "sha": "7410eb0369ce0fe8befa8e4f0b6dde0f98e500c0"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/math-initial-N-question.json",
+      "status": "added",
+      "additions": 41,
+      "deletions": 0,
+      "sha": "a92ffd95fab858634999e3400350eb95f9b89944"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/math-initial-N-simon-criterion.json",
+      "status": "added",
+      "additions": 53,
+      "deletions": 0,
+      "sha": "f86b54cf64a4bc502b040aff7d395cff8bae08e2"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/math-initial-N-simon.json",
+      "status": "added",
+      "additions": 70,
+      "deletions": 0,
+      "sha": "25a0eeeb6377c83a65d59a216550ee7708b84def"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/math-initial-N-translation-definition.json",
+      "status": "added",
+      "additions": 49,
+      "deletions": 0,
+      "sha": "1e593bc8b4d32e4c18a62967973b2cd013eb6225"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/math-initial-N-translations.json",
+      "status": "added",
+      "additions": 65,
+      "deletions": 0,
+      "sha": "dffcd92ee8b6dedf8a454986e0516e5fe4d3a226"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/math-initial-N-truncation.json",
+      "status": "added",
+      "additions": 74,
+      "deletions": 0,
+      "sha": "5fbe002778304d6e408989b8dc9c55fb00b5dcbf"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/source-cone-increment.json",
+      "status": "added",
+      "additions": 54,
+      "deletions": 0,
+      "sha": "db1be1557ac42d5ff0c5fa94514f80d205cf72e3"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/source-initial-S-maitre.json",
+      "status": "added",
+      "additions": 46,
+      "deletions": 0,
+      "sha": "3a3ff44f4829e305b8ef7ceeec5c90f829d4d51b"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/reviews/source-initial-S-simon.json",
+      "status": "added",
+      "additions": 47,
+      "deletions": 0,
+      "sha": "55af880c05b4b08f7a88bc080f9a5f5ca6eea341"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/source-checks/S-barrett-suli.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "379c7a7a561e4b2fe2b80dc13b751a96afa20525"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/source-checks/S-maitre.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "b2ba7163ce84fe6b75fa4d6f8186b8882278f8a7"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/evidence/source-checks/S-simon.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "17710e52ced5bcbd70a29bb372a690cf33c8f1be"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/conventions.tex",
+      "status": "added",
+      "additions": 5,
+      "deletions": 0,
+      "sha": "f1c97a611ef1dadf19fd70e248231a6da9481b78"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/coverage.json",
+      "status": "added",
+      "additions": 36,
+      "deletions": 0,
+      "sha": "47d76465b9799634ce431deb448512b4d5993b88"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/discovery.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "f1729f3ddb73df0a0d696d6ca40137ed4d543555"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/nodes/N-cone-definition.md",
+      "status": "added",
+      "additions": 47,
+      "deletions": 0,
+      "sha": "c1217bb2e6f9c01b27477201cc9f2eea2df86838"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/nodes/N-cone-ehrling.md",
+      "status": "added",
+      "additions": 50,
+      "deletions": 0,
+      "sha": "c9207a770e97ddaac4ae73f5e731dba97f576a1f"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/nodes/N-cone-mechanism.md",
+      "status": "added",
+      "additions": 66,
+      "deletions": 0,
+      "sha": "cdf2255a8f03b43f6f7d403791ea8dcd91e1bc44"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/nodes/N-cone.md",
+      "status": "added",
+      "additions": 62,
+      "deletions": 0,
+      "sha": "da71675fa90546f09ac3f9e252de73a4fdcc8127"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/nodes/N-endpoint.md",
+      "status": "added",
+      "additions": 35,
+      "deletions": 0,
+      "sha": "1e1fdaa7111feccd420a26d0b9cfdf274ee920d4"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/nodes/N-homogeneous-transfer.md",
+      "status": "added",
+      "additions": 81,
+      "deletions": 0,
+      "sha": "57e2b1209722d4a9c9c6426f3fb39a826ebacef1"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/nodes/N-image-only.md",
+      "status": "added",
+      "additions": 29,
+      "deletions": 0,
+      "sha": "7b2368e833f4b5fb6ba4a9000ea83d7d34864bed"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/nodes/N-linear-mechanism.md",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0,
+      "sha": "40fd24a653f2b5afcf06740a1446f83ca4e23346"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/nodes/N-maitre.md",
+      "status": "added",
+      "additions": 58,
+      "deletions": 0,
+      "sha": "5066d1ffbf311eb785695eaefaf4b19fbb8535e5"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/nodes/N-question.md",
+      "status": "added",
+      "additions": 23,
+      "deletions": 0,
+      "sha": "ca683fcd3072e566440300bb88ac0d250699d6d7"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/nodes/N-simon-criterion.md",
+      "status": "added",
+      "additions": 54,
+      "deletions": 0,
+      "sha": "92684b91778e8d33abea77b0afb942621916c4e1"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/nodes/N-simon.md",
+      "status": "added",
+      "additions": 58,
+      "deletions": 0,
+      "sha": "fffd254ff2154e4a59764079248f42e3ecf44b92"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/nodes/N-translation-definition.md",
+      "status": "added",
+      "additions": 45,
+      "deletions": 0,
+      "sha": "13b03491fe88f76254b3742b2bd2961ff1d3799d"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/nodes/N-translations.md",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0,
+      "sha": "578bd9d22a9a7368ed5bac30293c8b50edc09c1a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/nodes/N-truncation.md",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0,
+      "sha": "f5edb31f6b8257567c17dd7d767198eedde392f9"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/overview.md",
+      "status": "added",
+      "additions": 17,
+      "deletions": 0,
+      "sha": "2e2adcd289ab6b142f6a03366c224cfe26767365"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/sources/S-barrett-suli.json",
+      "status": "added",
+      "additions": 26,
+      "deletions": 0,
+      "sha": "a7fe47965c7eb41112468db0ec6646834c5ecf15"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/sources/S-maitre.json",
+      "status": "added",
+      "additions": 26,
+      "deletions": 0,
+      "sha": "bf1e9cf34df6eb2e39ac85e33a9cea68d922764a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/knowledge/sources/S-simon.json",
+      "status": "added",
+      "additions": 26,
+      "deletions": 0,
+      "sha": "b9d336631801357cc09f7ae293be918a8bedc078"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/project.json",
+      "status": "added",
+      "additions": 9,
+      "deletions": 0,
+      "sha": "dcc610ceff530b0cb7c8eb7f156ba49fdbe33954"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/files/scope.md",
+      "status": "added",
+      "additions": 19,
+      "deletions": 0,
+      "sha": "ffdcaaa6adf2e387aa30ba547c109486afd592f6"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-3bafc0dd9e16bd6dd56aa1c6d5dd1db62474438465f10ef1a7f448232611bd4d/manifest.json",
+      "status": "added",
+      "additions": 302,
+      "deletions": 0,
+      "sha": "64b6d3e9fd953776b1310d4f4326f83e69ac900a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/evidence/proof-step-catalog.json",
+      "status": "added",
+      "additions": 23,
+      "deletions": 0,
+      "sha": "f88de3fbbcb7443f9d182657de0ee724e9b9a1b0"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/evidence/reviews/coverage-initial.json",
+      "status": "added",
+      "additions": 77,
+      "deletions": 0,
+      "sha": "20be3f8e51f4a1c5608bade9da794dd2c4db9303"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/evidence/reviews/math-initial-N-endpoint.json",
+      "status": "added",
+      "additions": 56,
+      "deletions": 0,
+      "sha": "2fe7b73308f48b991b81089671a3386599196faf"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/evidence/reviews/math-initial-N-image-only.json",
+      "status": "added",
+      "additions": 54,
+      "deletions": 0,
+      "sha": "145bfb2a5c1d0ba53f306bdc565ce84706d2f9af"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/evidence/reviews/math-initial-N-linear-mechanism.json",
+      "status": "added",
+      "additions": 64,
+      "deletions": 0,
+      "sha": "2d6a7845fb22d035ee6cdaa94f2a41e737c7e86a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/evidence/reviews/math-initial-N-maitre.json",
+      "status": "added",
+      "additions": 78,
+      "deletions": 0,
+      "sha": "7410eb0369ce0fe8befa8e4f0b6dde0f98e500c0"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/evidence/reviews/math-initial-N-question.json",
+      "status": "added",
+      "additions": 41,
+      "deletions": 0,
+      "sha": "a92ffd95fab858634999e3400350eb95f9b89944"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/evidence/reviews/math-initial-N-simon-criterion.json",
+      "status": "added",
+      "additions": 53,
+      "deletions": 0,
+      "sha": "f86b54cf64a4bc502b040aff7d395cff8bae08e2"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/evidence/reviews/math-initial-N-simon.json",
+      "status": "added",
+      "additions": 70,
+      "deletions": 0,
+      "sha": "25a0eeeb6377c83a65d59a216550ee7708b84def"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/evidence/reviews/math-initial-N-translation-definition.json",
+      "status": "added",
+      "additions": 49,
+      "deletions": 0,
+      "sha": "1e593bc8b4d32e4c18a62967973b2cd013eb6225"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/evidence/reviews/math-initial-N-translations.json",
+      "status": "added",
+      "additions": 65,
+      "deletions": 0,
+      "sha": "dffcd92ee8b6dedf8a454986e0516e5fe4d3a226"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/evidence/reviews/math-initial-N-truncation.json",
+      "status": "added",
+      "additions": 74,
+      "deletions": 0,
+      "sha": "5fbe002778304d6e408989b8dc9c55fb00b5dcbf"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/evidence/reviews/source-initial-S-maitre.json",
+      "status": "added",
+      "additions": 46,
+      "deletions": 0,
+      "sha": "3a3ff44f4829e305b8ef7ceeec5c90f829d4d51b"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/evidence/reviews/source-initial-S-simon.json",
+      "status": "added",
+      "additions": 47,
+      "deletions": 0,
+      "sha": "55af880c05b4b08f7a88bc080f9a5f5ca6eea341"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/evidence/source-checks/S-maitre.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "32a818d7765039bacfdeb3da0bbcef0bcf828322"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/evidence/source-checks/S-simon.md",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0,
+      "sha": "17710e52ced5bcbd70a29bb372a690cf33c8f1be"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/knowledge/conventions.tex",
+      "status": "added",
+      "additions": 5,
+      "deletions": 0,
+      "sha": "f1c97a611ef1dadf19fd70e248231a6da9481b78"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/knowledge/coverage.json",
+      "status": "added",
+      "additions": 29,
+      "deletions": 0,
+      "sha": "ddba28cd365b00ef8e93310626140877aee8f119"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/knowledge/discovery.md",
+      "status": "added",
+      "additions": 11,
+      "deletions": 0,
+      "sha": "7158eccb23130de9d535e2d86bd5d0d3bc47addd"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/knowledge/nodes/N-endpoint.md",
+      "status": "added",
+      "additions": 35,
+      "deletions": 0,
+      "sha": "1e1fdaa7111feccd420a26d0b9cfdf274ee920d4"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/knowledge/nodes/N-image-only.md",
+      "status": "added",
+      "additions": 29,
+      "deletions": 0,
+      "sha": "7b2368e833f4b5fb6ba4a9000ea83d7d34864bed"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/knowledge/nodes/N-linear-mechanism.md",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0,
+      "sha": "40fd24a653f2b5afcf06740a1446f83ca4e23346"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/knowledge/nodes/N-maitre.md",
+      "status": "added",
+      "additions": 58,
+      "deletions": 0,
+      "sha": "5066d1ffbf311eb785695eaefaf4b19fbb8535e5"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/knowledge/nodes/N-question.md",
+      "status": "added",
+      "additions": 23,
+      "deletions": 0,
+      "sha": "ca683fcd3072e566440300bb88ac0d250699d6d7"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/knowledge/nodes/N-simon-criterion.md",
+      "status": "added",
+      "additions": 54,
+      "deletions": 0,
+      "sha": "92684b91778e8d33abea77b0afb942621916c4e1"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/knowledge/nodes/N-simon.md",
+      "status": "added",
+      "additions": 58,
+      "deletions": 0,
+      "sha": "fffd254ff2154e4a59764079248f42e3ecf44b92"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/knowledge/nodes/N-translation-definition.md",
+      "status": "added",
+      "additions": 45,
+      "deletions": 0,
+      "sha": "13b03491fe88f76254b3742b2bd2961ff1d3799d"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/knowledge/nodes/N-translations.md",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0,
+      "sha": "578bd9d22a9a7368ed5bac30293c8b50edc09c1a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/knowledge/nodes/N-truncation.md",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0,
+      "sha": "f5edb31f6b8257567c17dd7d767198eedde392f9"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/knowledge/overview.md",
+      "status": "added",
+      "additions": 11,
+      "deletions": 0,
+      "sha": "d1404fe6076f735f73caaa75849b01390bfad8fe"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/knowledge/sources/S-maitre.json",
+      "status": "added",
+      "additions": 26,
+      "deletions": 0,
+      "sha": "bf1e9cf34df6eb2e39ac85e33a9cea68d922764a"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/knowledge/sources/S-simon.json",
+      "status": "added",
+      "additions": 26,
+      "deletions": 0,
+      "sha": "b9d336631801357cc09f7ae293be918a8bedc078"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/project.json",
+      "status": "added",
+      "additions": 9,
+      "deletions": 0,
+      "sha": "dcc610ceff530b0cb7c8eb7f156ba49fdbe33954"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/files/scope.md",
+      "status": "added",
+      "additions": 19,
+      "deletions": 0,
+      "sha": "ffdcaaa6adf2e387aa30ba547c109486afd592f6"
+    },
+    {
+      "path": "examples/rc2/projects/time-compactness/snapshots/KB-65fc06042750df321560ad25b06d2d673de9361427293a7ae190ff4ad0ee694c/manifest.json",
+      "status": "added",
+      "additions": 177,
+      "deletions": 0,
+      "sha": "a7bbafd3ef574618eb8805b2653f12a0387568bf"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/evidence/author-semantic.json",
+      "status": "added",
+      "additions": 512,
+      "deletions": 0,
+      "sha": "cdeb3b260618e1ff12424f699d3ea6ef09155924"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/evidence/current-mathematical-reread.json",
+      "status": "added",
+      "additions": 84,
+      "deletions": 0,
+      "sha": "73669177de2a35817a70f4fe9f3eeb0ee867c111"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/evidence/render-manifest.json",
+      "status": "added",
+      "additions": 40,
+      "deletions": 0,
+      "sha": "6176ca2852d10ee4e0167f3ee168c8b8e1a429f7"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/evidence/root-page-review.json",
+      "status": "added",
+      "additions": 73,
+      "deletions": 0,
+      "sha": "d4983f1016cebf8f09aa9628848fbb38ed5993a7"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/evidence/source-reread.md",
+      "status": "added",
+      "additions": 7,
+      "deletions": 0,
+      "sha": "0ce797ee7c541df9cdd5710c35f402f0070f607d"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/evidence/visual-review.json",
+      "status": "added",
+      "additions": 55,
+      "deletions": 0,
+      "sha": "b76e7c371cddcbd276d0f3cb3fababa23e58699b"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/generated/conventions.tex",
+      "status": "added",
+      "additions": 1,
+      "deletions": 0,
+      "sha": "ed88a2a89b5cdedef9d51704f0d2c2ce9732f510"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/generated/manifest.json",
+      "status": "added",
+      "additions": 110,
+      "deletions": 0,
+      "sha": "a15268eb7948aa8c12a9885b7b713b8868c989df"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/generated/references.bib",
+      "status": "added",
+      "additions": 8,
+      "deletions": 0,
+      "sha": "ac58021b5c57e18917e46bed472b1db9001ba166"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/generated/statements/N-inverse.tex",
+      "status": "added",
+      "additions": 6,
+      "deletions": 0,
+      "sha": "42d46ec48fbd5b4a173bdc8c71290ede73b8ac10"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/generated/statements/N-main.tex",
+      "status": "added",
+      "additions": 10,
+      "deletions": 0,
+      "sha": "bfa3fca6eb96a75800b266b2726c68460f42a9af"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/generated/statements/N-square.tex",
+      "status": "added",
+      "additions": 8,
+      "deletions": 0,
+      "sha": "dd887e8f90d84f019c3e4940a16246cd8156af25"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/manuscript/main.tex",
+      "status": "added",
+      "additions": 180,
+      "deletions": 0,
+      "sha": "a1a625bb2d594bb099b0f9e7624e3636ecfc002f"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/manuscript/math-review.sty",
+      "status": "added",
+      "additions": 63,
+      "deletions": 0,
+      "sha": "1a5710e1885e6b81d1e6e17c5b2ee6d1d55442fe"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/materials/evidence/reviews/coverage.json",
+      "status": "added",
+      "additions": 63,
+      "deletions": 0,
+      "sha": "f338129a73e9055d396e93eb6e11b31d3bfd37c3"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/materials/evidence/reviews/math-N-boundary.json",
+      "status": "added",
+      "additions": 57,
+      "deletions": 0,
+      "sha": "0595bf2712136f3de23e4be0df55dd1cc3f3bf3e"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/materials/evidence/reviews/math-N-inverse.json",
+      "status": "added",
+      "additions": 57,
+      "deletions": 0,
+      "sha": "8e1462027cc7c0c97066c229dba08572d2a43c76"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/materials/evidence/reviews/math-N-main.json",
+      "status": "added",
+      "additions": 81,
+      "deletions": 0,
+      "sha": "b6a05dc5fb17524de1a8f4476b6d6f0163f290b7"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/materials/evidence/reviews/math-N-question.json",
+      "status": "added",
+      "additions": 57,
+      "deletions": 0,
+      "sha": "2c6187f68209088f5008e4a12c3655f94fa2cf91"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/materials/evidence/reviews/math-N-square.json",
+      "status": "added",
+      "additions": 57,
+      "deletions": 0,
+      "sha": "be3d00e4f5fb5fb3971c990cc56d74018e43abe4"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/materials/evidence/source-checks/guide.md",
+      "status": "added",
+      "additions": 3,
+      "deletions": 0,
+      "sha": "d626907024a39797d2a3cd1c0e971ae76ebdfeed"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/materials/knowledge/conventions.tex",
+      "status": "added",
+      "additions": 1,
+      "deletions": 0,
+      "sha": "ed88a2a89b5cdedef9d51704f0d2c2ce9732f510"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/materials/knowledge/coverage.json",
+      "status": "added",
+      "additions": 22,
+      "deletions": 0,
+      "sha": "8eb6ffdd01f31051acf687b10714c580f942973a"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/materials/knowledge/discovery.md",
+      "status": "added",
+      "additions": 3,
+      "deletions": 0,
+      "sha": "cea4e1b2c0b75789f5f02af030fec88c1721830f"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/materials/knowledge/nodes/N-boundary.md",
+      "status": "added",
+      "additions": 55,
+      "deletions": 0,
+      "sha": "758bf6f719dde18328ddb936f5cb9b9fedf7935b"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/materials/knowledge/nodes/N-inverse.md",
+      "status": "added",
+      "additions": 66,
+      "deletions": 0,
+      "sha": "f48493901d1558dcbe3448b5ea74a869c340bfce"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/materials/knowledge/nodes/N-main.md",
+      "status": "added",
+      "additions": 79,
+      "deletions": 0,
+      "sha": "322cd0836b4bc5892a9aaec9b52f7d353a1ea40d"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/materials/knowledge/nodes/N-question.md",
+      "status": "added",
+      "additions": 29,
+      "deletions": 0,
+      "sha": "6c1ab85c7262c5b0e020518014264061104f397f"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/materials/knowledge/nodes/N-square.md",
+      "status": "added",
+      "additions": 68,
+      "deletions": 0,
+      "sha": "896d972c1e95aa688068926fa034ef3246661c2c"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/materials/knowledge/overview.md",
+      "status": "added",
+      "additions": 23,
+      "deletions": 0,
+      "sha": "e703a8506dfc0f675ac23db0e1c48ad11a755c6a"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/materials/knowledge/sources/S-guide.json",
+      "status": "added",
+      "additions": 19,
+      "deletions": 0,
+      "sha": "ba171823f10eb5fa3736d384ec5dafbee6c3b5ed"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/materials/materials-manifest.json",
+      "status": "added",
+      "additions": 110,
+      "deletions": 0,
+      "sha": "a15268eb7948aa8c12a9885b7b713b8868c989df"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/materials/project.json",
+      "status": "added",
+      "additions": 9,
+      "deletions": 0,
+      "sha": "ae1c63a7f61c0784a9e5a5c3105b144ad121dd88"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/materials/scope.md",
+      "status": "added",
+      "additions": 5,
+      "deletions": 0,
+      "sha": "b0b554b7c05916a9344014daa8f547e0ab3a779a"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/outline.md",
+      "status": "added",
+      "additions": 27,
+      "deletions": 0,
+      "sha": "9dae5d7dbb61ade517b1910ca035f50278c30ce5"
+    },
+    {
+      "path": "examples/vnext/projects/schur/outputs/rc2-lecture/plan.json",
+      "status": "added",
+      "additions": 84,
+      "deletions": 0,
+      "sha": "e123e73db2842b5f81f9708723d913aec0b211f9"
+    },
+    {
+      "path": "skills/pure-math-survey/README.md",
+      "status": "modified",
+      "additions": 4,
+      "deletions": 4,
+      "sha": "e1aad856227af34a1bb6183fe611f30045056e8a"
+    },
+    {
+      "path": "skills/pure-math-survey/README.zh-CN.md",
+      "status": "modified",
+      "additions": 4,
+      "deletions": 4,
+      "sha": "63f1ec44fc082cc18a7ca69f570724c6afcfde0a"
+    },
+    {
+      "path": "skills/pure-math-survey/SKILL.md",
+      "status": "modified",
+      "additions": 22,
+      "deletions": 2,
+      "sha": "ac8a1276a0d68997a87fca0f3204aa7fcabe6211"
+    },
+    {
+      "path": "skills/pure-math-survey/agents/openai.yaml",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "sha": "b68ff3a196307dc8827d3387d6b73bb3e6bcff1a"
+    },
+    {
+      "path": "skills/pure-math-survey/artifact-checksums.txt",
+      "status": "modified",
+      "additions": 26,
+      "deletions": 25,
+      "sha": "313d206c94ccfd8aa85dedd847191274b86f2b74"
+    },
+    {
+      "path": "skills/pure-math-survey/assets/templates/profile-lecture.tex",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 1,
+      "sha": "884aff0445aa1bb194f722abedbc2df72c3efc64"
+    },
+    {
+      "path": "skills/pure-math-survey/assets/templates/profile-minimal.tex",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 1,
+      "sha": "518895699932bfb80fac13422d1baecba27c78d0"
+    },
+    {
+      "path": "skills/pure-math-survey/assets/templates/profile-paper.tex",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 1,
+      "sha": "d9de65074b52accb39ffe7022bb497d95cdcfdfa"
+    },
+    {
+      "path": "skills/pure-math-survey/assets/templates/profile-thematic.tex",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 1,
+      "sha": "f8edfbdd376c1c1db8da58daced3c5727bdc1234"
+    },
+    {
+      "path": "skills/pure-math-survey/references/contracts.md",
+      "status": "modified",
+      "additions": 58,
+      "deletions": 5,
+      "sha": "ae605c1c3cf1c9fa7429f6df138daab544ea976b"
+    },
+    {
+      "path": "skills/pure-math-survey/references/editions.md",
+      "status": "modified",
+      "additions": 21,
+      "deletions": 0,
+      "sha": "bc9b7845f2c80ade7c38a39357573eba9da7605a"
+    },
+    {
+      "path": "skills/pure-math-survey/references/output-review.md",
+      "status": "modified",
+      "additions": 18,
+      "deletions": 1,
+      "sha": "e2530c0e5acfe058062c2c66e14743b99cc38be9"
+    },
+    {
+      "path": "skills/pure-math-survey/references/research-and-evidence.md",
+      "status": "modified",
+      "additions": 9,
+      "deletions": 1,
+      "sha": "15e0a2c3e7d3826c263977ad4e782066a1c420e5"
+    },
+    {
+      "path": "skills/pure-math-survey/references/template-maintenance.md",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "sha": "e46c5dc0148d3d00e30b9902da14eaba5e41ea6e"
+    },
+    {
+      "path": "skills/pure-math-survey/scripts/package_release.py",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 0,
+      "sha": "2e08076aca7b52f05a1e203ec47226d8ad810119"
+    },
+    {
+      "path": "skills/pure-math-survey/scripts/survey_core/build.py",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 2,
+      "sha": "a34df1e263d3b1539654154346818deb399b7947"
+    },
+    {
+      "path": "skills/pure-math-survey/scripts/survey_core/cli.py",
+      "status": "modified",
+      "additions": 11,
+      "deletions": 7,
+      "sha": "a506587ff5e6e8e85fb80979441738e4b6577cbb"
+    },
+    {
+      "path": "skills/pure-math-survey/scripts/survey_core/common.py",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "sha": "f400351a8f32a388549951c31280f40bef1171b9"
+    },
+    {
+      "path": "skills/pure-math-survey/scripts/survey_core/exports.py",
+      "status": "modified",
+      "additions": 14,
+      "deletions": 5,
+      "sha": "de5372d0eaf84631d12634d419a39d709929f8ad"
+    },
+    {
+      "path": "skills/pure-math-survey/scripts/survey_core/exposition.py",
+      "status": "added",
+      "additions": 67,
+      "deletions": 0,
+      "sha": "4fd50e1b827e4c68208e924e992ffbda97b5dd49"
+    },
+    {
+      "path": "skills/pure-math-survey/scripts/survey_core/plans.py",
+      "status": "modified",
+      "additions": 19,
+      "deletions": 7,
+      "sha": "b83c437d6a1d2c1d1f13a9db03411c1bf7acd29e"
+    },
+    {
+      "path": "skills/pure-math-survey/scripts/survey_core/profiles.py",
+      "status": "modified",
+      "additions": 202,
+      "deletions": 30,
+      "sha": "cad9909e2b728c9135062ef3de531ff5f3b6022f"
+    },
+    {
+      "path": "skills/pure-math-survey/scripts/survey_core/readiness.py",
+      "status": "modified",
+      "additions": 10,
+      "deletions": 6,
+      "sha": "3e78a036842cfbed1be75f05c5decd2db8b2d7bf"
+    },
+    {
+      "path": "skills/pure-math-survey/scripts/survey_core/release.py",
+      "status": "modified",
+      "additions": 17,
+      "deletions": 8,
+      "sha": "1ee36e0e078e282b78f21a169d9caff0491d2c1c"
+    },
+    {
+      "path": "skills/pure-math-survey/scripts/survey_core/reviews.py",
+      "status": "modified",
+      "additions": 38,
+      "deletions": 7,
+      "sha": "4af34aef5e8cb3134cdeb9834dc59ef3b1c55dcc"
+    },
+    {
+      "path": "skills/pure-math-survey/scripts/survey_core/tex.py",
+      "status": "modified",
+      "additions": 295,
+      "deletions": 126,
+      "sha": "fce6fa1d448ca3d6b5230e18a6ea4783e2f26592"
+    },
+    {
+      "path": "skills/pure-math-survey/scripts/validate_assets.py",
+      "status": "modified",
+      "additions": 13,
+      "deletions": 3,
+      "sha": "9e0961d188686c2c6e3ce542f8547c72551c314f"
+    },
+    {
+      "path": "tests/test_output_review.py",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "sha": "d2569469da8e18ee0daf1bc727f48c0269048293"
+    },
+    {
+      "path": "tests/test_rc2.py",
+      "status": "added",
+      "additions": 124,
+      "deletions": 0,
+      "sha": "d3958110cdae4e563fba4d524c0a34b8a0477d6c"
+    },
+    {
+      "path": "tests/test_rc2_design.py",
+      "status": "added",
+      "additions": 109,
+      "deletions": 0,
+      "sha": "653a1fb31338caebc486ccaf7eb80131c1c37030"
+    },
+    {
+      "path": "tests/test_rc2_examples.py",
+      "status": "added",
+      "additions": 31,
+      "deletions": 0,
+      "sha": "fa1adc3879df63d30c63d2e4327b81309aa2d64f"
+    },
+    {
+      "path": "tests/test_rc2_locations.py",
+      "status": "added",
+      "additions": 61,
+      "deletions": 0,
+      "sha": "7bfadf79fc4750cdb95a144c204edebfd0d4df82"
+    },
+    {
+      "path": "tests/test_rc2_prior.py",
+      "status": "added",
+      "additions": 106,
+      "deletions": 0,
+      "sha": "23896dd6e6884b7f835394a74104393f6b642d8a"
+    },
+    {
+      "path": "tests/test_rc2_sources.py",
+      "status": "added",
+      "additions": 33,
+      "deletions": 0,
+      "sha": "534a545e438dd725d3f84de73b7a73e459f91a1e"
+    },
+    {
+      "path": "tests/test_rc2_views.py",
+      "status": "added",
+      "additions": 77,
+      "deletions": 0,
+      "sha": "5396b7b9645837a9b585613866c10b053f05538d"
+    },
+    {
+      "path": "tests/test_v2.py",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "sha": "c4e160f1c5e0bd85d79fe23ed02e8adfc49e69dd"
+    },
+    {
+      "path": "tests/test_vnext.py",
+      "status": "modified",
+      "additions": 26,
+      "deletions": 9,
+      "sha": "6322d81e8a124d3ab7420b96b10a7efd59900df0"
+    },
+    {
+      "path": "tools/verify_rc2_examples.py",
+      "status": "added",
+      "additions": 94,
+      "deletions": 0,
+      "sha": "914fb0a492e6a6d91bc6825de86bb585267f5b2d"
+    },
+    {
+      "path": "tools/verify_release.py",
+      "status": "modified",
+      "additions": 26,
+      "deletions": 4,
+      "sha": "391bae0c9d36cf658515cdb3e55f3d861e60ccc6"
+    },
+    {
+      "path": "tools/verify_vnext_examples.py",
+      "status": "modified",
+      "additions": 4,
+      "deletions": 0,
+      "sha": "c8981fb8208326867b1247f07ae3c5a81e7eacc1"
+    }
+  ]
+}

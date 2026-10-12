@@ -37,11 +37,28 @@ class Locations(unittest.TestCase):
         self.assertIn('REVIEW_LOCATION_EMPTY',rc.codes(self.check(text,8)))
         for dynamic in (r'\input{\filename}',r'\ifnum1=1 Visible\else Hidden\fi'):
             self.assertIn('REVIEW_LOCATION_UNVERIFIABLE',rc.codes(self.check('\\begin{document}\n'+dynamic+'\n\\end{document}\n',2)))
+    def test_LOC13_called_environment_control_is_not_literal_body_evidence(self):
+        definition=r'\newenvironment{hidden}{\setbox0=\vbox\bgroup}{\egroup}'+'\n'
+        self.assertIn('REVIEW_LOCATION_UNVERIFIABLE',rc.codes(self.check(
+            definition+'\\begin{document}\n\\begin{hidden}\n$x=0$\n\\end{hidden}\n\\end{document}\n',4)))
+        # An unused definition does not change execution; empty wrappers do not
+        # erase their contents. Keep both legitimate controls readable.
+        self.assertEqual(self.check(definition+'\\begin{document}\n$x=0$\n\\end{document}\n',3),[])
+        self.assertEqual(self.check(r'\newenvironment{plain}{}{}'+'\n\\begin{document}\n\\begin{plain}\n$x=0$\n\\end{plain}\n\\end{document}\n',4),[])
 
 
 class ReleaseLocations(unittest.TestCase):
     def setUp(self):self.t=v.VNext();self.t.setUp()
     def tearDown(self):self.t.tearDown()
+    def test_LOC14_called_environment_control_blocks_release_and_package(self):
+        p,plan=self.t.authored(draft=False);main=p.parent/'manuscript/main.tex'
+        text=main.read_text().replace(r'\begin{document}',
+            r'\newenvironment{hidden}{\setbox0=\vbox\bgroup}{\egroup}'+'\n'+r'\begin{document}'+'\n'+r'\begin{hidden}')
+        main.write_text(text.replace(r'\end{document}',r'\end{hidden}'+'\n'+r'\end{document}'))
+        write_json(p.parent/'evidence/hostile-environment.json',self.t.sem(p,plan))
+        self.assertIn('REVIEW_LOCATION_UNVERIFIABLE',rc.codes(assess_release(self.t.root,plan['output_id'])['errors']))
+        with self.assertRaises(SurveyError):package_output(self.t.root,plan['output_id'],self.t.base/'hidden.zip')
+        self.assertFalse((self.t.base/'hidden.zip').exists())
     def test_LOC09_canonical_location_cannot_use_other_body(self):
         p,plan=self.t.authored();review=self.t.sem(p,plan)
         review['scope']['principal_locations']['N-main']=review['scope']['proof_locations']['N-main']

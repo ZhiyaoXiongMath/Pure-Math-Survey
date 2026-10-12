@@ -160,3 +160,23 @@ CI result is inferred for that run here.
 
 Status: local source/installed tests and actual mathematical/page author readings
 are complete for this group. Final pushed-head PR CI is a separate pending gate.
+
+## PR diff review: invoked environment controls
+
+- Created PR #2 to main from 968d3d3e. All 498 changed files were fetched through
+  five paginated responses; no deletion or alteration of historical examples.
+  Local and remote source trees matched exactly. The review inventory is retained.
+- Found an additional F1 hole: a called locally defined environment could use
+  setbox to suppress its contents without scanner diagnosis. LOC13 reproduced
+  this as a real failing assertion; unused/empty environment controls were kept.
+- The scanner now inspects invocation of local begin/end definitions for the same
+  unsupported controls as local commands. LOC14 checks formal release/package
+  rejection. Focused location suite: nine tests OK (0.886 seconds).
+- Fresh complete source: 189 tests OK (47.732 seconds). Fresh isolated install:
+  189 tests OK (47.367 seconds), all 20 resources, all eleven actual PDF builds.
+  Original four reviewed PDFs retain RELEASABLE with their unchanged hashes.
+- New installation ZIP: 71 members, 70 verified member hashes, SHA-256
+  `4c25dee81dfc3b7bdb624f006e0b5385d1b4a7f325b2a0e76d85c926e753e411`.
+
+Status: the review finding is IMPLEMENTED and TESTED. Final pushed-head PR CI
+will be checked separately; prior green CI is not substituted for this repair.

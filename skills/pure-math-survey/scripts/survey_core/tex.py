@@ -253,6 +253,10 @@ def inspect_tex(out: Path) -> Inspection:
                 continue
             name = token[0][1:]
             executable.append((rel, raw, token.start(), name))
+            if name in {'begin', 'end'}:
+                j = _space(text, token.end()); end = _group_end(text, j)
+                if end > j and text[j] == '{':
+                    executable.append((rel, raw, token.start(), 'environment:' + text[j+1:end-1]))
             if name in DYNAMIC:
                 issue(rel, raw, token.start(), f'Execution-changing \\{name} is outside the literal model')
             if name in {'usepackage', 'RequirePackage'}:
@@ -307,7 +311,9 @@ def inspect_tex(out: Path) -> Inspection:
             return True
         for _, _, body in definitions.get(name, []):
             names = {m[0][1:] for m in TOKEN.finditer(body)}
-            if (not _meaningful(body).strip() or names & STRUCTURAL or
+            # Empty environment wrappers preserve their enclosed content;
+            # empty command expansion cannot itself supply content evidence.
+            if ((not name.startswith('environment:') and not _meaningful(body).strip()) or names & STRUCTURAL or
                     any(n.startswith('if') and n != 'iff' for n in names)):
                 return True
             if any(risky(n,visiting|{name}) for n in names if n in definitions):

@@ -8,8 +8,8 @@ example files match the fetched baseline Git blob identities
 
 ## Current evidence and its scope
 
-F1–F4 are IMPLEMENTED and TESTED. New source regression: **187 tests OK**
-(44.074 s). The extracted installation passed the same **187 tests** (44.878 s)
+F1–F4 are IMPLEMENTED and TESTED. New source regression: **189 tests OK**
+(47.732 s). The extracted installation passed the same **189 tests** (47.367 s)
 in a fresh no-pip, no-system-site-packages venv with isolated Python. All 17
 runtime modules came from the installation, all 70 member hashes verified,
 all 20 profile/view resources executed, and knowledge-only initialization
@@ -43,7 +43,7 @@ one (F3), and zero (F2/F1 completion). Actual commit/run/count records are in
 
 | Item | Actual implementation | Regression evidence |
 | --- | --- | --- |
-| F1 | `tex.py`: reachable literal body, comments/definitions/conditionals, canonical imports; shared per-assessment inspection in release/profile review | LOC01–LOC12, invalid accepted locations blocked by actual release/package |
+| F1 | `tex.py`: reachable literal body, comments/definitions/conditionals, canonical imports; shared per-assessment inspection in release/profile review | LOC01–LOC14, invalid accepted locations blocked by actual release/package |
 | F2 | `plans.py`, `profiles.py`, `exports.py`, mode templates: view goals, node uses, emphasis, actual outline tasks and located `view_focus` review | Twenty profile/view combinations, stale/missing view findings, same real canonical spine and distinct final manuscripts |
 | F3 | `models.py`, `profiles.py`, `plans.py`, `reviews.py`: typed comparison pairs, both comparison endpoints, every closest prior and primary support/version/locator reading | Wrong pairs, unsupported/secondary sources, wrong versions/locators, missing reading and stale endpoint records rejected; synthetic Paper evidence is labelled synthetic |
 | F4 | Retained `exposition.py` integrated into prepare, structure, release and bounded draft preview | Knowledge/output separation, default unfinished designs, preserved author files, invalid references and canonical faults remain blocking |
@@ -106,7 +106,7 @@ here uses the separately checked local reconstruction instead.
 | D4 | IMPLEMENTED, TESTED | Complete prepare/structure/release/draft separation |
 | D5 | IMPLEMENTED, TESTED | Explicit versions/policies; 399 original blobs unchanged |
 | D6 | REVIEWED | Three real papers, increment, three finished outputs, all pages and Schur proof regression |
-| D7 | TESTED; final PR CI NOT VERIFIED yet | Fresh source and installed 187-test runs; final-head remote result pending |
+| D7 | TESTED; final PR CI NOT VERIFIED yet | Fresh source and installed 189-test runs; final-head remote result pending |
 | D8 | IMPLEMENTED, TESTED | CLI, templates, references, SKILL, agents, checksums and package agree |
 | D9 | IMPLEMENTED, TESTED | Zero known unresolved F1–F4 requirements in the supported literal TeX model |
 | D10 | REVIEWED | Explicit distinctions and limitations below |
@@ -135,4 +135,19 @@ artifact identities. The separate candidate bundle retains actual original
 PDFs, page PNGs, logs and build/render histories. Rebuilding never inherits
 those visual observations. The install ZIP is 71 members with 70 verified
 member hashes; its SHA-256 is
-`11fa729ca89153f91f6e89b6cbca955e8fcc2f56ed16170e22647c1027fb38b5`.
+`4c25dee81dfc3b7bdb624f006e0b5385d1b4a7f325b2a0e76d85c926e753e411`.
+
+## Complete diff review finding
+
+The complete PR inventory was fetched in five pages: 498 changed files, no
+deletions. Runtime/tests/contracts and mathematical manuscripts were inspected;
+immutable/generated copies and exact stored bindings were mechanically checked.
+Local source tree `a3152c4d47142dbc3638a54ede33244e2d17fb10` exactly matched
+the pushed tree. See `diff-review.json` for the full inventory and scope.
+
+The review found a called custom-environment control gap in F1. LOC13 first
+failed on a setbox environment; the narrow scanner repair now checks invoked
+begin/end definitions. Empty wrappers and unused definitions remain valid.
+LOC14 confirms actual release/package rejection. Nine focused tests pass
+(0.886 s); the complete source and installed counts above include this repair.
+The original four reviewed PDFs still pass current release without changes.

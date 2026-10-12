@@ -58,3 +58,10 @@ Both use substantive manuscript body locations. An outline paragraph can help
 explain the design, but cannot stand in for a proof location. A fresh hash after
 a view edit does not replace either reading. Ordinary proof-step findings must
 point to the computation/argument, not merely the imported theorem statement.
+
+Called locally defined environments are checked for execution-changing controls
+in their begin/end definitions, just like called local commands. For example,
+a `setbox` wrapper cannot certify the enclosed text as literal proof evidence.
+An unused definition or an empty begin/end wrapper does not hide body content.
+This remains a bounded source model, not a general TeX interpreter or pixel
+visibility proof.
