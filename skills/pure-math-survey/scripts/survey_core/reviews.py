@@ -190,7 +190,7 @@ def markdown_anchors(text: str, *, require_content: bool = False) -> set[str]:
         reference_definition = False
         if re.fullmatch(r' {0,3}([*_-])(?:[ \t]*\1){2,}[ \t]*', masked):
             continue
-        mark = re.match(r'^ {0,3}(`{3,}|~{3,})', line)
+        mark = re.match(r'^ {0,3}(?:(?:[-+*]|\d+[.)])[ \t]+)?(`{3,}|~{3,})', line)
         if mark:
             fence = (mark[1][0], len(mark[1])); continue
         if not masked.strip(): continue
