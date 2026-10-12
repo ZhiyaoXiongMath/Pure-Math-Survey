@@ -25,11 +25,14 @@ software test fixtures. See `real-acceptance/time-compactness-report.md`,
 `real-acceptance/time-compactness-release.json`, `schur-lecture.md` and
 `schur-lecture-release.json`.
 
-The code at `3df41200613a00ab093e258211ce6638c7c7268a` has verified successful
-remote run [38228676928](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/actions/runs/38228676928):
-186 tests OK, 80.013 s. The added real-example regression and eleven-build
-installation verifier still require final PR CI; this document does not
-infer that result from local success. That final-head result will be appended.
+The final runtime commit `02d66046547a7581e3aff113720e89dffbc2d85d` passed
+[PR run 38231441213](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/actions/runs/38231441213)
+on **Python 3.10 and 3.12**, each executing 189 source tests and 189 installed
+tests plus eleven actual PDF builds. The actual logs were fetched; both CI
+installation hashes match the delivered ZIP. The branch audit
+[38231436703](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/actions/runs/38231436703)
+also succeeded. [PR #2](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/2)
+is open and unmerged. Exact job IDs and timings are in `CI.json`.
 
 ## Failure reproduction and repaired responsibilities
 
@@ -106,19 +109,20 @@ here uses the separately checked local reconstruction instead.
 | D4 | IMPLEMENTED, TESTED | Complete prepare/structure/release/draft separation |
 | D5 | IMPLEMENTED, TESTED | Explicit versions/policies; 399 original blobs unchanged |
 | D6 | REVIEWED | Three real papers, increment, three finished outputs, all pages and Schur proof regression |
-| D7 | TESTED; final PR CI NOT VERIFIED yet | Fresh source and installed 189-test runs; final-head remote result pending |
+| D7 | TESTED, REVIEWED | Current code PR CI passes on Python 3.10/3.12: 189 source + 189 installed tests and eleven PDF builds per job |
 | D8 | IMPLEMENTED, TESTED | CLI, templates, references, SKILL, agents, checksums and package agree |
 | D9 | IMPLEMENTED, TESTED | Zero known unresolved F1–F4 requirements in the supported literal TeX model |
 | D10 | REVIEWED | Explicit distinctions and limitations below |
 
 Independent mathematical audit, actual target-reader feedback and the formal
-quality of a genuine original Paper remain **NOT VERIFIED**. Formal Paper
-release without those required inputs remains **BLOCKED**. General TeX
+quality of a genuine original Paper remain **NOT VERIFIED**. Without an authorized, fully proved original contribution and verified prior-art
+evidence, formal Paper release remains **BLOCKED**. General TeX
 execution is outside the explicit literal-body scanner model. The cause of
 interrupted authoring locks/staging is NOT VERIFIED; inspected stale staging
 was cleared and inventories retained, with no gate weakened. No CI failure is
-being described as development completion. Candidate completion awaits the
-final PR checks stated above.
+being described as development completion. The code and topical candidate meet D1–D10, with those explicit validation
+boundaries. The final documentation-only commit is also checked remotely before
+delivery; it does not change the runtime or installation ZIP.
 
 ## Reproduce software verification
 
@@ -151,3 +155,8 @@ begin/end definitions. Empty wrappers and unused definitions remain valid.
 LOC14 confirms actual release/package rejection. Nine focused tests pass
 (0.886 s); the complete source and installed counts above include this repair.
 The original four reviewed PDFs still pass current release without changes.
+
+The subsequent environment-control repair diff and resource hash changes were
+reviewed after that initial inventory. All 499 code-candidate changes are
+accounted for; this CI-record update adds only documentation. No old example
+blob, accepted mathematical record, snapshot or manuscript was modified.

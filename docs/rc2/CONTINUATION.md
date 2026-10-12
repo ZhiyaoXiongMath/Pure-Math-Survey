@@ -180,3 +180,20 @@ are complete for this group. Final pushed-head PR CI is a separate pending gate.
 
 Status: the review finding is IMPLEMENTED and TESTED. Final pushed-head PR CI
 will be checked separately; prior green CI is not substituted for this repair.
+
+## Verified candidate code CI
+
+- Code commit 02d66046547a7581e3aff113720e89dffbc2d85d: branch audit 38231436703
+  successful; PR #2 run 38231441213 successful for both Python 3.10 and 3.12.
+- Python 3.10 job 114751622171: 189 source tests (66.845 s), 189 installed tests
+  (66.745 s), eleven actual installed PDF builds/renders.
+- Python 3.12 job 114751622634: 189 source tests (85.432 s), 189 installed tests
+  (84.785 s), eleven actual installed PDF builds/renders.
+- Actual decoded job logs were fetched and the CI package hash equals the local
+  candidate `4c25dee81dfc3b7bdb624f006e0b5385d1b4a7f325b2a0e76d85c926e753e411`.
+- PR reports mergeable/clean but is intentionally left open and unmerged.
+  No Release is published. Independent mathematical review, real reader feedback
+  and genuine original-Paper formal quality are still NOT VERIFIED.
+
+Status: D1–D10 code and thematic candidate evidence satisfied. This final
+record-only update is also subjected to remote CI before delivery.
