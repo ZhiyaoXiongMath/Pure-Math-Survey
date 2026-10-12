@@ -314,6 +314,47 @@ class R3KnowledgeReview(unittest.TestCase):
         route.write_text('# Fast route\n\nChanged synthetic route.\n')
         self.assertIn('REVIEW_STALE', {x['code'] for x in knowledge_scope_errors(self.inv, 'N-q', review)})
 
+    def test_hidden_or_literal_anchors_never_satisfy_actual_readiness(self):
+        from survey_core.common import file_hash
+        from survey_core.readiness import assess_readiness
+        cases = {
+            'visible heading': ('# Visible\n\n## Actual section\n\nSynthetic derivation.\n', True),
+            'visible explicit anchor': ('# Visible\n\n<a id="actual-section"></a>\n\nSynthetic derivation.\n', True),
+            'literal comment before visible heading': ('`<!--` is literal code.\n\n## Actual section\n', True),
+            'metadata frontmatter': ('---\ntitle: |\n  ## Actual section\n---\n\n# Visible\n', False),
+            'HTML comment': ('# Visible\n\n<!--\n## Actual section\n\nHidden text.\n-->\n', False),
+            'inline code': ('# Visible\n\n`<a id="actual-section">` is code.\n', False),
+            'two-backtick code': ('# Visible\n\n``<a id="actual-section">``\n', False),
+            'multiline code anchor': ('# Visible\n\n`code\n<a id="actual-section">\nend`\n', False),
+            'multiline code heading': ('# Visible\n\n`code\n## Actual section\nend`\n', False),
+            'indented code': ('# Visible\n\n    <a id="actual-section">\n', False),
+            'tab-indented code': ('# Visible\n\n\t<a id="actual-section">\n', False),
+            'fenced code': ('# Visible\n\n```md\n## Actual section\n```\n', False),
+            'raw HTML': ('<div hidden>\n<div>\n</div>\n## Actual section\n</div>\n', False),
+            'same-line nested HTML': ('<div hidden><div>\n</div>\n## Actual section\n</div>\n', False),
+            'HTML nonvoid self-close': ('<div hidden/>\n## Actual section\n</div>\n', False),
+            'escaped anchor': ('# Visible\n\n\\<a id="actual-section">\n', False),
+            'after closing comment same line': ('<!-- hidden\n-->## Actual section\n', False),
+        }
+        route = self.t.root/'knowledge/route.md'
+        for number, (name, (text, accepted)) in enumerate(cases.items()):
+            with self.subTest(name=name):
+                route.write_text(text)
+                review = copy.deepcopy(self.review)
+                review['findings'] = [task+': '+v.SYNTH+' [Section](knowledge/route.md#actual-section)' for task in R3_READINGS]
+                review['inputs'].append({'path': 'knowledge/route.md', 'sha256': file_hash(self.t.root, 'knowledge/route.md')})
+                write_json(self.review_path, review)
+                _, plan = self.t.make(oid='anchor-'+str(number), draft=False)
+                report = assess_readiness(self.t.root, plan)
+                self.assertEqual(report['status'], 'READY' if accepted else 'NEEDS_WORK')
+                if not accepted:
+                    self.assertIn('KNOWLEDGE_REVIEW_LOCATION_INVALID', {e['code'] for e in report['errors']})
+
+    def test_visible_heading_code_and_comment_duplicate_keep_correct_slug(self):
+        from survey_core.reviews import markdown_anchors
+        text = '<!--\n## The `actual` section\n-->\n\n## The `actual` section\n'
+        self.assertEqual(markdown_anchors(text), {'the-actual-section'})
+
     def test_missing_nodes_or_checks_are_not_accepted(self):
         for field, value, expected in [('checks', [], 'KNOWLEDGE_REVIEW_PENDING'),
                                       ('checks', {}, 'KNOWLEDGE_REVIEW_PENDING'),

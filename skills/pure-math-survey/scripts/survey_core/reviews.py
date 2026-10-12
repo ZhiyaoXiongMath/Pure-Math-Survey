@@ -139,18 +139,61 @@ def knowledge_scope_template(inv, question_ids: list[str]) -> dict:
 
 
 def markdown_anchors(text: str) -> set[str]:
-    """Resolve ordinary ATX headings and explicit anchors, outside code fences."""
-    anchors = set(); counts = {}; fence = None
-    for line in text.splitlines():
-        mark = re.match(r'^\s*(`{3,}|~{3,})', line)
-        if mark:
-            kind = mark[1][0]
-            if fence is None: fence = (kind, len(mark[1]))
-            elif kind == fence[0] and len(mark[1]) >= fence[1]: fence = None
+    """Resolve bounded Markdown subsection syntax, excluding literal content.
+
+    Explicit anchors must occupy their own unindented line. Arbitrary inline
+    HTML is not interpreted as a renderable address or a visibility guarantee.
+    """
+    front = re.match(r'\A\ufeff?---\r?\n.*?\r?\n(?:---|\.\.\.)[ \t]*(?:\r?\n|$)', text, re.S)
+    if front: text = text[front.end():]
+    anchors = set(); counts = {}; fence = None; comment = False; html_stack = []
+    # Markdown code spans may cross newlines. Preserve their line/column shape
+    # so an anchor on a middle line cannot become falsely visible.
+    code_mask = re.sub(r'(?<!`)(`+)(?!`)(.*?)(?<!`)\1(?!`)',
+                       lambda m: re.sub(r'[^\r\n]', ' ', m[0]), text, flags=re.S)
+    for line, masked in zip(text.splitlines(), code_mask.splitlines()):
+        if fence is not None:
+            if re.fullmatch(r' {0,3}' + re.escape(fence[0]) + '{' + str(fence[1]) + r',}\s*', line):
+                fence = None
             continue
-        if fence is not None: continue
-        anchors.update(re.findall(r'<a\s+(?:id|name)=[\"\']([^\"\']+)[\"\']\s*>', line, re.I))
-        heading = re.match(r'^ {0,3}#{1,6}\s+(.+?)(?:\s+#+)?\s*$', line)
+        # A literal `<!--` must not hide subsequent real headings. Code text
+        # in a heading still contributes to its ordinary heading slug below.
+        comment_line = comment or line.lstrip().startswith('<!--')
+        visible = []; visible_mask = []; position = 0
+        while position < len(line):
+            if comment:
+                end = masked.find('-->', position)
+                if end < 0: break
+                position = end + 3; comment = False
+            else:
+                start = masked.find('<!--', position)
+                if start < 0:
+                    visible.append(line[position:]); visible_mask.append(masked[position:]); break
+                visible.append(line[position:start]); visible_mask.append(masked[position:start])
+                position = start + 4; comment = True
+        line = ''.join(visible); masked = ''.join(visible_mask)
+        if comment_line: continue
+        if not line.strip() or re.match(r'^(?: {4}| {0,3}\t)', line): continue
+        mark = re.match(r'^ {0,3}(`{3,}|~{3,})', line)
+        if mark:
+            fence = (mark[1][0], len(mark[1])); continue
+        if not masked.strip(): continue
+        # A heading written inside a raw HTML block is not a Markdown heading.
+        # Ignore such blocks conservatively instead of guessing CSS visibility.
+        tag = re.match(r'^ {0,3}<(/?)([A-Za-z][A-Za-z0-9-]*)\b[^>]*>', line)
+        anchor = re.fullmatch(r' {0,3}<a\s+(?:id|name)=[\"\']([^\"\']+)[\"\']\s*>(?:</a>)?\s*', masked, re.I)
+        if anchor and not html_stack:
+            anchors.add(anchor[1]); continue
+        if html_stack or tag:
+            for closing, name in re.findall(r'<(/?)([A-Za-z][A-Za-z0-9-]*)\b[^>]*>', masked):
+                name = name.casefold()
+                if closing:
+                    if html_stack and name == html_stack[-1]: html_stack.pop()
+                elif name not in {'area','base','br','col','embed','hr','img','input','link','meta','param','source','track','wbr'}:
+                    html_stack.append(name)
+            continue
+        heading = (re.match(r'^ {0,3}#{1,6}\s+(.+?)(?:\s+#+)?\s*$', line)
+                   if re.match(r'^ {0,3}#{1,6}\s', masked) else None)
         if heading:
             value = re.sub(r'[^\w\- ]', '', heading[1].casefold()).replace(' ', '-')
             count = counts.get(value, 0); counts[value] = count + 1
