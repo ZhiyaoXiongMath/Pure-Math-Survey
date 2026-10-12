@@ -79,6 +79,19 @@ class R3VerifierContracts(unittest.TestCase):
         summary=verifier.installed_regression_summary('test_case (test_r3_policy.R3.test_case) ... ok\nRan 190 tests in 2s\nOK')
         self.assertEqual((summary['tests'],summary['r3_policy_tests']),(190,1))
 
+    def test_nonvisual_r3_semantic_failure_cannot_hide_behind_new_pdf_work(self):
+        result={'artifacts':{'editorial_policy':verifier.EXPECTED_POLICY,'readiness':'READY',
+                            'used_output_review_ids':['synthetic-semantic']},
+                'errors':[{'code':'VISUAL_REVIEW_INCOMPLETE','path':'evidence'},
+                          {'code':'REVIEW_STALE','path':'build/main.pdf'}]}
+        verifier.require_current_r3_semantics(result)
+        for error in ({'code':'OUTPUT_SEMANTIC_REVIEW_PENDING','path':'evidence'},
+                      {'code':'REVIEW_STALE','path':'manuscript/main.tex'},
+                      {'code':'MODE_SEMANTIC_REVIEW_PENDING','path':'evidence'},
+                      {'code':'DRAFT_NOT_RELEASABLE','path':'plan.json'}):
+            bad=copy.deepcopy(result);bad['errors'].append(error)
+            with self.subTest(error=error),self.assertRaises(AssertionError):verifier.require_current_r3_semantics(bad)
+
     def test_missing_r3_inputs_or_skipped_builds_remain_incomplete(self):
         for has_inputs,no_build in ((False,False),(True,True),(False,True)):
             self.assertEqual(verifier.verification_completion(has_inputs,no_build)[0],'INCOMPLETE')
@@ -142,9 +155,11 @@ class R3VerifierContracts(unittest.TestCase):
             before={p:p.read_bytes() for p in project.rglob('*') if p.is_file()};calls=[]
             def fake_check(command,cwd,env,**kwargs):
                 calls.append((command,kwargs))
-                if 'package' in command or 'release' in command:
+                if 'package' in command or ('release' in command and command[command.index('--output')+1]=='paper'):
                     self.assertEqual(kwargs['allowed_returncodes'],(3,))
                     return {'errors':[{'code':'DRAFT_NOT_RELEASABLE'}]}
+                if 'release' in command:
+                    return {'artifacts':{'editorial_policy':verifier.EXPECTED_POLICY,'readiness':'READY','used_output_review_ids':['synthetic']},'errors':[{'code':'VISUAL_REVIEW_INCOMPLETE','path':'evidence'}]}
                 if 'build' in command:return {'status':'BUILT','artifacts':{'pages':1}}
                 if 'render' in command:return {'status':'RENDERED_NOT_REVIEWED'}
                 return {'status':'CHECKED'}

@@ -121,6 +121,26 @@ def run_check(command:list[str],cwd:Path,env:dict,report:dict,decode:bool=True,t
     return json.loads(stdout) if decode else row
 
 
+def require_current_r3_semantics(result:dict)->dict:
+    """Separate source/semantic acceptance from new-PDF visual work still to do."""
+    artifacts=result.get('artifacts',{})
+    if (artifacts.get('editorial_policy')!=EXPECTED_POLICY or artifacts.get('readiness')!='READY'
+            or not artifacts.get('used_output_review_ids')):
+        raise AssertionError('Actual r3 input lacks a current bound semantic review/readiness result')
+    visual_paths={'build/main.pdf','build/build-report.json','evidence/render-manifest.json'}
+    blocking=[];visual=[]
+    for error in result.get('errors',[]):
+        path=error.get('path','')
+        if error.get('code')=='VISUAL_REVIEW_INCOMPLETE' or (error.get('code')=='REVIEW_STALE'
+                and (path in visual_paths or path.startswith('evidence/pages/'))):
+            visual.append(error)
+        else:blocking.append(error)
+    if blocking:raise AssertionError({'r3_nonvisual_release_errors':blocking})
+    return {'status':'CURRENT_BOUND_RECORDS_CHECKED','review_ids':artifacts['used_output_review_ids'],
+            'new_pdf_visual_findings_pending':visual,
+            'meaning':'Mechanical evidence/binding check; no new mathematical or page reading'}
+
+
 def load_r3_manifest(path:Path)->list[dict]:
     """Private verifier input only; does not add a mathematical project schema."""
     data=json.loads(path.read_text(encoding='utf-8'))
@@ -183,6 +203,9 @@ def verify_r3_outputs(entries:list[dict],base:Path,check,exe:Path,entry:Path,env
                 built=call('output','build',project,'--output',oid,timeout=build_timeout)
                 rendered=call('output','render',project,'--output',oid,timeout=build_timeout)
                 row.update(build=built['status'],pages=built['artifacts']['pages'],render=rendered['status'])
+                if profile!='paper':
+                    release=call('output','validate',project,'--output',oid,'--stage','release',allowed_returncodes=(0,3))
+                    row['semantic_validation']=require_current_r3_semantics(release)
             else:row['build']='NOT EXECUTED (--no-build)'
             if profile=='paper':
                 release=call('output','validate',project,'--output',oid,'--stage','release',allowed_returncodes=(3,))
