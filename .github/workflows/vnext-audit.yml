@@ -1,8 +1,8 @@
-name: vNext audit artifacts
+name: Historical vNext manual audit
 
 on:
-  push:
-    branches: ['vnext/four-mode-exposition-2026-10-11']
+  # Historical revisions may still be audited explicitly. Active development
+  # is checked by rc2-audit.yml and the candidate matrix in ci.yml.
   workflow_dispatch:
 
 permissions:

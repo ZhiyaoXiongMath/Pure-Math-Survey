@@ -59,3 +59,29 @@ by the four retained F2/F3 assertions. Full completion is not claimed.
 
 Status: F3 IMPLEMENTED and TESTED with synthetic regression fixtures. Real
 mathematical comparison and source-reading acceptance remain NOT VERIFIED.
+
+## F2 view-aware writing and remaining F1 regressions
+
+- F3 commit dcbb2ed remote Actions run 38225720369: 170 tests, only the
+  retained VIEW02 failure, zero errors (69.293 seconds).
+- Five views now affect editable reader goals, actual node-specific uses,
+  candidate emphasis order, outline tasks and section-local writing prompts.
+  The necessary node closure and all mode proof obligations stay intact.
+  Missing view candidates produce an explicit design gap, not an invented node.
+- Current output reviews bind the exact view and a located view_focus finding
+  naming available nodes. Updating hashes alone cannot substitute a new reading.
+- Added 20-combination interface checks, canonical/core preservation, stale-view
+  and missing-node probes. Installed resource smoke executes all 20 combinations.
+- Extended F1 coverage through LOC01–LOC12, including nested and repeated inputs,
+  CRLF/escaped percent, canonical-location substitution and accepted but invalid
+  body locations at the actual release/package gate. Synthetic positive proof
+  findings now locate an explicit computation, not a theorem import line.
+- Focused view tests: 7 OK (3.299 seconds); additional location tests: 7 OK
+  (0.534 seconds). Full regression: 184 tests, OK (39.744 seconds).
+- Installed-resource scaffold smoke: 20 profile/view combinations, 31 runtime
+  documentation links, PASS. Skill frontmatter validation and diff whitespace:
+  PASS. Historical manual audit retained; obsolete deleted-branch trigger removed.
+
+Status: F1–F4 software IMPLEMENTED and locally TESTED. This result is not remote
+CI acceptance, a real mathematical reading, PDF observation or candidate delivery.
+Real three-paper authoring and final installed-environment acceptance are ongoing.

@@ -131,4 +131,15 @@ reader goals and outline; structure and release reject unresolved default tasks.
 Keep preview drafts visibly unverified. Repeated prepare preserves authored main,
 outline and style. Knowledge readiness never requires an output outline.
 Adopt rc2 with a new output ID and schema 2.2.0. Do not rewrite historical outputs.
+
+Treat `view` as a reader task within the requested profile. Use the generated
+node-specific reasons and emphasis order as editable navigation; inspect actual
+node content before claiming a relation. Methods develops input-to-output
+operations; boundaries locates failing hypotheses and distinguishes noncoverage
+from counterexamples. Preserve the full principal, dependencies, decisive
+boundaries and profile proof promises in every view. When no suitable node exists,
+record the gap or justify why none is needed, returning new claims to the KB.
+Record the current `scope.view` and a substantive `mode_findings.view_focus`
+with available `node_ids` and actual body locations in each output reading.
+Changing the view requires a fresh reading even if canonical bytes stay identical.
 `--policy recorded` is a read-only assessment, never current release authorization.

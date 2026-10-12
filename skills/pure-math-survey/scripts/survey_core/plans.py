@@ -93,6 +93,8 @@ def create_plan(root: Path, output_id: str, snapshot_id: str, profile: str='mini
                 questions: list[str]|None=None, principals:list[str]|None=None, title:str|None=None, draft:bool=False,
                 comparison_group:str|None=None, max_pages:int|None=None) -> dict:
     require(identifier(output_id), 'CONTRACT_INVALID', 'Invalid output ID')
+    from .models import PROFILES, FACETS
+    require(profile in PROFILES and view in FACETS|{'integrated'}, 'CONTRACT_INVALID', 'Invalid profile/view')
     _, frozen = load_snapshot(root, snapshot_id); inv = inventory(frozen)
     questions = questions or [k for k,n in inv.nodes.items() if n.meta['kind']=='question']
     principals = principals or sorted({k for q in inv.coverage['questions'] if q['question_id'] in questions for k in q['answer_nodes']})
@@ -102,13 +104,15 @@ def create_plan(root: Path, output_id: str, snapshot_id: str, profile: str='mini
             for field,role in [('mechanism_nodes','essential_bridge'),('boundary_nodes','boundary')]:
                 seeds.update(q[field]); roles.update({k:role for k in q[field] if k not in roles})
     ids = required_closure(inv.nodes, seeds | set(questions), seeds) - set(questions)
+    from .profiles import view_match, view_reason, VIEW_TASKS
     selections = []
-    for key in sorted(ids):
+    for key in sorted(ids,key=lambda k:(0 if roles.get(k)=='principal_answer' else
+                      1 if view_match(inv.nodes[k].meta,view,roles.get(k,'background')) else 2,k)):
         n = inv.nodes[key]
         selections.append({'node_id':key, 'role':roles.get(key,'background'),
                            'statement_treatment':'full' if n.statement is not None else 'explained_reference',
                            'proof_treatment':'mechanism' if n.meta['kind']=='mechanism' else ('sketch' if key in principals else 'none'),
-                           'reason':'Required by the selected question or its dependency closure; refine during editorial selection.'})
+                           'reason':view_reason(n.meta,view,roles.get(key,'background'))})
     plan = {'schema_version':VERSION,'output_id':output_id,'snapshot_id':snapshot_id,'profile':profile,'view':view,
             'language':inv.project['language'],'title':title or inv.project['title'],'audience':'Readers of the selected mathematical scope; refine prerequisites before release.',
             'reader_goals':['Recover the selected question, exact principal answer, mechanism and decisive boundary.'],
@@ -118,7 +122,8 @@ def create_plan(root: Path, output_id: str, snapshot_id: str, profile: str='mini
     from .exposition import DEFAULT_AUDIENCE
     plan.update(schema_version=OUTPUT_SCHEMA, editorial_policy=POLICY, contributions=[],
                 audience=DEFAULT_AUDIENCE,
-                reader_goals=[GOALS.get(profile, 'Select a supported profile.')])
+                reader_goals=['[[PMS_PENDING:reader_goals]] '+GOALS.get(profile, 'Select a supported profile.'),
+                              '[[PMS_PENDING:view_goal]] '+VIEW_TASKS[view]])
     # These are authoring prompts, not automatically satisfied mathematical promises.
     for selection in selections:
         if selection['role'] == 'principal_answer':

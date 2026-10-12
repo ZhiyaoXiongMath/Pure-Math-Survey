@@ -20,7 +20,9 @@ def load_review(path: Path) -> dict:
         require(obj.get('schema_version', VERSION) == VERSION, 'SCHEMA_UNSUPPORTED', 'New review schemas require their explicit policy', path.name)
     if obj.get('schema_version') != '2.2.0':
         scope = obj.get('scope', {})
-        require('view' not in scope and not ({'view_focus','exposition_design'} & set(scope.get('mode_findings', {}))),
+        findings=scope.get('mode_findings',{})
+        require(isinstance(findings,dict),'REVIEW_INVALID','mode_findings must be an object',path.name)
+        require('view' not in scope and not ({'view_focus','exposition_design'} & set(findings)),
                 'SCHEMA_UNSUPPORTED', 'rc2 review responsibilities require schema 2.2.0', path.name)
         for entry in scope.get('contribution_reviews', {}).values() if isinstance(scope.get('contribution_reviews', {}), dict) else []:
             require(not isinstance(entry, dict) or 'prior_result_checks' not in entry, 'SCHEMA_UNSUPPORTED', 'rc2 prior checks require schema 2.2.0', path.name)

@@ -25,7 +25,7 @@ def parser()->Parser:
         x=os.add_parser(name);x.add_argument('project',type=Path)
         if name=='prepare':x.add_argument('--plan',required=True);x.add_argument('--draft',action='store_true')
         elif name=='plan':
-            x.add_argument('--output',required=True);x.add_argument('--snapshot',required=True);x.add_argument('--profile',default='minimal',choices=['minimal','thematic','lecture','paper']);x.add_argument('--view',default='integrated',choices=['integrated','foundations','results','methods','boundaries'])
+            x.add_argument('--output',required=True);x.add_argument('--snapshot',required=True);x.add_argument('--profile',default='minimal',choices=['minimal','thematic','lecture','paper']);x.add_argument('--view',default='integrated',choices=['integrated','foundations','results','methods','boundaries'],help='Reader emphasis for goals, node uses, writing tasks and semantic reading; preserves profile and canonical obligations')
             x.add_argument('--question',action='append');x.add_argument('--principal',action='append');x.add_argument('--title');x.add_argument('--draft',action='store_true');x.add_argument('--comparison-group');x.add_argument('--max-pages',type=int)
         else:x.add_argument('--output',required=True)
         if name=='validate':

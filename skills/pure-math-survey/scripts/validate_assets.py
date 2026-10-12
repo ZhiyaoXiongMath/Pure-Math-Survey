@@ -33,7 +33,7 @@ def check()->dict:
                 raise ValueError(f'Broken runtime documentation link: {name}: {target}')
             checked_links += 1
     inventory(ROOT/'assets/v2/empty-project')
-    exercised=[]
+    exercised=[];combinations=[]
     with tempfile.TemporaryDirectory() as tmp:
         base=Path(tmp);scope=base/'scope.md';scope.write_text('Software-only fixture: show the implication x=0 implies x^2=0. No source or semantic certification.\n')
         project=base/'project';init_project(project,'asset-smoke',scope)
@@ -44,9 +44,19 @@ def check()->dict:
         write_json(project/'knowledge/coverage.json',{'schema_version':VERSION,'questions':[{'question_id':'N-q','answer_nodes':['N-r'],'mechanism_nodes':[],'boundary_nodes':[],'gaps':['Actual review not performed.'],'assessment':'pending','rationale':'Resource smoke test only.'}]})
         sid=freeze_snapshot(project)['artifacts']['snapshot_id']
         for profile in ('minimal','thematic','lecture','paper'):
-            create_plan(project,profile,sid,profile=profile,draft=True)
-            p=project/f'outputs/{profile}/plan.json';prepare_output(project,p,draft=True);verify_generated(project,load_plan(p));exercised.append(profile)
+            from survey_core.profiles import VIEW_TASKS, review_scope_template
+            for view in VIEW_TASKS:
+                oid=profile+'-'+view
+                create_plan(project,oid,sid,profile=profile,view=view,draft=True)
+                p=project/f'outputs/{oid}/plan.json';prepared=prepare_output(project,p,draft=True)
+                plan=load_plan(p);verify_generated(project,plan);scope=review_scope_template(plan)
+                if (scope.get('view')!=view or 'view_focus' not in scope['mode_findings']
+                        or prepared['artifacts']['exposition_design']['status']!='NEEDS_WORK'):
+                    raise AssertionError('Installed view/design contracts were not exercised')
+                combinations.append(oid)
+            exercised.append(profile)
     return {'status':'PASSED','runtime_members':len(files),'checked_documentation_links':checked_links,'profile_preparations_executed':exercised,
+            'profile_view_preparations_executed':combinations,
             'python_3_10_grammar':'parsed; not a Python 3.10 runtime test','mathematical_certification':False}
 
 if __name__=='__main__':

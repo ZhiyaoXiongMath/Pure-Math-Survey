@@ -1,3 +1,13 @@
+# 2.1.0-rc2 — hardening development candidate
+
+Not a formal Release. Retains and integrates the existing body-location inspector
+and exposition checker; repairs the installed runtime allowlist. New output/review
+schema 2.2.0 binds view-aware reader tasks, explicit comparison pairs and located
+primary-support readings. Knowledge remains 2.0.0; rc1 and legacy records retain
+their exact policy and cannot authorize a current release without a new output
+and reading. Explicit incomplete-design drafts have bounded preview support.
+See docs/rc2/CONTINUATION.md for actual tests and outstanding acceptance.
+
 # 2.1.0-rc1 — vNext development candidate
 
 Not a formal Release. Adds versioned four-profile exposition, strong principal-statement

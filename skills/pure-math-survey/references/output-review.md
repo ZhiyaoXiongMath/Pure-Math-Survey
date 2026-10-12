@@ -47,3 +47,14 @@ Check each explicit comparison pair against the actual statements; report its
 unknowns, quantifiers, domain/parameters, regularity, normalization, conclusion
 and actual difference. Locate the manuscript discussion. A hash or accepted
 mechanical check does not establish correctness or novelty.
+
+## Current view and design readings
+
+A 2.2.0 output reading binds the exact `scope.view` and contains located
+`mode_findings.view_focus` and `exposition_design` findings. The former names
+nonempty available `node_ids` and explains the emphasized quantities or steps;
+the latter judges whether the concrete capabilities, outline and main text agree.
+Both use substantive manuscript body locations. An outline paragraph can help
+explain the design, but cannot stand in for a proof location. A fresh hash after
+a view edit does not replace either reading. Ordinary proof-step findings must
+point to the computation/argument, not merely the imported theorem statement.

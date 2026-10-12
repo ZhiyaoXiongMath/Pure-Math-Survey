@@ -1,13 +1,13 @@
 # Pure Math Survey
 
-> **2.1.0-rc1 是开发候选版，不是已发布版本。** 安装本开发分支的完整 `skills/pure-math-survey` 目录，或构建候选 ZIP；旧版 Release 链接仅供历史参考。四模式契约见[成文模式](skills/pure-math-survey/references/editions.md)。
+> **2.1.0-rc2 是开发候选版，不是已发布版本。** 安装本开发分支的完整 `skills/pure-math-survey` 目录，或构建候选 ZIP；旧版 Release 链接仅供历史参考。四模式契约见[成文模式](skills/pure-math-survey/references/editions.md)。
 > Minimal 严格三节；Thematic 核查路线比较；Lecture 兑现逐步证明；Paper 需授权原创贡献、最接近前人成果核查与闭合证明，默认只生成内部草稿。软件校验不保证数学正确、原创性或读者理解。
-> 知识 schema 为 2.0.0，新输出计划与新版政策审阅为 2.1.0；旧快照、正文和审阅不被静默迁移，历史 accepted 不构成新版政策验收。
+> 知识 schema 为 2.0.0，新输出计划与新版政策审阅为 2.2.0；旧快照、正文和审阅不被静默迁移，历史 accepted 不构成新版政策验收。
 
 
 **简体中文** | [English](README.en.md)
 
-**候选版本 2.1.0-rc1；尚未发布正式 Release。** 先建立有原始文献依据的数学知识库，再从固定的知识快照撰写所需的英文综述或讲义。
+**候选版本 2.1.0-rc2；尚未发布正式 Release。** 先建立有原始文献依据的数学知识库，再从固定的知识快照撰写所需的英文综述或讲义。
 
 知识项目保存明确的问题、定义、结论、证明机制、结果之间的关系、例子、适用边界及对应的文献证据。它可以独立维护，不必生成文章。作者或代理负责数学阅读与写作；工具负责检查文件约定、固定输入、证据关联和实际编译。
 
@@ -28,7 +28,7 @@
 也可以直接复制本仓库的 [skills/pure-math-survey](skills/pure-math-survey/) 文件夹。
 
 Release 附件只提供安装包和校验文件；下方示例保存在仓库中，无需单独下载示例即可使用 skill。
-本分支的软件版本为 2.1.0-rc1；知识与快照 schema 为 2.0.0，新计划及新版政策审阅 schema 为 2.1.0。旧软件不能读取新计划；旧成果按显式历史政策读取，不自动迁移。
+本分支的软件版本为 2.1.0-rc2；知识与快照 schema 为 2.0.0，新计划及新版政策审阅 schema 为 2.2.0。旧软件不能读取新计划；旧成果按显式历史政策读取，不自动迁移。
 
 ## 使用
 
@@ -87,8 +87,8 @@ Release 附件只提供安装包和校验文件；下方示例保存在仓库中
 ```sh
 python -m unittest discover -s tests -v
 python skills/pure-math-survey/scripts/validate_assets.py --json
-python skills/pure-math-survey/scripts/package_release.py --output ../pure-math-survey-2.1.0-rc1.zip
-python tools/verify_release.py ../pure-math-survey-2.1.0-rc1.zip --no-build
+python skills/pure-math-survey/scripts/package_release.py --output ../pure-math-survey-2.1.0-rc2.zip
+python tools/verify_release.py ../pure-math-survey-2.1.0-rc2.zip --no-build
 ```
 
 测试覆盖快照与材料完整性、范围明确的审阅、TeX 正文检查、历史记录和打包，并包含实际 TeX 编译。测试中人工构造的审阅记录仅用于软件测试。Linux CI 使用 Python 3.10 和 3.12；Windows 若无创建符号链接的权限，会明确跳过对应的一项测试。

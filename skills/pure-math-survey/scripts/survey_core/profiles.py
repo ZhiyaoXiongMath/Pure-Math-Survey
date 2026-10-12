@@ -33,6 +33,26 @@ GOALS = {
     'lecture': 'Reproduce the promised constructions, estimates and limits, identifying each hypothesis and imported input.',
     'paper': 'Audit the proposed original contribution against closest prior results and its entire proof.',
 }
+VIEW_TASKS = {
+    'integrated': 'Trace a coherent question, exact answer, mechanism and decisive boundary; explain how each supplies the next input.',
+    'foundations': 'Explain why the objects and definitions are natural, what distinctions they encode, and which model makes each used tool callable.',
+    'results': 'Compare exact conclusions, quantifiers, ranges and normalization; justify each relation using its mechanism and boundary conditions.',
+    'methods': 'Execute the decisive construction, identity or estimate from input to output; track uniform constants, admissibility and convergence topology.',
+    'boundaries': 'Identify which changed hypothesis breaks which step; distinguish a proved failure example from a range merely not covered by the theorem.',
+}
+VIEW_KINDS = {'integrated': set(), 'foundations': {'definition','example'},
+              'results': {'result','relation'}, 'methods': {'mechanism'},
+              'boundaries': {'frontier'}}
+
+
+def view_match(meta: dict, view: str, role: str) -> bool:
+    return (view == 'integrated' or view in meta['facets'] or meta['kind'] in VIEW_KINDS[view]
+            or (view == 'boundaries' and role == 'boundary'))
+
+
+def view_reason(meta: dict, view: str, role: str) -> str:
+    focus = 'Emphasis candidate' if view_match(meta, view, role) else 'Retained prerequisite or core node'
+    return f"{focus}: {meta['id']} ({meta['title']}; {meta['kind']}, {role}). {VIEW_TASKS[view]} Establish this node's actual use from its reviewed content; tags alone prove no relation."
 PROOF_PROMPTS = {
     'minimal': 'PENDING: name the decisive input, mathematical operation, output, and condition closing the connection.',
     'thematic': 'PENDING: identify the route mechanism and the exact assumptions and normalization supporting comparison.',
@@ -235,9 +255,11 @@ def profile_readiness_errors(inv, plan: dict) -> list[dict]:
 def review_scope_template(plan: dict) -> dict:
     if not four_modes(plan):
         return {}
-    keys = COMMON_READINGS + MODE_READINGS[plan['profile']] + (('exposition_design',) if current(plan) else ())
+    keys = COMMON_READINGS + MODE_READINGS[plan['profile']] + (('exposition_design','view_focus') if current(plan) else ())
     return {'editorial_policy': policy(plan), 'statement_reviews': {},
-            'mode_findings': {k: {'outcome': 'not_performed', 'finding': '', 'locations': []} for k in keys},
+            **({'view':plan['view']} if current(plan) else {}),
+            'mode_findings': {k: {'outcome': 'not_performed', 'finding': '', 'locations': [],
+                                **({'node_ids':[]} if k=='view_focus' else {})} for k in keys},
             'proof_step_findings': {o['node_id']: {s: {'outcome': 'not_performed', 'finding': '', 'locations': []}
                                     for s in o['required_steps']} for o in plan['proof_obligations']},
             'contribution_reviews': {c['node_id']: {'outcome': 'not_performed', 'finding': '', 'locations': [],
@@ -262,8 +284,16 @@ def semantic_profile_errors(out: Path, plan: dict, review: dict, *, inspection=N
             return
         errors.extend(validate_locations(out, entry.get('locations'), node_id=key, inspection=inspection))
     findings = mapping(scope.get('mode_findings'))
-    for name in COMMON_READINGS + MODE_READINGS[plan['profile']] + (('exposition_design',) if current(plan) else ()):
+    for name in COMMON_READINGS + MODE_READINGS[plan['profile']] + (('exposition_design','view_focus') if current(plan) else ()):
         check_entry(findings.get(name), name)
+    if current(plan):
+        if scope.get('view') != plan['view']:
+            errors.append(diagnostic('VIEW_REVIEW_MISMATCH','Review the current view; changing only the plan or its hash is not a new reading.','evidence'))
+        ids=mapping(findings.get('view_focus')).get('node_ids')
+        available=set(plan['question_ids']) | {s['node_id'] for s in plan['selections']}
+        available |= {p['node_id'] for p in plan['prerequisites'] if isinstance(p,dict)}
+        if not isinstance(ids,list) or not ids or not all(isinstance(k,str) and k in available for k in ids):
+            errors.append(diagnostic('VIEW_FOCUS_NODE_INVALID','Identify available nodes whose quantities or steps were actually emphasized and read.','evidence'))
     for s in plan['selections']:
         if s['role'] == 'principal_answer':
             key = s['node_id']
@@ -418,7 +448,7 @@ def structure_errors(inv, plan: dict, nodes: dict, expanded: str) -> tuple[list[
     return errors, warnings
 
 
-def outline(plan: dict, order: list[str]) -> str:
+def outline(plan: dict, order: list[str], nodes: dict | None = None) -> str:
     """Preparation proposes a reading task; it deliberately leaves work pending."""
     section_plans = {
         'minimal': '\n'.join(f'{i}. {title}' for i, title in enumerate(MINIMAL_SECTIONS, 1)),
@@ -445,6 +475,12 @@ def outline(plan: dict, order: list[str]) -> str:
              'Prefer short prose alternating with mathematically useful displays. About four TYPESet lines is an editorial heuristic, never a source-line count, formula quota or permission to drop hypotheses.',
              '', '## Review boundary',
              'No semantic, originality, reader-comprehension or page review was performed by prepare. Project overview may cover many questions and routes; this outline selects just this manuscript.']
+    if current(plan):
+        lines += ['', '## View-specific work', VIEW_TASKS[plan['view']],
+                  'PENDING: replace these navigation suggestions with the actual quantities, operations, node consumers and manuscript locations. Preserve all principal results, decisive boundaries and mode proof promises.',
+                  *[f'- [[{s["node_id"]}]]: {s["reason"]}' for s in plan['selections']]]
+        if nodes is not None and not any(view_match(nodes[s['node_id']].meta,plan['view'],s['role']) for s in plan['selections']):
+            lines += ['PENDING: no dedicated '+plan['view']+' candidate exists in this selected closure. State the evidence gap or justify why no extra material is needed; return to KB for any new claim. Do not invent a node or drop the main result.']
     if plan['profile'] == 'paper':
         lines += ['', '## Contribution contract',
                   'PENDING: audit every plan contribution against authorized provenance, closest verified prior results, supported difference, complete proof and caveats. No closed original contribution: DRAFT_UNVERIFIED only.']

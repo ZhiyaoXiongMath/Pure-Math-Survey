@@ -80,17 +80,25 @@ class VNext(unittest.TestCase):
         with self.assertRaises(SurveyError) as cm:fn(*a,**kw)
         self.assertEqual(cm.exception.diagnostic['code'],code)
     def sem(self,p,v):
-        out=p.parent;lines=(out/'manuscript/main.tex').read_text().splitlines()
+        # Explicitly author a real (trivial) computation in this SYNTHETIC
+        # fixture. Proof findings must never point merely at a theorem input.
+        out=p.parent;main=out/'manuscript/main.tex';text=main.read_text()
+        computation=r'For $x=0$, substitution gives $x^2=0\cdot 0=0$. This is a synthetic software fixture.'
+        if computation not in text:
+            text=text.replace(r'\end{document}',computation+'\n'+r'\end{document}');main.write_text(text)
+        lines=text.splitlines()
         def loc(n):return {'path':'manuscript/main.tex','line_start':n,'line_end':n}
         principal=next(i for i,l in enumerate(lines,1) if 'statements/N-main.tex' in l)
+        proof=lines.index(computation)+1
         scope=review_scope_template(v)
         scope.update(output_ids=[v['output_id']],profile=v['profile'],node_ids=['N-q','N-def','N-main'],
             whole_manuscript=True,checks=CHECKS,principal_locations={'N-main':[loc(principal)]},
             proof_steps={o['node_id']:o['required_steps'] for o in v['proof_obligations']},
-            proof_locations={o['node_id']:[loc(principal)] for o in v['proof_obligations']})
-        for key in scope['mode_findings']:scope['mode_findings'][key]={'outcome':'accepted','finding':SYNTH,'locations':[loc(principal)]}
+            proof_locations={o['node_id']:[loc(proof)] for o in v['proof_obligations']})
+        for key in scope['mode_findings']:scope['mode_findings'][key]={'outcome':'accepted','finding':SYNTH,'locations':[loc(proof)]}
+        if 'view_focus' in scope['mode_findings']:scope['mode_findings']['view_focus']['node_ids']=['N-main']
         for steps in scope['proof_step_findings'].values():
-            for key in steps:steps[key]={'outcome':'accepted','finding':SYNTH,'locations':[loc(principal)]}
+            for key in steps:steps[key]={'outcome':'accepted','finding':SYNTH,'locations':[loc(proof)]}
         item=principal_template((out/'generated/statements/N-main.tex').read_bytes());item['outcome']='accepted'
         item.update({k:SYNTH for k in STATEMENT_ASPECTS});scope['statement_reviews']['N-main']=item
         r=review_template(out,'output_semantic',[v['output_id']],output_inputs(out),scope)

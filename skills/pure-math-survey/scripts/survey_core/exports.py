@@ -91,7 +91,7 @@ def prepare_output(root:Path,plan_path:Path,draft:bool=False)->dict:
         if not (out/'outline.md').exists():
             order=topological(inv.nodes,ids) if plan['profile']=='lecture' else [s['node_id'] for s in plan['selections']]
             from .profiles import outline
-            atomic_bytes(out/'outline.md', outline(plan, order).encode('utf-8'))
+            atomic_bytes(out/'outline.md', outline(plan, order, inv.nodes).encode('utf-8'))
         if not (out/'manuscript/math-review.sty').exists():
             atomic_bytes(out/'manuscript/math-review.sty',(SKILL_ROOT/'assets/templates/math-review.sty').read_bytes())
         if not (out/'manuscript/main.tex').exists():
@@ -103,7 +103,9 @@ def prepare_output(root:Path,plan_path:Path,draft:bool=False)->dict:
                     snippet = f'\\begin{{{env}}}\\label{{node:{key}}}\n\\input{{../generated/statements/{key}.tex}}\n\\end{{{env}}}\n'
                     snippets.append(snippet)
                     (principals if s['role']=='principal_answer' else ingredients).append(snippet)
-            text=template.replace('@@TITLE@@',tex_text(plan['title'])).replace('@@STATEMENTS@@','\n'.join(snippets)).replace('@@PRINCIPALS@@','\n'.join(principals)).replace('@@INGREDIENTS@@','\n'.join(ingredients))
+            from .profiles import VIEW_TASKS, current
+            task='\\placeholder{'+tex_text(VIEW_TASKS[plan['view']])+'}' if current(plan) else ''
+            text=template.replace('@@TITLE@@',tex_text(plan['title'])).replace('@@STATEMENTS@@','\n'.join(snippets)).replace('@@PRINCIPALS@@','\n'.join(principals)).replace('@@INGREDIENTS@@','\n'.join(ingredients)).replace('@@VIEW_TASK@@',task)
             notice='\\noindent\\textbf{DRAFT\\_UNVERIFIED: source and mathematical review may be incomplete.}\n' if plan['draft'] else ''
             atomic_bytes(out/'manuscript/main.tex',text.replace('@@DRAFT@@',notice).encode())
     from .exposition import check_exposition_design
