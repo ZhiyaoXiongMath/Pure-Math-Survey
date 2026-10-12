@@ -92,7 +92,7 @@ def assess_release(root:Path,output_id:str,*,policy_mode:str='current')->dict:
                     vis=r;used.append(r['review_id']);break
                 vis_stale+=stale
             if vis is None:errors+=vis_stale
-            if vis is None:errors.append(diagnostic('VISUAL_REVIEW_INCOMPLETE','Actual full-page human observations and PDF/image-bound evidence are required','evidence'))
+            if vis is None:errors.append(diagnostic('VISUAL_REVIEW_INCOMPLETE','Actual full-page observations and PDF/image-bound evidence are required; identify the reviewer and actual inspection method honestly','evidence'))
     if sem is None or sem['reviewer_mode']!='independent_review':
         warnings.append(diagnostic('NO_INDEPENDENT_REVIEW','No scoped independent mathematical reading of this manuscript is claimed. Author reread is not independent review.'))
     status='NEEDS_WORK' if errors else ('RECORDED_VALID' if policy_mode=='recorded' else 'RELEASABLE')

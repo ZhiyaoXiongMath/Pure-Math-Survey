@@ -106,3 +106,23 @@ Real three-paper authoring and final installed-environment acceptance are ongoin
 
 Status: reliable source/installed/remote test loop TESTED. Candidate mathematics
 and final PR CI remain separate unfinished acceptance responsibilities.
+
+## Source-retention finding from actual authoring
+
+- Three real primary PDFs were downloaded, hashed and read, but are not
+  redistributed in the project. Readiness previously described every absent
+  in-project source file as an unavailable hash. It now distinguishes a
+  recorded hash with unretained bytes (`SOURCE_RAW_BYTES_NOT_RETAINED`) from
+  genuinely absent raw hash/bytes. Neither condition certifies retained bytes.
+- Online source scopes now reject malformed or empty locator lists with
+  SOURCE_REVIEW_MISSING instead of accepting a truthy scalar or crashing on a
+  null nested scope. Source/version/actual-reading duties remain unchanged.
+- Visual diagnostics no longer imply the observer must have been human; each
+  record must truthfully identify actual observations and reviewer method.
+- Focused tests: two tests OK (0.811 seconds). Complete fresh source regression:
+  186 tests OK (42.055 seconds); all 20 resource preparations also passed.
+  This 186-test run is new execution, not the earlier conversation's assertion.
+
+Status: these narrow authoring findings IMPLEMENTED and TESTED. faf7934 remote
+run 38227400876 was still installing TeX at the latest observation; no completed
+CI result is inferred for that run here.
