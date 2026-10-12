@@ -356,6 +356,19 @@ class CurrentVisualScope(unittest.TestCase):
                 verifier.require_current_r3_semantics(self.result,self.out)
             pdf.write_bytes(original)
 
+    def test_poppler_zero_padded_page_names_remain_valid(self):
+        manifest=self.out/'evidence/render-manifest.json';data=json.loads(manifest.read_text())
+        for row in data['pages']:
+            target=f"evidence/pages/page-{row['page']:02d}.png"
+            (self.out/row['path']).rename(self.out/target);row['path']=target
+        manifest.write_text(json.dumps(data))
+        self.review['inputs']=[{'path':p} for p in ['build/main.pdf','build/build-report.json','evidence/render-manifest.json']+
+                              [f'evidence/pages/page-{n:02d}.png' for n in range(1,8)]]
+        (self.out/'evidence/old-visual.json').write_text(json.dumps(self.review))
+        self.result['errors'][0]['message']='Review old-visual omits necessary inputs: evidence/pages/page-08.png'
+        self.assertEqual(verifier.require_current_r3_semantics(self.result,self.out)['visual_review_status'],
+                         'NEW_VISUAL_REVIEW_REQUIRED')
+
     def test_known_old_visual_stale_is_pending_but_unknown_or_corruption_is_blocking(self):
         for message,allowed in (('Review old-visual no longer matches this input',True),
                                 ('Review synthetic-semantic no longer matches this input',False),

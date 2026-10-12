@@ -176,14 +176,14 @@ def current_render_inputs(out:Path,result:dict)->tuple[set[str],dict[str,set[str
             or render.get('pdf_sha256')!=built.get('pdf_sha256')):
         raise AssertionError('Current PDF/build/render identities are invalid')
     rows=render.get('pages')
-    if (not isinstance(rows,list) or any(not isinstance(row,dict) for row in rows)
+    if (not isinstance(rows,list) or any(not isinstance(row,dict) or type(row.get('page')) is not int for row in rows)
             or [row.get('page') for row in rows]!=list(range(1,pages+1))):
         raise AssertionError('Current render manifest does not cover the entire PDF')
     required={'build/main.pdf','build/build-report.json','evidence/render-manifest.json'}
     for row in rows:
         path=row.get('path');digest=row.get('sha256')
-        if (not isinstance(path,str) or not re.fullmatch(r'evidence/pages/page-[1-9][0-9]*\.png',path)
-                or path!=f"evidence/pages/page-{row['page']}.png"
+        filename=re.fullmatch(r'evidence/pages/page-([0-9]+)\.png',path) if isinstance(path,str) else None
+        if (not filename or int(filename[1])!=row['page']
                 or not isinstance(digest,str) or not re.fullmatch('[a-f0-9]{64}',digest)):
             raise AssertionError('Current render manifest has an invalid page binding')
         try:file=safe(out,path,True)
