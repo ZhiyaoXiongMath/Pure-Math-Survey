@@ -339,7 +339,7 @@ class CurrentVisualScope(unittest.TestCase):
 
     def test_missing_invalid_or_stale_manifest_is_a_hard_failure(self):
         manifest=self.out/'evidence/render-manifest.json';original=manifest.read_bytes()
-        for variant in (None,b'{',json.dumps({'pdf_sha256':'wrong','pages':[]}).encode(),
+        for variant in (None,b'{',b'[]',json.dumps({'pdf_sha256':'wrong','pages':[]}).encode(),
                         json.dumps({'pdf_sha256':hashlib.sha256((self.out/'build/main.pdf').read_bytes()).hexdigest(),'pages':[]}).encode()):
             if variant is None:manifest.unlink()
             else:manifest.write_bytes(variant)

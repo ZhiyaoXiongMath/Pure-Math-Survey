@@ -169,6 +169,8 @@ def current_render_inputs(out:Path,result:dict)->tuple[set[str],dict[str,set[str
     from survey_core.common import safe,SurveyError
     built=json.loads((out/'build/build-report.json').read_text(encoding='utf-8'))
     render=json.loads((out/'evidence/render-manifest.json').read_text(encoding='utf-8'))
+    if not isinstance(built,dict) or not isinstance(render,dict):
+        raise AssertionError('Current build/render manifest must be an object')
     pdf=out/'build/main.pdf';pages=built.get('pages')
     if (built.get('status')!='BUILT' or type(pages) is not int or pages<=0
             or result.get('artifacts',{}).get('pages')!=pages or not pdf.is_file()
@@ -195,7 +197,8 @@ def current_render_inputs(out:Path,result:dict)->tuple[set[str],dict[str,set[str
     for file in (out/'evidence').rglob('*.json'):
         record=json.loads(file.read_text(encoding='utf-8'))
         if (isinstance(record,dict) and record.get('kind')=='visual'
-                and result['artifacts'].get('output_id') in record.get('scope',{}).get('output_ids',[])):
+                and isinstance(record.get('scope'),dict)
+                and result['artifacts'].get('output_id') in record['scope'].get('output_ids',[])):
             key=record.get('review_id')
             if not isinstance(key,str) or key in visual_records:
                 raise AssertionError('Ambiguous visual review identity')
