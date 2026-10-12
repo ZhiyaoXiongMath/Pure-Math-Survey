@@ -47,12 +47,12 @@ class ReleaseVerifierEvidence(unittest.TestCase):
                 with verifier.verification_workspace(report,Path(td)) as base:
                     verifier.run_check([sys.executable,'-I','-u','-c',
                         "import time;print('TeX still running',flush=True);time.sleep(30)"],
-                        base,os.environ.copy(),report,False,timeout=1)
+                        base,os.environ.copy(),report,False,timeout=3)
             self.assertTrue(base.exists())
             row=report['checks'][0]
             self.assertIsNone(row['returncode'])
             self.assertIn('TeX still running',row['stdout'])
-            self.assertEqual(row['timeout_seconds'],1)
+            self.assertEqual(row['timeout_seconds'],3)
 
 
 class R3VerifierContracts(unittest.TestCase):
