@@ -13,6 +13,8 @@ def consumption(inv: Inventory, plan: dict) -> set[str]:
     seeds = set(plan['question_ids']) | {s['node_id'] for s in plan['selections']}
     for obligation in plan['proof_obligations']:
         seeds.add(obligation['node_id']); seeds.update(obligation['imported_inputs'])
+    for claim in plan.get('contributions', []):
+        seeds.update(claim['closest_prior_results']); seeds.update(claim['comparison_nodes'])
     return required_closure(inv.nodes, seeds, explain)
 
 def consumed_paths(inv: Inventory, plan: dict) -> set[str]:
@@ -30,6 +32,8 @@ def consumed_paths(inv: Inventory, plan: dict) -> set[str]:
     return paths
 
 def validate_plan(root: Path, plan: dict, *, compare: bool = True) -> Inventory:
+    from .profiles import validate_plan_contract, validate_profile_selection
+    validate_plan_contract(plan)
     _, frozen = load_snapshot(root, plan['snapshot_id']); inv = inventory(frozen)
     selected = {s['node_id']: s for s in plan['selections']}
     require(len(selected) == len(plan['selections']), 'DUPLICATE_ID', 'Duplicate selection in plan', 'plan.json')
@@ -69,6 +73,7 @@ def validate_plan(root: Path, plan: dict, *, compare: bool = True) -> Inventory:
     for o in plan['proof_obligations']:
         require(o['node_id'] in selected, 'PROOF_OBLIGATION_UNMET', 'Obligation must refer to a selected node', 'plan.json', o['node_id'])
         require(all(k in selected or k in prereqs for k in o['imported_inputs']), 'PROOF_OBLIGATION_UNMET', 'Imported inputs need explicit treatment', 'plan.json', o['node_id'])
+    validate_profile_selection(inv, plan)
     if compare and plan.get('comparison_group'):
         def spine(p:dict)->tuple:
             return (p['snapshot_id'], set(p['question_ids']), {s['node_id'] for s in p['selections'] if s['role']=='principal_answer'}, {s['node_id'] for s in p['selections'] if s['role']=='boundary'})
@@ -103,6 +108,25 @@ def create_plan(root: Path, output_id: str, snapshot_id: str, profile: str='mini
             'reader_goals':['Recover the selected question, exact principal answer, mechanism and decisive boundary.'],
             'question_ids':questions,'prerequisites':[],'selections':selections,'omissions':[],'proof_obligations':[],
             'limits':{'max_pages':max_pages,'page_review_threshold':None},'comparison_group':comparison_group,'draft':draft}
+    from .profiles import OUTPUT_SCHEMA, POLICY, GOALS, PROOF_PROMPTS
+    plan.update(schema_version=OUTPUT_SCHEMA, editorial_policy=POLICY, contributions=[],
+                audience='General undergraduate mathematics and early doctoral background in the relevant field; specify the actual callable capabilities for this topic.',
+                reader_goals=[GOALS.get(profile, 'Select a supported profile.')])
+    # These are authoring prompts, not automatically satisfied mathematical promises.
+    for selection in selections:
+        if selection['role'] == 'principal_answer':
+            selection['proof_treatment'] = {'minimal':'mechanism', 'thematic':'sketch', 'lecture':'complete', 'paper':'complete'}.get(profile, 'sketch')
+        if selection['proof_treatment'] in {'complete','sketch','mechanism'}:
+            plan['proof_obligations'].append({'node_id':selection['node_id'], 'treatment':selection['proof_treatment'],
+                'required_steps':[PROOF_PROMPTS.get(profile, 'PENDING: select a supported profile.')],
+                'imported_inputs':[e['target'] for e in inv.nodes[selection['node_id']].meta['links'] if e['relation']=='proof_input']})
+    if profile == 'paper':
+        plan['draft'] = True  # Promotion is a separate explicit, reviewed plan edit.
+        plan['contributions'] = [{'node_id':key, 'classification':'unverified',
+            'provenance':'PENDING: identify the authorized derivation or supplied manuscript; do not relabel known work.',
+            'authorization':'', 'closest_prior_results':[], 'comparison_nodes':[],
+            'actual_difference':'', 'proof_status':'unverified',
+            'gaps':['Contribution, closest prior work and proof closure have not been reviewed.']} for key in principals]
     target = safe(root, f'outputs/{output_id}/plan.json')
     require(not target.exists(), 'DESTINATION_EXISTS', 'Output plan already exists', target.relative_to(root).as_posix())
     # Round-trip through the strict loader before committing.

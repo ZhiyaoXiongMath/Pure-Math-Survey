@@ -90,20 +90,20 @@ def prepare_output(root:Path,plan_path:Path,draft:bool=False)->dict:
         finally:shutil.rmtree(stage,ignore_errors=True)
         if not (out/'outline.md').exists():
             order=topological(inv.nodes,ids) if plan['profile']=='lecture' else [s['node_id'] for s in plan['selections']]
-            behavior={'minimal':'Put the usable question and exact answer early; retain the key calculation and decisive boundary.',
-                      'thematic':'Organize by the selected question and supported relations, not a paper-by-paper bibliography.',
-                      'lecture':'Develop prerequisite definitions and the promised proof steps; state imported inputs accurately.'}[plan['profile']]
-            atomic_bytes(out/'outline.md',('# Writing task\n\n'+behavior+'\n\nReader goals:\n'+''.join('- '+g+'\n' for g in plan['reader_goals'])+'\nSuggested nodes (editable pedagogical order):\n'+''.join('- [['+k+']]\n' for k in order)+'\nNo semantic or visual review has been performed by this preparation command.\n').encode())
+            from .profiles import outline
+            atomic_bytes(out/'outline.md', outline(plan, order).encode('utf-8'))
         if not (out/'manuscript/math-review.sty').exists():
             atomic_bytes(out/'manuscript/math-review.sty',(SKILL_ROOT/'assets/templates/math-review.sty').read_bytes())
         if not (out/'manuscript/main.tex').exists():
             template=(SKILL_ROOT/f"assets/templates/profile-{plan['profile']}.tex").read_text(encoding='utf-8')
-            snippets=[]
+            snippets=[]; principals=[]; ingredients=[]
             for s in plan['selections']:
                 if s['statement_treatment']=='full':
                     key=s['node_id']; env='definition' if inv.nodes[key].meta['kind']=='definition' else 'theorem'
-                    snippets.append(f'\\begin{{{env}}}\\label{{node:{key}}}\n\\input{{../generated/statements/{key}.tex}}\n\\end{{{env}}}\n')
-            text=template.replace('@@TITLE@@',tex_text(plan['title'])).replace('@@STATEMENTS@@','\n'.join(snippets))
+                    snippet = f'\\begin{{{env}}}\\label{{node:{key}}}\n\\input{{../generated/statements/{key}.tex}}\n\\end{{{env}}}\n'
+                    snippets.append(snippet)
+                    (principals if s['role']=='principal_answer' else ingredients).append(snippet)
+            text=template.replace('@@TITLE@@',tex_text(plan['title'])).replace('@@STATEMENTS@@','\n'.join(snippets)).replace('@@PRINCIPALS@@','\n'.join(principals)).replace('@@INGREDIENTS@@','\n'.join(ingredients))
             notice='\\noindent\\textbf{DRAFT\\_UNVERIFIED: source and mathematical review may be incomplete.}\n' if plan['draft'] else ''
             atomic_bytes(out/'manuscript/main.tex',text.replace('@@DRAFT@@',notice).encode())
     return result('output.prepare','DRAFT_PREPARED' if plan['draft'] else 'PREPARED',{'output':out.relative_to(root).as_posix(),'snapshot_id':plan['snapshot_id'],'readiness':ready,'main_preserved':True})
@@ -165,4 +165,14 @@ def validate_structure(root:Path,output_id:str)->dict:
     body=text.split(r'\begin{document}',1)[-1].split(r'\end{document}',1)[0]
     if plan['draft'] and not re.search(r'DRAFT(?:\\)?_UNVERIFIED|DRAFT\\_UNVERIFIED',body):
         errors.append(diagnostic('DRAFT_NOTICE_MISSING','Unverified manuscript must visibly identify its draft status','manuscript/main.tex'))
+    from .profiles import structure_errors
+    profile_errors, profile_warnings = structure_errors(inv, plan, validate_plan(root, plan).nodes, text)
+    errors += profile_errors; warnings += profile_warnings
+    if plan.get('editorial_policy') and plan['profile']=='minimal':
+        from .structure import strip_comments
+        for path in sorted(used | {'manuscript/main.tex'}):
+            if path.startswith('manuscript/') and path.endswith('.tex'):
+                raw=strip_comments(safe(out,path,True).read_text(encoding='utf-8'))
+                if re.search(r'\\(?:re)?newcommand\s*(?:\{)?\\thesection\b|\\def\s*\\thesection\b',raw):
+                    errors.append(diagnostic('MINIMAL_NUMBERING_UNSUPPORTED','Custom main-section numbering is not supported by the strict three-section contract.',path))
     return result('output.structure','NEEDS_WORK' if errors else 'STRUCTURALLY_VALID',{'tex_inventory':public_inventory(inv),'actual_literal_inputs':sorted(used),'body_inputs':sorted(scan.body_inputs),'canonical_locations':scan.locations},errors,warnings)

@@ -1,0 +1,441 @@
+{
+  "schema_version": "2.1.0",
+  "review_id": "AUTHOR-compactness-minimal-semantic",
+  "kind": "output_semantic",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-11",
+  "inputs": [
+    {
+      "path": "generated/conventions.tex",
+      "sha256": "11cd32e393793531befa920aceac933e3c544ada8683f11f893b87876a529217"
+    },
+    {
+      "path": "generated/manifest.json",
+      "sha256": "2cb09c171806848172010e4f8390eb3a76822bac06c4a60d89401c87c3666e54"
+    },
+    {
+      "path": "generated/references.bib",
+      "sha256": "7b6c7d1bdfeae10f914d4ec674b8c81eccdde8f4a41085f5797656c2be3e76d2"
+    },
+    {
+      "path": "generated/statements/N-compactness.tex",
+      "sha256": "83b64e8829255b02aa1512f302d984b268fdc201f21644ba8c541f2bb774041a"
+    },
+    {
+      "path": "generated/statements/N-main.tex",
+      "sha256": "3d77759c3e45e5ff93d413bc7d0c93f5d2037b205a604b249305dba24cd89147"
+    },
+    {
+      "path": "generated/statements/N-margin.tex",
+      "sha256": "19673c53aaccdec7a15667a4b6f40fd074c72d8f3ff1ee11b735ea6ef04b8d8d"
+    },
+    {
+      "path": "generated/statements/N-norm.tex",
+      "sha256": "73931ad631fad18d2ff5f926e761171689fb50e5da823bb733dde68bcc3d620c"
+    },
+    {
+      "path": "manuscript/main.tex",
+      "sha256": "2635f588016edba0447c5292623f93566222d20f18025edf460f2bc724ff6a13"
+    },
+    {
+      "path": "manuscript/math-review.sty",
+      "sha256": "33e5673880cbebe90caab1beea95ed7b78493838790bef340944496c664a5b83"
+    },
+    {
+      "path": "materials/evidence/reviews/math-N-boundary.json",
+      "sha256": "5d577cdbcdf7395ef48ae34f79041ce4dbffc5693f310eeb45d69bb310518d3c"
+    },
+    {
+      "path": "materials/evidence/reviews/math-N-margin.json",
+      "sha256": "a137c212a02178dd1ff916092e1320491b1570cd992a74bb8651933be8c18d49"
+    },
+    {
+      "path": "materials/evidence/reviews/math-N-question.json",
+      "sha256": "de36d544a8453689be04f7984327d2f3f222899842bbf8b3b58c9b71486c9574"
+    },
+    {
+      "path": "materials/evidence/reviews/mode-promises-N-main.json",
+      "sha256": "0e3b094c66085a9d767f6f7ad939218001af3a62008eb4b89306f76c266200ee"
+    },
+    {
+      "path": "materials/evidence/reviews/norm-binding-N-compactness.json",
+      "sha256": "83f4bd55f2842c6a65d62caae38dc7b81b8754a16caebc772c0bdc0b66b55be3"
+    },
+    {
+      "path": "materials/evidence/reviews/norm-binding-N-norm.json",
+      "sha256": "1c1738b596bd052709b98772be14b15322af34899b8cbbc02cd0e6db061b3e67"
+    },
+    {
+      "path": "materials/evidence/reviews/norm-binding-coverage.json",
+      "sha256": "7d2030fa145108427f796608edd006f4b4cd1c14ca89aa6d57761e6e0cf2731c"
+    },
+    {
+      "path": "materials/evidence/source-checks/guide.md",
+      "sha256": "983facc726cb80b8557af6559099fb00c52189e4bdf201dc4d23d92f297f56eb"
+    },
+    {
+      "path": "materials/knowledge/conventions.tex",
+      "sha256": "11cd32e393793531befa920aceac933e3c544ada8683f11f893b87876a529217"
+    },
+    {
+      "path": "materials/knowledge/coverage.json",
+      "sha256": "9804b9a576e30757d299bc587fb1820b8d9ed49bfd50abafbbcfadd449086f55"
+    },
+    {
+      "path": "materials/knowledge/discovery.md",
+      "sha256": "a8a0727115e0fbf29370dab0f9a0563289d21e1597834c372c336548eb54def4"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-boundary.md",
+      "sha256": "792e257a912d704c1741fe963208671e0412ecdfd8482880ee92563bfd31e801"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-compactness.md",
+      "sha256": "cbe3b0df4771c4524e74840c69ea494b44edede58ef6167407088201fbb16eb8"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-main.md",
+      "sha256": "f49c64cbcca43258bb2a4f9386b68413ea02e49cc93ab6ae8e91c03a69480865"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-margin.md",
+      "sha256": "5ee248a33dbf7bc0bbc1757bf9fe17587a575dd50f5a519a069ba4ee574ef649"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-norm.md",
+      "sha256": "ddfd050703983c2e8478d09107f22ca636f038c96c94f55366963108b6ed5d91"
+    },
+    {
+      "path": "materials/knowledge/nodes/N-question.md",
+      "sha256": "a1ab5720531cd2294bb48b0e4ba0c8a3aca1cfd394a23f9fde686f7dde7445e1"
+    },
+    {
+      "path": "materials/knowledge/overview.md",
+      "sha256": "d1372f0577c5cb417fd27efbd24b8a8b96191230b3b1715828576f0df42b385d"
+    },
+    {
+      "path": "materials/knowledge/sources/S-guide.json",
+      "sha256": "1e3177ed0672d6a08f1382eeca94e093f14d25c8ffb9690ed18686919af1283c"
+    },
+    {
+      "path": "materials/materials-manifest.json",
+      "sha256": "2cb09c171806848172010e4f8390eb3a76822bac06c4a60d89401c87c3666e54"
+    },
+    {
+      "path": "materials/project.json",
+      "sha256": "f5b28b75fc3774a636441ace9a24569747f084c6921e18b10b069aa65fb4980b"
+    },
+    {
+      "path": "materials/scope.md",
+      "sha256": "0ea6d7c8232ff1f2560f05470356ea3a649268a07053b1fa95cf59d830010ec2"
+    },
+    {
+      "path": "outline.md",
+      "sha256": "ab6267ecdab3f109843c9f00acf303bf32701795e407ebc5c8b76a08ed3e8618"
+    },
+    {
+      "path": "plan.json",
+      "sha256": "ed1f191121959c7e8eef08c57afbd1bf17001cde86a6a7ea5a06cb85c979022b"
+    }
+  ],
+  "scope": {
+    "editorial_policy": "four-modes-2026-10-11-r2",
+    "statement_reviews": {
+      "N-main": {
+        "canonical_sha256": "3d77759c3e45e5ff93d413bc7d0c93f5d2037b205a604b249305dba24cd89147",
+        "outcome": "accepted",
+        "objects": "Periodic real functions, the continuous symmetric-matrix map A, its positive domain U, and the continuous equation map F are explicitly declared.",
+        "domain": "Integers d,r>=1, 0<beta<alpha<1, fixed flat torus, parameter interval [0,1] and the target C0 spaces are retained.",
+        "fixed_and_variable": "A,F and norms are fixed. t_j,u_j are a given sequence; only a subsequence and its limit are concluded.",
+        "hypotheses": "Continuity, an already existing solution sequence, uniform C2alpha bound and one positive delta independent of j and x are all present.",
+        "equations": "The equation F(t_j,u_j)=0 and all norm/matrix inequalities are displayed. Norms are defined completely immediately before the theorem, not by a remote label.",
+        "quantifiers": "The constants are independent of j; the matrix bound is for every j,x; the conclusion is some subsequence, not the entire sequence.",
+        "conclusion": "The limit is C2alpha, convergence is C2beta, the margin persists and the equation holds; no smoothness or new existence claim.",
+        "status": "A proved conditional closedness lemma for the stated data, not a solution of a nonlinear existence problem.",
+        "local_definitions": "The flat distance, derivatives, Holder seminorm and norm are displayed immediately before each principal; symmetric-matrix order is quadratic-form order, recalled locally."
+      }
+    },
+    "mode_findings": {
+      "fast_path": {
+        "outcome": "accepted",
+        "finding": "The reader can recover the exact sequence-to-limit task: uniform C2alpha bound gives strong C2beta convergence, continuity of A gives uniform matrices, one delta keeps the limit in U, and then continuity passes F=0.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 9,
+            "line_end": 21
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 22,
+            "line_end": 38
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 39,
+            "line_end": 63
+          }
+        ]
+      },
+      "reader_calibration": {
+        "outcome": "accepted",
+        "finding": "The exact Holder norm is a canonical adjacent input. Basic periodic derivatives, uniform-limit integration and symmetric-matrix diagonalization are declared baseline; the compactness interface and admissibility conversion are explicitly explained.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 9,
+            "line_end": 21
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 39,
+            "line_end": 63
+          }
+        ]
+      },
+      "points": {
+        "outcome": "accepted",
+        "finding": "The compactness lemma delivers the topology needed by A and F. The margin lemma delivers membership of the limit in U. These outputs are different and jointly consumed; neither point is an unused tool list.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 9,
+            "line_end": 21
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 22,
+            "line_end": 38
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 39,
+            "line_end": 63
+          }
+        ]
+      },
+      "connections": {
+        "outcome": "accepted",
+        "finding": "The unit-vector equality passes the same delta through the uniform matrix limit for every x and v. The proof invokes F only after u_infinity is shown admissible, so continuity is not used outside its domain.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 9,
+            "line_end": 21
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 22,
+            "line_end": 38
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 39,
+            "line_end": 63
+          }
+        ]
+      },
+      "limits": {
+        "outcome": "accepted",
+        "finding": "The stated theorem assumes solutions and uniform estimates; it does not construct them or upgrade smoothness. The 1/j example checks the missing uniform-margin case; the longer modes additionally compute failure of top-exponent convergence.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 9,
+            "line_end": 21
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 39,
+            "line_end": 63
+          }
+        ]
+      },
+      "display_rhythm": {
+        "outcome": "accepted",
+        "finding": "The norm, maps, sequence estimates, unit-vector limit and F-limit are displayed where consumed. The long self-contained principal is a justified accuracy-first exception, not an excuse to replace its assumptions with labels.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 9,
+            "line_end": 21
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 39,
+            "line_end": 63
+          }
+        ]
+      },
+      "statement_context": {
+        "outcome": "accepted",
+        "finding": "The prose retains beta<alpha, one delta independent of j and x, a subsequence rather than whole-sequence convergence, and the conditional rather than arbitrary-existence status. The adjacent norms now come from N-norm in the new snapshot.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 9,
+            "line_end": 21
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 39,
+            "line_end": 63
+          }
+        ]
+      },
+      "results_first": {
+        "outcome": "accepted",
+        "finding": "Exactly the three prescribed numbered sections appear; every principal is formal and complete in Main Results, with its necessary nearby terminology.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 9,
+            "line_end": 21
+          }
+        ]
+      },
+      "point_use": {
+        "outcome": "accepted",
+        "finding": "The compactness lemma delivers the topology needed by A and F. The margin lemma delivers membership of the limit in U. These outputs are different and jointly consumed; neither point is an unused tool list.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 22,
+            "line_end": 38
+          },
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 39,
+            "line_end": 63
+          }
+        ]
+      },
+      "decisive_connections": {
+        "outcome": "accepted",
+        "finding": "The unit-vector equality passes the same delta through the uniform matrix limit for every x and v. The proof invokes F only after u_infinity is shown admissible, so continuity is not used outside its domain.",
+        "locations": [
+          {
+            "path": "manuscript/main.tex",
+            "line_start": 39,
+            "line_end": 63
+          }
+        ]
+      }
+    },
+    "proof_step_findings": {
+      "N-main": {
+        "Import the exact strong C^{2,beta} compactness interface, without claiming its proof here.": {
+          "outcome": "accepted",
+          "finding": "The precise compactness theorem states the full norm input and strong C2beta output. The article explicitly imports this lemma rather than claiming its full proof; the lecture provides that proof.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 22,
+              "line_end": 38
+            },
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 39,
+              "line_end": 63
+            }
+          ]
+        },
+        "Pass the uniform matrix lower bound to the limit.": {
+          "outcome": "accepted",
+          "finding": "The same uniform delta is passed by testing a fixed unit vector at every point, after continuity has given uniform matrix convergence.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 22,
+              "line_end": 38
+            },
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 39,
+              "line_end": 63
+            }
+          ]
+        },
+        "Use admissibility and operator continuity to pass the equation.": {
+          "outcome": "accepted",
+          "finding": "Only after the limit is in U does the text pass F(t_j,u_j)=0 through continuity in the specified product topology.",
+          "locations": [
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 22,
+              "line_end": 38
+            },
+            {
+              "path": "manuscript/main.tex",
+              "line_start": 39,
+              "line_end": 63
+            }
+          ]
+        }
+      }
+    },
+    "contribution_reviews": {},
+    "output_ids": [
+      "minimal"
+    ],
+    "profile": "minimal",
+    "node_ids": [
+      "N-boundary",
+      "N-compactness",
+      "N-main",
+      "N-margin",
+      "N-norm",
+      "N-question"
+    ],
+    "whole_manuscript": true,
+    "checks": [
+      "whole_manuscript",
+      "canonical_use",
+      "conditions_quantifiers",
+      "selection",
+      "attribution",
+      "proof_obligations",
+      "readability"
+    ],
+    "principal_locations": {
+      "N-main": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 17,
+          "line_end": 17
+        }
+      ]
+    },
+    "proof_steps": {
+      "N-main": [
+        "Import the exact strong C^{2,beta} compactness interface, without claiming its proof here.",
+        "Pass the uniform matrix lower bound to the limit.",
+        "Use admissibility and operator continuity to pass the equation."
+      ]
+    },
+    "proof_locations": {
+      "N-main": [
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 22,
+          "line_end": 38
+        },
+        {
+          "path": "manuscript/main.tex",
+          "line_start": 39,
+          "line_end": 63
+        }
+      ]
+    }
+  },
+  "findings": [
+    "Read the actual authored opening, points, decisive connections and promised details against the fixed nodes; the located observations state the concrete mathematical reasons. This is author self-review, not independent review or a measured target-reader result."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "Independent review and real-reader feedback were not performed; no original-research sample is asserted."
+    }
+  ],
+  "disposition": "accepted"
+}

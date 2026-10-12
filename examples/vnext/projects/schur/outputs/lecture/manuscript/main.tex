@@ -1,0 +1,94 @@
+\documentclass[12pt,reqno]{amsart}
+\usepackage{math-review}
+\input{../generated/conventions.tex}
+\title{The Schur Complement -- Lecture}
+\author{Known-mathematics exposition benchmark}
+\date{}
+\begin{document}
+\maketitle
+\section{Goal theorem and the strategy}
+We will derive the block positivity test from ordinary completion of a
+square. The unfamiliar object will appear as a remainder, not as a formula
+to memorize in advance.
+\begin{theorem}[Classical Schur-complement criterion]\label{thm:main}
+\input{../generated/statements/N-main.tex}
+\end{theorem}
+The proof will remove the mixed term, check that nonzero vectors are
+preserved, and test the residual form in both directions.
+
+\section{A scalar model motivates the shift}
+Assume the reader can multiply matrices and test positivity by a quadratic
+form. Begin with $a>0$ and the scalar expression
+\[
+ ax^2+2bxy+cy^2
+ =a\left(x+\frac ba y\right)^2+\left(c-\frac{b^2}{a}\right)y^2.
+\]
+The coefficient $b/a$ is forced by matching the cross term. In blocks,
+the matching equation is $AK=B$, so the shift is $K=A^{-1}B$.
+
+\section{Constructing and checking the identity}
+Write $z=x+A^{-1}By$. Since $A$ is symmetric and invertible,
+$(A^{-1})^{\mathsf T}=A^{-1}$. Expanding every term gives
+\begin{align*}
+ z^{\mathsf T}Az
+ &=x^{\mathsf T}Ax+x^{\mathsf T}By+y^{\mathsf T}B^{\mathsf T}x
+       +y^{\mathsf T}B^{\mathsf T}A^{-1}By\\
+ &=x^{\mathsf T}Ax+2x^{\mathsf T}By
+       +y^{\mathsf T}B^{\mathsf T}A^{-1}By.
+\end{align*}
+The two middle terms agree because they are transposes of the same real
+scalar. Moving the last term to the remainder proves the precise identity.
+\begin{lemma}\label{lem:square}
+\input{../generated/statements/N-square.tex}
+\end{lemma}
+Denote the left side of this identity by $Q(x,y)$.
+
+The identity was derived with invertibility; the sign of $A$ is not used
+until we turn it into a positivity argument.
+
+\section{Preserving vectors and closing the proof}
+We must still justify that the new variables test all nonzero pairs.
+\begin{lemma}\label{lem:inverse}
+\input{../generated/statements/N-inverse.tex}
+\end{lemma}
+To prove this, substitution of $x=z-Ky$ into $x+Ky$ gives $z$;
+substitution of $z=x+Ky$ into $z-Ky$ gives $x$. In particular,
+$(z,y)=(0,0)$ forces $(x,y)=(0,0)$, and conversely.
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+For sufficiency, assume $S>0$ in addition to the given $A>0$.
+For any nonzero $(x,y)$ the new pair $(z,y)$ is nonzero, and therefore
+\[
+ Q(x,y)=z^{\mathsf T}Az+y^{\mathsf T}Sy>0.
+\]
+If $z\ne0$, the first term is positive and the other is nonnegative;
+if $z=0$, then $y\ne0$ and the second term is positive.
+
+For necessity, assume $M>0$ and let $y$ be any nonzero vector. Set
+$x=-A^{-1}By$. The pair $(x,y)$ is nonzero, so
+\[
+ y^{\mathsf T}Sy=Q(-A^{-1}By,y)>0.
+\]
+This universal test is precisely the positive definiteness of $S$.
+\end{proof}
+No external block-matrix theorem was imported into this proof. The scalar
+model motivated the construction; the algebra and the inverse map closed it.
+
+\section{Using the criterion and testing its boundary}
+For $A=2$, $B=1$, $C=1$ the remainder is $S=1/2$. Indeed,
+\[
+ 2x^2+2xy+y^2=2(x+y/2)^2+y^2/2>0
+ \quad\text{for }(x,y)\ne(0,0).
+\]
+For fixed $y$, this expression has minimum $y^2/2$ at $x=-y/2$.
+This computes the elimination, rather than merely invoking its name.
+
+Now take $A=-1$, $B=0$, $C=1$. The identity still holds and $S=1>0$,
+but the value at $(x,y)=(1,0)$ is $-1$. Thus the step using the sign of
+the first square fails exactly when the positive-block assumption is removed.
+If $A$ is singular, even the shift is undefined; that case is not covered.
+
+\nocite{S-guide}
+\bibliographystyle{plain}
+\bibliography{../generated/references}
+\end{document}

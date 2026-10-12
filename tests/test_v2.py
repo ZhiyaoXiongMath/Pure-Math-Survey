@@ -85,8 +85,12 @@ def plan(root,oid='mini',profile='minimal',question='N-q',principal='N-main',dra
     path=root/f'outputs/{oid}/plan.json'
     # A synthetic gate fixture imports the trivial answer; actual exposition promises are tested separately.
     value=read_json(path)
+    # This helper deliberately models an existing 2.0.0 output, not vNext certification.
+    value['schema_version']='2.0.0'
+    value.pop('editorial_policy',None); value.pop('contributions',None)
+    value['proof_obligations']=[]
     for selection in value['selections']:
-        if selection['proof_treatment']=='sketch':selection['proof_treatment']='citation'
+        if selection['proof_treatment'] in {'sketch','complete','mechanism'}:selection['proof_treatment']='citation'
     write_json(path,value)
     return path
 
@@ -202,8 +206,8 @@ class Contracts(unittest.TestCase):
         for name,record in provenance['files'].items():
             self.assertEqual(hashlib.sha256((sample/name).read_bytes()).hexdigest(),record['sha256'])
         entry=dest/'pure-math-survey/scripts/survey.py'
-        p=subprocess.run([sys.executable,'-I',str(entry),'--json','--version'],capture_output=True,text=True,cwd=self.base);self.assertEqual(p.returncode,0,p.stderr);self.assertEqual(json.loads(p.stdout)['artifacts']['version'],'2.0.4')
-        p=subprocess.run([sys.executable,'-I',str(entry.parent/'validate_assets.py'),'--json'],capture_output=True,text=True,cwd=self.base);self.assertEqual(p.returncode,0,p.stdout+p.stderr);self.assertEqual(json.loads(p.stdout)['profile_preparations_executed'],['minimal','thematic','lecture'])
+        p=subprocess.run([sys.executable,'-I',str(entry),'--json','--version'],capture_output=True,text=True,cwd=self.base);self.assertEqual(p.returncode,0,p.stderr);self.assertEqual(json.loads(p.stdout)['artifacts']['version'],'2.1.0-rc1')
+        p=subprocess.run([sys.executable,'-I',str(entry.parent/'validate_assets.py'),'--json'],capture_output=True,text=True,cwd=self.base);self.assertEqual(p.returncode,0,p.stdout+p.stderr);self.assertEqual(json.loads(p.stdout)['profile_preparations_executed'],['minimal','thematic','lecture','paper'])
     def test_T22_actual_current_and_frozen_style_builds(self):
         from build_checks import stage_balanced_sample,compile_one
         root=self.base/'styles';(root/'assets/templates').mkdir(parents=True);shutil.copytree(SKILL/'assets/reference-samples/dhym-balanced',root/'assets/reference-samples/dhym-balanced')

@@ -1,4 +1,4 @@
-% Pure Math Survey 2.0.4: minimal. No fixed section, theorem or page quota.
+% Pure Math Survey 2.1.0-rc1: minimal. Preparation is not completed authorship.
 \documentclass[12pt,reqno]{amsart}
 \usepackage{math-review}
 \input{../generated/conventions.tex}
@@ -7,9 +7,14 @@
 \begin{document}
 \maketitle
 @@DRAFT@@
-\placeholder{State the precise selected question; introduce only needed notation before the principal answer.}
-@@STATEMENTS@@
-\placeholder{Give the decisive short calculation, exact imported inputs and necessary boundary. No page or theorem quota.}
+\section{Main Results}
+@@PRINCIPALS@@
+\placeholder{Check each principal in isolation and explain decisive caveats without changing canonical hypotheses. No historical introduction before these results.}
+\section{Key Mathematical Ingredients}
+@@INGREDIENTS@@
+\placeholder{Select only actually consumed points. Give each precise input, output, and consumer; refresh or build its reader-facing interface.}
+\section{Connecting the Ingredients}
+\placeholder{Write the decisive equalities, estimates, constructions or limits joining the points to each principal. State conjunctive hypotheses, branches, imported theorems and gaps; routine interiors alone may be compressed.}
 \bibliographystyle{plain}
 \bibliography{../generated/references}
 \end{document}

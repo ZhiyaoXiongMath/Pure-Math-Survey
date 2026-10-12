@@ -10,7 +10,12 @@ def load_review(path: Path) -> dict:
     obj = read_json(path)
     fields(obj, {'review_id':str,'kind':str,'reviewer_mode':str,'inputs':list,'findings':list,'unchecked_items':list,'disposition':str}, path.name)
     if 'schema_version' in obj:
-        require(obj['schema_version']==VERSION,'SCHEMA_UNSUPPORTED','Unsupported review schema',path.name)
+        require(obj['schema_version'] in {VERSION, '2.1.0'},'SCHEMA_UNSUPPORTED','Unsupported review schema',path.name)
+    require(isinstance(obj.get('scope',{}),dict),'REVIEW_INVALID','Review scope must be an object',path.name)
+    if obj.get('scope', {}).get('editorial_policy') is not None:
+        from .profiles import POLICY, OUTPUT_SCHEMA
+        require(obj.get('schema_version')==OUTPUT_SCHEMA and obj['scope']['editorial_policy']==POLICY,
+                'SCHEMA_UNSUPPORTED','Policy-bearing reviews require schema 2.1.0 and the supported policy',path.name)
     require(obj['kind'] in {'source','mathematical','coverage','output_semantic','visual'},'REVIEW_INVALID','Invalid review kind',path.name)
     require(obj['reviewer_mode'] in {'author_reread','independent_review','not_performed'},'REVIEW_INVALID','Do not label self-review independent',path.name)
     require(obj['disposition'] in {'accepted','revise','limited'} and 'reviewed_at' in obj,'REVIEW_INVALID','Invalid review disposition/date',path.name)
@@ -50,11 +55,12 @@ def reviews_in(root:Path, directory:str='evidence/reviews')->list[tuple[str,dict
     return result
 
 def find_review(root:Path, records:list[tuple[str,dict]], kind:str, scope_field:str, key:str,
-                required:set[str])->tuple[dict|None,list[dict]]:
+                required:set[str], extra_check=None)->tuple[dict|None,list[dict]]:
     candidates=[]; diagnostics=[]
     for path,r in records:
         if r['kind']==kind and key in r.get('scope',{}).get(scope_field,[]):
             errors=check_review_bindings(root,r,required)
+            if extra_check is not None: errors += extra_check(r)
             if r['disposition']=='accepted' and not blocking_unchecked(r) and not errors:
                 return r,[]
             candidates.append(r); diagnostics.extend(errors)
@@ -84,7 +90,9 @@ def coverage_inputs(inv,question_id:str)->set[str]:
     return paths
 
 def review_template(root:Path,kind:str,keys:list[str],required:set[str],scope:dict|None=None)->dict:
-    return {'schema_version':VERSION,'review_id':'REPLACE-WITH-STABLE-REVIEW-ID','kind':kind,'reviewer_mode':'not_performed',
+    from .profiles import OUTPUT_SCHEMA, POLICY
+    version = OUTPUT_SCHEMA if (scope or {}).get('editorial_policy') == POLICY else VERSION
+    return {'schema_version':version,'review_id':'REPLACE-WITH-STABLE-REVIEW-ID','kind':kind,'reviewer_mode':'not_performed',
             'reviewed_at':None,'inputs':[{'path':p,'sha256':file_hash(root,p)} for p in sorted(required)],
             'scope':scope or { {'source':'source_ids','mathematical':'node_ids','coverage':'question_ids'}.get(kind,'output_ids'):keys},
             'findings':[],'unchecked_items':['Actual scoped reading and substantive findings have not been recorded.'], 'disposition':'revise'}

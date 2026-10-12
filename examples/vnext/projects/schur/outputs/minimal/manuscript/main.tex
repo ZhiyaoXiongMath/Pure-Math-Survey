@@ -1,0 +1,60 @@
+\documentclass[12pt,reqno]{amsart}
+\usepackage{math-review}
+\input{../generated/conventions.tex}
+\title{The Schur Complement -- Minimal}
+\author{Known-mathematics exposition benchmark}
+\date{}
+\begin{document}
+\maketitle
+\section{Main Results}
+The cross term in a quadratic form can be eliminated without losing the
+nonzero-vector condition. The resulting criterion is classical.
+\begin{theorem}[Schur-complement criterion]\label{thm:main}
+\input{../generated/statements/N-main.tex}
+\end{theorem}
+The positivity of $A$ is essential. Invertibility alone allows the square
+identity below, but does not control the sign of its first term.
+
+\section{Key Mathematical Ingredients}
+The reader may test positivity by a quadratic form. What needs refreshing
+is the choice that removes the mixed term, rather than the name of a matrix.
+\begin{lemma}[Square completion]\label{lem:square}
+\input{../generated/statements/N-square.tex}
+\end{lemma}
+Denote the left side of this identity by $Q(x,y)$.
+
+Its output is a sum of two uncoupled forms. The next ingredient explains
+why this sum still tests every nonzero vector.
+\begin{lemma}\label{lem:inverse}
+\input{../generated/statements/N-inverse.tex}
+\end{lemma}
+Here we use $K=A^{-1}B$. The inverse map is the bridge between the
+original positivity test and the two remaining quadratic forms.
+
+\section{Connecting the Ingredients}
+For the first direction, $A>0$ and $S>0$ give, for every $(x,y)\ne0$,
+\[
+ Q(x,y)=z^{\mathsf T}Az+y^{\mathsf T}Sy>0.
+\]
+Indeed $(z,y)\ne0$ by Lemma~\ref{lem:inverse}, so at least one positive
+term is nonzero. Both positivity assumptions are used jointly.
+
+For the reverse direction, fix an arbitrary $y\ne0$ and choose
+\[
+ x=-A^{-1}By,\qquad z=0.
+\]
+This is the decisive test: it removes the already controlled square.
+The original pair is nonzero, and $M>0$ therefore yields
+\[
+ 0<Q(-A^{-1}By,y)=y^{\mathsf T}Sy.
+\]
+Since this holds for every nonzero $y$, it proves $S>0$.
+
+For a boundary check, take $A=-1$, $B=0$, $C=1$. Then $S=1>0$, but
+$M=\operatorname{diag}(-1,1)$ is not positive definite. This explains
+why the theorem does not replace $A>0$ by mere invertibility.
+
+\nocite{S-guide}
+\bibliographystyle{plain}
+\bibliography{../generated/references}
+\end{document}

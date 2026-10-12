@@ -1,0 +1,91 @@
+\documentclass[12pt,reqno]{amsart}
+\usepackage{math-review}
+\input{../generated/conventions.tex}
+\title{Strong Compactness and Admissible Limits -- Thematic}
+\author{Known-mathematics exposition benchmark}
+\date{}
+\begin{document}
+\maketitle
+\section{The question and the conditional answer}
+The slogan ``estimate, then take a limit'' hides two distinct problems:
+obtaining the right topology and staying in the domain of the equation.
+We keep the same spaces and quantifiers throughout the comparison.
+
+\input{../generated/statements/N-norm.tex}
+
+Matrix order is quadratic-form order, and matrix norms are Euclidean operator norms.
+\begin{theorem}[Conditional sequential closedness]\label{thm:main}
+\input{../generated/statements/N-main.tex}
+\end{theorem}
+This theorem gives one closedness mechanism. It does not supply an openness
+argument, an initial solution or the estimates needed to apply it.
+
+\section{The topology supplied by the estimate}
+For a second-order nonlinear equation, weak or uniform convergence of the
+functions alone need not pass the operator. Here the required interface is explicit.
+\begin{lemma}\label{lem:compactness}
+\input{../generated/statements/N-compactness.tex}
+\end{lemma}
+Uniform bounds and equicontinuity first give uniform limits of derivatives
+through order two. Compatibility follows by integrating along coordinate segments.
+For each second-derivative difference $w$, the sharper conclusion follows from
+\[
+ [w]_\beta\leq (2\|w\|_\infty)^{1-\beta/\alpha}
+                   [w]_\alpha^{\beta/\alpha}.
+\]
+The first factor tends to zero and the second stays bounded. The lecture
+proves this interpolation step and the extraction, rather than treating them as synonyms.
+
+\section{Two equivalent ways to control admissibility}
+A bound on the functions does not automatically bound their distance from a
+matrix-cone boundary. The following two formulations do give exactly the same control.
+\begin{lemma}\label{lem:margin}
+\input{../generated/statements/N-margin.tex}
+\end{lemma}
+For a positive definite matrix with eigenvalues $\lambda_1,\ldots,\lambda_r$,
+\[
+ \|H^{-1}\|_{\mathrm{op}}
+ =\max_i\lambda_i^{-1}=\lambda_{\min}(H)^{-1}.
+\]
+Thus the lower-eigenvalue and inverse-norm formulations have identical
+quantifier order: a single bound must work for every $j$ and every $x$.
+
+They are not two different existence theories. The first is convenient for
+passing quadratic-form inequalities to the limit; the second may be convenient
+when an inverse matrix is already estimated by a particular equation.
+
+\section{Synthesis: joint premises, not competing routes}
+Choose the strong subsequence from Lemma~\ref{lem:compactness}. Continuity of
+$A$ gives uniform matrix convergence. Testing each unit vector preserves
+$A(u_\infty)\geq\delta I_r$, so the limit lies in $\mathcal U$. It follows that
+\[
+ \mathcal F(t_\infty,u_\infty)=\lim_j\mathcal F(t_j,u_j)=0.
+\]
+Compactness and cone control are both required by this proof. Calling one
+``stronger'' than the other confuses different outputs: one supplies a topology,
+the other supplies membership in the domain where continuity applies.
+
+\section{What the argument does not imply}
+Separate positivity is insufficient. Take $u_j=t_j=1/j$,
+$A(u)=uI_r$ and $\mathcal F(t,u)=u-t$ on positive functions. The norm bound
+holds, but the limit leaves the positive cone.
+
+Nor may the convergence exponent be silently strengthened. In one periodic
+coordinate, let
+\[
+ u_n(x)=n^{-(2+\alpha)}\cos(2\pi n x_1).
+\]
+Then $\|\partial_1^2u_n\|_\infty=(2\pi)^2n^{-\alpha}$ and
+$[\partial_1^2u_n]_\beta=O(n^{\beta-\alpha})$. But comparing $x_1=0$
+and $x_1=1/(2n)$ gives an $\alpha$-H\"older quotient
+\[
+ 2(2\pi)^2\,2^\alpha,
+\]
+independent of $n$. These functions converge to zero in $C^{2,\beta}$,
+not in $C^{2,\alpha}$. The theorem states the weaker topology deliberately;
+it also makes no automatic claim of smoothness or convergence of the entire sequence.
+
+\nocite{S-guide}
+\bibliographystyle{plain}
+\bibliography{../generated/references}
+\end{document}

@@ -1,0 +1,129 @@
+\documentclass[12pt,reqno]{amsart}
+\usepackage{math-review}
+\input{../generated/conventions.tex}
+\title{Strong Compactness and Admissible Limits -- Lecture}
+\author{Known-mathematics exposition benchmark}
+\date{}
+\begin{document}
+\maketitle
+\section{The goal and the reader's starting point}
+Assume the reader can differentiate periodic functions, pass uniform limits
+through integrals, extract a subsequence of bounded real numbers and diagonalize
+a real symmetric matrix. We will build the stronger compactness interface needed here.
+
+\input{../generated/statements/N-norm.tex}
+
+For matrices, $H\geq\delta I_r$ means $v^{\mathsf T}Hv\geq\delta|v|^2$
+for every real vector $v$.
+\begin{theorem}[Conditional sequential closedness]\label{thm:main}
+\input{../generated/statements/N-main.tex}
+\end{theorem}
+The route is to extract compatible derivatives, upgrade their convergence,
+keep the limit admissible, and only then apply continuity of the equation.
+
+\section{Building the compactness input}
+The fixed $C^{2,\alpha}$ bound makes every derivative of order at most two
+uniformly bounded and equicontinuous. Top derivatives have a common H\"older modulus;
+lower derivatives have a common Lipschitz modulus from the next derivative.
+
+Enumerate the rational points of the torus and the finitely many derivatives.
+Repeated bounded-real subsequence extraction and a diagonal choice give convergence
+at every listed point for every derivative.
+
+For any one derivative sequence $v_j=D^\nu u_j$, a finite net upgrades
+this to uniform convergence:
+\[
+ |v_j(x)-v_k(x)|
+ \leq |v_j(x)-v_j(a)|+|v_j(a)-v_k(a)|+|v_k(a)-v_k(x)|.
+\]
+Choose a nearby net point $a$ so the first and third terms are uniformly small;
+then convergence at the finitely many net points controls the middle term.
+Apply this to all derivatives through order two along the same subsequence.
+
+Denote the uniform derivative limits by $v_\nu$. They must still be shown to
+be derivatives of the limiting function, not an unrelated collection. For $|\nu|\leq1$,
+\[
+ D^\nu u_j(x+he_i)-D^\nu u_j(x)
+ =\int_0^h D^{\nu+e_i}u_j(x+se_i)\,ds.
+\]
+Uniform convergence passes through the integral. The resulting identity gives
+$\partial_i v_\nu=v_{\nu+e_i}$. Thus $v_0=u_\infty\in C^2$, with exactly
+these derivatives. Fixed-point difference quotients also retain their uniform
+$\alpha$-H\"older bound, so $u_\infty\in C^{2,\alpha}$.
+
+\section{Why the lower H\"older exponent gives strong convergence}
+For an $\alpha$-H\"older function $w$, put $a=\|w\|_\infty$ and
+$b=[w]_\alpha$. For points at distance $s>0$,
+\[
+ \frac{|w(x)-w(y)|}{s^\beta}
+ \leq\min\{2a s^{-\beta},\,b s^{\alpha-\beta}\}.
+\]
+If $a,b>0$, split at $s_0=(2a/b)^{1/\alpha}$. The second bound applies
+below $s_0$ and the first above it, giving
+\[
+ [w]_\beta\leq(2a)^{1-\beta/\alpha}b^{\beta/\alpha}.
+\]
+The cases $a=0$ or $b=0$ are immediate. Now set
+$w=D^\nu(u_j-u_\infty)$ for each $|\nu|=2$. Its sup norm tends to zero,
+while its $\alpha$ seminorm is at most the sum of two uniformly bounded seminorms.
+All lower derivative sup norms already tend to zero. We have proved the exact input:
+\begin{lemma}\label{lem:compactness}
+\input{../generated/statements/N-compactness.tex}
+\end{lemma}
+This is a proof of the compactness version used here, not merely a citation
+of a general embedding theorem.
+
+\section{Admissibility before continuity}
+For the chosen subsequence, continuity of $A$ yields uniform convergence
+$A(u_j)\to A(u_\infty)$. The relevant elementary matrix fact is the following.
+\begin{lemma}\label{lem:margin}
+\input{../generated/statements/N-margin.tex}
+\end{lemma}
+For the limit assertion, fix $x$ and a unit vector $v$. Then
+\[
+ v^{\mathsf T}H(x)v=\lim_j v^{\mathsf T}H_j(x)v\geq\delta.
+\]
+This holds for every $x,v$, so $H\geq\delta I_r$. For the equivalent inverse
+bound, orthogonal diagonalization gives
+$\|H_j^{-1}\|_{\mathrm{op}}=1/\lambda_{\min}(H_j)$ at each point.
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+The compactness lemma gives a $C^{2,\beta}$ convergent subsequence with a
+$C^{2,\alpha}$ limit. The preceding matrix argument proves
+$A(u_\infty)\geq\delta I_r>0$, hence $u_\infty\in\mathcal U$.
+Since $t_j\to t_\infty$ and $\mathcal F$ is continuous on this domain,
+\[
+ \mathcal F(t_\infty,u_\infty)
+ =\lim_j\mathcal F(t_j,u_j)=0\quad\text{in }C^0.
+\]
+Each continuity hypothesis has now been used in its stated topology.
+\end{proof}
+No estimate was derived from a particular PDE: the norm bound and positive
+margin were hypotheses. No regularity beyond $C^{2,\alpha}$ was established.
+
+\section{Two computed limits of the method}
+First take constant functions $u_j=t_j=1/j$, with $A(u)=uI_r$ and
+$\mathcal F(t,u)=u-t$ on the open set of positive functions. These are
+uniformly H\"older-bounded solutions, but $u_\infty=0$ is not admissible.
+The missing hypothesis is one positive $\delta$ working for all $j$.
+
+Second, set $u_n(x)=n^{-(2+\alpha)}\cos(2\pi n x_1)$. Since
+$|\cos s-\cos t|\leq\min\{2,|s-t|\}$, the second derivatives satisfy
+\[
+ [\partial_1^2u_n]_\gamma\leq C_\gamma n^{\gamma-\alpha}
+ \quad(0<\gamma<1),\qquad
+ \|\partial_1^2u_n\|_\infty=(2\pi)^2n^{-\alpha}.
+\]
+Thus the $C^{2,\alpha}$ norms are bounded and the $C^{2,\beta}$ norms tend
+to zero. Yet at $x_1=0,y_1=1/(2n)$ the $\alpha$ quotient is exactly
+\[
+ \frac{2(2\pi)^2n^{-\alpha}}{(1/(2n))^\alpha}
+ =2(2\pi)^2 2^\alpha.
+\]
+So strong $C^{2,\alpha}$ convergence fails. The strict inequality
+$\beta<\alpha$ has a mathematical purpose, not just a notational one.
+
+\nocite{S-guide}
+\bibliographystyle{plain}
+\bibliography{../generated/references}
+\end{document}

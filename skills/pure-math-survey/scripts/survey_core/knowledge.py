@@ -96,7 +96,7 @@ def init_project(destination: Path, topic: str, scope: Path, title: str | None =
         write_json(stage / 'project.json', {'schema_version': VERSION, 'project_id': topic, 'title': title or topic,
                    'language': language, 'scope_file': 'scope.md', 'knowledge_root': 'knowledge', 'literature_cutoff': None})
         atomic_bytes(stage / 'scope.md', body)
-        atomic_bytes(stage / 'knowledge/overview.md', b'# Knowledge overview\n\nPending: reconstruct the question, answers, mechanisms and decisive boundaries.\nNo mathematical claims have been reviewed.\n')
+        atomic_bytes(stage / 'knowledge/overview.md', b'# Knowledge overview\n\nPending: write a readable multi-question mathematical map, not a node index or an article section.\nIdentify usable tools for this reader, precise targets, decisive constructions, conditions, branches and exact entrances into detail.\nKeep per-article choices in its outline. New mathematical connections return to reviewed nodes.\nNo mathematical claims have been reviewed.\n')
         atomic_bytes(stage / 'knowledge/conventions.tex', b'% Project-wide mathematical notation. No claims are certified here.\n')
         atomic_bytes(stage / 'knowledge/discovery.md', b'# Discovery\n\nNo source search or original-text reading has been performed in this new project.\nRecord actual queries, candidates, omissions and stopping reasons here.\n')
         write_json(stage / 'knowledge/coverage.json', {'schema_version': VERSION, 'questions': []})

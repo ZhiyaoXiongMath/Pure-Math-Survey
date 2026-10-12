@@ -1,3 +1,11 @@
+# 2.1.0-rc1 — vNext development candidate
+
+Not a formal Release. Adds versioned four-profile exposition, strong principal-statement
+readings, Minimal body structure, located mode/step findings, and Paper contribution,
+prior-art, proof and draft gates. Preserves knowledge schema 2.0.0, immutable snapshots,
+historical output contracts and authored prose. New plans/reviews use 2.1.0. See
+docs/vnext/requirements.md and validation.md for actual verification, not implied quality.
+
 # Pure Math Survey 2.0.4
 
 This maintenance release improves the public distribution without changing mathematical examples or the 2.0.0 data contract.

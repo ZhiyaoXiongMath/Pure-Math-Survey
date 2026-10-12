@@ -1,0 +1,82 @@
+{
+  "schema_version": "2.1.0",
+  "output_id": "lecture",
+  "snapshot_id": "KB-ba7a5c0de54b8dd9f67bf52fccd84bf4a4084992ba7469b5cdb6ab464c519b48",
+  "profile": "lecture",
+  "view": "integrated",
+  "language": "en",
+  "title": "Strong compactness and admissible limits",
+  "audience": "The reader can use periodic derivatives, uniform convergence, the fundamental theorem of calculus, bounded real subsequence extraction and orthogonal diagonalization. The precise Holder compactness interface and admissibility mechanism are built or refreshed here.",
+  "reader_goals": [
+    "Reproduce the promised constructions, estimates and limits, identifying each hypothesis and imported input."
+  ],
+  "question_ids": [
+    "N-question"
+  ],
+  "prerequisites": [
+    "Assumed: The reader can use periodic derivatives, uniform convergence, the fundamental theorem of calculus, bounded real subsequence extraction and orthogonal diagonalization. The precise Holder compactness interface and admissibility mechanism are built or refreshed here."
+  ],
+  "selections": [
+    {
+      "node_id": "N-boundary",
+      "role": "boundary",
+      "statement_treatment": "explained_reference",
+      "proof_treatment": "citation",
+      "reason": "Actually used by the authored lecture argument or by its explicit failure-boundary discussion."
+    },
+    {
+      "node_id": "N-compactness",
+      "role": "essential_bridge",
+      "statement_treatment": "full",
+      "proof_treatment": "citation",
+      "reason": "Actually used by the authored lecture argument or by its explicit failure-boundary discussion."
+    },
+    {
+      "node_id": "N-main",
+      "role": "principal_answer",
+      "statement_treatment": "full",
+      "proof_treatment": "complete",
+      "reason": "Actually used by the authored lecture argument or by its explicit failure-boundary discussion."
+    },
+    {
+      "node_id": "N-margin",
+      "role": "essential_bridge",
+      "statement_treatment": "full",
+      "proof_treatment": "citation",
+      "reason": "Actually used by the authored lecture argument or by its explicit failure-boundary discussion."
+    },
+    {
+      "node_id": "N-norm",
+      "role": "background",
+      "statement_treatment": "full",
+      "proof_treatment": "none",
+      "reason": "The exact norm defining the compactness topology appears immediately before the principal statement."
+    }
+  ],
+  "omissions": [],
+  "proof_obligations": [
+    {
+      "node_id": "N-main",
+      "treatment": "complete",
+      "required_steps": [
+        "Extract uniformly convergent derivatives using a countable grid and finite nets.",
+        "Identify compatible limit derivatives using coordinate-line integral identities.",
+        "Derive Holder interpolation and obtain strong C^{2,beta} convergence.",
+        "Pass the uniform matrix lower bound to the limit.",
+        "Use admissibility and operator continuity to pass the equation."
+      ],
+      "imported_inputs": [
+        "N-compactness",
+        "N-margin"
+      ]
+    }
+  ],
+  "limits": {
+    "max_pages": null,
+    "page_review_threshold": null
+  },
+  "comparison_group": null,
+  "draft": false,
+  "editorial_policy": "four-modes-2026-10-11-r2",
+  "contributions": []
+}

@@ -1,0 +1,19 @@
+{
+  "schema_version": "2.0.0",
+  "id": "S-guide",
+  "kind": "supplied_manuscript",
+  "title": "Pure-Math-Survey vNext Integrated Development Guide: mathematical examples in Appendices A and B",
+  "authors": [],
+  "publication_status": "unpublished",
+  "identifiers": {
+    "user_file": "Pure-Math-Survey_vNext_Integrated_Development-Guide_2026-10-11_r2(2).md"
+  },
+  "version": "2026-10-11 r2",
+  "access": {
+    "state": "full_text_read",
+    "checked_at": "2026-10-11",
+    "material_sha256": "2e8c5ab518cc40f62a2085ec573ac3c53c81ad9cf53e0fefe9e38f2d35420188",
+    "local_path": null,
+    "reading_note": "evidence/source-checks/guide.md"
+  }
+}

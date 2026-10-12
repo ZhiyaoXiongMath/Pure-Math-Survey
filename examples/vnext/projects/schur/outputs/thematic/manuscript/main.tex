@@ -1,0 +1,80 @@
+\documentclass[12pt,reqno]{amsart}
+\usepackage{math-review}
+\input{../generated/conventions.tex}
+\title{The Schur Complement -- Thematic}
+\author{Known-mathematics exposition benchmark}
+\date{}
+\begin{document}
+\maketitle
+\section{The question and its principal answer}
+A coupled quadratic form suggests two related questions: how to test its
+positivity, and what remains after eliminating one group of variables.
+The same residual matrix answers both, but under the same sign hypothesis.
+\begin{theorem}[Classical Schur-complement criterion]\label{thm:main}
+\input{../generated/statements/N-main.tex}
+\end{theorem}
+Throughout the comparison, the unknown test vector is $(x,y)$ and the
+blocks $A,B,C$ are fixed. We do not change the field or the meaning of positivity.
+
+\section{The obstruction and square completion}
+The term $2x^{\mathsf T}By$ prevents a separate test of the two blocks.
+To cancel it, shift only the $x$ variable by a multiple of $y$.
+\begin{lemma}\label{lem:square}
+\input{../generated/statements/N-square.tex}
+\end{lemma}
+Denote the left side of this identity by $Q(x,y)$.
+
+This is not yet a positivity proof: the change must preserve nonzero pairs.
+\begin{lemma}\label{lem:inverse}
+\input{../generated/statements/N-inverse.tex}
+\end{lemma}
+With $K=A^{-1}B$, the two lemmas prove sufficiency because
+$z^{\mathsf T}Az+y^{\mathsf T}Sy>0$ for every $(z,y)\ne0$ when $A,S>0$.
+For necessity, choose $x=-A^{-1}By$ for each nonzero $y$. Then
+\[
+ y^{\mathsf T}Sy=Q(-A^{-1}By,y)>0.
+\]
+The same calculation has a variational interpretation. For fixed $y$,
+strict positivity of $A$ gives a unique minimum:
+\[
+ \min_{x\in\mathbb R^p}Q(x,y)=y^{\mathsf T}Sy,
+ \qquad x_{\min}=-A^{-1}By.
+\]
+Thus the Schur complement is the residual quadratic form after eliminating $x$.
+
+\section{Congruence: the same elimination in coordinates}
+The second description works directly with block matrices rather than
+with the expanded quadratic form.
+\begin{proposition}\label{prop:comparison}
+\input{../generated/statements/N-comparison.tex}
+\end{proposition}
+The calculation can be checked without a new existence theorem:
+\[
+ MT=\begin{pmatrix}A&0\\B^{\mathsf T}&S\end{pmatrix},\qquad
+ T^{\mathsf T}MT=\begin{pmatrix}A&0\\0&S\end{pmatrix}.
+\]
+For $v=(z,y)$, the vector $Tv=(z-A^{-1}By,y)$ is exactly the inverse
+change used above. Hence the congruence identity is square completion
+written before evaluating on a vector, not a stronger criterion.
+
+\section{Comparison, scope and a failure boundary}
+The viewpoints share the same data and conclusions. Square completion
+explains the choice of shift; congruence packages that shift as an invertible
+matrix; minimization identifies the residual value when $A>0$.
+
+Their usable interfaces differ. The congruence and square identities need
+only symmetric invertible $A$, whereas the displayed global minimum requires
+$A>0$. Thus the identities survive a loss of positivity, but the sign conclusion does not.
+\[
+ A=-1,\quad B=0,\quad C=1
+ \quad\Longrightarrow\quad S=1,
+ \qquad M=\operatorname{diag}(-1,1).
+\]
+This is a counterexample to the stronger claim that $S>0$ alone suffices,
+not to the stated theorem. Singular $A$ is outside all formulas using $A^{-1}$;
+no pseudoinverse extension or historical novelty claim is intended.
+
+\nocite{S-guide}
+\bibliographystyle{plain}
+\bibliography{../generated/references}
+\end{document}

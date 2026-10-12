@@ -1,0 +1,121 @@
+{
+  "schema_version": "2.0.0",
+  "snapshot_id": "KB-ba7a5c0de54b8dd9f67bf52fccd84bf4a4084992ba7469b5cdb6ab464c519b48",
+  "output_id": "thematic",
+  "plan_sha256": "2a2fe37ed00b49f6bc21d7336ddb68bcbc2745364bd26b3eee5ce338cb719f95",
+  "draft": false,
+  "consumed_nodes": [
+    "N-boundary",
+    "N-compactness",
+    "N-main",
+    "N-margin",
+    "N-norm",
+    "N-question"
+  ],
+  "consumed_inputs": [
+    {
+      "path": "evidence/source-checks/guide.md",
+      "sha256": "983facc726cb80b8557af6559099fb00c52189e4bdf201dc4d23d92f297f56eb",
+      "bytes": 574
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "11cd32e393793531befa920aceac933e3c544ada8683f11f893b87876a529217",
+      "bytes": 68
+    },
+    {
+      "path": "knowledge/coverage.json",
+      "sha256": "9804b9a576e30757d299bc587fb1820b8d9ed49bfd50abafbbcfadd449086f55",
+      "bytes": 517
+    },
+    {
+      "path": "knowledge/discovery.md",
+      "sha256": "a8a0727115e0fbf29370dab0f9a0563289d21e1597834c372c336548eb54def4",
+      "bytes": 637
+    },
+    {
+      "path": "knowledge/nodes/N-boundary.md",
+      "sha256": "792e257a912d704c1741fe963208671e0412ecdfd8482880ee92563bfd31e801",
+      "bytes": 3136
+    },
+    {
+      "path": "knowledge/nodes/N-compactness.md",
+      "sha256": "cbe3b0df4771c4524e74840c69ea494b44edede58ef6167407088201fbb16eb8",
+      "bytes": 3692
+    },
+    {
+      "path": "knowledge/nodes/N-main.md",
+      "sha256": "f49c64cbcca43258bb2a4f9386b68413ea02e49cc93ab6ae8e91c03a69480865",
+      "bytes": 4572
+    },
+    {
+      "path": "knowledge/nodes/N-margin.md",
+      "sha256": "5ee248a33dbf7bc0bbc1757bf9fe17587a575dd50f5a519a069ba4ee574ef649",
+      "bytes": 3568
+    },
+    {
+      "path": "knowledge/nodes/N-norm.md",
+      "sha256": "ddfd050703983c2e8478d09107f22ca636f038c96c94f55366963108b6ed5d91",
+      "bytes": 1273
+    },
+    {
+      "path": "knowledge/nodes/N-question.md",
+      "sha256": "a1ab5720531cd2294bb48b0e4ba0c8a3aca1cfd394a23f9fde686f7dde7445e1",
+      "bytes": 644
+    },
+    {
+      "path": "knowledge/overview.md",
+      "sha256": "d1372f0577c5cb417fd27efbd24b8a8b96191230b3b1715828576f0df42b385d",
+      "bytes": 1531
+    },
+    {
+      "path": "knowledge/sources/S-guide.json",
+      "sha256": "1e3177ed0672d6a08f1382eeca94e093f14d25c8ffb9690ed18686919af1283c",
+      "bytes": 647
+    },
+    {
+      "path": "project.json",
+      "sha256": "f5b28b75fc3774a636441ace9a24569747f084c6921e18b10b069aa65fb4980b",
+      "bytes": 234
+    },
+    {
+      "path": "scope.md",
+      "sha256": "0ea6d7c8232ff1f2560f05470356ea3a649268a07053b1fa95cf59d830010ec2",
+      "bytes": 575
+    }
+  ],
+  "generated_files": [
+    {
+      "path": "generated/conventions.tex",
+      "sha256": "11cd32e393793531befa920aceac933e3c544ada8683f11f893b87876a529217",
+      "bytes": 68
+    },
+    {
+      "path": "generated/references.bib",
+      "sha256": "7b6c7d1bdfeae10f914d4ec674b8c81eccdde8f4a41085f5797656c2be3e76d2",
+      "bytes": 384
+    },
+    {
+      "path": "generated/statements/N-compactness.tex",
+      "sha256": "83b64e8829255b02aa1512f302d984b268fdc201f21644ba8c541f2bb774041a",
+      "bytes": 415
+    },
+    {
+      "path": "generated/statements/N-main.tex",
+      "sha256": "3d77759c3e45e5ff93d413bc7d0c93f5d2037b205a604b249305dba24cd89147",
+      "bytes": 1161
+    },
+    {
+      "path": "generated/statements/N-margin.tex",
+      "sha256": "19673c53aaccdec7a15667a4b6f40fd074c72d8f3ff1ee11b735ea6ef04b8d8d",
+      "bytes": 380
+    },
+    {
+      "path": "generated/statements/N-norm.tex",
+      "sha256": "73931ad631fad18d2ff5f926e761171689fb50e5da823bb733dde68bcc3d620c",
+      "bytes": 415
+    }
+  ],
+  "raw_sources_omitted": [],
+  "meaning": "Exact stored bytes are reused; independent mathematical and output readings are still required."
+}

@@ -1,6 +1,6 @@
 # Native file fields and reproducible operations
 
-Data `schema_version` strings remain exactly `2.0.0`; the software runtime is `2.0.4`. See [output review](output-review.md) for whole-manuscript checks, actual body locations and build history. JSON has no duplicate keys or nonfinite numbers. Stable IDs use letters/digits/dot/underscore/hyphen, with N- and S- prefixes for nodes and sources; each filename equals its ID. All project-relative paths are POSIX, contain no traversal/absolute prefix and cross no symbolic links.
+The candidate software runtime is `2.1.0-rc1`. Project, knowledge, sources, snapshots and generated/build manifests retain schema `2.0.0`. New output plans and policy-bearing mathematical/output-semantic reviews use schema `2.1.0`; historical `2.0.0` plans and reviews remain readable without mutation. See [output review](output-review.md) for whole-manuscript checks, actual body locations and build history. JSON has no duplicate keys or nonfinite numbers. Stable IDs use letters/digits/dot/underscore/hyphen, with N- and S- prefixes for nodes and sources; each filename equals its ID. All project-relative paths are POSIX, contain no traversal/absolute prefix and cross no symbolic links.
 
 ## Project and knowledge
 
@@ -45,3 +45,40 @@ python scripts/survey.py kb diff topic --from KB-OLD_FULL_HASH --to KB-NEW_FULL_
 ```
 
 These recipes use placeholder IDs. init produces an empty unverified KB; add real scope-specific knowledge, evidence and coverage before a meaningful plan. Prepare makes no mathematical claims and preserves existing prose. Fill review templates only after the actual recorded work. `--draft` permanently marks that plan draft until an explicit reviewed plan change/reprepare; never remove the flag merely to bypass readiness.
+
+## Versioned output policy (2.1.0)
+
+New plans require `editorial_policy: four-modes-2026-10-11-r2` and `contributions`
+(an empty list outside Paper). The `profile` enum is minimal/thematic/lecture/paper.
+Each Paper contribution has `node_id`, classification original/known/conjectural/unverified,
+`provenance`, `authorization`, `actual_difference`, proof_status complete/incomplete/unverified,
+`closest_prior_results`, `comparison_nodes` and `gaps`. Classify every principal. Prior
+results and comparison relations must be selected or explicitly scoped prerequisites.
+These are references and editorial evidence, not another canonical statement store.
+
+New-policy mathematical reviews use scope.editorial_policy and statement_reviews keyed
+by principal node. Each entry binds canonical_sha256, outcome and actual observations for
+objects/domain/fixed_and_variable/hypotheses/equations/quantifiers/conclusion/status/
+local_definitions. `review template --principal-statements` produces pending entries.
+Only actual readings may set accepted. Missing new-policy findings cannot inherit an old
+accepted review. Nodes may receive these richer reviews without changing node schemas.
+
+New-policy output-semantic scopes additionally contain mode_findings, proof_step_findings
+and (for original Paper principals) contribution_reviews. Each reading entry has outcome,
+finding and actual manuscript locations. See output-review.md for keys and responsibility.
+Every obligation step requires its own located finding. Paper entries also record
+closest_prior_results, prior_art_searches (searched_at/query/outcome/checked_source_ids),
+provenance_check, authorization_check, actual_difference, proof_closure and remaining_caveats.
+Source IDs must exist in the bound materials. These records remain review assertions;
+no script claims to decide mathematical truth, comprehension, authorization or novelty.
+
+## Historical compatibility, not silent migration
+
+Schema 2.0.0 output plans use only the historical three modes and may not contain new
+policy/contribution fields. Schema 2.1.0 plans cannot be read by the old 2.0.4 parser.
+No in-place migration command is added. To adopt vNext, create a new output ID from an
+appropriate snapshot, refine its new plan/outline, and perform the new readings. Repair
+canonical statements in knowledge and freeze again when necessary. Old snapshots,
+manuscripts and evidence remain unchanged; reprepare preserves authored prose and outline.
+Legacy release checks explicitly identify `legacy-2.0.0`; they are not vNext acceptance.
+Never manually downgrade a new plan to evade policy gates.

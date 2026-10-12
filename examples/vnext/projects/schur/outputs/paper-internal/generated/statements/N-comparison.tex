@@ -1,0 +1,11 @@
+Let $A\in\mathbb R^{p\times p}$ be symmetric and invertible,
+$B\in\mathbb R^{p\times q}$ and $C\in\mathbb R^{q\times q}$ symmetric.
+For
+\[
+ M=\begin{pmatrix}A&B\\B^{\mathsf T}&C\end{pmatrix},\quad
+ T=\begin{pmatrix}I_p&-A^{-1}B\\0&I_q\end{pmatrix},\quad
+ S=C-B^{\mathsf T}A^{-1}B,
+\]
+one has $T^{\mathsf T}MT=\operatorname{diag}(A,S)$.
+Because $T$ is invertible, $M>0$ is equivalent to $A>0$ and $S>0$ jointly;
+$S>0$ alone is not sufficient without $A>0$.

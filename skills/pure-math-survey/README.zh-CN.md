@@ -1,4 +1,9 @@
-# Pure Math Survey 2.0.4
+# Pure Math Survey 2.1.0-rc1
+
+> **2.1.0-rc1 是开发候选版，不是已发布版本。** 安装本开发分支的完整 `skills/pure-math-survey` 目录，或构建候选 ZIP；旧版 Release 链接仅供历史参考。四模式契约见[成文模式](references/editions.md)。
+> Minimal 严格三节；Thematic 核查路线比较；Lecture 兑现逐步证明；Paper 需授权原创贡献、最接近前人成果核查与闭合证明，默认只生成内部草稿。软件校验不保证数学正确、原创性或读者理解。
+> 知识 schema 为 2.0.0，新输出计划与新版政策审阅为 2.1.0；旧快照、正文和审阅不被静默迁移，历史 accepted 不构成新版政策验收。
+
 
 **简体中文** | [English](README.md)
 
@@ -8,13 +13,13 @@
 
 ## 写作与流程示例
 
-[balanced dHYM 文稿](assets/reference-samples/dhym-balanced/README.md)由用户经过多轮润色后提供，是主要的写作和排版参考；其中的 TeX、PDF、样式与参考文献保持原字节不变。它的六页篇幅和章节／结论数量不是其他文章的要求。独立的 [Schur 补示例](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/tree/main/examples/schur-complement)演示从知识库到文章的完整流程。数据格式仍为 2.0.0。
+[balanced dHYM 文稿](assets/reference-samples/dhym-balanced/README.md)由用户经过多轮润色后提供，是主要的写作和排版参考；其中的 TeX、PDF、样式与参考文献保持原字节不变。它的六页篇幅和章节／结论数量不是其他文章的要求。独立的 [Schur 补示例](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/tree/main/examples/schur-complement)演示从知识库到文章的完整流程。知识节点与快照仍为 2.0.0；新计划及带新版政策的审阅采用 2.1.0，不能由旧软件读取。
 
 [文章示例目录](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/tree/main/examples/dhym-balanced)只有独立 TeX 和原始 PDF。TeX 已内嵌所需样式和参考文献，数学正文没有改变。示例放在仓库中；Release 附件只包含技能安装包与校验文件。
 
 ## 安装与运行
 
-解压 `pure-math-survey-2.0.4.zip`，将其中唯一的 `pure-math-survey/` 文件夹完整复制到宿主应用的技能目录。也可以直接运行脚本，无需安装 pip 包：
+解压候选安装包 `pure-math-survey-2.1.0-rc1.zip`，将其中唯一的 `pure-math-survey/` 文件夹完整复制到宿主应用的技能目录。也可以直接运行脚本，无需安装 pip 包：
 
 ```sh
 python pure-math-survey/scripts/survey.py --version --json
@@ -37,9 +42,9 @@ leading block. Exclude the general singular-pivot theorem.
 
 再执行“安装与运行”中的初始化与验证命令。预期得到 `my-topic/` 知识项目，其中包含 `project.json`、`scope.md` 和 `knowledge/` 目录。初始化不会生成文章或 PDF；阅读文献、编写并审阅知识节点属于后续步骤。
 
-## 三种写作模式与统一的知识依据
+## 四种写作模式与统一的知识依据
 
-`minimal` 给出精确的核心答案、必要机制和关键边界；`thematic` 组织相关结论及有依据的关系；`lecture` 展开指定的前置知识、计算和证明。请求成文时默认采用 **minimal + integrated**。仅建库或更新知识不会隐含生成文章。PDF 是交付格式，不是第四种模式。Part I–IV 是可以交叠的基础、结果、方法和边界视角，不要求分成多卷。只有用户明确设置的 `max_pages` 才是硬性页数上限。
+`minimal` 给出精确的核心答案、必要机制和关键边界；`thematic` 组织相关结论及有依据的关系；`lecture` 展开指定的前置知识、计算和证明。请求成文时默认采用 **minimal + integrated**。仅建库或更新知识不会隐含生成文章。PDF 是交付格式，不是第五种模式。Part I–IV 是可以交叠的基础、结果、方法和边界视角，不要求分成多卷。只有用户明确设置的 `max_pages` 才是硬性页数上限。
 
 只在知识节点中编辑规范数学陈述，用 `kb freeze` 固定快照，再以 `output plan ... --snapshot KB-...` 创建明确的文章计划。细化读者、选材和证明步骤，在正式准备前检查相应范围的就绪状态。`output prepare` 生成快照中的精确片段与待写作框架，不会凭空完成文章。`--draft` 允许准备尚未核查的内部草稿，但不允许正式发布。重新准备会保留已写的 `main.tex`；采用不同快照前应重新审阅。
 

@@ -1,9 +1,46 @@
-# Mathematical writing
+# Mathematical writing and self-contained results
 
-Use English mathematics with precise local data and quantifiers. Avoid invented names for theorems and definitions; useful author attributions are welcome. Prefer formulas to repetitive verbal descriptions. State independent hypotheses in short clauses or itemized lines. Keep each result's essential conclusion clear; place nonessential consequences afterward. Repeat necessary local conditions rather than forcing a reader to chase remote equation numbers.
+Prefer short explanatory prose alternating with substantive displayed mathematics.
+In normal font size, line width and margins, about four **typeset** prose lines is an
+editing heuristic. At a natural mathematical turn, display the decisive object,
+condition, equation, transformation, estimate or output and explain its role nearby.
+It is not a source-line count, mandatory formula frequency or readability score.
 
-No trivial transitions, inflated roadmaps or prose quotas. Introduce a definition at the point of use. A mechanism explains an actual map, estimate, construction or limiting step and its input/output. An example must compute or distinguish something. A theorem's complete canonical body is inserted from the snapshot and never freely rephrased in a shorter profile.
+A display should reveal why this quantity matters now and what it supplies next.
+Define its major new symbols locally. Do not show long unmotivated formula galleries.
+Do not insert decorative equations, force line breaks, shrink typography, fragment a
+proof or remove hypotheses to satisfy the heuristic. Long rigorous statements and
+necessary lists may exceed four lines; organize them better without losing content.
+Bibliographies, code, tables and externally constrained abstracts are reasonable
+exceptions. Record local exceptions in existing semantic/page findings, not a new
+approval database. Actual PDFs, not source wrapping, decide layout observations.
 
-Read the selected profile independently. A compact output may compress proof interiors but not phase branches, strictness, regularity, boundary hypotheses or status. A lecture must supply the intermediate calculations it promised and say exactly which theorem remains imported. A thematic survey compares actual ranges through supported relations, not adjectives or a bibliography tour.
+## Principal statement-self-contained contract
 
-The [balanced dHYM reference](../assets/reference-samples/dhym-balanced/README.md) illustrates focused principal answers, definitions placed near their consumers, short substantive derivations and a concrete boundary example. Consult it for these local choices, not a fixed length or outline. Avoid repeating a complete statement immediately after its first appearance unless the repetition serves a distinct reading need.
+A reader with the declared background must recognize the whole mathematical claim
+from the principal statement and immediately adjacent necessary terminology, without
+chasing remote numbered formulas. Explicitly identify:
+
+- objects, domain/dimension/rank/boundary/parameter range, fixed data and variables;
+- all decisive hypotheses, equations or quantities, quantifiers and constant dependence;
+- the exact conclusion and its established, conditional or conjectural status.
+
+“Assume (1.2)–(1.5), then (1.8),” “the above equation,” “standard positivity,” and
+“the conclusion of Theorem 2.3” cannot replace essential content. Standard mathematical
+concepts need not be redefined from scratch. An unusually long nonstandard definition
+may be stated completely and immediately adjacent; the reviewer must explain why no
+remote chase is required. The main equation and decisive parameters still need visibility.
+Supporting propositions should be locally self-contained; technical lemmas may inherit
+explicit subsection data without ambiguous quantifiers. Ordinary proof `\eqref` uses
+are not automatically errors.
+
+First repair a deficient canonical statement in the KB, perform mathematical/source
+and self-contained readings, freeze a new snapshot, and import its exact bytes. Never
+“improve” a generated fragment or silently replace it with a second theorem in the
+output. Review neighboring prose too: a correct fragment does not license converting
+some to every, semipositive to positive, or conditional to unconditional.
+
+Use English mathematical prose and appropriate established author attributions. Do
+not invent decorative names. Examples must calculate, distinguish hypotheses or expose
+a real boundary. The historical balanced dHYM sample is a local writing reference,
+not a new-policy acceptance record or a fixed outline/page target.

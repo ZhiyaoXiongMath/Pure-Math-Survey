@@ -1,0 +1,28 @@
+\documentclass[12pt,reqno]{amsart}
+\usepackage{math-review}
+\input{../generated/conventions.tex}
+\title{Internal Paper-Mode Boundary Example}
+\date{}
+\begin{document}\maketitle
+\noindent\textbf{DRAFT\_UNVERIFIED: not an original research paper; not for formal publication.}
+\begin{abstract}This document exercises the research-paper software boundary using known
+linear algebra. No original theorem, prior-art assessment or submission-ready research
+quality is claimed. A complete proof of a classical statement cannot supply originality.\end{abstract}
+\section{Known result, not a contribution}
+\begin{theorem}[Classical criterion]
+\input{../generated/statements/N-main.tex}
+\end{theorem}
+\section{Established inputs}
+\begin{lemma}\input{../generated/statements/N-square.tex}\end{lemma}
+\begin{lemma}\input{../generated/statements/N-inverse.tex}\end{lemma}
+\begin{proposition}\input{../generated/statements/N-comparison.tex}\end{proposition}
+\section{Proof and publication boundary}
+Write $Q(x,y)=x^{\mathsf T}Ax+2x^{\mathsf T}By+y^{\mathsf T}Cy$.
+
+For $A,S>0$, the square identity and invertible coordinate change show that
+$Q(x,y)>0$ for every nonzero pair. Conversely, for every nonzero $y$, set
+$x=-A^{-1}By$; then $M>0$ implies $y^{\mathsf T}Sy>0$.
+The mathematical argument is closed but known. The missing original contribution
+and prior-art assessment are disclosed, not filled with fictional novelty records.
+\nocite{S-guide}\bibliographystyle{plain}\bibliography{../generated/references}
+\end{document}

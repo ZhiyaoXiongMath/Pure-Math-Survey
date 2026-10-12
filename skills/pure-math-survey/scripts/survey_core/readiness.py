@@ -9,7 +9,11 @@ from .reviews import coverage_inputs,find_review,mathematical_inputs,reviews_in,
 def assess_readiness(root:Path,plan:dict|Path)->dict:
     if isinstance(plan,Path):plan=load_plan(plan)
     inv=validate_plan(root,plan); records=reviews_in(inv.root); ids=consumption(inv,plan)
-    errors=[];warnings=[];used=[]; valid_math={}
+    from .profiles import current, profile_readiness_errors, statement_errors, statement_warnings
+    errors=profile_readiness_errors(inv, plan);warnings=[];used=[]; valid_math={}
+    principals={s['node_id'] for s in plan['selections'] if s['role']=='principal_answer'}
+    obligations={o['node_id']:o for o in plan['proof_obligations']}
+    supplied_originals={c['node_id'] for c in plan.get('contributions', []) if c['classification']=='original' and c['authorization'].strip()}
     def add(code,message,path='',node_id=None):errors.append(diagnostic(code,message,path,node_id))
     sources={s['source_id'] for k in ids for s in inv.nodes[k].meta['sources'] if s['role']=='support'}
     for sid in sorted(sources):
@@ -37,13 +41,28 @@ def assess_readiness(root:Path,plan:dict|Path)->dict:
     for key in sorted(ids):
         n=inv.nodes[key];m=n.meta
         if m['mathematical_status']=='unassessed':add('MATHEMATICAL_REVIEW_PENDING','Node remains mathematically unassessed',n.path,key)
-        if m['origin'] in {'supplied_manuscript','primary_source'} and not any(s['role']=='support' and inv.sources[s['source_id']]['kind']=='primary' for s in m['sources']):
+        if m['origin'] in {'supplied_manuscript','primary_source'} and not (m['origin']=='supplied_manuscript' and key in supplied_originals) and not any(s['role']=='support' and inv.sources[s['source_id']]['kind']=='primary' for s in m['sources']):
             add('SOURCE_REVIEW_MISSING','Imported/primary claim needs an original supporting source, not only an attachment',n.path,key)
-        r,diagnostics=find_review(inv.root,records,'mathematical','node_ids',key,mathematical_inputs(inv,key)); errors.extend(diagnostics)
+        principal_check = current(plan) and key in principals
+        if principal_check: warnings.extend(statement_warnings(key, n.statement))
+        def candidate_check(r, key=key, n=n, principal_check=principal_check):
+            # Select a review satisfying this plan, not merely the first valid
+            # historical reading of these bytes. A different mode can promise
+            # different steps without changing the authoritative statement.
+            found = statement_errors(key, n.statement, r) if principal_check else []
+            promised = set(obligations.get(key, {}).get('required_steps', []))
+            done = r.get('scope', {}).get('proof_steps', {}).get(key, [])
+            missing = promised - set(done)
+            if missing:
+                found.append(diagnostic('PROOF_OBLIGATION_UNMET',
+                    'Candidate mathematical review omits promised steps: ' + '; '.join(sorted(missing)), n.path, key))
+            return found
+        r,diagnostics=find_review(inv.root,records,'mathematical','node_ids',key,mathematical_inputs(inv,key),extra_check=candidate_check); errors.extend(diagnostics)
+        if principal_check and r is None: errors.extend(statement_errors(key,n.statement,{}))
         if not r:add('MATHEMATICAL_REVIEW_PENDING','Need an accepted mathematical reading of the node and necessary fixed inputs',n.path,key)
         else:
             valid_math[key]=r;used.append(r['review_id'])
-            if m['origin']=='local_derivation' and not r.get('scope',{}).get('evidence_basis'):
+            if (m['origin']=='local_derivation' or key in supplied_originals) and not r.get('scope',{}).get('evidence_basis'):
                 add('MATHEMATICAL_REVIEW_PENDING','Local derivation review must state its actual proof basis',n.path,key)
         if m['mathematical_status']=='open':
             searches=(r or {}).get('scope',{}).get('reverse_search',{}).get(key,[])

@@ -1,0 +1,57 @@
+{
+  "schema_version": "2.0.0",
+  "review_id": "AUTHOR-compactness-N-compactness",
+  "kind": "mathematical",
+  "reviewer_mode": "author_reread",
+  "reviewed_at": "2026-10-11",
+  "inputs": [
+    {
+      "path": "evidence/source-checks/guide.md",
+      "sha256": "983facc726cb80b8557af6559099fb00c52189e4bdf201dc4d23d92f297f56eb"
+    },
+    {
+      "path": "knowledge/conventions.tex",
+      "sha256": "11cd32e393793531befa920aceac933e3c544ada8683f11f893b87876a529217"
+    },
+    {
+      "path": "knowledge/nodes/N-compactness.md",
+      "sha256": "74cc7851b58b2ba0a688cdaca56827616a47550fd20e5f0d50b7722466525691"
+    },
+    {
+      "path": "knowledge/sources/S-guide.json",
+      "sha256": "1e3177ed0672d6a08f1382eeca94e093f14d25c8ffb9690ed18686919af1283c"
+    },
+    {
+      "path": "project.json",
+      "sha256": "f5b28b75fc3774a636441ace9a24569747f084c6921e18b10b069aa65fb4980b"
+    },
+    {
+      "path": "scope.md",
+      "sha256": "0ea6d7c8232ff1f2560f05470356ea3a649268a07053b1fa95cf59d830010ec2"
+    }
+  ],
+  "scope": {
+    "node_ids": [
+      "N-compactness"
+    ],
+    "evidence_basis": "Author derivation and rereading of diagonal extraction, derivative compatibility, Holder interpolation, quadratic-form passage and continuity on the admissible domain.",
+    "proof_steps": {
+      "N-compactness": [
+        "Extract compatible uniformly convergent derivatives and interpolate to C^{2,beta}.",
+        "Pass the uniform matrix lower bound to the limit.",
+        "Use admissibility and operator continuity to pass the equation."
+      ]
+    }
+  },
+  "findings": [
+    "Author derivation and rereading of diagonal extraction, derivative compatibility, Holder interpolation, quadratic-form passage and continuity on the admissible domain.",
+    "The interpolation exponent beta<alpha is essential, and the uniform delta is used before continuity of F can be invoked."
+  ],
+  "unchecked_items": [
+    {
+      "blocking": false,
+      "reason": "No independent mathematical reviewer or real target-reader experiment; no originality or literature-completeness claim."
+    }
+  ],
+  "disposition": "accepted"
+}
