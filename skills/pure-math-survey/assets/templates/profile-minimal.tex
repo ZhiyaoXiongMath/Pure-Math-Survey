@@ -1,4 +1,6 @@
-% Pure Math Survey 2.1.0: r3 Minimal local problem units. Preparation is not completed authorship.
+% Pure Math Survey 2.1.0: r4 Minimal, exactly three numbered body sections.
+% No abstract or pre-section summary. All principals belong in Main Results.
+% Preparation is not completed authorship or mathematical review.
 \documentclass[12pt,reqno]{amsart}
 \usepackage{math-review}
 \input{../generated/conventions.tex}
@@ -7,9 +9,15 @@
 \begin{document}
 \maketitle
 @@DRAFT@@
-\placeholder{Give a brief result map: questions answered, reader inputs and the route through local units. Do not replace complete principal statements with paraphrases.}
+\section{Main Results}
+\placeholder{Briefly state the question and necessary local definitions. Present every complete principal early, grouped by its actual problem; preserve objects, fixed data and unknowns, hypotheses, quantifiers, equations, conclusion, attribution, status and caveats. No theorem quota or long historical introduction.}
+@@PRINCIPALS@@
+\section{Key Mathematical Ingredients}
+@@INGREDIENTS@@
+\placeholder{Build only the points actually consumed in section 3 and not reliably callable by this reader. For each give its precise object, definition, identity, estimate or theorem, exact input and output, and the later step using it. Shared constructions may be established once; tool names alone are insufficient.}
+\section{Connecting the Ingredients}
 @@VIEW_TASK@@
-@@LOCAL_UNITS@@
+\placeholder{Connect every principal to its ingredients by actual equalities, estimates, constructions, limits and reasons. Show input, operation or intermediate object, output, next consumer and indispensable conditions. Explain independent branches separately; precision at deep external theorem interfaces does not claim their independent proof. Reconstruct obligations and save actual fast-route, slow-step and condition-change attempts.}
 \placeholder{Target about 2-3 actual typeset lines for ordinary explanatory prose. Review longer blocks with concrete exceptions or repairs in the final PDF; retain all mathematical conditions.}
 \bibliographystyle{plain}
 \bibliography{../generated/references}

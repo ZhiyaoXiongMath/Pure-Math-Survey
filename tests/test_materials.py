@@ -2,7 +2,7 @@
 from pathlib import Path
 import tempfile
 import unittest
-from test_v2 import fixture, plan, authored_toy, read_json, SurveyError, SCRIPTS
+from test_v2 import fixture, plan, authored_toy, read_json, write_json, SurveyError, SCRIPTS
 from survey_core.exports import prepare_output, verify_generated, validate_structure
 from survey_core.build import build_output
 from survey_core.release import package_output
@@ -14,8 +14,13 @@ class AuthoringMaterials(unittest.TestCase):
         self.base=Path(self.tmp.name)
         self.root=fixture(self.base/'project',reviewed=True)
         self.plan_path=plan(self.root)
+        value=read_json(self.plan_path)
+        value['audience']='Synthetic reader can substitute a real number and multiply zero.'
+        value['reader_goals']=['Use x=0 to reconstruct x times x equals zero; no mathematical certification.']
+        write_json(self.plan_path,value)
         authored_toy(self.root)
         self.out=self.plan_path.parent
+        (self.out/'outline.md').write_text('Synthetic design: state x=0, identify real multiplication, then substitute zero in x times x. Software fixture only.\n',encoding='utf-8')
         self.node=self.out/'materials/knowledge/nodes/N-main.md'
 
     def tearDown(self):

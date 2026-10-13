@@ -6,7 +6,7 @@ waives a profile's responsibilities. Knowledge-only work produces no manuscript 
 For a requested output without a profile, use minimal/integrated. Generate only the
 requested profiles. PDF is a delivery format, not a fifth profile.
 
-## Views within each profile (rc2 and r3)
+## Views within current r4
 
 | View | Editable reader task |
 |---|---|
@@ -21,60 +21,33 @@ node-specific uses and emphasis order from kinds, facets and roles. These tags
 are navigation, never mathematical evidence. An absent candidate is an explicit
 design gap requiring explanation or further KB work, not a generated claim.
 Lecture dependency order is only a starting point for teaching order. Minimal
-keeps complete results and its recorded-policy organization in every view; Paper keeps all
+keeps complete results and its strict three-section organization in every view; Paper keeps all
 contribution and proof responsibilities. Prepare leaves view-specific writing
 tasks unfinished within the relevant section. Replace them with actual prose.
 The output reading binds `scope.view`; `view_focus` records a concrete finding,
 available `node_ids`, and reachable substantive manuscript locations.
 
-## Minimal under r3: local Results → Points → Connections
+## Minimal under r4: strict three sections
 
-Start with a short mathematical result map, then organize local problem units: state
-each complete principal near the points it needs, perform the decisive connections,
-and give a first use or boundary nearby. A brief question, useful model or indispensable
-definition may precede its formal result. There is no fixed chapter count and no
-requirement to print three labels in every unit. The map cannot replace full results.
-
-Establish a shared construction at its first actual use, then recall its exact interface
-where reused. Keep one canonical authority; do not copy inconsistent theorem versions
-or turn units into disconnected paper abstracts. Every principal remains a full canonical
-input in a suitable result environment, with a self-contained statement reading.
-
-A three-chapter organization can suit a new r3 article: explain why in its outline,
-restore the local question and interface near use, and perform all r3 responsibility
-readings. Its appearance neither makes it historical nor waives the new obligations.
-Keep the user's explicit branches and promised depth; Minimal reduces simultaneous
-unfamiliar constructions, not the agreed mathematical scope.
-
-## Historical Minimal under r2/rc1 and rc2
-
-Only these recorded policies require exactly three numbered main sections, in order:
+No abstract or independent/renamed summary block precedes the first section. The title and necessary status notice lead directly to exactly three numbered mathematical sections:
 
 1. Main Results
 2. Key Mathematical Ingredients
 3. Connecting the Ingredients
 
-References are not a fourth mathematical section. A title and a brief orientation
-sentence are allowed; no long background section precedes the results. Put every
-principal's complete canonical statement in a theorem/proposition/corollary environment
-in the first section. Include decisive caveats locally, not a delayed correction.
+References do not count as a fourth section. Necessary subsections are allowed; extra top-level question units, unnumbered mathematical body or appendices cannot evade this contract. A brief question and indispensable definitions belong in the first section, followed promptly by **all complete principals** in appropriate result environments. Keep objects, fixed data/unknowns, domain, assumptions, quantifiers, equations, conclusion, attribution and caveats; nearby terminology may be shared, remote numbered references cannot replace decisive conditions.
 
-In every policy choose only points the argument actually consumes and this reader cannot yet
-reliably use. A point gives the object or precise identity, its input conditions,
-its mathematical output and its consumer. Neither a textbook-sized black box nor
-every algebraic equality is a useful point. The connections passage actually constructs,
-estimates, substitutes or takes a justified limit; identify conjunctions, alternatives,
-parameters and exact imported theorems. A bare arrow diagram or “standard arguments”
-is not a decisive connection. Routine proof interiors may be compressed; decisive
-steps and hypotheses may not.
+The second section selects only inputs actually consumed in the third and not already reliable for the reader. Each ingredient specifies exact object/interface, input, output and its consumer. Shared constructions have one authority, with precise local reminders where reused.
 
-Acceptance requires reconstructing the full results and the actual point-to-result
-argument from this article alone. Three correct headings do not establish this.
+The third section executes each principal's decisive route through genuine construction, identity, estimate, substitution or justified limit. Show input, operation/intermediate object, output, next use and indispensable condition. Different branches need not become a fictitious unified chain. Routine details may be compressed; decisive reasoning and external theorem interfaces may not. Bare arrows or “standard arguments” are inadequate. Headings alone cannot pass mathematical/exposition review.
+
+## Current r4 support
+
+Only current r4 is supported by this installation. Old/unknown policies receive unsupported diagnostics; there is no historical-template selection, recorded-policy validation or migration route. Keep old files, history and evidence unchanged and use the corresponding historical version if needed. Current r4 still requires all four understanding-review duties. No design reason exempts a current Minimal from its three-section structure.
 
 ## Thematic: Questions → Approaches → Synthesis
 
-Organize by precise mathematical questions and mechanisms, not author/year lists.
-State representative full principal results early. Explain the structural obstruction
+No abstract or front matter summary. The first section, normally Questions and Principal Results, formulates precise questions and representative complete principals, with shared objects, conventions and comparison conditions. Organize by mathematical questions and mechanisms, not author/year lists. Explain the structural obstruction
 using actual unknowns, estimates or failed implications. For each genuine route give
 motivation, mechanism, precise results, decisive proof ideas and limits. A topic with
 one mature route needs no invented competitor. The titles and number of sections adapt
@@ -88,7 +61,7 @@ mathematical organization must remain intelligible.
 
 ## Lecture: Motivation → Construction → Proof
 
-Present a complete goal theorem early and a faithful proof strategy. Prepare only
+No abstract or front matter summary. The first section, normally Goal Theorem and Proof Strategy (topic-specific naming is allowed), explains learning goals, states the full core goal theorem and a faithful proof/learning route, and says what later constructions solve. Important companion branches may be stated locally in the later teaching sequence. Prepare only
 prerequisites that are actually consumed: assumed, refreshable or bridge-required for
 this reader. Establish an unfamiliar construction with a motivating model or calculation.
 For each promised step show the local problem, mathematical object, actual derivation,
@@ -110,8 +83,7 @@ prior-result nodes, reviewed comparison relations, the precise difference, full 
 obligations and caveats. Prior-art searches and source readings must be actual, dated
 and scoped. Software validates records, not novelty.
 
-Use an abstract and an early, self-contained presentation of the new results, compare
-with closest prior work in the same language and explain the new mechanism. The body
+Use a concise abstract naming the problem, decisive assumptions, actual contribution and mechanism. The first section is Introduction: closest prior work, precise remaining difficulty, full new results, accurate differences, new idea and proof route. Do not merely repeat the abstract. Known-result internal drafts state their known claims and attribution honestly. The later body establishes precise inputs, new constructions/estimates/lemmas and complete proofs. The body
 must close every original proof, with exact imported inputs and accurate attribution.
 A short research note and a long article may use different sections. Incomplete proofs,
 unchecked contributions or unresolved essential gaps are `DRAFT_UNVERIFIED` only.
@@ -130,7 +102,7 @@ snapshot, questions, principal answers and decisive boundaries agree. Otherwise 
 article may choose its own subset and teaching order. Preparation supplies bounded
 materials and an unfinished scaffold; authors must actually write and review it.
 
-## r3 responsibilities across all modes
+## Understanding responsibilities across all current modes
 
 Reconstruct necessary obligations before locating the supplied list. Record actual
 fast-route reconstruction, slow-step reproduction and condition transfer, including
@@ -138,3 +110,5 @@ failed attempts and repairs. All explanatory prose actively targets about 2–3 
 actual typeset lines; longer blocks need editing or a specifically located justified
 exception in the final PDF. Profile/view labels, formula density and test counts do
 not prove these responsibilities. See [output review](output-review.md).
+
+See [knowledge-to-manuscript](knowledge-to-manuscript.md) for paired fast/slow consumption and the actual plan/prepare/TeX/PDF sequence.

@@ -1,4 +1,0 @@
-# Current source reading: Shapiro
-Read all three pages of the original Math 829 notes: Theorem 1.1 and proof Steps I-III. The setting is scalar continuous functions on a compact metric space, with a uniform bound and common modulus of continuity. Finite nets supply a countable dense set; nested subsequences converge there; a three-term estimate makes the diagonal sequence uniformly Cauchy.
-
-The sentence before the three-term estimate on p.3 prints m,n>M although the preceding uniform Cauchy threshold is N. The argument requires m,n>N; this local proof uses that correct threshold. The manuscript applies the argument to finitely many coordinate derivatives and then proves the Holder interpolation step separately. The source does not by itself prove nonlinear PDE closedness or strict admissibility. PDF text was read online; no raw PDF hash is claimed.

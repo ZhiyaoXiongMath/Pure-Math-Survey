@@ -4,7 +4,7 @@ from pathlib import Path
 import re
 import shutil
 import tempfile
-from .common import VERSION, all_files, atomic_bytes, canonical, file_inventory, read_json, require, result, safe, sha, write_json, writer
+from .common import relpath, VERSION, all_files, atomic_bytes, canonical, file_inventory, native_path, read_json, require, result, safe, sha, write_json, writer
 from .knowledge import inventory
 from .dependencies import affected_dependents
 
@@ -42,6 +42,10 @@ def freeze_snapshot(root: Path) -> dict:
     with writer(root):
         inv = inventory(root)
         contents = {p: safe(root, p, True).read_bytes() for p in inv.files}
+        from .reviews import reviews_in
+        matching_bindings = [(b['path'], b['sha256']) for _, r in reviews_in(root)
+                             for b in r['inputs'] if b['path'] in contents
+                             and sha(contents[b['path']]) == b['sha256']]
         records = [{'path': p, 'sha256': sha(b), 'bytes': len(b)} for p, b in sorted(contents.items())]
         value = payload(inv.project['project_id'], records); sid = 'KB-' + sha(canonical(value))
         snapshots = safe(root, 'snapshots'); snapshots.mkdir(exist_ok=True)
@@ -56,11 +60,20 @@ def freeze_snapshot(root: Path) -> dict:
             # Verify staged bytes and reject concurrent changes even under the advisory lock.
             require(file_inventory(stage / 'files', inv.files) == records and file_inventory(root, inv.files) == records,
                     'SNAPSHOT_INPUT_CHANGED', 'Input changed while freezing; retry')
+            require(all(sha(safe(stage / 'files', p, True).read_bytes()) == digest
+                        for p, digest in matching_bindings), 'SNAPSHOT_INPUT_CHANGED',
+                    'A valid review input binding was lost while staging; retry')
             write_json(stage / 'manifest.json', {**value, 'snapshot_id': sid})
             stage.rename(target)
+            try:
+                # Final names are longer than staging names on Windows. Verify
+                # ordinary-path readability before committing a usable result.
+                load_snapshot(root, sid)
+            except Exception:
+                target.rename(stage)
+                raise
         finally:
-            if stage.exists(): shutil.rmtree(stage)
-        load_snapshot(root, sid)
+            if stage.exists(): shutil.rmtree(native_path(stage, extended=True))
     return result('kb.freeze', 'FROZEN', {'snapshot_id': sid, 'manifest': f'snapshots/{sid}/manifest.json'})
 
 def diff_snapshots(root: Path, old_id: str, new_id: str) -> dict:
@@ -107,7 +120,7 @@ def diff_snapshots(root: Path, old_id: str, new_id: str) -> dict:
                 key = next((k for k,n in a.nodes.items() if n.path == p), None)
                 found = [i+1 for i,line in enumerate(lines) if key and key in line]
                 locations.append({'changed_input': p, 'node_id': key, 'manuscript_lines': found,
-                                  'location': file.relative_to(root).as_posix() if not found else (file.parent/'manuscript/main.tex').relative_to(root).as_posix(),
+                                  'location': relpath(root, file) if not found else relpath(root, file.parent/'manuscript/main.tex'),
                                   'action': 'Reassess consumed input, dependent proof and surrounding prose before adopting new snapshot.'})
             # B-inspired impact precision: inspect all literal body sections and
             # locate affected dependent statements, not only IDs in main.tex.
@@ -122,7 +135,7 @@ def diff_snapshots(root: Path, old_id: str, new_id: str) -> dict:
                         key = Path(loc['input']).stem
                         if key in nodes_affected:
                             precise.append({**loc,'node_id':key,
-                                            'project_path':(file.parent/loc['path']).relative_to(root).as_posix()})
+                                            'project_path':relpath(root, file.parent/loc['path'])})
                 except (SurveyError,OSError):
                     # A missing/unfinished manuscript does not prevent KB diff.
                     pass

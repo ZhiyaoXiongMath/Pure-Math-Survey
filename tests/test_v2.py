@@ -28,6 +28,7 @@ from survey_core.models import node_bytes
 from survey_core.release import package_output,assess_release
 from survey_core.build import build_output,render_output,reading_budget
 from package_release import package,verify_archive
+STEP = 'Substitute x=0 into x times x and obtain zero.'
 
 
 def putnode(root,key,kind,statement=None,links=(),questions=('N-q',),source=False,status='unassessed'):
@@ -46,11 +47,24 @@ def synthetic_reviews(root):
     specs += [('mathematical',k,mathematical_inputs(inv,k)) for k in inv.nodes]
     specs += [('coverage',k,coverage_inputs(inv,k)) for k,n in inv.nodes.items() if n.meta['kind']=='question']
     for kind,key,inputs in specs:
-        r=review_template(root,kind,[key],inputs)
+        from survey_core.profiles import POLICY, STATEMENT_ASPECTS, UNDERSTANDING_READINGS, principal_template
+        from survey_core.reviews import knowledge_scope_template
+        scope = None
+        if kind == 'mathematical':
+            scope = {'editorial_policy': POLICY, 'node_ids': [key], 'proof_steps': {key: [STEP]}, 'statement_reviews': {}}
+            if inv.nodes[key].statement is not None:
+                item = principal_template(inv.nodes[key].statement); item['outcome'] = 'accepted'
+                item.update({k: 'Synthetic aspect finding, not mathematical acceptance.' for k in STATEMENT_ASPECTS})
+                scope['statement_reviews'][key] = item
+        elif kind == 'coverage':
+            scope = knowledge_scope_template(inv, [key])
+        r=review_template(root,kind,[key],inputs,scope)
         r.update({'review_id':'SYNTHETIC-'+kind+'-'+key,'reviewer_mode':'author_reread','reviewed_at':now(),
                   'findings':['Synthetic accepted-state input for software gate testing only; not actual research acceptance.'],
                   'unchecked_items':[],'disposition':'accepted'})
         r['scope']['evidence_basis']='Synthetic software fixture; not a claim of an executed independent mathematical review.'
+        if kind == 'coverage':
+            r['findings'] = [task + ': Synthetic gate finding [Actual section](' + inv.nodes[key].path + '#software-fixture)' for task in UNDERSTANDING_READINGS]
         write_json(root/f'evidence/reviews/{kind}-{key}.json',r)
 
 
@@ -85,9 +99,7 @@ def plan(root,oid='mini',profile='minimal',question='N-q',principal='N-main',dra
     path=root/f'outputs/{oid}/plan.json'
     # A synthetic gate fixture imports the trivial answer; actual exposition promises are tested separately.
     value=read_json(path)
-    # This helper deliberately models an existing 2.0.0 output, not vNext certification.
-    value['schema_version']='2.0.0'
-    value.pop('editorial_policy',None); value.pop('contributions',None)
+    # Current-r4 citation-only fixture, not completed teaching or mathematics.
     value['proof_obligations']=[]
     for selection in value['selections']:
         if selection['proof_treatment'] in {'sketch','complete','mechanism'}:selection['proof_treatment']='citation'
@@ -103,9 +115,12 @@ def authored_toy(root,oid='mini',two_pages=False):
 \title{Synthetic build fixture}\date{}
 \begin{document}\maketitle
 \noindent\textbf{DRAFT\_UNVERIFIED: software fixture, not a surveyed research claim.}
+\section{Main Results}
+\begin{theorem}\label{thm:x}\input{../generated/statements/N-main.tex}\end{theorem}
+\section{Key Mathematical Ingredients}
 Let $x$ be real.
 \begin{definition}\label{def:x}\input{../generated/statements/N-def.tex}\end{definition}
-\begin{theorem}\label{thm:x}\input{../generated/statements/N-main.tex}\end{theorem}
+\section{Connecting the Ingredients}
 \begin{proof}Multiplication gives $0\cdot0=0$.\end{proof}
 '''
     if two_pages:text+='\\newpage\nThis second page exists to test the actual PDF page count, not a length quota.\n'
@@ -201,32 +216,36 @@ class Contracts(unittest.TestCase):
             names=archive.namelist()
             self.assertFalse(any('/dhym-v6/' in n or '/dhym-compact/' in n for n in names))
             archive.extractall(dest)
-        sample=dest/'pure-math-survey/assets/reference-samples/dhym-balanced'
-        provenance=read_json(sample/'provenance.json')
-        for name,record in provenance['files'].items():
-            self.assertEqual(hashlib.sha256((sample/name).read_bytes()).hexdigest(),record['sha256'])
+        self.assertFalse(any('/reference-samples/' in name for name in names))
         entry=dest/'pure-math-survey/scripts/survey.py'
         p=subprocess.run([sys.executable,'-I',str(entry),'--json','--version'],capture_output=True,text=True,cwd=self.base);self.assertEqual(p.returncode,0,p.stderr);self.assertEqual(json.loads(p.stdout)['artifacts']['version'],'2.1.0')
         p=subprocess.run([sys.executable,'-I',str(entry.parent/'validate_assets.py'),'--json'],capture_output=True,text=True,cwd=self.base);self.assertEqual(p.returncode,0,p.stdout+p.stderr);self.assertEqual(json.loads(p.stdout)['profile_preparations_executed'],['minimal','thematic','lecture','paper'])
+    def style_fixture(self):
+        root=self.base/'styles';(root/'assets/templates').mkdir(parents=True)
+        sample=root/'fixture';sample.mkdir()
+        shutil.copy2(SKILL/'assets/templates/math-review.sty',sample/'math-review.sty')
+        (sample/'main.tex').write_text(r'\documentclass{amsart}\usepackage{math-review}\begin{document}A neutral style test cites~\cite{fixture}.\input{main.bbl}\end{document}')
+        (sample/'main.bbl').write_text(r'\begin{thebibliography}{1}\bibitem{fixture}Synthetic fixture, not a research source.\end{thebibliography}')
+        (sample/'references.bib').write_text('@misc{fixture,title={Synthetic fixture}}')
+        return root,sample
     def test_T22_actual_current_and_frozen_style_builds(self):
-        from build_checks import stage_balanced_sample,compile_one
-        root=self.base/'styles';(root/'assets/templates').mkdir(parents=True);shutil.copytree(SKILL/'assets/reference-samples/dhym-balanced',root/'assets/reference-samples/dhym-balanced')
-        original={p.name:p.read_bytes() for p in (root/'assets/reference-samples/dhym-balanced').iterdir()}
+        from build_checks import stage_style_fixture,compile_one
+        root,sample=self.style_fixture()
+        original={p.name:p.read_bytes() for p in sample.iterdir()}
         current=(SKILL/'assets/templates/math-review.sty').read_bytes()+b'\n\\typeout{PMS-V2-CURRENT-STYLE-ONLY}\n';(root/'assets/templates/math-review.sty').write_bytes(current)
         seen={}
         for mode in ('current','frozen'):
-            d=self.base/mode;entry=stage_balanced_sample(root,d,mode=mode);r=compile_one(d,entry.name,shutil.which('pdflatex'));self.assertEqual(r['status'],'PASS',r);seen[mode]=(d/(entry.stem+'.log')).read_text(errors='replace')
+            d=self.base/mode;entry=stage_style_fixture(root,d,mode=mode);r=compile_one(d,entry.name,shutil.which('pdflatex'));self.assertEqual(r['status'],'PASS',r);seen[mode]=(d/(entry.stem+'.log')).read_text(errors='replace')
             self.assertEqual((d/'references.bib').read_bytes(),original['references.bib'])
-            self.assertEqual((d/'dhym-survey-revised.bbl').read_bytes(),original['dhym-survey-revised.bbl'])
+            self.assertEqual((d/'main.bbl').read_bytes(),original['main.bbl'])
         self.assertIn('PMS-V2-CURRENT-STYLE-ONLY',seen['current']);self.assertNotIn('PMS-V2-CURRENT-STYLE-ONLY',seen['frozen'])
-        self.assertEqual(original,{p.name:p.read_bytes() for p in (root/'assets/reference-samples/dhym-balanced').iterdir()})
+        self.assertEqual(original,{p.name:p.read_bytes() for p in sample.iterdir()})
     def test_balanced_staging_requires_supplied_bibliography(self):
-        from build_checks import stage_balanced_sample
-        root=self.base/'styles';sample=root/'assets/reference-samples/dhym-balanced'
-        shutil.copytree(SKILL/'assets/reference-samples/dhym-balanced',sample)
-        (sample/'dhym-survey-revised.bbl').unlink()
+        from build_checks import stage_style_fixture
+        root,sample=self.style_fixture()
+        (sample/'main.bbl').unlink()
         destination=self.base/'missing-bibliography'
-        with self.assertRaises(FileNotFoundError):stage_balanced_sample(root,destination,mode='frozen')
+        with self.assertRaises(FileNotFoundError):stage_style_fixture(root,destination,mode='frozen')
         self.assertFalse(destination.exists())
     def test_T23_draft_package_refused(self):
         p=plan(self.root);authored_toy(self.root);self.code('DRAFT_NOT_RELEASABLE',package_output,self.root,'mini',self.base/'forbidden.zip');self.assertFalse((self.base/'forbidden.zip').exists())

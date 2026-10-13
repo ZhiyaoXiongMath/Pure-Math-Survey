@@ -1,6 +1,6 @@
 # Native file fields and reproducible operations
 
-The software runtime is `2.1.0`. Project, knowledge, sources, snapshots and generated/build manifests retain schema `2.0.0`. New output plans and policy-bearing mathematical/output-semantic reviews use schema `2.2.0`; historical `2.0.0` plans and reviews remain readable without mutation. See [output review](output-review.md) for whole-manuscript checks, actual body locations and build history. JSON has no duplicate keys or nonfinite numbers. Stable IDs use letters/digits/dot/underscore/hyphen, with N- and S- prefixes for nodes and sources; each filename equals its ID. All project-relative paths are POSIX, contain no traversal/absolute prefix and cross no symbolic links.
+The software runtime is `2.1.0`. Project, knowledge, sources, snapshots and generated/build manifests retain schema `2.0.0`. Current output plans and policy-bearing mathematical/output-semantic reviews use schema `2.2.0` and `four-modes-2026-10-13-r4`. This installation supports current r4 only: explicit old/unknown policies or unsupported inputs are rejected without changing their files. Unchanged format numbers do not grant old-policy support or acceptance. See [output review](output-review.md) for whole-manuscript checks, actual body locations and build history. JSON has no duplicate keys or nonfinite numbers. Stable IDs use letters/digits/dot/underscore/hyphen, with N- and S- prefixes for nodes and sources; each filename equals its ID. All project-relative paths are POSIX, contain no traversal/absolute prefix and cross no symbolic links.
 
 ## Project and knowledge
 
@@ -20,7 +20,11 @@ Required: schema_version, output_id, snapshot_id, profile, view, language, title
 
 Selection: node_id; role principal_answer/essential_bridge/boundary/background/frontier; statement_treatment full/explained_reference; proof_treatment complete/sketch/mechanism/citation/none; reason. Omission: node_id/reason. An explicitly scoped prerequisite is either plain reader background or an object with node_id/scope/reason; only the object can mechanically discharge a specific unselected dependency.
 
+Keep substantively selected question nodes when they express the actual requested target or boundary. Their role/status must describe what the node really asserts; a question/task description is not automatically an established theorem or principal answer. Principal mathematical results retain full canonical statements. Do not delete selected questions, mark unanswered claims established or narrow scope merely to pass validation; follow current kind/role/status diagnostics with truthful evidence.
+
 Proof obligation: node_id, treatment complete/sketch/mechanism, nonempty required_steps, imported_inputs. An expanded proof selection must have step obligations directly or through selected explaining mechanisms. Imported inputs need explicit selection/prerequisite treatment. limits.max_pages is required and nullable; optional page_review_threshold is also nullable. A comparison group shares snapshot/question/core/boundary only when explicitly requested.
+
+All requested output plans expose concrete reader/proof promises before output-specific knowledge review. For a pending plan-scoped request use `review template PROJECT --kind mathematical --id NODE --plan outputs/ID/plan.json --to evidence/reviews/NEW.json --json`. `--plan` is mathematical-only. Its returned artifacts.promise_request names a content-addressed file under evidence/p; it excludes snapshot_id, binds actual live source/KB identity and preserves old requests. The template leaves scope.proof_steps empty and statement findings not_performed. A real non-author supplies exact actually checked steps/findings; scope.output_ids restricts the contract. PLAN_KNOWLEDGE_CHANGED rejects changed live mathematical/source bytes until knowledge and plan are explicitly reconciled. Fresh reviewed live evidence → new snapshot → explicit plan snapshot adoption → readiness/prepare is the sequence, detailed in [proof responsibilities](proofs-and-boundaries.md).
 
 ## CLI recipes
 
@@ -31,6 +35,7 @@ python scripts/survey.py kb index topic --json
 python scripts/survey.py kb freeze topic --json
 python scripts/survey.py kb verify topic --snapshot KB-FULL_HASH --json
 python scripts/survey.py output plan topic --output short --snapshot KB-FULL_HASH --json
+python scripts/survey.py review template topic --kind mathematical --id N-RESULT --plan outputs/short/plan.json --to evidence/reviews/NEW.json --json
 python scripts/survey.py kb readiness topic --plan topic/outputs/short/plan.json --json
 python scripts/survey.py output prepare topic --plan topic/outputs/short/plan.json --draft --json
 python scripts/survey.py output validate topic --output short --stage plan --json
@@ -44,11 +49,11 @@ python scripts/survey.py output package topic --output short --to short.zip --js
 python scripts/survey.py kb diff topic --from KB-OLD_FULL_HASH --to KB-NEW_FULL_HASH --json
 ```
 
-These recipes use placeholder IDs. init produces an empty unverified KB; add real scope-specific knowledge, evidence and coverage before a meaningful plan. Prepare makes no mathematical claims and preserves existing prose. Fill review templates only after the actual recorded work. `--draft` permanently marks that plan draft until an explicit reviewed plan change/reprepare; never remove the flag merely to bypass readiness.
+These recipes use placeholder IDs. init produces an empty unverified KB; add real scope-specific knowledge, evidence and coverage before a meaningful plan. After output plan, authors complete all concrete promises before the plan-scoped mathematical request. The reviewer performs the actual work; controller integrates fresh evidence, freezes a new snapshot and explicitly adopts its returned ID before readiness/prepare. The code block cannot perform those human/AI readings or plan edits. Prepare makes no mathematical claims and preserves existing prose. Fill review templates only after the actual recorded work. `--draft` permanently marks that plan draft until an explicit reviewed plan change/reprepare; never remove the flag merely to bypass readiness.
 
-## Versioned output policy (2.2.0)
+## Current r4 output policy (2.2.0)
 
-New r3 plans use `editorial_policy: four-modes-2026-10-12-r3` and `contributions`
+New r4 plans use `editorial_policy: four-modes-2026-10-13-r4` and `contributions`
 (an empty list outside Paper). The `profile` enum is minimal/thematic/lecture/paper.
 Each Paper contribution has `node_id`, classification original/known/conjectural/unverified,
 `provenance`, `authorization`, `actual_difference`, proof_status complete/incomplete/unverified,
@@ -73,30 +78,13 @@ provenance_check, authorization_check, actual_difference, proof_closure and rema
 Source IDs must exist in the bound materials. These records remain review assertions;
 no script claims to decide mathematical truth, comprehension, authorization or novelty.
 
-## Historical compatibility, not silent migration
+## Current support and file protection
 
-Schema 2.0.0 output plans use only the historical three modes and may not contain new
-policy/contribution fields. Schema 2.2.0 plans cannot be read by the old 2.0.4 parser.
-No in-place migration command is added. To adopt the current policy, create a new output ID from an
-appropriate snapshot, refine its new plan/outline, and perform the new readings. Repair
-canonical statements in knowledge and freeze again when necessary. Old snapshots,
-manuscripts and evidence remain unchanged; reprepare preserves authored prose and outline.
-Legacy release checks explicitly identify `legacy-2.0.0`; they are not current-policy acceptance.
-Never manually downgrade a new plan to evade policy gates.
+Only schema-2.2.0 r4 output plans/policy reviews participate in the current output flow. Explicit old/unknown policy, unsupported schema and mismatched inputs receive unsupported diagnostics, not automatic migration or reclassification. This installation has no old-policy validation/rebuild continuation, recorded-policy release route or historical template selector. Consult a corresponding historical software version for old work; preserve Git history, backups, prior evidence and source files unchanged.
 
-## Current-policy adoption and design checks
+Within current r4, repair canonical statements in live knowledge, obtain fresh applicable review, freeze a new snapshot and explicitly adopt it downstream. Reprepare preserves authored manuscript, outline and style; immutable snapshots and prior evidence remain protected. Those file protections are current safety behavior, not promises of backward compatibility. Package requires the current release checks. Never rename an old policy or edit accepted hashes to evade them.
 
-| Output schema | Recorded policy | Current package authorization |
-| --- | --- | --- |
-| 2.0.0 | legacy-2.0.0 | Requires a new schema-2.2.0 output |
-| 2.1.0 | four-modes-2026-10-11-r2 | Requires a new schema-2.2.0 output |
-| 2.2.0 | four-modes-2026-10-12-rc2 | Historical recorded assessment only; new r3 output required |
-| 2.2.0 | four-modes-2026-10-12-r3 | Only after all current release checks |
-
-Unknown or mixed schema/policy pairs fail closed. Use `output validate ... --stage
-release --policy recorded` only for a read-only historical assessment: even a valid
-result is RECORDED_VALID, never authorization to package. Package always rechecks
-current policy. F1 location checks apply to historical evidence too.
+## Current design checks
 
 Preparation reports `artifacts.exposition_design`; a default outline is NEEDS_WORK.
 Structure and release reread audience, reader_goals and outline every time. Reserved
@@ -137,19 +125,10 @@ Without directly comparable prior evidence, keep an explicit draft; no waiver
 can authorize formal publication. Read every claimed comparison in the same
 unknowns, quantifiers, dimension, parameters, regularity and normalization.
 
-## Explicit compatibility responsibilities
+## Current responsibilities and evidence closure
 
-Software 2.1.0, knowledge/snapshot schema 2.0.0, output/review schema 2.2.0 and r3
-editorial policy are distinct. The supported exact pairs above do not permit arbitrary
-policy names on schema 2.2.0. Legacy 2.0 uses its recorded default; r2/rc1 2.1 retains
-four modes; rc2 2.2 retains F1–F4, typed comparison/prior support, view/design and strict
-old Minimal; r3 2.2 retains those capabilities and adds local Minimal and new tasks.
-Current-release policy, four-mode support, rc2 capabilities, strict-old-Minimal and
-r3 duties must be distinguished. Old runtimes rejecting a new policy is expected.
+Software 2.1.0, knowledge/snapshot schema 2.0.0 and output/policy-review schema 2.2.0 remain distinct. Current r4 retains four profiles, five views, strict Minimal three sections, F1–F4 and obligation coverage, fast-route reconstruction, slow-step reproduction and condition transfer. Removing old runtime policy/template support removes none of these duties. Old files remain unchanged and old acceptance never upgrades automatically.
 
-r3 reuses existing plan/outline, scope/findings, mode_findings and page_findings; it
-does not change the knowledge schema or promise a new typed API. Knowledge-only review
-records bind actual nodes/routes and subsections, independently of article locations.
-See [output review](output-review.md). Canonical/explanation revisions go through live
-KB, review and a new snapshot. Keep all old records and fixed artifacts unchanged;
-never downgrade policy or refresh hashes alone to manufacture current acceptance.
+R4 reuses existing plan/outline, scope/findings, mode_findings and page_findings. No mathematical schema shape changes or typed route database are introduced. Private invocation/task records are independent local bookkeeping, not node/output/review fields and not public package content. Read dispatch.md for controller/worker authorization, fixed Astra/ultra parameters and task identity handling; the deterministic CLI does not orchestrate chats.
+
+Keep actual mathematical review inputs safely inside project-relative, nonsymlink paths. A review may depend on a plan-derived authoring-promise request and source/KB files; all declared legitimate inputs must remain available in the new frozen evidence closure. Do not point frozen review inputs into mutable output directories, recursively include snapshots, or hand-copy files into an existing snapshot. Use fresh live evidence and a new freeze. A closed hash inventory proves availability/identity, not that the reviewer actually checked a promised step.

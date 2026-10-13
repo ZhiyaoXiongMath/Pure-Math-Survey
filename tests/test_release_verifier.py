@@ -11,6 +11,9 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
+from contextlib import redirect_stdout
+from io import StringIO
 
 ROOT=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location('release_verifier',ROOT/'tools/verify_release.py')
@@ -57,7 +60,7 @@ class ReleaseVerifierEvidence(unittest.TestCase):
             self.assertEqual(row['timeout_seconds'],3)
 
 
-class R3VerifierContracts(unittest.TestCase):
+class R4VerifierContracts(unittest.TestCase):
     """Synthetic verifier orchestration only; no accepted mathematics is created."""
     def valid_version(self):
         return {'version':'2.1.0','schema_version':'2.0.0','output_schema_version':'2.2.0',
@@ -65,37 +68,74 @@ class R3VerifierContracts(unittest.TestCase):
                 'supported_output_contracts':[{'schema_version':s,'editorial_policy':p}
                                               for s,p in sorted(verifier.EXPECTED_CONTRACTS)]}
 
-    def test_installed_rc2_or_missing_old_capabilities_cannot_pass_as_r3(self):
+    def test_obsolete_extra_or_missing_contracts_cannot_pass_as_current(self):
         actual=self.valid_version()
         verifier.assert_installed_contract(actual)
         for key,value in (('editorial_policy','four-modes-2026-10-12-rc2'),
                           ('version','2.2.0'),('schema_version','2.1.0'),
-                          ('supported_output_contracts',actual['supported_output_contracts'][:-1])):
+                          ('supported_output_contracts',[]),
+                          ('supported_output_contracts',actual['supported_output_contracts']+[
+                              {'schema_version':'2.0.0','editorial_policy':'legacy-2.0.0'}]),
+                          ('supported_output_contracts',[
+                              {'schema_version':'2.2.0','editorial_policy':'four-modes-2026-10-12-r3'}])):
             wrong=copy.deepcopy(actual);wrong[key]=value
             with self.subTest(key=key),self.assertRaises(AssertionError):verifier.assert_installed_contract(wrong)
 
-    def test_r3_suite_must_really_execute_not_merely_total_old_tests(self):
+    def test_current_suites_must_really_execute_without_skips_or_failures(self):
         with self.assertRaises(AssertionError):verifier.installed_regression_summary('Ran 189 tests in 2s\nOK')
-        with self.assertRaises(AssertionError):
-            verifier.installed_regression_summary('test_case (test_r3_policy.R3.test_case) ... skipped reason\nRan 1 tests in 2s\nOK')
-        summary=verifier.installed_regression_summary('test_case (test_r3_policy.R3.test_case) ... ok\nRan 190 tests in 2s\nOK')
-        self.assertEqual((summary['tests'],summary['r3_policy_tests']),(190,1))
+        lines=[f'test_case ({name}.Current.test_case) ... ok' for name in verifier.REQUIRED_SUITES]
+        for index in range(len(lines)):
+            for outcome in ('skipped reason','FAIL','ERROR'):
+                bad=lines.copy();bad[index]=bad[index].replace('... ok',f'... {outcome}')
+                with self.subTest(suite=verifier.REQUIRED_SUITES[index],outcome=outcome),self.assertRaises(AssertionError):
+                    verifier.installed_regression_summary('\n'.join(bad)+'\nRan 190 tests in 2s\nOK')
+            with self.subTest(missing=verifier.REQUIRED_SUITES[index]),self.assertRaises(AssertionError):
+                verifier.installed_regression_summary('\n'.join(lines[:index]+lines[index+1:])+'\nRan 190 tests in 2s\nOK')
+        summary=verifier.installed_regression_summary('\n'.join(lines)+'\nRan 190 tests in 2s\nOK')
+        self.assertEqual(summary['tests'],190)
+        self.assertEqual(summary['required_suites'],{name:1 for name in verifier.REQUIRED_SUITES})
 
-    def test_nonvisual_r3_semantic_failure_cannot_hide_behind_new_pdf_work(self):
+    def test_windows_symlink_permission_skip_is_incomplete_never_pass(self):
+        lines=[f'test_case ({name}.Current.test_case) ... ok' for name in verifier.REQUIRED_SUITES]
+        unavailable=('test_native_identity_still_rejects_symlink_escape '
+            '(test_workflow_bindings.WorkflowBindings.test_native_identity_still_rejects_symlink_escape) '
+            '... skipped "OS did not authorize directory symlink creation: [WinError 1314] denied"')
+        log='\n'.join(lines+[unavailable])+'\nRan 5 tests in 2s\nOK (skipped=1)'
+        with patch.object(verifier.os,'name','nt'):
+            result=verifier.installed_regression_summary(log)
+            self.assertEqual(result['status'],'INCOMPLETE')
+            self.assertEqual(result['unverified_tests'],[unavailable])
+            for bad in (log.replace('WinError 1314','WinError 5'),
+                        log.replace('... skipped "OS','... ERROR "OS'),
+                        log.replace('WorkflowBindings.test_native','Other.test_native'),
+                        log.replace(lines[2]+'\n','')):
+                with self.subTest(log=bad),self.assertRaises(AssertionError):
+                    verifier.installed_regression_summary(bad)
+        with patch.object(verifier.os,'name','posix'),self.assertRaises(AssertionError):
+            verifier.installed_regression_summary(log)
+
+    def test_nonrequired_skipped_test_also_prevents_regression_pass(self):
+        lines=[f'test_case ({name}.Current.test_case) ... ok' for name in verifier.REQUIRED_SUITES]
+        skipped='test_optional (test_other.Optional.test_optional) ... skipped "unavailable"'
+        result=verifier.installed_regression_summary('\n'.join(lines+[skipped])+'\nRan 5 tests in 2s\nOK (skipped=1)')
+        self.assertEqual(result['status'],'INCOMPLETE')
+        self.assertEqual(result['unverified_tests'],[skipped])
+
+    def test_nonvisual_current_semantic_failure_cannot_hide_behind_new_pdf_work(self):
         result={'artifacts':{'editorial_policy':verifier.EXPECTED_POLICY,'readiness':'READY',
                             'used_output_review_ids':['synthetic-semantic']},
                 'errors':[{'code':'VISUAL_REVIEW_INCOMPLETE','path':'evidence'},
                           {'code':'REVIEW_STALE','message':'Review old-visual no longer matches this input','path':'build/main.pdf'}]}
-        verifier.require_current_r3_semantics(result)
+        verifier.require_current_semantics(result)
         for error in ({'code':'OUTPUT_SEMANTIC_REVIEW_PENDING','path':'evidence'},
                       {'code':'REVIEW_STALE','path':'manuscript/main.tex'},
                       {'code':'MODE_SEMANTIC_REVIEW_PENDING','path':'evidence'},
                       {'code':'REVIEW_STALE','message':'Rendered image bytes have changed','path':'evidence/pages/page-1.png'},
                       {'code':'DRAFT_NOT_RELEASABLE','path':'plan.json'}):
             bad=copy.deepcopy(result);bad['errors'].append(error)
-            with self.subTest(error=error),self.assertRaises(AssertionError):verifier.require_current_r3_semantics(bad)
+            with self.subTest(error=error),self.assertRaises(AssertionError):verifier.require_current_semantics(bad)
 
-    def test_missing_r3_inputs_or_skipped_builds_remain_incomplete(self):
+    def test_missing_current_inputs_or_skipped_builds_remain_incomplete(self):
         for has_inputs,no_build in ((False,False),(True,True),(False,True)):
             self.assertEqual(verifier.verification_completion(has_inputs,no_build)[0],'INCOMPLETE')
         self.assertEqual(verifier.verification_completion(True,False),('PASS',[]))
@@ -103,32 +143,35 @@ class R3VerifierContracts(unittest.TestCase):
     def test_default_manifest_is_discovered_but_explicit_path_takes_precedence(self):
         with tempfile.TemporaryDirectory() as td:
             root=Path(td)
-            self.assertIsNone(verifier.resolve_r3_manifest(None,root))
-            default=root/'examples/r3/verification-manifest.json';default.parent.mkdir(parents=True);default.write_text('{}')
-            self.assertEqual(verifier.resolve_r3_manifest(None,root),default)
+            self.assertIsNone(verifier.resolve_output_manifest(None,root))
+            default=root/'examples/r4/verification-manifest.json';default.parent.mkdir(parents=True);default.write_text('{}')
+            self.assertEqual(verifier.resolve_output_manifest(None,root),default)
             explicit=root/'requested.json'
-            self.assertEqual(verifier.resolve_r3_manifest(explicit,root),explicit)
+            self.assertEqual(verifier.resolve_output_manifest(explicit,root),explicit)
 
-    def test_reviewed_rc2_layout_mapping_is_limited_to_each_approved_output(self):
-        spec=importlib.util.spec_from_file_location('rc2_mapping',ROOT/'tools/verify_rc2_examples.py')
-        module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
-        for oid in ('thematic','minimal-methods','minimal-boundaries'):
-            selected=module.historical_layout_override('time-compactness',oid)
-            self.assertEqual(selected['emergency_stretch_em'],2.0)
-            self.assertTrue(selected['reason'])
-        for project,oid in (('schur','rc2-lecture'),('other','thematic'),
-                            ('r3','minimal-methods'),('time-compactness','unreviewed')):
-            self.assertIsNone(module.historical_layout_override(project,oid))
-        copy=module.historical_layout_override('time-compactness','thematic')
-        copy['emergency_stretch_em']=9.0
-        self.assertEqual(module.historical_layout_override('time-compactness','thematic')['emergency_stretch_em'],2.0)
+    def test_engineering_only_does_not_discover_or_execute_default_outputs(self):
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td);manifest=root/'examples/r4/verification-manifest.json'
+            manifest.parent.mkdir(parents=True);manifest.write_text('Deliberately unreadable output manifest')
+            stdout=StringIO()
+            with patch.object(verifier,'ROOT',root), patch.object(sys,'argv',['verify_release','missing.zip','--engineering-only']), redirect_stdout(stdout):
+                self.assertEqual(verifier.main(),1)  # The missing archive is the actual failure.
+            report=json.loads(stdout.getvalue())
+            self.assertIsNone(report['manifest'])
+            self.assertNotIn('outputs',report)
+            self.assertNotIn('output manifest',report['failure'])
+
+    def test_engineering_only_and_explicit_full_manifest_conflict(self):
+        with patch.object(sys,'argv',['verify_release','missing.zip','--engineering-only','--manifest','explicit.json']):
+            with self.assertRaises(SystemExit) as caught:verifier.main()
+            self.assertEqual(caught.exception.code,2)
 
     def test_example_failure_records_keep_progress_and_actual_log_location(self):
         with tempfile.TemporaryDirectory() as td:
             destination=Path(td);build=destination/'project/outputs/thematic/build';build.mkdir(parents=True)
             (build/'build-report.json').write_text(json.dumps({'status':'FAILED','blocking_log_issues':{'overflow':['11.1444pt']}}))
             (build/'main.log').write_text('Actual overflow diagnostic')
-            for name in ('verify_rc2_examples','verify_vnext_examples'):
+            for name in ('verify_release',):
                 spec=importlib.util.spec_from_file_location(name,ROOT/'tools'/f'{name}.py')
                 module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
                 report={'outputs':[{'output_id':'previous','build':'BUILT'},{'output_id':'thematic','build':'RUNNING'}]}
@@ -140,14 +183,14 @@ class R3VerifierContracts(unittest.TestCase):
 
     def synthetic_project(self,base):
         project=base/'source';project.mkdir();(project/'project.json').write_text('{}')
-        specs=(('methods','minimal','methods'),('boundaries','minimal','boundaries'),
+        specs=(('minimal','minimal','integrated'),('second','minimal','integrated'),
                ('thematic','thematic','integrated'),('lecture','lecture','integrated'),
                ('paper','paper','integrated'))
         for oid,profile,view in specs:
             out=project/'outputs'/oid;(out/'manuscript').mkdir(parents=True)
             plan={'output_id':oid,'schema_version':'2.2.0','editorial_policy':verifier.EXPECTED_POLICY,
                   'profile':profile,'view':view,'snapshot_id':'KB-synthetic','draft':profile=='paper',
-                  'comparison_group':'synthetic-pair','question_ids':['N-q'],
+                  'comparison_group':'synthetic-comparison','question_ids':['N-q'],
                   'selections':[{'node_id':'N-main','role':'principal_answer'}]}
             (out/'generated/statements').mkdir(parents=True)
             (out/'generated/statements/N-main.tex').write_text('Synthetic canonical bytes; not mathematics.')
@@ -162,13 +205,24 @@ class R3VerifierContracts(unittest.TestCase):
             for selected in (outputs,['../paper'],['paper','paper'],[]):
                 manifest.write_text(json.dumps({'projects':[{'path':'source','outputs':selected}]}))
                 if selected==outputs:
-                    self.assertEqual(verifier.load_r3_manifest(manifest)[0]['path'],project.resolve())
+                    self.assertEqual(verifier.load_output_manifest(manifest)[0]['path'],project.resolve())
                 else:
-                    with self.assertRaises(ValueError):verifier.load_r3_manifest(manifest)
+                    with self.assertRaises(ValueError):verifier.load_output_manifest(manifest)
+
+    def synthetic_entries(self,base):
+        import shutil
+        project,outputs=self.synthetic_project(base)
+        single=base/'single';paper=base/'draft'
+        for dest,ids in ((single,['second']),(paper,['paper'])):
+            dest.mkdir();(dest/'project.json').write_text('{}')
+            for oid in ids:shutil.copytree(project/'outputs'/oid,dest/'outputs'/oid)
+        return [{'path':single,'outputs':['second']},
+                {'path':project,'outputs':['minimal','thematic','lecture']},
+                {'path':paper,'outputs':['paper']}]
 
     def test_synthetic_orchestration_copies_sources_and_checks_paper_barrier(self):
         with tempfile.TemporaryDirectory() as td:
-            base=Path(td);project,outputs=self.synthetic_project(base)
+            base=Path(td);entries=self.synthetic_entries(base);project=entries[1]['path']
             before={p:p.read_bytes() for p in project.rglob('*') if p.is_file()};calls=[]
             def fake_check(command,cwd,env,**kwargs):
                 calls.append((command,kwargs))
@@ -183,7 +237,7 @@ class R3VerifierContracts(unittest.TestCase):
                     CurrentVisualScope.write_artifacts(output,pages=1)
                     return {'status':'RENDERED_NOT_REVIEWED'}
                 return {'status':'CHECKED'}
-            result=verifier.verify_r3_outputs([{'path':project,'outputs':outputs}],base/'work',fake_check,
+            result=verifier.verify_outputs(entries,base/'work',fake_check,
                 Path(sys.executable),Path('synthetic-entry.py'),{},900,True)
             self.assertEqual(len(result['outputs']),5)
             self.assertEqual(before,{p:p.read_bytes() for p in before})
@@ -191,23 +245,24 @@ class R3VerifierContracts(unittest.TestCase):
             self.assertEqual(sum('render' in cmd for cmd,_ in calls),5)
             self.assertEqual(result['outputs'][-1]['formal_package'],'BLOCKED: no archive created')
 
-    def test_mismatched_minimal_spines_are_rejected(self):
+    def test_mismatched_comparison_snapshots_or_principals_are_rejected(self):
         with tempfile.TemporaryDirectory() as td:
-            base=Path(td);project,outputs=self.synthetic_project(base)
-            path=project/'outputs/boundaries/generated/statements/N-main.tex';path.write_text('Different synthetic canonical')
+            base=Path(td);entries=self.synthetic_entries(base)
+            path=entries[1]['path']/'outputs/thematic/generated/statements/N-main.tex'
+            path.write_text('Different synthetic canonical')
             def check(command,*args,**kwargs):
                 return {'errors':[{'code':'DRAFT_NOT_RELEASABLE'}]}
             with self.assertRaises(AssertionError):
-                verifier.verify_r3_outputs([{'path':project,'outputs':outputs}],base/'work',check,
+                verifier.verify_outputs(entries,base/'work',check,
                     Path(sys.executable),Path('synthetic-entry.py'),{},900,False)
 
-    def test_paper_nondraft_cannot_enter_real_r3_verification(self):
+    def test_paper_nondraft_cannot_enter_current_draft_verification(self):
         with tempfile.TemporaryDirectory() as td:
             base=Path(td);project,outputs=self.synthetic_project(base)
             path=project/'outputs/paper/plan.json';plan=json.loads(path.read_text());plan['draft']=False
             path.write_text(json.dumps(plan))
             with self.assertRaises(AssertionError):
-                verifier.verify_r3_outputs([{'path':project,'outputs':['paper']}],base/'work',lambda *a,**k:{},
+                verifier.verify_outputs([{'path':project,'outputs':['paper']}],base/'work',lambda *a,**k:{},
                     Path(sys.executable),Path('unused'),{},900,False)
 
     def test_timeout_terminates_descendants_not_only_the_python_parent(self):
@@ -313,7 +368,7 @@ class CurrentVisualScope(unittest.TestCase):
 
     def test_new_page_from_old_visual_scope_requires_actual_new_review(self):
         before={p:p.read_bytes() for p in self.out.rglob('*') if p.is_file()}
-        checked=verifier.require_current_r3_semantics(self.result,self.out)
+        checked=verifier.require_current_semantics(self.result,self.out)
         self.assertEqual(checked['visual_review_status'],'NEW_VISUAL_REVIEW_REQUIRED')
         self.assertFalse(checked['formal_release_authorized'])
         self.assertEqual(len(checked['new_pdf_visual_findings_pending']),2)
@@ -326,7 +381,7 @@ class CurrentVisualScope(unittest.TestCase):
                         'Review old-visual omits necessary inputs: evidence/pages/page-9.png'):
             bad=copy.deepcopy(self.result);bad['errors'][0]['message']=message
             with self.subTest(message=message),self.assertRaises(AssertionError):
-                verifier.require_current_r3_semantics(bad,self.out)
+                verifier.require_current_semantics(bad,self.out)
 
     def test_missing_or_corrupt_current_png_cannot_hide_behind_old_visual_scope(self):
         image=self.out/'evidence/pages/page-8.png';original=image.read_bytes()
@@ -334,7 +389,7 @@ class CurrentVisualScope(unittest.TestCase):
             if operation=='missing':image.unlink()
             else:image.write_bytes(b'corrupt')
             with self.subTest(operation=operation),self.assertRaises(AssertionError):
-                verifier.require_current_r3_semantics(self.result,self.out)
+                verifier.require_current_semantics(self.result,self.out)
             image.write_bytes(original)
 
     def test_missing_invalid_or_stale_manifest_is_a_hard_failure(self):
@@ -344,7 +399,7 @@ class CurrentVisualScope(unittest.TestCase):
             if variant is None:manifest.unlink()
             else:manifest.write_bytes(variant)
             with self.subTest(variant=variant),self.assertRaises((OSError,ValueError,AssertionError)):
-                verifier.require_current_r3_semantics(self.result,self.out)
+                verifier.require_current_semantics(self.result,self.out)
             manifest.write_bytes(original)
 
     def test_missing_or_changed_pdf_cannot_be_waived_as_visual_reading(self):
@@ -353,7 +408,7 @@ class CurrentVisualScope(unittest.TestCase):
             if operation=='missing':pdf.unlink()
             else:pdf.write_bytes(b'%PDF-corrupt')
             with self.subTest(operation=operation),self.assertRaises(AssertionError):
-                verifier.require_current_r3_semantics(self.result,self.out)
+                verifier.require_current_semantics(self.result,self.out)
             pdf.write_bytes(original)
 
     def test_poppler_zero_padded_page_names_remain_valid(self):
@@ -366,7 +421,7 @@ class CurrentVisualScope(unittest.TestCase):
                               [f'evidence/pages/page-{n:02d}.png' for n in range(1,8)]]
         (self.out/'evidence/old-visual.json').write_text(json.dumps(self.review))
         self.result['errors'][0]['message']='Review old-visual omits necessary inputs: evidence/pages/page-08.png'
-        self.assertEqual(verifier.require_current_r3_semantics(self.result,self.out)['visual_review_status'],
+        self.assertEqual(verifier.require_current_semantics(self.result,self.out)['visual_review_status'],
                          'NEW_VISUAL_REVIEW_REQUIRED')
 
     def test_known_old_visual_stale_is_pending_but_unknown_or_corruption_is_blocking(self):
@@ -376,10 +431,10 @@ class CurrentVisualScope(unittest.TestCase):
             changed=copy.deepcopy(self.result)
             changed['errors'].append({'code':'REVIEW_STALE','path':'evidence/pages/page-1.png','message':message})
             if allowed:
-                self.assertEqual(verifier.require_current_r3_semantics(changed,self.out)['visual_review_status'],
+                self.assertEqual(verifier.require_current_semantics(changed,self.out)['visual_review_status'],
                                  'NEW_VISUAL_REVIEW_REQUIRED')
             else:
-                with self.assertRaises(AssertionError):verifier.require_current_r3_semantics(changed,self.out)
+                with self.assertRaises(AssertionError):verifier.require_current_semantics(changed,self.out)
 
 
 if __name__=='__main__':unittest.main()

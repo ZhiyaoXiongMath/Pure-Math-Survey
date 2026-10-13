@@ -10,40 +10,48 @@ def load_review(path: Path) -> dict:
     obj = read_json(path)
     fields(obj, {'review_id':str,'kind':str,'reviewer_mode':str,'inputs':list,'findings':list,'unchecked_items':list,'disposition':str}, path.name)
     if 'schema_version' in obj:
-        require(obj['schema_version'] in (VERSION, '2.1.0', '2.2.0'),'SCHEMA_UNSUPPORTED','Unsupported review schema',path.name)
+        require(obj['schema_version'] in (VERSION, '2.2.0'),'SCHEMA_UNSUPPORTED','Unsupported review schema',path.name)
     require(isinstance(obj.get('scope',{}),dict),'REVIEW_INVALID','Review scope must be an object',path.name)
     if 'editorial_policy' in obj.get('scope', {}):
         from .profiles import supported_contract
-        require(obj.get('schema_version') in ('2.1.0','2.2.0') and supported_contract(obj.get('schema_version'),obj['scope']['editorial_policy']),
+        require(supported_contract(obj.get('schema_version'),obj['scope']['editorial_policy']),
                 'SCHEMA_UNSUPPORTED','Review schema and policy must match exactly',path.name)
     else:
         require(obj.get('schema_version', VERSION) == VERSION, 'SCHEMA_UNSUPPORTED', 'New review schemas require their explicit policy', path.name)
-    from .profiles import POLICY, R3_READINGS
+    from .profiles import current, UNDERSTANDING_READINGS
     mode_findings = obj.get('scope', {}).get('mode_findings', {})
     require(isinstance(mode_findings, dict), 'REVIEW_INVALID', 'mode_findings must be an object', path.name)
-    if obj.get('scope', {}).get('editorial_policy') != POLICY:
-        require(not set(R3_READINGS) & set(mode_findings),
-                'SCHEMA_UNSUPPORTED', 'r3 output responsibilities require the explicit r3 policy', path.name)
+    proof_steps = obj.get('scope', {}).get('proof_steps', {})
+    require(isinstance(proof_steps, dict) and all(isinstance(key, str) and isinstance(steps, list)
+            and all(isinstance(step, str) and step.strip() for step in steps) for key, steps in proof_steps.items()),
+            'REVIEW_INVALID', 'proof_steps must map node IDs to lists of actual exact checked actions', path.name)
+    if not current({'schema_version': obj.get('schema_version'),
+                            'editorial_policy': obj.get('scope', {}).get('editorial_policy')}):
+        require(not set(UNDERSTANDING_READINGS) & set(mode_findings),
+                'SCHEMA_UNSUPPORTED', 'Understanding responsibilities require the current r4 policy', path.name)
     if obj.get('schema_version') != '2.2.0':
         scope = obj.get('scope', {})
         findings=scope.get('mode_findings',{})
         require(isinstance(findings,dict),'REVIEW_INVALID','mode_findings must be an object',path.name)
         require('view' not in scope and not ({'view_focus','exposition_design'} & set(findings)),
-                'SCHEMA_UNSUPPORTED', 'rc2 review responsibilities require schema 2.2.0', path.name)
+                'SCHEMA_UNSUPPORTED', 'Current output responsibilities require schema 2.2.0', path.name)
         for entry in scope.get('contribution_reviews', {}).values() if isinstance(scope.get('contribution_reviews', {}), dict) else []:
-            require(not isinstance(entry, dict) or 'prior_result_checks' not in entry, 'SCHEMA_UNSUPPORTED', 'rc2 prior checks require schema 2.2.0', path.name)
+            require(not isinstance(entry, dict) or 'prior_result_checks' not in entry, 'SCHEMA_UNSUPPORTED', 'Current prior checks require schema 2.2.0', path.name)
     else:
         contributions=obj.get('scope',{}).get('contribution_reviews',{})
         require(isinstance(contributions,dict),'REVIEW_INVALID','contribution_reviews must be an object',path.name)
         for entry in contributions.values():
             require(isinstance(entry,dict) and isinstance(entry.get('prior_result_checks'),list),
-                    'REVIEW_INVALID','rc2 contribution review requires typed prior_result_checks',path.name)
+                    'REVIEW_INVALID','Current contribution review requires typed prior_result_checks',path.name)
             for check in entry['prior_result_checks']:
                 require(isinstance(check,dict) and all(isinstance(check.get(k),str) for k in
                     ('prior_result_id','source_id','version','locator','outcome','finding'))
                     and check['outcome'] in {'not_performed','accepted','revise','limited'},
                     'REVIEW_INVALID','Invalid prior-result support check',path.name)
     require(obj['kind'] in {'source','mathematical','coverage','output_semantic','visual'},'REVIEW_INVALID','Invalid review kind',path.name)
+    if obj['kind'] in {'output_semantic', 'visual'}:
+        require(current({'schema_version': obj.get('schema_version'), 'editorial_policy': obj.get('scope', {}).get('editorial_policy')}),
+                'SCHEMA_UNSUPPORTED', 'Output reviews require current r4; obsolete inputs are not migrated', path.name)
     require(obj['reviewer_mode'] in {'author_reread','independent_review','not_performed'},'REVIEW_INVALID','Do not label self-review independent',path.name)
     require(obj['disposition'] in {'accepted','revise','limited'} and 'reviewed_at' in obj,'REVIEW_INVALID','Invalid review disposition/date',path.name)
     require(obj['reviewed_at'] is None or valid_date(obj['reviewed_at']),'REVIEW_INVALID','Review date is not a real nonfuture date',path.name)
@@ -59,6 +67,27 @@ def load_review(path: Path) -> dict:
     require(len(paths)==len(set(paths)), 'REVIEW_INVALID','Duplicate input binding',path.name)
     require(isinstance(obj.get('scope',{}),dict),'REVIEW_INVALID','Review scope must be an object',path.name)
     return obj
+
+
+def knowledge_review_input_paths(root: Path, records: list[tuple[str, dict]]) -> set[str]:
+    """Existing declared byte dependencies only; missing/stale records stay stale."""
+    paths = set()
+    for record_path, review in records:
+        for binding in review['inputs']:
+            path = binding['path']
+            folded = path.casefold()
+            require(not folded.startswith(('snapshots/', 'outputs/', '.cache/')) and folded != record_path.casefold(),
+                    'REVIEW_BINDING_INVALID', 'Knowledge review may not bind snapshots, outputs, cache or itself', record_path)
+            file = safe(root, path)  # Validate even missing inputs; never invent bytes.
+            from .common import logical_path, native_path
+            resolved_root = logical_path(native_path(root).resolve())
+            resolved = logical_path(file.resolve()).relative_to(resolved_root).as_posix().casefold()
+            require(not resolved.startswith(('snapshots/', 'outputs/', '.cache/'))
+                    and resolved != logical_path(safe(root, record_path).resolve()).relative_to(resolved_root).as_posix().casefold(),
+                    'REVIEW_BINDING_INVALID', 'Resolved knowledge input aliases an excluded directory or its own review', record_path)
+            if file.is_file():
+                paths.add(path)
+    return paths
 
 def check_review_bindings(root: Path, review: dict, required: set[str] | None = None) -> list[dict]:
     errors=[]; paths=set()
@@ -87,11 +116,71 @@ def find_review(root:Path, records:list[tuple[str,dict]], kind:str, scope_field:
     for path,r in records:
         if r['kind']==kind and key in r.get('scope',{}).get(scope_field,[]):
             errors=check_review_bindings(root,r,required)
-            if extra_check is not None: errors += extra_check(r)
+            # A stale record cannot establish a second absence of otherwise
+            # available node-specific steps; report its root binding failure.
+            if extra_check is not None and not errors: errors += extra_check(r)
             if r['disposition']=='accepted' and not blocking_unchecked(r) and not errors:
                 return r,[]
             candidates.append(r); diagnostics.extend(errors)
     return None,diagnostics
+
+
+def plan_promise_scope_errors(root: Path, plan: dict, review: dict) -> list[dict]:
+    """Explicit scoped requests are consumed only by their exact current plan."""
+    scope = review.get('scope', {})
+    if 'output_ids' not in scope:
+        return []  # Generic exact KB step evidence is not an inferred mapping.
+    from .plans import promise_request
+    from .common import sha
+    path, data = promise_request(plan); errors = []
+    ids = scope['output_ids']
+    if not isinstance(ids, list) or plan['output_id'] not in ids:
+        errors.append(diagnostic('PLAN_REVIEW_SCOPE_MISMATCH', 'Plan-scoped mathematical review belongs to another output', 'evidence'))
+    bindings = {b['path']: b['sha256'] for b in review['inputs']}
+    file = safe(root, path)
+    if bindings.get(path) != sha(data) or not file.is_file() or file.read_bytes() != data:
+        errors.append(diagnostic('PLAN_REVIEW_SCOPE_MISMATCH', 'Review must bind the exact current reader, selection, treatment, imported inputs and detailed promises; snapshot adoption alone does not change that request', path))
+    if review.get('reviewer_mode') != 'independent_review' or not review.get('reviewer'):
+        errors.append(diagnostic('PLAN_REVIEW_INDEPENDENT_REQUIRED', 'The actual nonauthor must read and bind this plan request; pending templates and author rereads cannot supply it', 'evidence'))
+    return errors
+
+
+def plan_mathematical_template(root: Path, plan_path: Path, keys: list[str]) -> tuple[dict, str]:
+    """Create requests and pending scaffolds, never checked-step assertions."""
+    from .models import load_plan
+    from .plans import validate_plan, consumption, promise_request
+    from .knowledge import inventory
+    from .profiles import POLICY, principal_template
+    from .common import atomic_bytes, logical_path, relpath, resolved_path, writer
+    require(logical_path(plan_path).is_relative_to(logical_path(root) / 'outputs'),
+            'PLAN_LOCATION_MISMATCH', 'Read only a current plan inside this project\'s outputs')
+    plan_path = safe(root, relpath(root, plan_path), True)
+    plan = load_plan(plan_path)
+    require(resolved_path(plan_path) == resolved_path(safe(root, f"outputs/{plan['output_id']}/plan.json")),
+            'PLAN_LOCATION_MISMATCH', 'Use this project\'s actual current plan')
+    frozen = validate_plan(root, plan); live = inventory(root)
+    require(keys and set(keys) <= consumption(frozen, plan), 'UNKNOWN_REFERENCE', 'Review only nodes consumed by this plan')
+    paths = set()
+    for key in keys:
+        old = mathematical_inputs(frozen, key); present = mathematical_inputs(live, key)
+        require(old == present and all(file_hash(frozen.root, p) == file_hash(root, p) for p in old),
+                'PLAN_KNOWLEDGE_CHANGED', 'Live mathematical/source bytes differ from the authored plan snapshot; explicitly resolve knowledge and plan before requesting review', key)
+        paths |= present
+    request_path, data = promise_request(plan)
+    with writer(root):
+        target = safe(root, request_path)
+        if target.exists():
+            require(target.read_bytes() == data, 'PLAN_REQUEST_CHANGED', 'An existing request cannot be overwritten', request_path)
+        else:
+            atomic_bytes(target, data)
+    paths.add(request_path)
+    scope = {'editorial_policy': POLICY, 'node_ids': keys, 'output_ids': [plan['output_id']],
+             'proof_steps': {key: [] for key in keys}, 'statement_reviews': {
+                 key: principal_template(live.nodes[key].statement) for key in keys
+                 if any(s['node_id'] == key and s['role'] == 'principal_answer' for s in plan['selections'])}}
+    template = review_template(root, 'mathematical', keys, paths, scope)
+    template['unchecked_items'].append('A real nonauthor must read the bound request and slow KB sections, record actual per-action findings/locations, and copy only genuinely checked exact required_steps into scope.proof_steps. Missing derivations require revise; narrative praise, string similarity and template generation are not acceptance. Keep all detailed teaching promises. Integrate new evidence, freeze, and explicitly adopt the new snapshot before formal readiness.')
+    return template, request_path
 
 def source_inputs(inv, source_id:str)->set[str]:
     s=inv.sources[source_id]; out={inv.source_paths[source_id]}
@@ -128,14 +217,14 @@ def coverage_inputs(inv,question_id:str)->set[str]:
 
 
 def knowledge_scope_template(inv, question_ids: list[str]) -> dict:
-    """Use existing scope fields for an r3 question-route reading."""
-    from .profiles import POLICY, R3_READINGS
+    """Use existing scope fields for the current r4 question-route reading."""
+    from .profiles import POLICY, UNDERSTANDING_READINGS
     nodes = set(question_ids)
     for q in inv.coverage['questions']:
         if q['question_id'] in question_ids:
             nodes.update(q['answer_nodes'] + q['mechanism_nodes'] + q['boundary_nodes'])
     return {'editorial_policy': POLICY, 'question_ids': question_ids,
-            'node_ids': sorted(nodes), 'checks': list(R3_READINGS)}
+            'node_ids': sorted(nodes), 'checks': list(UNDERSTANDING_READINGS)}
 
 
 def markdown_anchors(text: str, *, require_content: bool = False) -> set[str]:
@@ -236,20 +325,21 @@ def knowledge_scope_errors(inv, question_id: str, review: dict) -> list[dict]:
     Existing inputs bind every cited file. No manuscript locations are used.
     """
     from urllib.parse import unquote
-    from .profiles import POLICY, R3_READINGS, filled, mapping
+    from .profiles import current, UNDERSTANDING_READINGS, filled, mapping
     from .common import SurveyError
     scope = mapping(review.get('scope')); errors = []
     def fail(code, message, path='evidence/reviews'):
         errors.append(diagnostic(code, message, path, question_id))
-    if scope.get('editorial_policy') != POLICY:
+    if not current({'schema_version': review.get('schema_version'),
+                            'editorial_policy': scope.get('editorial_policy')}):
         fail('KNOWLEDGE_REVIEW_POLICY_REASSESSMENT_REQUIRED',
-             'Record the four r3 knowledge tasks against the current node and route bytes; historical acceptance does not supply them.')
+             'Record the four current r4 knowledge tasks against these node and route bytes; earlier-policy acceptance does not supply them.')
         return errors
     expected = knowledge_scope_template(inv, [question_id])
     checks = scope.get('checks', [])
     nodes = scope.get('node_ids', [])
     if (not isinstance(checks, list) or not all(isinstance(x, str) for x in checks)
-            or not set(R3_READINGS) <= set(checks)):
+            or not set(UNDERSTANDING_READINGS) <= set(checks)):
         fail('KNOWLEDGE_REVIEW_PENDING', 'Knowledge scope must name all four actual understanding checks.')
     if (not isinstance(nodes, list) or not all(isinstance(x, str) and x in inv.nodes for x in nodes)
             or not set(expected['node_ids']) <= set(nodes)):
@@ -257,7 +347,7 @@ def knowledge_scope_errors(inv, question_id: str, review: dict) -> list[dict]:
         nodes = expected['node_ids']
     required = coverage_inputs(inv, question_id) | {inv.nodes[k].path for k in nodes}
     findings = review.get('findings', [])
-    for task in R3_READINGS:
+    for task in UNDERSTANDING_READINGS:
         rows = [x.split(':', 1)[1].strip() for x in findings
                 if isinstance(x, str) and re.match(r'^' + re.escape(task) + r'\s*:', x)]
         if not rows or any(not filled(row) for row in rows):
@@ -283,13 +373,15 @@ def knowledge_scope_errors(inv, question_id: str, review: dict) -> list[dict]:
     return errors
 
 def review_template(root:Path,kind:str,keys:list[str],required:set[str],scope:dict|None=None)->dict:
-    from .profiles import POLICIES
-    selected_policy = (scope or {}).get('editorial_policy')
-    require((selected_policy is None and 'editorial_policy' not in (scope or {})) or
-            (isinstance(selected_policy, str) and selected_policy in {p for names in POLICIES.values() for p in names}),
-            'SCHEMA_UNSUPPORTED', 'Unknown review policy')
-    version = next((v for v,names in POLICIES.items() if selected_policy in names), VERSION)
+    from .profiles import POLICY, OUTPUT_SCHEMA
+    scope = dict(scope or { {'source':'source_ids','mathematical':'node_ids','coverage':'question_ids'}.get(kind,'output_ids'):keys})
+    if kind in {'output_semantic', 'visual'}:
+        scope.setdefault('editorial_policy', POLICY)
+    selected_policy = scope.get('editorial_policy')
+    require('editorial_policy' not in scope or selected_policy == POLICY,
+            'SCHEMA_UNSUPPORTED', 'Only current r4 review policy is supported')
+    version = OUTPUT_SCHEMA if 'editorial_policy' in scope else VERSION
     return {'schema_version':version,'review_id':'REPLACE-WITH-STABLE-REVIEW-ID','kind':kind,'reviewer_mode':'not_performed',
             'reviewed_at':None,'inputs':[{'path':p,'sha256':file_hash(root,p)} for p in sorted(required)],
-            'scope':scope or { {'source':'source_ids','mathematical':'node_ids','coverage':'question_ids'}.get(kind,'output_ids'):keys},
-            'findings':[],'unchecked_items':['Actual scoped reading and substantive findings have not been recorded.'], 'disposition':'revise'}
+            'scope':scope, 'findings':[],
+            'unchecked_items':['Actual scoped reading and substantive findings have not been recorded.'], 'disposition':'revise'}

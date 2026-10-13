@@ -1,4 +1,4 @@
-"""2.0.1 regressions from adversarial comparison, not mathematical attestations."""
+"""Current adversarial output regressions; synthetic records are not mathematical attestations."""
 from __future__ import annotations
 import ast
 from datetime import datetime, timezone, timedelta
@@ -25,14 +25,20 @@ from survey_core.history import save_record, verify_record, verify_history
 from survey_core.build import build_output, render_output
 from survey_core.knowledge import validate_knowledge
 from package_release import package, verify_archive
+import test_vnext as current_fixture
 
 CHECKS=['whole_manuscript','canonical_use','conditions_quantifiers','selection','attribution','proof_obligations','readability']
 
 class OutputReview(unittest.TestCase):
     def setUp(self):
         self.tmp=tempfile.TemporaryDirectory(); self.base=Path(self.tmp.name)
-        self.root=fixture(self.base/'project',True);plan(self.root,draft=False);authored_toy(self.root)
+        self.root=fixture(self.base/'project',True);path=plan(self.root,draft=False)
+        value=read_json(path)
+        value['audience']='Synthetic reader can substitute a real number and multiply zero.'
+        value['reader_goals']=['Reconstruct substitution of zero in x times x; no research acceptance.']
+        write_json(path,value);authored_toy(self.root)
         self.out=self.root/'outputs/mini';self.main=self.out/'manuscript/main.tex'
+        (self.out/'outline.md').write_text('Synthetic design: state x=0, identify multiplication and substitute zero to obtain x squared=0. Software fixture only.\n',encoding='utf-8')
     def tearDown(self):self.tmp.cleanup()
     def failcode(self,code,fn,*args,**kw):
         with self.assertRaises(SurveyError) as ctx:fn(*args,**kw)
@@ -41,11 +47,12 @@ class OutputReview(unittest.TestCase):
         n=next(i for i,line in enumerate(self.main.read_text().splitlines(),1) if 'statements/N-main.tex' in line)
         return {'path':'manuscript/main.tex','line_start':n,'line_end':n}
     def semantic(self):
-        r=review_template(self.out,'output_semantic',['mini'],output_inputs(self.out))
-        r.update(review_id='SYNTHETIC-REVIEW',reviewer_mode='author_reread',reviewed_at=now(),
-                 disposition='accepted',unchecked_items=[],findings=['Synthetic gate input only; no real mathematical review is asserted.'])
-        r['scope']={'output_ids':['mini'],'profile':'minimal','node_ids':['N-q','N-main','N-def'],
-            'whole_manuscript':True,'checks':CHECKS.copy(),'principal_locations':{'N-main':[self.principal_location()]},'proof_locations':{},'proof_steps':{}}
+        # Reuse the current typed synthetic scope, including all understanding
+        # duties and actual trivial-computation locations. No legacy review is
+        # upgraded and no real mathematical acceptance is asserted.
+        r=current_fixture.VNext.sem(self,self.out/'plan.json',load_plan(self.out/'plan.json'))
+        r['review_id']='SYNTHETIC-REVIEW'
+        r['scope']['checks']=CHECKS.copy()
         return r
     def codes(self):return {x['code'] for x in validate_structure(self.root,'mini')['errors']}
     def test_U01_preamble_reference_is_not_statement(self):
@@ -93,7 +100,11 @@ class OutputReview(unittest.TestCase):
         r=self.semantic();p=load_plan(self.out/'plan.json');p['proof_obligations']=[{'node_id':'N-main','required_steps':['multiply']}]
         r['scope']['proof_steps']['N-main']=['multiply']
         self.assertTrue(semantic_scope_errors(self.out,p,['N-main'],r))
-        r['scope']['proof_locations']['N-main']=[{'path':'manuscript/main.tex','line_start':10,'line_end':10}]
+        line=next(i for i,text in enumerate(self.main.read_text().splitlines(),1) if 'Multiplication gives' in text)
+        location={'path':'manuscript/main.tex','line_start':line,'line_end':line}
+        r['scope']['proof_locations']['N-main']=[location]
+        r['scope']['proof_step_findings']={'N-main':{'multiply':{'outcome':'accepted',
+            'finding':'Synthetic software-only scope for the displayed zero multiplication.', 'locations':[location]}}}
         self.assertEqual(semantic_scope_errors(self.out,p,['N-main'],r),[])
     def test_U13_valid_new_record_supersedes_incomplete_scope(self):
         old=self.semantic();old['scope']['principal_locations']={'N-main':'unvalidated prose'}

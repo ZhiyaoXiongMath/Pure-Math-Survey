@@ -1,9 +1,0 @@
-# Current source discovery, 2026-10-12
-
-Queries executed: `site.math.uchicago.edu Lichnerowicz Bochner formula first eigenvalue lecture notes`; `site.math.stanford.edu Holder compact embedding Arzela Ascoli C alpha beta lecture notes`; `"LECTURE 27: THE BOCHNER TECHNIQUE"`; `site.staff.ustc.edu.cn wangzuoq "BOCHNER" "Lichnerowitz"`; `site.web.stanford.edu boyd convex optimization Schur complement A.5.5`.
-
-The author-hosted Boyd--Vandenberghe book was selected for the precise invertibility/positive-definiteness distinction. Shapiro's original Math 829 notes were selected for the complete finite-net/diagonal argument. Datar's original course notes were selected for the exact Bochner and spectral interfaces; the actual relevant pages disclosed typographical errors recorded in the source note and avoided in our proof. A direct USTC lecture-PDF attempt timed out; no reading or hash is claimed for it. Search hits from reposting services, encyclopedia entries and unrelated generalized eigenvalue papers were not used as controlling mathematical sources.
-
-Historical Schur and compactness examples were read for task continuity; their source/review acceptance is not inherited. The new compactness argument includes chart localization and a separate local-exhaustion limit. The omission challenge checked the singular Schur case, endpoint Holder exponent, loss of an open positive cone, weak nonlinear passage, dimension one, boundary terms and rigidity. Each is either an explicit failure model or a precise exclusion.
-
-Search stopped after sources for these bounded teaching interfaces and complete local calculations were available. This is not an exhaustive research-priority or novelty search. Modern refinements, singular generalized complements, specific PDE estimates, equality rigidity and research-level original claims remain outside the stated task.

@@ -14,71 +14,23 @@ An output outline selects this reader's points, decisive connections and proof-d
 choices. Teaching order is not identical to dependency order. These layers share one
 canonical node authority; new mathematics discovered in either returns to the KB.
 
-The incremental profiles.py module holds versioned editorial policy, plan constraints
+The incremental profiles.py module holds current r4 editorial policy, plan constraints
 and evidence checks. It is not a second knowledge store or mathematical reasoner.
 Existing source, snapshot, material-integrity, build, review and package mechanisms remain.
 New output/review contracts coexist with unchanged schema-2.0.0 knowledge and snapshots.
 
-## Daily-use main and bounded cooperation
+## Calling controller and bounded workers
 
-The daily-use main owns the user's mathematical scope and live knowledge project;
-it differs from a development-stage main updating this software. At startup save the
-full request/latest corrections, required branches, reader operations, requested outputs,
-actual project revision (commit or fixed file hashes), snapshot, allowed sources,
-write boundaries, authored materials, historical reviews and outstanding gaps.
+The actual human invocation is the controller, preserving its model/effort. A dispatched `role=worker` task stays a worker without recursive creation. Read [dispatch](dispatch.md), [worker](worker.md) and [user authorization wording](user-start.md) for the installed role contract and actual Codex calls. Every product worker is created through create_thread with gpt-6-astra/ultra. Missing authorization, tools or model support blocks dispatch; serial role playing is not equivalent.
 
-Delegate only useful bounded work with actual available tools and current authorization:
-source reading, paired fast/slow candidate writing, read-only knowledge review, writing
-from an accepted snapshot, mathematical/exposition review or inspection of the actual PDF.
-Use isolated candidate files/patches; the main is the sole integration writer of live
-KB/plan/manuscript. Pair writers on the same canonical/interface and have them check
-both directions. Without suitable tools/authorization, main performs the same duties
-serially and reports the actual roles; no invented dispatch, scheduler or database.
+Every dispatch includes the exact human/parent read boundary plus permitted installation resources, original sources, fixed project/snapshot files and owned output paths. Workers enforce that boundary before loading helpers. Do not confuse a same-named-global-skill ban with an all-global ban, or use global PDF instructions to cross a real blanket ban. The installed native layout-and-build workflow supports actual source rendering, all-page article inspection and rebuild evidence.
 
-Persist task intent/input revision, role, source scope, owned candidate path, expected
-files, acceptance tasks and limitations before dispatch. Record actual tool/task IDs;
-use bounded waits and independent work, then read terminal state and returned files.
-Creation, progress messages and elapsed time do not demonstrate completion. On acceptance
-check revision, scope, hashes/files, sources, canonical consistency, fast/slow entrances,
-independently reconstructed obligations and actual task answers. Reject stale revisions
-and report specific repairs. Main accepts and integrates candidates serially, then
-reviews/freezes a new snapshot. Knowledge-only ends without article prepare; requested
-articles alone proceed from that accepted snapshot to design, writing and final review.
+The controller alone integrates canonical live KB and shared indexes; workers own separate candidate/output/review directories. Persist request/corrections, fixed installed/input identities, scope/reader, real parent/child IDs, requested/readable configuration, states, artifacts and acceptance in private ordinary files. Deduplicate before creation and reconcile unknown/pending receipts before retry. Resume applicable interrupted work. Accept only completed real tasks with inspected current files and non-author critical review; an accepted-shaped record is not mathematical truth.
 
-Resolve text conflicts in order; mathematical hypotheses/conclusion/interface conflicts
-return to sources, never majority vote or completion order. New facts and reusable
-explanations discovered while writing return to knowledge/review/new snapshot. Preserve
-old reviews; changed consumed input makes current evidence stale and needs actual rereading,
-not edited hashes or accepted fields. Existing invalidation is file-granular. A layout-only
-edit still changes bound output inputs and requires current semantic/visual evidence.
+Resolve hypothesis/conclusion conflicts against sources, not majority vote or completion order. New reusable explanations and mathematical corrections return to reviewed live KB and a new snapshot. Integration changing reviewed mathematics requires fresh corresponding review. Evidence remains file-bound; refreshed hashes cannot replace actual reading. Historical bytes and accepted records retain their identity.
 
-On failure/unknown state read files and actual task status before retry or takeover.
-Freeze the former writer before assigning overlapping work; late results remain isolated
-candidates, never overwrite accepted inputs. On user stop cease dispatch, stop writes as
-tools allow, accurately record still-running tasks and save revision/candidates/remaining
-work; do not assume every task stopped or start scheduled continuation. Recovery/handoff
-first reconciles actual files, old task states and authority before continuing.
+Coordinate every planned output's exact reader and proof promises early. Non-author knowledge review performs the specified steps and records only actually checked exact scope.proof_steps with findings/locators/gaps. Safe plan-derived promise evidence and its declared source/KB inputs belong in fresh live evidence before freeze; mutable output paths are not frozen evidence dependencies. Adopt the new snapshot explicitly before prepare. Current r4 only is supported; old/unknown policy is rejected without modifying its files. Immutable file protection is not old-version runtime compatibility.
 
-Keep request/corrections, revisions, snapshots, candidates, states, task answers, source
-locators, product/evidence hashes, remaining work and next step in accessible project notes
-or private evidence files so chat loss is recoverable. A chat link alone is insufficient.
-Do not pass unnecessary private directories, raw full chats or restricted source texts
-to workers or public bundles. Distinguish access from redistribution permission.
+On user stop or a configured limit, cease dispatch, send authorized stop messages, save remaining work and quarantine late results. Report still-running chats when immediate interruption is unavailable. Recovery reconciles ledger, files and actual task state; it does not reset iteration limits or perform an entire already-applicable reception again. Private task records and restricted sources do not belong in public software/article bundles.
 
-### Bounded task and receipt notes (not CLI commands or new typed schemas)
-
-Task: main/role/ID; full user branches and this scope; fixed revision/canonical/source
-versions; reader operations; exact imports; allowed read/isolated-write paths; expected
-files/patch and hashes; fast/slow subsection links; reverse-obligation audit; actual
-reconstruction/reproduction/condition task; unresolved scope; stop/late-result boundary.
-
-Receipt: actual terminal state; returned revision/files/hashes; read/retested scope;
-canonical/condition consistency; bidirectional entrances; missing obligations and actual
-task answers; all user branches; accepted serial integration or specific rejection;
-new revision/snapshot and affected bindings; limitations/next step. PDF tasks additionally
-need actual PDF, corresponding TeX/build logs and hashes. No blank template grants acceptance.
-
-Report software, mathematics, exposition tasks, PDF observations and real-reader feedback
-separately. Team/AI review is not external independent review or evidence that students
-learned. Parallel coordination and genuine mathematical understanding need separate
-verification; a serial environment cannot claim the parallel route was exercised.
+The CLI handles files, integrity, builds and validation; the calling chat orchestrates through actual host tools. There is no model API server, resident scheduler or Research Studio bridge. Report software, source/mathematics, exposition attempts, actual PDF observations and real-reader feedback separately. AI non-author review is not external peer review or proof of student learning.

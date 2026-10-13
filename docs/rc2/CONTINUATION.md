@@ -1,3 +1,5 @@
+> Historical development record: all policy claims, artifact paths, results and command transcripts below apply to that earlier revision. Removed examples/reports/tools remain in Git history or private backups; they are not current instructions, answer inputs or r4 acceptance. Follow [current product workflow](../r4/workflow.md) for new work.
+
 # rc2 continuation evidence — 2026-10-12
 
 This is an append-only continuation of the existing hardening branch. It does

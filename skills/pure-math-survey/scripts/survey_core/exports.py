@@ -5,7 +5,7 @@ import re
 import shutil
 import tempfile
 import unicodedata
-from .common import SKILL_ROOT, VERSION, all_files, atomic_bytes, canonical, diagnostic, file_hash, file_inventory, read_json, require, result, safe, sha, write_json, writer
+from .common import relpath, resolved_path, native_path, SKILL_ROOT, VERSION, all_files, atomic_bytes, canonical, diagnostic, file_hash, file_inventory, read_json, require, result, safe, sha, write_json, writer
 from .models import load_plan
 from .plans import consumption, consumed_paths, validate_plan
 from .dependencies import topological
@@ -45,29 +45,34 @@ def expected_generated(inv,plan:dict)->dict[str,bytes]:
     return {**extract_statements(inv,ids),'conventions.tex':safe(inv.root,inv.project['knowledge_root']+'/conventions.tex',True).read_bytes(),
             'references.bib':export_bibliography(inv,ids)}
 
+def authoring_input_paths(inv, plan: dict, ready: dict) -> set[str]:
+    """Exact selection plus byte closure of only its actually consumed reviews."""
+    from .reviews import reviews_in, knowledge_review_input_paths
+    used = set(ready['artifacts']['used_review_ids'])
+    records = [(p, r) for p, r in reviews_in(inv.root) if r['review_id'] in used]
+    return consumed_paths(inv, plan) | {p for p, _ in records} | knowledge_review_input_paths(inv.root, records)
+
+
 def expected_materials(inv,plan:dict,ready:dict)->dict[str,bytes]:
     """Reconstruct authoring inputs from the immutable snapshot, not its copies.
 
-    Original source files remain omitted, as in 2.0.0/2.0.1. Review records
+    Retained raw source files remain omitted. Review records
     actually used by this selection are included even though they are not
-    ordinary consumed knowledge paths. This preserves existing output bytes.
+    ordinary consumed knowledge paths. Their declared byte closure stays fixed.
     """
     raw_files={s['access'].get('local_path') for s in inv.sources.values()}
-    paths=consumed_paths(inv,plan)-raw_files
-    from .reviews import reviews_in
-    used=set(ready['artifacts']['used_review_ids'])
-    paths|={p for p,r in reviews_in(inv.root) if r['review_id'] in used}
+    paths=authoring_input_paths(inv,plan,ready)-raw_files
     return {p:safe(inv.root,p,True).read_bytes() for p in sorted(paths)}
 
 def prepare_output(root:Path,plan_path:Path,draft:bool=False)->dict:
-    plan=load_plan(plan_path);out=safe(root,'outputs/'+plan['output_id'])
-    require(plan_path.resolve()==(out/'plan.json').resolve(),'PLAN_LOCATION_MISMATCH','Plan must be outputs/<output_id>/plan.json')
+    plan=load_plan(plan_path);out=native_path(safe(root,'outputs/'+plan['output_id']), extended=True)
+    require(resolved_path(plan_path)==resolved_path(out/'plan.json'),'PLAN_LOCATION_MISMATCH','Plan must be outputs/<output_id>/plan.json')
     if draft and not plan['draft']:
         plan={**plan,'draft':True}
         with writer(root):write_json(plan_path,plan)
     inv=validate_plan(root,plan);ready=assess_readiness(root,plan)
     require(plan['draft'] or ready['status']=='READY','READINESS_REQUIRED','Formal preparation requires readiness; use explicit --draft for an internal manuscript','plan.json')
-    data=expected_generated(inv,plan); ids=consumption(inv,plan);inputs=consumed_paths(inv,plan)
+    data=expected_generated(inv,plan); ids=consumption(inv,plan);inputs=authoring_input_paths(inv,plan,ready)
     raw_files={s['access'].get('local_path') for s in inv.sources.values()}
     materials=expected_materials(inv,plan,ready)
     manifest={'schema_version':VERSION,'snapshot_id':plan['snapshot_id'],'output_id':plan['output_id'],
@@ -77,7 +82,7 @@ def prepare_output(root:Path,plan_path:Path,draft:bool=False)->dict:
               'raw_sources_omitted':sorted(x for x in raw_files if x and x in inputs),
               'meaning':'Exact stored bytes are reused; independent mathematical and output readings are still required.'}
     with writer(root):
-        stage=Path(tempfile.mkdtemp(prefix='.prepare-',dir=out))
+        stage=Path(tempfile.mkdtemp(prefix='.prepare-',dir=native_path(out, extended=True)))
         try:
             for p,b in data.items():atomic_bytes(stage/'generated'/p,b)
             write_json(stage/'generated/manifest.json',manifest)
@@ -87,7 +92,7 @@ def prepare_output(root:Path,plan_path:Path,draft:bool=False)->dict:
                 target=out/folder
                 if target.exists():shutil.rmtree(target)
                 (stage/folder).rename(target)
-        finally:shutil.rmtree(stage,ignore_errors=True)
+        finally:shutil.rmtree(native_path(stage, extended=True),ignore_errors=True)
         if not (out/'outline.md').exists():
             order=topological(inv.nodes,ids) if plan['profile']=='lecture' else [s['node_id'] for s in plan['selections']]
             from .profiles import outline
@@ -95,52 +100,24 @@ def prepare_output(root:Path,plan_path:Path,draft:bool=False)->dict:
         if not (out/'manuscript/math-review.sty').exists():
             atomic_bytes(out/'manuscript/math-review.sty',(SKILL_ROOT/'assets/templates/math-review.sty').read_bytes())
         if not (out/'manuscript/main.tex').exists():
-            from .profiles import VIEW_TASKS, rc2_capabilities, strict_old_minimal, current
-            template_name = ('profile-minimal-rc2.tex' if plan['profile']=='minimal' and not current(plan) else
-                             f"profile-{plan['profile']}.tex")
-            template=(SKILL_ROOT/'assets/templates'/template_name).read_text(encoding='utf-8')
+            from .profiles import VIEW_TASKS
+            template=(SKILL_ROOT/'assets/templates'/f"profile-{plan['profile']}.tex").read_text(encoding='utf-8')
             snippets=[]; principals=[]; ingredients=[]; by_node={}
             for s in plan['selections']:
                 if s['statement_treatment']=='full':
-                    key=s['node_id']; env='definition' if inv.nodes[key].meta['kind']=='definition' else 'theorem'
+                    key=s['node_id']; kind=inv.nodes[key].meta['kind']
+                    env={'definition':'definition','question':'problem','example':'example'}.get(kind,'theorem')
+                    if s['role']=='frontier' and kind!='question': env='conjecture'
                     snippet = f'\\begin{{{env}}}\\label{{node:{key}}}\n\\input{{../generated/statements/{key}.tex}}\n\\end{{{env}}}\n'
                     snippets.append(snippet)
                     by_node[key]=snippet
                     (principals if s['role']=='principal_answer' else ingredients).append(snippet)
-            task='\\placeholder{'+tex_text(VIEW_TASKS[plan['view']])+'}' if rc2_capabilities(plan) else ''
+            task='\\placeholder{'+tex_text(VIEW_TASKS[plan['view']])+'}'
             text=template.replace('@@TITLE@@',tex_text(plan['title'])).replace('@@STATEMENTS@@','\n'.join(snippets)).replace('@@PRINCIPALS@@','\n'.join(principals)).replace('@@INGREDIENTS@@','\n'.join(ingredients)).replace('@@VIEW_TASK@@',task)
-            if current(plan) and plan['profile']=='minimal':
-                # The scaffold selects no new mathematics. Reuse each canonical
-                # input once and leave local teaching/first-use work explicit.
-                from .dependencies import required_closure
-                units=[]; imported=set()
-                principal_ids={s['node_id'] for s in plan['selections'] if s['role']=='principal_answer'}
-                for selection in plan['selections']:
-                    key=selection['node_id']
-                    if key not in principal_ids:continue
-                    needed=required_closure(inv.nodes,{key},{key})-principal_ids
-                    local=[k for k in by_node if k in needed and k not in imported]
-                    reused=[k for k in by_node if k in needed and k in imported]
-                    units += ['\\section{'+tex_text(inv.nodes[key].meta['title'])+'}',
-                        '\\placeholder{State the local question, model and necessary definitions; identify what this result will answer.}',
-                        by_node[key],
-                        '\\placeholder{Establish only the points needed here and explain each exact input, output and consumer.}',
-                        *[by_node[k] for k in local]]
-                    imported.update(local);imported.add(key)
-                    if reused:
-                        units += ['\\placeholder{Recall the exact previously established interfaces for '+tex_text(', '.join(reused))+', with their local use; do not duplicate canonical authority.}']
-                    units += ['\\placeholder{Show the decisive operations connecting the points to this result, including conditions and exact imported theorem applications.}',
-                              '\\placeholder{Give the first use or a necessary boundary nearby; identify which changed condition breaks which step.}']
-                remaining=[k for k in by_node if k not in imported]
-                if remaining:
-                    units += ['\\section{Additional selected inputs and boundaries}',
-                              '\\placeholder{Place each remaining input near its actual consumer, or justify a shared-tool section and recall its interface at each use.}',
-                              *[by_node[k] for k in remaining]]
-                text=text.replace('@@LOCAL_UNITS@@','\n'.join(units))
             notice='\\noindent\\textbf{DRAFT\\_UNVERIFIED: source and mathematical review may be incomplete.}\n' if plan['draft'] else ''
             atomic_bytes(out/'manuscript/main.tex',text.replace('@@DRAFT@@',notice).encode())
     from .exposition import check_exposition_design
-    return result('output.prepare','DRAFT_PREPARED' if plan['draft'] else 'PREPARED',{'output':out.relative_to(root).as_posix(),'snapshot_id':plan['snapshot_id'],'readiness':ready,'main_preserved':True,
+    return result('output.prepare','DRAFT_PREPARED' if plan['draft'] else 'PREPARED',{'output':relpath(root, out),'snapshot_id':plan['snapshot_id'],'readiness':ready,'main_preserved':True,
         'exposition_design':check_exposition_design(out,plan),'authorship':'SCAFFOLD: preparation is not completed writing or review.'})
 
 def verify_generated(root:Path,plan:dict)->dict:
@@ -152,7 +129,7 @@ def verify_generated(root:Path,plan:dict)->dict:
     for p,b in expected.items():
         require(safe(out,'generated/'+p,True).read_bytes()==b,'CANONICAL_STATEMENT_CHANGED','Generated content differs from fixed snapshot','generated/'+p)
     expected_records=[{'path':'generated/'+p,'sha256':sha(b),'bytes':len(b)} for p,b in sorted(expected.items())]
-    require(manifest.get('generated_files')==expected_records and manifest.get('consumed_inputs')==file_inventory(inv.root,sorted(consumed_paths(inv,plan))),
+    require(manifest.get('generated_files')==expected_records and manifest.get('consumed_inputs')==file_inventory(inv.root,sorted(authoring_input_paths(inv,plan,assess_readiness(root,plan)))),
             'GENERATED_INPUT_STALE','Generated manifest does not bind actual fixed inputs','generated/manifest.json')
     # The generated theorem alone is insufficient: prose is written using all
     # supplied materials, which must retain the same snapshot authority.
@@ -179,7 +156,7 @@ def output_inputs(out:Path)->set[str]:
 def expand_tex(out:Path,path:Path,active:tuple[Path,...]=())->tuple[str,set[str]]:
     """Inspect the actual entry point with compiler-relative input resolution."""
     from .tex import inspect_tex
-    require(path.resolve() == (out/'manuscript/main.tex').resolve(), 'TEX_INPUT_UNSUPPORTED', 'Inspect from the actual entry point')
+    require(resolved_path(path) == resolved_path(out/'manuscript/main.tex'), 'TEX_INPUT_UNSUPPORTED', 'Inspect from the actual entry point')
     scan = inspect_tex(out)
     return scan.text, scan.inputs
 
@@ -204,8 +181,8 @@ def validate_structure(root:Path,output_id:str)->dict:
     from .profiles import structure_errors
     profile_errors, profile_warnings = structure_errors(inv, plan, validate_plan(root, plan).nodes, text)
     errors += profile_errors; warnings += profile_warnings
-    from .profiles import strict_old_minimal
-    if strict_old_minimal(plan):
+    from .profiles import strict_minimal
+    if strict_minimal(plan):
         from .structure import strip_comments
         for path in sorted(used | {'manuscript/main.tex'}):
             if path.startswith('manuscript/') and path.endswith('.tex'):
@@ -216,4 +193,4 @@ def validate_structure(root:Path,output_id:str)->dict:
     from .profiles import policy
     design=check_exposition_design(out,plan);errors+=design['errors']
     return result('output.structure','NEEDS_WORK' if errors else 'STRUCTURALLY_VALID',{'tex_inventory':public_inventory(inv),'actual_literal_inputs':sorted(used),'body_inputs':sorted(scan.body_inputs),'canonical_locations':scan.locations,
-        'exposition_design':design,'recorded_policy':policy(plan)},errors,warnings)
+        'exposition_design':design,'editorial_policy':policy(plan)},errors,warnings)

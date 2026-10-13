@@ -40,36 +40,47 @@ def verification_workspace(report:dict,parent:Path|None=None,keep:bool=False):
         if not workspace['retained']:shutil.rmtree(base)
 
 
-EXPECTED_POLICY = 'four-modes-2026-10-12-r3'
-EXPECTED_CONTRACTS = {('2.0.0', 'legacy-2.0.0'),
-                      ('2.1.0', 'four-modes-2026-10-11-r2'),
-                      ('2.2.0', 'four-modes-2026-10-12-rc2'),
-                      ('2.2.0', EXPECTED_POLICY)}
+EXPECTED_POLICY = 'four-modes-2026-10-13-r4'
+EXPECTED_CONTRACTS = {('2.2.0', EXPECTED_POLICY)}
+REQUIRED_SUITES = ('test_current_policy', 'test_r4_policy',
+                   'test_workflow_bindings', 'test_dispatch')
 
 
 def assert_installed_contract(artifacts:dict)->dict:
-    """Version identity and declared compatibility are separate from test success."""
+    """Current contract identity is separate from test success."""
     if (artifacts.get('version'), artifacts.get('schema_version'),
             artifacts.get('output_schema_version'), artifacts.get('editorial_policy')) != (
             '2.1.0', '2.0.0', '2.2.0', EXPECTED_POLICY):
-        raise AssertionError('Installed runtime is not software 2.1.0 / KB 2.0.0 / output 2.2.0 / r3')
+        raise AssertionError('Installed runtime is not software 2.1.0 / KB 2.0.0 / output 2.2.0 / r4')
     contracts=artifacts.get('supported_output_contracts')
-    if not isinstance(contracts,list) or len(contracts)!=4 or any(
+    if not isinstance(contracts,list) or len(contracts)!=1 or any(
             not isinstance(x,dict) or not isinstance(x.get('schema_version'),str) or
             not isinstance(x.get('editorial_policy'),str) for x in contracts):
-        raise AssertionError('Installed runtime did not report four exact schema-policy contracts')
+        raise AssertionError('Installed runtime did not report the single current schema-policy contract')
     pairs={(x['schema_version'],x['editorial_policy']) for x in contracts}
     if pairs != EXPECTED_CONTRACTS:
-        raise AssertionError('Installed schema-policy compatibility pairs are missing or unexpected')
+        raise AssertionError('Installed schema-policy contract is missing or unsupported')
     return {'editorial_policy':EXPECTED_POLICY,'supported_contracts':artifacts['supported_output_contracts']}
 
 
 def installed_regression_summary(stderr:str)->dict:
     count=re.search(r'Ran (\d+) tests',stderr)
-    r3_rows=[line for line in stderr.splitlines() if '(test_r3_policy.' in line]
-    if not count or not r3_rows or any(not line.rstrip().endswith('... ok') for line in r3_rows):
-        raise AssertionError('Installed regression must actually execute the r3 policy suite without skips')
-    return {'tests':int(count[1]),'r3_policy_tests':len(r3_rows),'status':'PASS',
+    suites={name:[line for line in stderr.splitlines() if f'({name}.' in line]
+            for name in REQUIRED_SUITES}
+    def unavailable_windows_symlink(line:str)->bool:
+        return (os.name=='nt' and line.startswith(
+            'test_native_identity_still_rejects_symlink_escape '
+            '(test_workflow_bindings.WorkflowBindings.test_native_identity_still_rejects_symlink_escape) ... skipped ')
+            and 'OS did not authorize directory symlink creation: [WinError 1314]' in line)
+    if not count or any(not rows or not any(line.rstrip().endswith('... ok') for line in rows)
+                        or any(not line.rstrip().endswith('... ok')
+                               and not unavailable_windows_symlink(line) for line in rows)
+                        for rows in suites.values()):
+        raise AssertionError('Installed current policy, workflow and dispatch regressions must actually execute without skips')
+    skipped=[line for line in stderr.splitlines() if ') ... skipped ' in line]
+    return {'tests':int(count[1]),'required_suites':{name:len(rows) for name,rows in suites.items()},
+            'status':'INCOMPLETE' if skipped else 'PASS',
+            'unverified_tests':skipped,
             'synthetic_gates_are_not_mathematical_acceptance':True}
 
 
@@ -210,12 +221,12 @@ def current_render_inputs(out:Path,result:dict)->tuple[set[str],dict[str,set[str
     return required,visual_records
 
 
-def require_current_r3_semantics(result:dict,out:Path|None=None)->dict:
+def require_current_semantics(result:dict,out:Path|None=None)->dict:
     """Separate source/semantic acceptance from new-PDF visual work still to do."""
     artifacts=result.get('artifacts',{})
     if (artifacts.get('editorial_policy')!=EXPECTED_POLICY or artifacts.get('readiness')!='READY'
             or not artifacts.get('used_output_review_ids')):
-        raise AssertionError('Actual r3 input lacks a current bound semantic review/readiness result')
+        raise AssertionError('Actual current-policy input lacks a current bound semantic review/readiness result')
     visual_paths={'build/main.pdf','build/build-report.json','evidence/render-manifest.json'}
     visual_records={}
     if out is not None:visual_paths,visual_records=current_render_inputs(out,result)
@@ -239,7 +250,7 @@ def require_current_r3_semantics(result:dict,out:Path|None=None)->dict:
         if pending_reading or stale_visual_record or old_visual_scope:
             visual.append(error)
         else:blocking.append(error)
-    if blocking:raise AssertionError({'r3_nonvisual_release_errors':blocking})
+    if blocking:raise AssertionError({'nonvisual_release_errors':blocking})
     return {'status':'CURRENT_BOUND_RECORDS_CHECKED','review_ids':artifacts['used_output_review_ids'],
             'new_pdf_visual_findings_pending':visual,
             'visual_review_status':'NEW_VISUAL_REVIEW_REQUIRED' if visual else 'CURRENT_VISUAL_RECORDS_CHECKED',
@@ -247,57 +258,53 @@ def require_current_r3_semantics(result:dict,out:Path|None=None)->dict:
             'meaning':'Mechanical evidence/binding check; no new mathematical or page reading'}
 
 
-def load_r3_manifest(path:Path)->list[dict]:
+def load_output_manifest(path:Path)->list[dict]:
     """Private verifier input only; does not add a mathematical project schema."""
     data=json.loads(path.read_text(encoding='utf-8'))
     if not isinstance(data,dict) or set(data)!={'projects'} or not isinstance(data['projects'],list) or not data['projects']:
-        raise ValueError('r3 manifest needs a nonempty projects list')
+        raise ValueError('output manifest needs a nonempty projects list')
     entries=[];seen=set()
     for item in data['projects']:
         if not isinstance(item,dict) or set(item)!={'path','outputs'} or not isinstance(item['path'],str):
-            raise ValueError('Each r3 manifest project needs only path and outputs')
+            raise ValueError('Each output manifest project needs only path and outputs')
         source=(path.parent/item['path']).resolve()
         outputs=item['outputs']
-        if not source.is_dir() or not (source/'project.json').is_file():raise ValueError('r3 source project does not exist: '+str(source))
+        if not source.is_dir() or not (source/'project.json').is_file():raise ValueError('output source project does not exist: '+str(source))
         if not isinstance(outputs,list) or not outputs or any(not isinstance(x,str) or not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]*',x) for x in outputs):
-            raise ValueError('r3 output IDs must be nonempty safe identifiers')
-        if len(outputs)!=len(set(outputs)) or source in seen:raise ValueError('Duplicate r3 project or output')
+            raise ValueError('output IDs must be nonempty safe identifiers')
+        if len(outputs)!=len(set(outputs)) or source in seen:raise ValueError('Duplicate output project or output')
         seen.add(source);entries.append({'path':source,'outputs':outputs})
     return entries
 
 
-def verify_r3_outputs(entries:list[dict],base:Path,check,exe:Path,entry:Path,env:dict,build_timeout:int,build:bool,report:dict|None=None)->dict:
-    """Rebuild only explicit real r3 inputs, never manufacture review acceptance."""
+def verify_outputs(entries:list[dict],base:Path,check,exe:Path,entry:Path,env:dict,build_timeout:int,build:bool,report:dict|None=None)->dict:
+    """Rebuild only explicit explicit current-policy inputs, never manufacture review acceptance."""
     import hashlib
     result={'status':'RUNNING','outputs':[],
             'original_paper_quality':'NOT VERIFIED; an internal draft is not original research acceptance'}
-    if report is not None:report['r3_outputs']=result
-    rows=result['outputs'];coverage=set();spines={}
+    if report is not None:report['outputs']=result
+    rows=result['outputs'];coverage=[];spines={}
     for index,item in enumerate(entries):
-        source=item['path'];project=base/'r3-projects'/str(index)
+        source=item['path'];project=base/'verified-projects'/str(index)
         shutil.copytree(source,project,ignore=shutil.ignore_patterns('build','history','__pycache__'))
         for oid in item['outputs']:
             out=project/'outputs'/oid;plan=json.loads((out/'plan.json').read_text(encoding='utf-8'))
             if plan.get('output_id')!=oid or (plan.get('schema_version'),plan.get('editorial_policy'))!=('2.2.0',EXPECTED_POLICY):
-                raise AssertionError('Requested real output does not carry r3 policy: '+oid)
+                raise AssertionError('Requested real output does not carry r4 policy: '+oid)
             profile,view=plan.get('profile'),plan.get('view')
             if profile not in {'minimal','thematic','lecture','paper'}:raise AssertionError('Unknown real output profile')
-            if profile=='paper' and plan.get('draft') is not True:raise AssertionError('The r3 Paper verification input must remain an internal draft: '+oid)
-            if profile!='paper' and plan.get('draft'):raise AssertionError('Non-Paper r3 acceptance input must be an authored nondraft output: '+oid)
+            if profile=='paper' and plan.get('draft') is not True:raise AssertionError('The current Paper verification input must remain an internal draft: '+oid)
+            if profile!='paper' and plan.get('draft'):raise AssertionError('Non-Paper current acceptance input must be an authored nondraft output: '+oid)
             source_hashes={name:hashlib.sha256((source/'outputs'/oid/name).read_bytes()).hexdigest()
                            for name in ('plan.json','outline.md','manuscript/main.tex')}
             call=lambda *args,**kwargs:check([str(exe),'-I',str(entry),'--json',*map(str,args)],base,env,**kwargs)
             call('kb','verify',project,'--snapshot',plan['snapshot_id'])
             call('output','validate',project,'--output',oid,'--stage','structure')
-            coverage.add((profile,view))
-            if profile=='minimal' and view in {'methods','boundaries'}:
-                principals=sorted(x['node_id'] for x in plan['selections'] if x['role']=='principal_answer')
-                boundaries=sorted(x['node_id'] for x in plan['selections'] if x['role']=='boundary')
-                group=plan.get('comparison_group')
-                if not group or not principals:raise AssertionError('Paired r3 Minimal inputs need an explicit comparison group and principal spine')
-                canonical=tuple((key,hashlib.sha256((out/'generated/statements'/f'{key}.tex').read_bytes()).hexdigest()) for key in principals)
-                spine=(group,plan['snapshot_id'],tuple(sorted(plan['question_ids'])),tuple(principals),tuple(boundaries),canonical)
-                spines.setdefault(spine,set()).add(view)
+            if view!='integrated':raise AssertionError('The fixed five-output suite uses integrated view')
+            coverage.append(profile)
+            principals=sorted(x['node_id'] for x in plan['selections'] if x['role']=='principal_answer')
+            canonical=tuple((key,hashlib.sha256((out/'generated/statements'/f'{key}.tex').read_bytes()).hexdigest()) for key in principals)
+            spines.setdefault(index,[]).append((profile,plan['snapshot_id'],tuple(sorted(plan['question_ids'])),canonical))
             row={'source_project':str(source),'verification_project':str(project),'output_directory':str(out),
                  'build_report':str(out/'build/build-report.json'),'output_id':oid,'profile':profile,'view':view,
                  'editorial_policy':plan['editorial_policy'],'snapshot_id':plan['snapshot_id'],
@@ -311,7 +318,7 @@ def verify_r3_outputs(entries:list[dict],base:Path,check,exe:Path,entry:Path,env
                 row.update(build=built['status'],pages=built['artifacts']['pages'],render=rendered['status'])
                 if profile!='paper':
                     release=call('output','validate',project,'--output',oid,'--stage','release',allowed_returncodes=(0,3))
-                    row['semantic_validation']=require_current_r3_semantics(release,out)
+                    row['semantic_validation']=require_current_semantics(release,out)
             else:row['build']='NOT EXECUTED (--no-build)'
             if profile=='paper':
                 release=call('output','validate',project,'--output',oid,'--stage','release',allowed_returncodes=(3,))
@@ -321,47 +328,71 @@ def verify_r3_outputs(entries:list[dict],base:Path,check,exe:Path,entry:Path,env
                     raise AssertionError('Paper draft did not preserve its formal release/package barrier')
                 row['formal_release']='BLOCKED: DRAFT_NOT_RELEASABLE'
                 row['formal_package']='BLOCKED: no archive created'
-    profiles={p for p,_ in coverage}
-    missing={'minimal','thematic','lecture','paper'}-profiles
-    if missing or not {('minimal','methods'),('minimal','boundaries')}<=coverage:
-        raise AssertionError('Real r3 inputs require all four profiles and Minimal methods/boundaries; missing '+str(sorted(missing)))
-    if not any({'methods','boundaries'}<=views for views in spines.values()):
-        raise AssertionError('r3 Minimal methods/boundaries do not share the requested snapshot, question, principal, boundary and canonical spine')
-    result['paired_canonical_spine']='IDENTICAL: actual emphasis still requires reading'
+    if len(entries)!=3 or sorted(coverage)!=['lecture','minimal','minimal','paper','thematic']:
+        raise AssertionError('The fixed suite needs three projects and five outputs: two Minimal, Thematic, Lecture, draft Paper')
+    comparison=[values for values in spines.values() if len(values)==3]
+    if len(comparison)!=1 or {v[0] for v in comparison[0]}!={'minimal','thematic','lecture'}:
+        raise AssertionError('One comparison project must supply all three requested modes')
+    if len({v[1] for v in comparison[0]})!=1 or len({v[2] for v in comparison[0]})!=1:
+        raise AssertionError('Comparison modes must consume the same snapshot and questions')
+    if len({v[3] for v in comparison[0]})!=1:
+        raise AssertionError('Comparison modes must preserve the same canonical principal spine')
+    result['shared_comparison_snapshot']='IDENTICAL: mode quality requires independent reading'
     result['status']='BUILT_NOT_VISUALLY_REVIEWED' if build else 'NOT_EXECUTED'
     return result
 
 
-def resolve_r3_manifest(explicit:Path|None,repository:Path)->Path|None:
+def resolve_output_manifest(explicit:Path|None,repository:Path)->Path|None:
     if explicit is not None:return explicit
-    default=repository/'examples/r3/verification-manifest.json'
+    default=repository/'examples/r4/verification-manifest.json'
     return default if default.is_file() else None
 
 
-def verification_completion(has_r3_inputs:bool,no_build:bool)->tuple[str,list[str]]:
+def verification_completion(has_inputs:bool,no_build:bool)->tuple[str,list[str]]:
     incomplete=[]
     if no_build:incomplete.append('Actual TeX builds were explicitly omitted')
-    if not has_r3_inputs:incomplete.append('Real r3 manuscript inputs were not supplied')
+    if not has_inputs:incomplete.append('Real five-output manuscript inputs were not supplied')
     return ('INCOMPLETE' if incomplete else 'PASS'),incomplete
+
+
+def record_failure_artifacts(destination:Path,report:dict)->None:
+    """Preserve real build failure location without replacing prior successful rows."""
+    import hashlib
+    artifacts=[]
+    for path in sorted(destination.rglob('build-report.json')) if destination.exists() else []:
+        if path.parent.name!='build':continue
+        try:
+            data=json.loads(path.read_text(encoding='utf-8'))
+            log=path.parent/'main.log'
+            artifacts.append({'report':str(path),'status':data.get('status'),
+                'blocking_log_issues':data.get('blocking_log_issues',{}),'failure':data.get('failure'),
+                'log':str(log) if log.is_file() else None,
+                'log_sha256':hashlib.sha256(log.read_bytes()).hexdigest() if log.is_file() else None})
+        except (OSError,ValueError) as exc:artifacts.append({'report':str(path),'read_error':str(exc)})
+    report['output_directory']=str(destination)
+    report['failure_artifacts']=artifacts
+    for row in report.get('outputs',[]):
+        if row.get('build')=='RUNNING':row['build']='FAILED'
 
 
 def main()->int:
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('archive',type=Path)
     ap.add_argument('--report',type=Path);ap.add_argument('--no-build',action='store_true',help='Explicitly skip external TeX; reported as NOT_EXECUTED.')
-    ap.add_argument('--example-root',type=Path,help='Directory containing the authored schur and compactness projects (default: examples/vnext/projects).')
     ap.add_argument('--work-directory',type=Path,help='Parent of a short-lived staging directory; use a shallow path for deeply nested historical Windows artifacts.')
-    ap.add_argument('--r3-manifest',type=Path,help='Private JSON projects/path/outputs input list for actual r3 manuscripts; missing input leaves verification INCOMPLETE.')
+    ap.add_argument('--manifest',type=Path,help='Explicit three-project/five-output current-policy input list; missing input leaves full verification INCOMPLETE.')
+    ap.add_argument('--engineering-only',action='store_true',help='Run isolated software checks and neutral TeX smoke only; does not claim five-case acceptance.')
     ap.add_argument('--tests-timeout',type=int,default=1200,help='Seconds allowed for the full installed regression suite (default 1200).')
-    ap.add_argument('--build-timeout',type=int,default=1200,help='Seconds allowed per example-verifier or r3 build/render call (default 1200).')
+    ap.add_argument('--build-timeout',type=int,default=1200,help='Seconds allowed per output build/render call (default 1200).')
     ap.add_argument('--keep-work-directory',action='store_true',help='Also retain successful installation/build artifacts. Failed verification artifacts are always retained.')
     args=ap.parse_args()
     if args.tests_timeout<=0 or args.build_timeout<=0:ap.error('Timeouts must be positive seconds')
-    args.r3_manifest=resolve_r3_manifest(args.r3_manifest,ROOT)
+    if args.engineering_only and args.manifest:ap.error('Choose engineering-only or the full five-output manifest')
+    if not args.engineering_only:args.manifest=resolve_output_manifest(args.manifest,ROOT)
     report={'status':'RUNNING','checks':[],'archive':args.archive.name,'python':sys.version,
-            'r3_manifest':str(args.r3_manifest.resolve()) if args.r3_manifest else None,
+            'manifest':str(args.manifest.resolve()) if args.manifest else None,
             'timeouts':{'installed_tests':args.tests_timeout,'build_or_render':args.build_timeout},
             'scope':'Installation and build verification, not mathematical/exposition/page acceptance'}
-    initial_status,initial_incomplete=verification_completion(bool(args.r3_manifest),args.no_build)
+    initial_status,initial_incomplete=verification_completion(bool(args.manifest),args.no_build)
     if initial_incomplete:report['incomplete']=initial_incomplete
     def check(command:list[str],cwd:Path,env:dict,decode:bool=True,timeout:int=180,allowed_returncodes:tuple[int,...]=(0,))->dict:
         return run_check(command,cwd,env,report,decode,timeout,allowed_returncodes)
@@ -388,14 +419,9 @@ def main()->int:
             suite=base/'installed-suite'
             shutil.copytree(ROOT/'tests',suite/'tests',ignore=shutil.ignore_patterns('__pycache__'))
             shutil.copytree(ROOT/'tools',suite/'tools',ignore=shutil.ignore_patterns('__pycache__'))
-            shutil.copytree(ROOT/'examples/vnext/projects',suite/'examples/vnext/projects',
-                            ignore=shutil.ignore_patterns('build','history','__pycache__'))
-            shutil.copytree(ROOT/'examples/rc2/projects',suite/'examples/rc2/projects',
-                            ignore=shutil.ignore_patterns('build','history','__pycache__'))
-            if (ROOT/'examples/r3').is_dir():
-                shutil.copytree(ROOT/'examples/r3',suite/'examples/r3',ignore=shutil.ignore_patterns('build','history','__pycache__'))
             shutil.copytree(skill,suite/'skills/pure-math-survey')
-            if not (suite/'tests/test_r3_policy.py').is_file():raise AssertionError('No r3 behavior regression suite is available to execute against the installation')
+            if any(not (suite/'tests'/f'{name}.py').is_file() for name in REQUIRED_SUITES):
+                raise AssertionError('A required current behavior regression suite is unavailable for installed execution')
             executed=check([str(exe),'-I','-m','unittest','discover','-s',str(suite/'tests'),'-v'],base,env,False,timeout=args.tests_timeout)
             report['installed_regression']=installed_regression_summary(executed['stderr'])
             (base/'scope.md').write_text('# Scope\n\nRecord incidence-matrix conventions without requesting any manuscript.\n')
@@ -407,23 +433,23 @@ def main()->int:
             if list((project/'outputs').glob('*/plan.json')):raise AssertionError('Knowledge initialization generated a manuscript')
             report['clean_environment']={'venv_with_pip':False,'system_site_packages':False,'isolated_python':True,'runtime_modules_imported':len(loaded['modules']),'knowledge_only_outputs':0}
             if not args.no_build:
-                example=args.example_root or ROOT/'examples/vnext/projects'
-                if not example.is_dir():raise FileNotFoundError('Supply --example-root with the vNext source projects, or explicitly use --no-build.')
-                reproduced=check([str(exe),'-I',str(ROOT/'tools/verify_vnext_examples.py'),
-                    '--skill-root',str(skill),'--examples',str(example),'--output',str(base/'relocated-examples')],base,env,timeout=args.build_timeout)
-                if reproduced['status']!='PASS':raise AssertionError(reproduced)
-                report['installed_profile_builds']=reproduced['outputs']
-                current=check([str(exe),'-I',str(ROOT/'tools/verify_rc2_examples.py'),
-                    '--repository',str(ROOT),'--skill-root',str(skill),
-                    '--output',str(base/'relocated-rc2')],base,env,timeout=args.build_timeout)
-                if current['status']!='PASS':raise AssertionError(current)
-                report['installed_rc2_builds']=current['outputs']
-                report['installed_tex_build']='Eleven historical PDFs BUILT and rendered using the isolated installed runtime: seven rc1 and four rc2; these are not r3 manuscripts and new PDFs are NOT VISUALLY REVIEWED'
-            else:report['installed_tex_build']='NOT_EXECUTED (--no-build)'
-            if args.r3_manifest:
-                report['r3_outputs']=verify_r3_outputs(load_r3_manifest(args.r3_manifest.resolve()),base,check,exe,entry,env,args.build_timeout,not args.no_build,report)
-            else:report['r3_outputs']={'status':'NOT_EXECUTED','reason':'No --r3-manifest supplied; historical builds cannot stand in for actual r3 manuscripts'}
-            report['status'],incomplete=verification_completion(bool(args.r3_manifest),args.no_build)
+                smoke=check([str(exe),'-I',str(skill/'scripts/build_checks.py'),
+                             '--output',str(base/'tex-smoke')],base,env,timeout=args.build_timeout)
+                if smoke['status']!='PASS':raise AssertionError(smoke)
+                report['installed_tex_smoke']=smoke
+            else:report['installed_tex_smoke']='NOT_EXECUTED (--no-build)'
+            if args.manifest:
+                report['outputs']=verify_outputs(load_output_manifest(args.manifest.resolve()),base,check,exe,entry,env,args.build_timeout,not args.no_build,report)
+            else:report['outputs']={'status':'NOT_EXECUTED','reason':'No fixed five-output manifest; engineering smoke is not mathematical acceptance'}
+            report['status'],incomplete=verification_completion(bool(args.manifest),args.no_build)
+            if args.engineering_only and not args.no_build and not args.manifest:
+                report['status']='PASS'
+                report['scope']='Engineering installation/regression/neutral TeX smoke only; five-output E2E NOT_EXECUTED'
+                incomplete=[]
+                report.pop('incomplete',None)
+            if report['installed_regression']['unverified_tests']:
+                report['status']='INCOMPLETE'
+                incomplete.append('Installed regression tests skipped; real symlink rejection remains unverified on this host and must execute in a capable environment')
             if incomplete:
                 report['incomplete']=incomplete
                 report['workspace']['retained']=True

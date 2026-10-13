@@ -30,17 +30,16 @@ def parser()->Parser:
         else:x.add_argument('--output',required=True)
         if name=='validate':
             x.add_argument('--stage',choices=['plan','structure','release'],default='plan')
-            x.add_argument('--policy',choices=['current','recorded'],default='current',help='recorded is read-only and never authorizes package')
         if name=='render':x.add_argument('--dpi',type=int,default=120)
         if name=='package':x.add_argument('--to',type=Path,required=True)
         if name=='review-template':x.add_argument('--kind',choices=['output_semantic','visual'],required=True);x.add_argument('--to')
-    r=sub.add_parser('review');rs=r.add_subparsers(dest='action',required=True);x=rs.add_parser('template');x.add_argument('project',type=Path);x.add_argument('--kind',choices=['source','mathematical','coverage'],required=True);x.add_argument('--id',action='append',required=True);x.add_argument('--to');x.add_argument('--principal-statements',action='store_true')
+    r=sub.add_parser('review');rs=r.add_subparsers(dest='action',required=True);x=rs.add_parser('template');x.add_argument('project',type=Path);x.add_argument('--kind',choices=['source','mathematical','coverage'],required=True);x.add_argument('--id',action='append',required=True);x.add_argument('--to');x.add_argument('--principal-statements',action='store_true');x.add_argument('--plan',help='Current authored plan for an actual nonauthor mathematical step review; generates only a pending request')
     return p
 
 def execute(a)->dict:
     if a.version:
         from .profiles import OUTPUT_SCHEMA, POLICY, POLICIES, SUPPORTED_CONTRACTS
-        return result('version','OK',{'version':SOFTWARE_VERSION,'schema_version':VERSION,'output_schema_version':OUTPUT_SCHEMA,'editorial_policy':POLICY,'supported_output_schemas':list(POLICIES),'recorded_policies':POLICIES,'supported_output_contracts':[{'schema_version':v,'editorial_policy':p} for v,p in sorted(SUPPORTED_CONTRACTS)],'python':sys.version})
+        return result('version','OK',{'version':SOFTWARE_VERSION,'schema_version':VERSION,'output_schema_version':OUTPUT_SCHEMA,'editorial_policy':POLICY,'supported_output_schemas':list(POLICIES),'supported_output_contracts':[{'schema_version':v,'editorial_policy':p} for v,p in sorted(SUPPORTED_CONTRACTS)],'python':sys.version})
     if a.command=='init':
         from .knowledge import init_project
         return init_project(a.output,a.topic,a.scope,a.title,a.language)
@@ -56,6 +55,9 @@ def execute(a)->dict:
         if a.action=='diff':return diff_snapshots(root,a.old,a.new)
         return assess_readiness(root,safe(root,relpath(root,a.plan),True))
     if a.command=='review':
+        if a.plan:
+            from .common import require
+            require(a.kind == 'mathematical', 'CLI_ARGUMENT_INVALID', '--plan is only for mathematical review')
         from .knowledge import inventory
         from .reviews import review_template,source_inputs,mathematical_inputs,coverage_inputs
         inv=inventory(root);f={'source':source_inputs,'mathematical':mathematical_inputs,'coverage':coverage_inputs}[a.kind]
@@ -71,7 +73,16 @@ def execute(a)->dict:
             require(a.kind=='mathematical', 'CLI_ARGUMENT_INVALID', '--principal-statements is for mathematical review')
             require(all(inv.nodes[k].statement is not None for k in a.id),'CANONICAL_BLOCK_MISSING','Principal review requires canonical statements')
             scope={'node_ids':a.id,'editorial_policy':POLICY,'statement_reviews':{k:principal_template(inv.nodes[k].statement) for k in a.id}}
-        template=review_template(root,a.kind,a.id,paths,scope)
+        request_path = None
+        if a.plan:
+            from .common import require
+            from .reviews import plan_mathematical_template
+            require(a.kind == 'mathematical', 'CLI_ARGUMENT_INVALID', '--plan is only for mathematical review')
+            if a.to:
+                require(not safe(root, relpath(root, a.to)).exists(), 'DESTINATION_EXISTS', 'Never overwrite an existing review', str(a.to))
+            template, request_path = plan_mathematical_template(root, safe(root, relpath(root, a.plan), True), a.id)
+        else:
+            template=review_template(root,a.kind,a.id,paths,scope)
         if a.kind=='coverage':
             template['unchecked_items'].append('For each check, add a findings string beginning with its check name and a colon, the actual answer or failure, and a project-root-relative Markdown link to the knowledge file#subsection. Bind every cited route file in inputs. Do not use manuscript locations or claim real-reader/external review without that evidence.')
         if a.to:
@@ -80,7 +91,7 @@ def execute(a)->dict:
                 from .common import require
                 require(not target.exists(),'DESTINATION_EXISTS','Never overwrite an existing review; choose a new record path',str(a.to))
                 write_json(target,template)
-        return result('review.template','PENDING_TEMPLATE',{'review':template,'path':a.to})
+        return result('review.template','PENDING_TEMPLATE',{'review':template,'path':a.to,'promise_request':request_path})
     if a.command=='output':
         from .models import load_plan
         from .plans import create_plan,validate_plan,consumption
@@ -98,7 +109,7 @@ def execute(a)->dict:
         if a.action=='render':return render_output(root,a.output,a.dpi)
         if a.action=='package':return package_output(root,a.output,a.to)
         if a.action=='validate':
-            if a.stage=='release':return assess_release(root,a.output,policy_mode=a.policy)
+            if a.stage=='release':return assess_release(root,a.output)
             if a.stage=='structure':return validate_structure(root,a.output)
             plan=load_plan(out/'plan.json');inv=validate_plan(root,plan)
             return result('output.plan','VALID',{'output_id':a.output,'consumed_nodes':sorted(consumption(inv,plan))})
@@ -107,10 +118,9 @@ def execute(a)->dict:
         if a.kind=='output_semantic':
             paths=output_inputs(out);scope={'output_ids':[a.output],'profile':plan['profile'],'node_ids':sorted(consumption(inv,plan)),
                   'whole_manuscript':False,'checks':[], 'principal_locations':{},'proof_steps':{},'proof_locations':{}}
-            from .profiles import review_scope_template, principal_template, four_modes
+            from .profiles import review_scope_template, principal_template
             scope.update(review_scope_template(plan))
-            if four_modes(plan):
-                scope['statement_reviews']={s['node_id']:principal_template(inv.nodes[s['node_id']].statement) for s in plan['selections'] if s['role']=='principal_answer'}
+            scope['statement_reviews']={s['node_id']:principal_template(inv.nodes[s['node_id']].statement) for s in plan['selections'] if s['role']=='principal_answer'}
         else:
             m=read_json(safe(out,'evidence/render-manifest.json',True))
             paths={'build/main.pdf','build/build-report.json','evidence/render-manifest.json'}|{x['path'] for x in m['pages']}

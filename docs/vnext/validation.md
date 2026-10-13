@@ -1,3 +1,5 @@
+> Historical development record: all policy claims, artifact paths, results and command transcripts below apply to that earlier revision. Removed examples/reports/tools remain in Git history or private backups; they are not current instructions, answer inputs or r4 acceptance. Follow [current product workflow](../r4/workflow.md) for new work.
+
 # Validation record — 2.1.0-rc1
 
 Date: 2026-10-11. This record distinguishes actual author work from deterministic reruns. GitHub commit/check identifiers belong in the PR; do not treat a local test as a completed remote check.

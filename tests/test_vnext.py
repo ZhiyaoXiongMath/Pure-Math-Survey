@@ -11,7 +11,7 @@ import sys
 import tempfile
 import unittest
 import zipfile
-from test_v2 import (fixture, synthetic_reviews, putnode, plan as legacy_plan,
+from test_v2 import (fixture, synthetic_reviews, putnode,
                      ROOT, SKILL, SCRIPTS, SurveyError, read_json, write_json, now)
 from survey_core.common import file_hash, sha
 from survey_core.models import load_plan, load_node
@@ -22,7 +22,7 @@ from survey_core.exports import prepare_output, validate_structure, verify_gener
 from survey_core.reviews import review_template, mathematical_inputs, load_review
 from survey_core.release import semantic_scope_errors, assess_release, package_output
 from survey_core.readiness import assess_readiness
-from survey_core.profiles import (POLICY, RC2_POLICY, OUTPUT_SCHEMA, MINIMAL_SECTIONS, COMMON_READINGS,
+from survey_core.profiles import (POLICY, OUTPUT_SCHEMA, MINIMAL_SECTIONS, COMMON_READINGS,
     MODE_READINGS, STATEMENT_ASPECTS, principal_template, review_scope_template,
     statement_warnings, semantic_profile_errors, validate_plan_contract)
 from package_release import package
@@ -47,13 +47,13 @@ def synthetic_policy_reviews(root):
     # Explicitly synthetic r3 knowledge-task evidence, separate from manuscript
     # findings; the cited sections and input bytes must still really exist.
     from survey_core.reviews import coverage_inputs, knowledge_scope_template
-    from survey_core.profiles import R3_READINGS
+    from survey_core.profiles import UNDERSTANDING_READINGS
     for q in inv.coverage['questions']:
         key=q['question_id'];scope=knowledge_scope_template(inv,[key])
         scope['evidence_basis']=SYNTH
         rec=review_template(root,'coverage',[key],coverage_inputs(inv,key),scope)
         rec.update(review_id='SYNTHETIC-KNOWLEDGE-'+key,reviewer_mode='author_reread',reviewed_at=now(),
-                   findings=[f'{task}: {SYNTH} [Actual fixture section]({inv.nodes[key].path}#software-fixture)' for task in R3_READINGS],
+                   findings=[f'{task}: {SYNTH} [Actual fixture section]({inv.nodes[key].path}#software-fixture)' for task in UNDERSTANDING_READINGS],
                    unchecked_items=[],disposition='accepted')
         write_json(root/f'evidence/reviews/new-coverage-{key}.json',rec)
 
@@ -62,6 +62,12 @@ class VNext(unittest.TestCase):
     def setUp(self):
         self.tmp=tempfile.TemporaryDirectory(); self.base=Path(self.tmp.name)
         self.root=fixture(self.base/'project',reviewed=True)
+        # This fixture supplies one current mathematical/coverage candidate.
+        # Shared KB tests have their own current synthetic records; retaining
+        # those alternate records here would mask deliberate evidence defects.
+        for path in (self.root/'evidence/reviews').glob('*.json'):
+            if read_json(path)['kind'] in {'mathematical', 'coverage'}:
+                path.unlink()
         synthetic_policy_reviews(self.root)
     def tearDown(self):self.tmp.cleanup()
     def make(self,profile='minimal',oid='new',draft=True,refine=True,view='integrated',policy=None):
@@ -172,31 +178,31 @@ class VNext(unittest.TestCase):
             self.assertNotIn('Readers of the selected mathematical scope',v['audience'])
             self.assertTrue(v['proof_obligations'])
     def test_V03_minimal_real_three_sections_and_methods_view(self):
-        self.authored(view='methods',policy=RC2_POLICY);self.assertEqual(self.codes(),set())
+        self.authored(view='methods',policy=POLICY);self.assertEqual(self.codes(),set())
     def test_V04_minimal_extra_numbered_section_fails(self):
-        p,v=self.authored(policy=RC2_POLICY);main=p.parent/'manuscript/main.tex'
+        p,v=self.authored(policy=POLICY);main=p.parent/'manuscript/main.tex'
         main.write_text(main.read_text().replace(r'\end{document}',r'\section{Appendix}Extra.\end{document}'))
         self.assertIn('MINIMAL_THREE_SECTIONS_REQUIRED',self.codes())
     def test_V05_background_before_results_fails(self):
-        p,v=self.authored(policy=RC2_POLICY);m=p.parent/'manuscript/main.tex'
+        p,v=self.authored(policy=POLICY);m=p.parent/'manuscript/main.tex'
         m.write_text(m.read_text().replace(r'\section{Main Results}',r'\section*{Background}\section{Main Results}'))
         self.assertIn('MINIMAL_RESULTS_FIRST',self.codes())
     def test_V06_titles_in_comments_false_or_uncalled_macro_do_not_count(self):
-        p,v=self.authored(policy=RC2_POLICY);m=p.parent/'manuscript/main.tex';original=m.read_text()
+        p,v=self.authored(policy=POLICY);m=p.parent/'manuscript/main.tex';original=m.read_text()
         for wrapper in [lambda x:'%'+x,lambda x:r'\iffalse '+x+r'\fi',lambda x:r'\newcommand{\unused}{'+x+'}']:
             with self.subTest(wrapper=wrapper):
                 m.write_text(original.replace(r'\section{Key Mathematical Ingredients}',wrapper(r'\section{Key Mathematical Ingredients}')))
                 self.assertIn('MINIMAL_THREE_SECTIONS_REQUIRED',self.codes())
     def test_V07_principal_in_later_section_fails(self):
-        p,v=self.authored(policy=RC2_POLICY);m=p.parent/'manuscript/main.tex';t=m.read_text();a=t.index(r'\begin{theorem}');b=t.index(r'\end{theorem}',a)+len(r'\end{theorem}')
+        p,v=self.authored(policy=POLICY);m=p.parent/'manuscript/main.tex';t=m.read_text();a=t.index(r'\begin{theorem}');b=t.index(r'\end{theorem}',a)+len(r'\end{theorem}')
         theorem=t[a:b];t=t[:a]+t[b:];t=t.replace(r'\section{Connecting the Ingredients}',r'\section{Connecting the Ingredients}'+theorem);m.write_text(t)
         self.assertIn('MINIMAL_PRINCIPAL_NOT_FIRST',self.codes())
     def test_V08_plain_principal_input_without_formal_result_fails(self):
-        p,v=self.authored(policy=RC2_POLICY);m=p.parent/'manuscript/main.tex'
+        p,v=self.authored(policy=POLICY);m=p.parent/'manuscript/main.tex'
         m.write_text(m.read_text().replace(r'\begin{theorem}', '').replace(r'\end{theorem}',''))
         self.assertIn('PRINCIPAL_RESULT_ENVIRONMENT_MISSING',self.codes())
     def test_V09_section_number_suppression_fails(self):
-        p,v=self.authored(policy=RC2_POLICY);m=p.parent/'manuscript/main.tex';t=m.read_text()
+        p,v=self.authored(policy=POLICY);m=p.parent/'manuscript/main.tex';t=m.read_text()
         for control in [r'\setcounter{secnumdepth}{-1}',r'\renewcommand{\thesection}{}',r'\appendix']:
             with self.subTest(control=control):
                 m.write_text(t.replace(r'\begin{document}',control+r'\begin{document}'))
@@ -213,7 +219,8 @@ class VNext(unittest.TestCase):
         m.write_text(m.read_text().replace(r'\end{document}',r'In the proof use \eqref{identity}.\end{document}'))
         self.assertNotIn('STATEMENT_SELF_CONTAINED_RISK',{x['code'] for x in validate_structure(self.root,'new')['warnings']})
     def test_V12_old_math_accepted_record_cannot_pass_new_statement_reading(self):
-        for path in (self.root/'evidence/reviews').glob('new-*.json'):path.unlink()
+        for path in (self.root/'evidence/reviews').glob('*N-main.json'):
+            record=read_json(path);record['scope']['statement_reviews']={};write_json(path,record)
         p,v=self.make();self.assertIn('PRINCIPAL_SELF_CONTAINED_REVIEW_PENDING',self.readiness(v))
     def test_V13_later_valid_math_record_is_not_shadowed_by_old_record(self):
         p,v=self.make(draft=False);self.assertFalse(self.readiness(v))
@@ -225,10 +232,6 @@ class VNext(unittest.TestCase):
                 write_json(path,v);p,pl=self.make(oid='case-'+aspect)
                 self.assertIn('PRINCIPAL_SELF_CONTAINED_REVIEW_PENDING',self.readiness(pl))
         write_json(path,original)
-    def test_V15_legacy_plan_preserved_and_labeled_not_new_acceptance(self):
-        p=legacy_plan(self.root);before=p.read_bytes();prepare_output(self.root,p,draft=True)
-        main=p.parent/'manuscript/main.tex';main.write_text('Author historical prose.\n');outline=p.parent/'outline.md';outline.write_text('Authored historical outline.\n')
-        prepare_output(self.root,p);self.assertEqual(p.read_bytes(),before);self.assertEqual(main.read_text(),'Author historical prose.\n');self.assertEqual(outline.read_text(),'Authored historical outline.\n')
     def test_V16_schema_downgrade_and_paper_disguised_as_legacy_rejected(self):
         p,v=self.make();v['schema_version']='2.0.0';write_json(p,v)
         self.failcode('SCHEMA_UNSUPPORTED',load_plan,p)

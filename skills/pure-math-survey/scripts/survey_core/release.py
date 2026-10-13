@@ -40,14 +40,10 @@ def semantic_scope_errors(out:Path,plan:dict,consumed_nodes:list[str],review:dic
     errors += semantic_profile_errors(out, plan, review, inspection=inspection)
     return errors
 
-def assess_release(root:Path,output_id:str,*,policy_mode:str='current')->dict:
+def assess_release(root:Path,output_id:str)->dict:
     out=safe(root,'outputs/'+output_id);plan=load_plan(out/'plan.json')
     ready=assess_readiness(root,plan);errors=list(ready['errors']);warnings=list(ready['warnings']);used=[]
     from .profiles import POLICY, current, policy
-    require(policy_mode in {'current','recorded'},'EDITORIAL_POLICY_UNSUPPORTED','Choose current or recorded assessment')
-    if policy_mode=='current' and not current(plan):
-        errors.append(diagnostic('EDITORIAL_POLICY_REASSESSMENT_REQUIRED',
-            'Create a new r3 output ID and complete its current-policy reviews; historical bytes are preserved.', 'plan.json'))
     if plan['draft']:errors.append(diagnostic('DRAFT_NOT_RELEASABLE','Internal unverified drafts cannot be packaged as formal output','plan.json'))
     structure=validate_structure(root,output_id);errors+=structure['errors'];warnings+=structure['warnings']
     records=reviews_in(out,'evidence')
@@ -95,10 +91,10 @@ def assess_release(root:Path,output_id:str,*,policy_mode:str='current')->dict:
             if vis is None:errors.append(diagnostic('VISUAL_REVIEW_INCOMPLETE','Actual full-page observations and PDF/image-bound evidence are required; identify the reviewer and actual inspection method honestly','evidence'))
     if sem is None or sem['reviewer_mode']!='independent_review':
         warnings.append(diagnostic('NO_INDEPENDENT_REVIEW','No scoped independent mathematical reading of this manuscript is claimed. Author reread is not independent review.'))
-    status='NEEDS_WORK' if errors else ('RECORDED_VALID' if policy_mode=='recorded' else 'RELEASABLE')
+    status='NEEDS_WORK' if errors else 'RELEASABLE'
     return result('output.release',status,{'output_id':output_id,'snapshot_id':plan['snapshot_id'],
-                  'pages':built.get('pages'),'editorial_policy':policy(plan),'recorded_policy':policy(plan),
-                  'evaluated_policy':policy(plan) if policy_mode=='recorded' else POLICY,
+                  'pages':built.get('pages'),'editorial_policy':policy(plan),
+                  'evaluated_policy':POLICY,
                   'release_authorized':status=='RELEASABLE','used_output_review_ids':used,'readiness':ready['status']},errors,warnings)
 
 def package_output(root:Path,output_id:str,destination:Path)->dict:

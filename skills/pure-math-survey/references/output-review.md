@@ -18,7 +18,7 @@ For each of the following mode_findings provide outcome, a concrete mathematical
 and actual manuscript path/line_start/line_end locations:
 
 - Common: fast_path, reader_calibration, points, connections, limits, display_rhythm, statement_context.
-- Minimal: results_first (early within the local unit under r3; global first section only under historical r2/rc1 or rc2), point_use, decisive_connections.
+- Minimal: results_first (all full principals in Main Results), point_use, decisive_connections.
 - Thematic: question_structure, approach_mechanisms, comparison_basis, synthesis.
 - Lecture: motivation, worked_derivations, hypothesis_use, imported_inputs, model_boundary.
 - Paper: contribution_position, prior_art, proof_closure, attribution.
@@ -42,7 +42,7 @@ assertion is true. Distinguish author_reread from independent_review and from re
 feedback. Running another prompt is not independence. Formula density and typeset line
 counts are not a semantic score. Inspect actual pages, including justified long statements.
 
-For rc2 and r3 Paper, record prior_result_checks separately from prior_art_searches.
+For current Paper, record prior_result_checks separately from prior_art_searches.
 Check each explicit comparison pair against the actual statements; report its
 unknowns, quantifiers, domain/parameters, regularity, normalization, conclusion
 and actual difference. Locate the manuscript discussion. A hash or accepted
@@ -66,7 +66,7 @@ An unused definition or an empty begin/end wrapper does not hide body content.
 This remains a bounded source model, not a general TeX interpreter or pixel
 visibility proof.
 
-## r3 task findings and actual final pages
+## Current r4 task findings and actual final pages
 
 In article `mode_findings`, retain all inherited checks and add the existing-shaped
 `outcome`, `finding`, `locations` entries:
@@ -94,7 +94,7 @@ snapshots remain schema `2.0.0`; this policy-bearing review uses `schema_version
 
 ```json
 {
-  "editorial_policy": "four-modes-2026-10-12-r3",
+  "editorial_policy": "four-modes-2026-10-13-r4",
   "question_ids": ["Q-density"],
   "node_ids": ["Q-density", "N-density", "N-radial-change", "N-zero-boundary"],
   "checks": ["obligation_coverage", "fast_route_reconstruction",
@@ -164,7 +164,12 @@ only for verified identical page images and do not grant the new output semantic
 New visual records bind the actual final PDF/build/render inputs and all pages.
 
 F2 view/design, F3 explicit comparison pairs plus primary prior support, and F4 draft/design
-safety remain on both rc2 and r3. Old accepted fields gain no new r3 responsibilities;
-`RECORDED_VALID` cannot authorize current release. Paper remains prominently draft unless
+safety remain mandatory in current r4. Unsupported old policy/evidence is not renamed or migrated into current acceptance. Paper remains prominently draft unless
 actual authorization, originality positioning and complete proofs are reviewed. Software,
 mathematics, exposition attempts, PDF checks and real-reader feedback remain five reports.
+
+## R4 opening and actual non-author acceptance
+
+Inspect visible TeX/PDF, not only abstract environment names. Minimal/Thematic/Lecture have no independent or renamed front matter summary; Paper has an accurate concise abstract and full Introduction. Check first-section duties and later mathematical work against editions.md; only Minimal's three-section structure is fixed. Its ingredients must be consumed and every principal must have an actual connection route.
+
+Product critical acceptance requires a non-author worker with a real thread identity, fixed inputs, inspected artifacts and actual findings. Author_reread describes actual self-reading but does not satisfy critical non-author review. Controller integration that changes reviewed mathematics needs fresh review within the task's existing allowance. Distinct chats are not external peer review or evidence of truth. Record actual source/snapshot/author/reviewer identity in existing findings and private dispatch receipts, without new mathematical schema fields.

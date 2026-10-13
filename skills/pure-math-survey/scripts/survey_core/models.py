@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 import re
 import json
-from .common import VERSION, decode, read_json, require, relative, identifier, valid_date, safe
+from .common import relpath, VERSION, decode, read_json, require, relative, identifier, valid_date, safe
 
 FACETS = {'foundations', 'results', 'methods', 'boundaries'}
 KINDS = {'question', 'definition', 'result', 'relation', 'mechanism', 'example', 'application', 'frontier'}
@@ -44,10 +44,10 @@ def load_project(root: Path) -> dict:
     candidates += list((root / 'outputs').glob('*/evidence/reviews/*.json'))
     candidates += list((root / 'outputs').glob('*/evidence/*review*.json'))
     for path in candidates:
-        review = read_json(safe(root, path.relative_to(root).as_posix(), True))
+        review = read_json(safe(root, relpath(root, path), True))
         if isinstance(review, dict) and 'review_id' in review:
             require(isinstance(review.get('scope'), dict), 'REVIEW_FORMAT_UNSUPPORTED',
-                    'Reviews must use the current scoped evidence contract', str(path.relative_to(root)))
+                    'Reviews must use the current scoped evidence contract', relpath(root, path))
     obj = read_json(root / 'project.json')
     fields(obj, {'schema_version': str, 'project_id': str, 'title': str, 'language': str, 'scope_file': str, 'knowledge_root': str}, 'project.json')
     require(identifier(obj['project_id']), 'CONTRACT_INVALID', 'Invalid stable project ID', 'project.json')

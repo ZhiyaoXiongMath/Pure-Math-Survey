@@ -70,14 +70,11 @@ def inventory(root: Path) -> Inventory:
         if p.endswith('.md'):
             for target in re.findall(r'\[\[([NS]-[A-Za-z0-9._-]+)\]\]', safe(root, p, True).read_text(encoding='utf-8')):
                 require(target in nodes or target in sources, 'UNKNOWN_REFERENCE', f'Broken readable link [[{target}]]', p)
-    for p in all_files(root, 'evidence/reviews'):
-        if p.endswith('.json'):
-            from .reviews import load_review
-            review = load_review(safe(root, p, True))
-            for binding in review['inputs']:
-                require(not binding['path'].startswith(('snapshots/', 'outputs/', '.cache/')) and binding['path'] != p,
-                        'REVIEW_BINDING_INVALID', 'Knowledge review may not bind snapshots, outputs, cache or itself', p)
-                # Historical stale paths may be missing; retain the record, report on use.
+    from .reviews import load_review, knowledge_review_input_paths
+    # Auxiliary input bytes are opaque dependencies, not navigation registries.
+    # Stale/missing records remain unchanged and are rejected when consumed.
+    records = [(p, load_review(safe(root, p, True))) for p in all_files(root, 'evidence/reviews') if p.endswith('.json')]
+    paths |= knowledge_review_input_paths(root, records)
     return Inventory(root, project, nodes, sources, source_paths, cov, sorted(paths))
 
 def validate_knowledge(root: Path) -> dict:

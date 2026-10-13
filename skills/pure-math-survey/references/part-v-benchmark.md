@@ -2,4 +2,4 @@
 
 `view: integrated` organizes selected questions, exact answers, mechanisms and boundaries as one independently readable account. It is available for all four profiles. It does not require foundations/results/methods/boundaries PDFs first.
 
-The supplied balanced dHYM sample is a bounded style reference, not an authoritative source for new mathematics or a fixed length/template. For a new topic build and review its own knowledge and output, rather than replay a standard answer into a template.
+Build and review the target's own source-grounded fast/slow knowledge and requested output. Old generated manuscripts are not current writing authorities or answer inputs. Current mode contracts, declared reader capabilities and actual sources determine the mathematical work; integrated does not alter those duties.

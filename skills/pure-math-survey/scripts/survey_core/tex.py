@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 import re
 
-from .common import SurveyError, diagnostic, require, safe
+from .common import native_path, relpath, resolved_path, SurveyError, diagnostic, require, safe
 
 TOKEN = re.compile(r'\\(?:[A-Za-z@]+|[^A-Za-z@])')
 INPUT = re.compile(r'\\(?:input|include)\s*\{([^{}]+)\}')
@@ -153,10 +153,10 @@ def input_path(out: Path, value: str) -> Path:
     candidate = out / 'manuscript'
     for component in Path(value).parts:
         candidate = candidate / component
-        require(not candidate.is_symlink(), 'UNSAFE_PATH', 'Symlinked TeX input is not allowed', value)
-    target = candidate.resolve()
-    require(target.is_relative_to(out.resolve()), 'UNSAFE_PATH', 'TeX input escapes the output directory', value)
-    return safe(out, target.relative_to(out.resolve()).as_posix(), True)
+        require(not native_path(candidate).is_symlink(), 'UNSAFE_PATH', 'Symlinked TeX input is not allowed', value)
+    target = resolved_path(candidate)
+    require(target.is_relative_to(resolved_path(out)), 'UNSAFE_PATH', 'TeX input escapes the output directory', value)
+    return safe(out, relpath(resolved_path(out), target), True)
 
 
 def _meaningful(text: str) -> str:
@@ -194,7 +194,7 @@ class Inspection:
 
 
 def inspect_tex(out: Path) -> Inspection:
-    out = out.resolve(); main = safe(out, 'manuscript/main.tex', True)
+    out = resolved_path(out); main = safe(out, 'manuscript/main.tex', True)
     scan = Inspection('', {'manuscript/main.tex'}, set(), [], [])
     cache = {}; definitions = {}; executable = []; loaded_styles = set()
 
@@ -213,7 +213,7 @@ def inspect_tex(out: Path) -> Inspection:
                 scan.content_lines.setdefault(rel, set()).add(line)
 
     def visit(path: Path, active: tuple[Path, ...], in_body: bool, is_main=False) -> tuple[str, bool]:
-        rel = path.relative_to(out).as_posix()
+        rel = relpath(out, path)
         require(path not in active, 'TEX_INPUT_CYCLE', 'Recursive literal TeX input', rel)
         scan.inputs.add(rel)
         if path not in cache:
@@ -285,7 +285,7 @@ def inspect_tex(out: Path) -> Inspection:
             start, end = max(previous, body_start), min(a, body_end)
             mark(rel, raw, start, end, significant)
             chunks.append(text[previous:a])
-            target = input_path(out, match[1]); target_rel = target.relative_to(out).as_posix()
+            target = input_path(out, match[1]); target_rel = relpath(out, target)
             child_body = body_start <= a < body_end
             child, child_content = visit(target, active + (path,), child_body)
             if child_body:

@@ -1,33 +1,13 @@
-# The opening depends on the mathematical reading task
+# Mode-specific opening
 
-All principal statements are complete and statement-self-contained; exact canonical
-bytes come from the reviewed snapshot. Explain nonstandard terminology immediately
-nearby when indispensable, without turning the opening into a distant glossary.
+Minimal, Thematic and Lecture have no abstract or independent summary before the first section. Do not retain one under Overview, Preface, an unnumbered heading or a long unlabeled paragraph. Put brief useful problem positioning in the first section. Only Minimal has fixed section count, titles and order.
 
-**Minimal under r3:** give a short result map, then local problem units with complete
-results, needed points, decisive connections and first use/boundary close together.
-A short problem/model/necessary definition can precede a result. A suitable three-chapter
-layout needs a design reason and all new responsibilities. **Historical r2/rc1 and rc2**
-keep the first numbered Main Results section with every full principal, followed by
-Key Mathematical Ingredients and Connecting the Ingredients. In either policy decisive
-caveats belong beside the result. See [policy-specific profiles](editions.md).
+**Minimal/r4:** Main Results promptly states every complete principal, with objects, domain, data/unknowns, hypotheses, quantifiers, equations, conclusion and status. Necessary terminology is adjacent; detailed tools and proofs belong in the second and third sections. Follow with Key Mathematical Ingredients and Connecting the Ingredients. Old policies are unsupported, and their files remain unchanged.
 
-**Thematic:** formulate the precise questions and representative full principal results
-early, then explain the structural difficulty behind the actual routes. Do not tour
-author names or replace theorem hypotheses with citations. Synthesis requires comparable
-normalizations, assumptions, unknowns and quantifiers.
+**Thematic:** Questions and Principal Results (or a precise thematic title) formulates questions, representative full results, common objects/conventions and comparison conditions. Later analyze structural difficulties, actual methods/mechanisms and supported synthesis. Do not invent competitors or substitute paper summaries for mathematics.
 
-**Lecture:** state a complete goal theorem early, then give a faithful construction and
-proof route. Mark which later lemma supplies each nontrivial arrow. Prepare unfamiliar
-inputs only when needed; do not assume the very method being taught.
+**Lecture:** Goal Theorem and Proof Strategy (or a topic-specific title) explains reader goals, full core target theorem, faithful proof/learning route and what later constructions solve. Teach prerequisites, constructions, computations and proof in their actual learning order; accompanying branches appear completely near their use. Do not put every lemma in the opening.
 
-**Paper:** the abstract names the object, decisive assumptions, proved new conclusion
-and mechanism without an exaggerated claim. The introduction moves from closest known
-results to a precise remaining difficulty, the complete new theorem, the new idea and
-how its proof will close. Compare prior and current work in the same mathematical
-language. Short notes and longer papers need not share a fixed number of sections.
-An unclosed proof is visibly internal draft material, not a completed contribution.
+**Paper:** retain a concise abstract stating problem, decisive assumptions, actual contribution and mechanism. Introduction compares closest prior work, identifies the precise unsolved difficulty, states complete new results, accurate differences, new idea and proof route. The abstract cannot replace this work. Unknown contribution/authorization/proof closure keeps DRAFT_UNVERIFIED; known-result drafts must not claim new results.
 
-Read the opening independently, then match its promises with the body. Check neighboring
-prose for changes to every/some, common/separate solutions, strictness, uniformity,
-regularity, dimension, branches and status. A matching fragment hash is not this reading.
+Canonical bytes come from the reviewed snapshot. Immediately adjacent necessary terminology makes principal statements self-contained; remote formula numbers cannot replace key conditions. Independently read the opening, then verify every promised branch and derivation in the body. Check surrounding quantifiers, strictness, uniformity, regularity, branches and status. A fragment hash does not perform that reading. See [profiles](editions.md) and [knowledge-to-manuscript](knowledge-to-manuscript.md).

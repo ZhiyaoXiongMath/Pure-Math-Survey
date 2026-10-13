@@ -1,3 +1,0 @@
-# Bounded benchmark provenance and exclusions
-
-The supplied guide examples were read. This is not a literature-completeness exercise: the elementary proofs are expanded in the local-derivation nodes, and the supplied guide is provenance, not external primary-source proof of originality. No web prior-art searches were performed. Excluded: singular-block generalizations, arbitrary-PDE existence, unproved uniform estimates, smoothness upgrades and original-paper claims. The omission challenge was to test exactly those stronger conclusions against the explicit hypotheses; the negative models in N-boundary show the relevant failures.

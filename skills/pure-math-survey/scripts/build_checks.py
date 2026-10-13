@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Literal
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 BLOCKING_PATTERNS = {
     "undefined_reference": r"(?:Reference|Citation) .+? undefined|There were undefined references",
     "duplicate_label": r"multiply[- ]defined|destination with the same identifier",
@@ -96,14 +97,14 @@ def compile_one(folder: Path, entrypoint: str, engine: str, timeout: int = 120) 
             "recall_counters": recalls,
             "status": "PASS" if not issues else "FAIL"}
 
-def stage_balanced_sample(root: Path, destination: Path, *, mode: Literal["current", "frozen"]) -> Path:
+def stage_style_fixture(root: Path, destination: Path, *, mode: Literal["current", "frozen"]) -> Path:
     """Stage explicit dependencies; do not confuse regression with reproduction."""
     if mode not in ("current", "frozen"):
         raise ValueError(f"Unsupported style mode: {mode}")
-    sample = root / "assets/reference-samples/dhym-balanced"
+    sample = root / "fixture"
     style = (root / "assets/templates/math-review.sty" if mode == "current"
              else sample / "math-review.sty")
-    inputs = [sample / "dhym-survey-revised.tex", sample / "dhym-survey-revised.bbl",
+    inputs = [sample / "main.tex", sample / "main.bbl",
               sample / "references.bib", style]
     for source in inputs:
         if not source.is_file():
@@ -113,7 +114,7 @@ def stage_balanced_sample(root: Path, destination: Path, *, mode: Literal["curre
     destination.mkdir(parents=True, exist_ok=True)
     for source in inputs:
         shutil.copy2(source, destination / source.name)
-    return destination / "dhym-survey-revised.tex"
+    return destination / "main.tex"
 
 def run_checks(output: Path, engine: str = "pdflatex") -> dict:
     engine_path = shutil.which(engine)
@@ -138,23 +139,14 @@ def run_checks(output: Path, engine: str = "pdflatex") -> dict:
         shutil.copy2(fixture, folder / fixture.name)
     shutil.copy2(style, folder / style.name)
     tasks.append((folder, "exposition-smoke.tex"))
-    for mode in ("current", "frozen"):
-        folder = output / f"balanced-{mode}"
-        entry = stage_balanced_sample(ROOT, folder, mode=mode)
-        tasks.append((folder, entry.name))
     for folder, entry in tasks:
-        print(f"Building {entry}", flush=True)
+        print(f"Building {entry}", flush=True, file=sys.stderr)
         try:
             result = compile_one(folder, entry, engine_path)
         except (OSError, ValueError, subprocess.SubprocessError, RuntimeError) as exc:
             result = {"entrypoint": entry, "status": "FAIL", "error": str(exc)}
-        result["artifact_kind"] = ("elementary_example" if entry.startswith("exposition") else
-                                   "shared_style_regression" if folder.name == "balanced-current" else
-                                   "frozen_sample_reproduction")
+        result["artifact_kind"] = "elementary_style_regression"
         result["target"] = folder.name
-        if entry == "dhym-survey-revised.tex":
-            result["style_mode"] = folder.name.rsplit("-", 1)[-1]
-            result["style_sha256"] = hashlib.sha256((folder / "math-review.sty").read_bytes()).hexdigest()
         # Findings are reader-review pointers, not a mathematical build verdict.
         # Use the same literal-input expansion path as project validation.
         try:

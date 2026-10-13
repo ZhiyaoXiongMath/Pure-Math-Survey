@@ -1,7 +1,7 @@
 """Versioned exposition policy, not a mathematical decision procedure.
 
 Knowledge remains schema 2.0.0. New plans and policy-bearing reviews use 2.2.0;
-legacy plans are read without mutation and are never called vNext-reviewed.
+Only current r4 outputs are supported; obsolete inputs are rejected without mutation.
 All accepted findings below are accountable reader assertions, not inferred truth.
 """
 from __future__ import annotations
@@ -10,16 +10,11 @@ import re
 from .common import diagnostic, require, sha, valid_date
 
 OUTPUT_SCHEMA = '2.2.0'
-POLICY = 'four-modes-2026-10-12-r3'
-RC2_POLICY = 'four-modes-2026-10-12-rc2'
-RC1_SCHEMA = '2.1.0'
-RC1_POLICY = 'four-modes-2026-10-11-r2'
-LEGACY_POLICY = 'legacy-2.0.0'
-POLICIES = {'2.0.0': (LEGACY_POLICY,), RC1_SCHEMA: (RC1_POLICY,),
-            OUTPUT_SCHEMA: (RC2_POLICY, POLICY)}
-SUPPORTED_CONTRACTS = {(version, name) for version, names in POLICIES.items() for name in names}
-R3_READINGS = ('obligation_coverage', 'fast_route_reconstruction',
-               'slow_step_reproduction', 'condition_transfer')
+POLICY = 'four-modes-2026-10-13-r4'
+POLICIES = {OUTPUT_SCHEMA: (POLICY,)}
+SUPPORTED_CONTRACTS = {(OUTPUT_SCHEMA, POLICY)}
+UNDERSTANDING_READINGS = ('obligation_coverage', 'fast_route_reconstruction',
+                          'slow_step_reproduction', 'condition_transfer')
 PROFILES = {'minimal', 'thematic', 'lecture', 'paper'}
 MINIMAL_SECTIONS = ['Main Results', 'Key Mathematical Ingredients', 'Connecting the Ingredients']
 STATEMENT_ASPECTS = ('objects', 'domain', 'fixed_and_variable', 'hypotheses',
@@ -74,20 +69,9 @@ def current(plan: dict) -> bool:
     return plan.get('schema_version') == OUTPUT_SCHEMA and plan.get('editorial_policy') == POLICY
 
 
-def four_modes(plan: dict) -> bool:
-    return rc2_capabilities(plan) or (plan.get('schema_version') == RC1_SCHEMA and plan.get('editorial_policy') == RC1_POLICY)
-
-
-def rc2_capabilities(plan: dict) -> bool:
-    """F1-F4 apply to recorded rc2 as well as the current r3 policy."""
-    return (plan.get('schema_version') == OUTPUT_SCHEMA
-            and plan.get('editorial_policy') in (RC2_POLICY, POLICY))
-
-
-def strict_old_minimal(plan: dict) -> bool:
-    return plan.get('profile') == 'minimal' and (
-        (plan.get('schema_version'), plan.get('editorial_policy')) in
-        ((RC1_SCHEMA, RC1_POLICY), (OUTPUT_SCHEMA, RC2_POLICY)))
+def strict_minimal(plan: dict) -> bool:
+    validate_plan_contract(plan)
+    return plan['profile'] == 'minimal'
 
 
 def supported_contract(version: object, name: object) -> bool:
@@ -96,24 +80,17 @@ def supported_contract(version: object, name: object) -> bool:
 
 
 def required_readings(plan: dict) -> tuple[str, ...]:
-    # Under r3, results_first means early in each local problem unit;
-    # only strict_old_minimal imposes the historical global first section.
-    mode = MODE_READINGS[plan['profile']]
-    return (COMMON_READINGS + mode
-            + (('exposition_design', 'view_focus') if rc2_capabilities(plan) else ())
-            + (R3_READINGS if current(plan) else ()))
+    validate_plan_contract(plan)
+    return COMMON_READINGS + MODE_READINGS[plan['profile']] + ('exposition_design', 'view_focus') + UNDERSTANDING_READINGS
 
 
 def policy(plan: dict) -> str:
     validate_plan_contract(plan)
-    return plan.get('editorial_policy', LEGACY_POLICY)
+    return plan['editorial_policy']
 
 
 def comparison_ids(contribution: dict) -> list[str]:
-    """Read one contract, never infer comparison pairs for old records."""
-    if 'comparison_bindings' in contribution:
-        return list(dict.fromkeys(b['comparison_node_id'] for b in contribution['comparison_bindings']))
-    return contribution.get('comparison_nodes', [])
+    return list(dict.fromkeys(b['comparison_node_id'] for b in contribution['comparison_bindings']))
 
 
 def filled(value: object) -> bool:
@@ -126,12 +103,6 @@ def validate_plan_contract(plan: dict) -> None:
     require(isinstance(plan, dict), 'CONTRACT_INVALID', 'Output plan must be an object', 'plan.json')
     version = plan.get('schema_version')
     require(isinstance(version, str) and version in POLICIES, 'SCHEMA_UNSUPPORTED', 'Unsupported output-plan schema', 'plan.json')
-    if version == '2.0.0':
-        require(isinstance(plan.get('profile'), str) and plan['profile'] in PROFILES - {'paper'}, 'SCHEMA_UNSUPPORTED',
-                'Paper requires an explicit four-mode schema; legacy has only three profiles', 'plan.json')
-        require('editorial_policy' not in plan and 'contributions' not in plan,
-                'SCHEMA_UNSUPPORTED', 'Do not disguise new-policy fields as a legacy plan', 'plan.json')
-        return
     require(supported_contract(version, plan.get('editorial_policy')), 'EDITORIAL_POLICY_UNSUPPORTED', 'Schema and editorial policy must match an explicitly supported pair', 'plan.json')
     require(isinstance(plan.get('profile'), str) and plan['profile'] in PROFILES,
             'CONTRACT_INVALID', 'Invalid output profile', 'plan.json')
@@ -143,23 +114,20 @@ def validate_plan_contract(plan: dict) -> None:
         require(isinstance(item, dict), 'CONTRACT_INVALID', 'Contribution must be an object', 'plan.json')
         for key in ('node_id', 'classification', 'provenance', 'authorization', 'actual_difference', 'proof_status'):
             require(type(item.get(key)) is str, 'CONTRACT_INVALID', f'Contribution {key} must be text', 'plan.json')
-        for key in ('closest_prior_results', 'gaps') + (('comparison_nodes',) if version == RC1_SCHEMA else ()):
+        for key in ('closest_prior_results', 'gaps'):
             require(type(item.get(key)) is list and all(type(x) is str and x.strip() for x in item[key]),
                     'CONTRACT_INVALID', f'Contribution {key} must be a text list', 'plan.json')
             require(len(item[key]) == len(set(item[key])), 'DUPLICATE_ID', f'Duplicate contribution {key}', 'plan.json')
-        if version == OUTPUT_SCHEMA:
-            require('comparison_nodes' not in item, 'SCHEMA_UNSUPPORTED', 'rc2 uses comparison_bindings only', 'plan.json')
-            bindings = item.get('comparison_bindings')
-            require(isinstance(bindings, list), 'CONTRACT_INVALID', 'comparison_bindings must be a list', 'plan.json')
-            pairs = []
-            for binding in bindings:
-                require(isinstance(binding, dict) and set(binding) == {'comparison_node_id', 'prior_result_id'}
-                        and all(isinstance(v, str) and re.fullmatch(r'N-[A-Za-z0-9._-]+', v) for v in binding.values()),
-                        'CONTRACT_INVALID', 'Each comparison binding needs explicit relation and prior IDs', 'plan.json')
-                pairs.append((binding['comparison_node_id'], binding['prior_result_id']))
-            require(len(pairs) == len(set(pairs)), 'DUPLICATE_ID', 'Duplicate comparison binding', 'plan.json')
-        else:
-            require('comparison_bindings' not in item, 'SCHEMA_UNSUPPORTED', 'rc2 fields cannot be disguised as rc1', 'plan.json')
+        require('comparison_nodes' not in item, 'SCHEMA_UNSUPPORTED', 'Current contributions use comparison_bindings only', 'plan.json')
+        bindings = item.get('comparison_bindings')
+        require(isinstance(bindings, list), 'CONTRACT_INVALID', 'comparison_bindings must be a list', 'plan.json')
+        pairs = []
+        for binding in bindings:
+            require(isinstance(binding, dict) and set(binding) == {'comparison_node_id', 'prior_result_id'}
+                    and all(isinstance(v, str) and re.fullmatch(r'N-[A-Za-z0-9._-]+', v) for v in binding.values()),
+                    'CONTRACT_INVALID', 'Each comparison binding needs explicit relation and prior IDs', 'plan.json')
+            pairs.append((binding['comparison_node_id'], binding['prior_result_id']))
+        require(len(pairs) == len(set(pairs)), 'DUPLICATE_ID', 'Duplicate comparison binding', 'plan.json')
         require(item['node_id'] not in seen, 'DUPLICATE_ID', 'Duplicate contribution claim', 'plan.json'); seen.add(item['node_id'])
         require(item['classification'] in {'original', 'known', 'conjectural', 'unverified'}, 'CONTRACT_INVALID', 'Invalid contribution classification', 'plan.json')
         require(item['proof_status'] in {'complete', 'incomplete', 'unverified'}, 'CONTRACT_INVALID', 'Invalid contribution proof_status', 'plan.json')
@@ -167,8 +135,6 @@ def validate_plan_contract(plan: dict) -> None:
 
 def validate_profile_selection(inv, plan: dict) -> None:
     validate_plan_contract(plan)
-    if not four_modes(plan):
-        return
     selected = {s['node_id']: s for s in plan['selections']}
     available = set(selected) | {p['node_id'] for p in plan['prerequisites'] if isinstance(p, dict)}
     principals = {k for k, s in selected.items() if s['role'] == 'principal_answer'}
@@ -194,7 +160,7 @@ def principal_template(statement: bytes) -> dict:
 def statement_errors(key: str, statement: bytes, review: dict) -> list[dict]:
     scope = mapping(review.get('scope'))
     entry = mapping(scope.get('statement_reviews')).get(key, {})
-    valid = (review.get('schema_version') in (RC1_SCHEMA, OUTPUT_SCHEMA)
+    valid = (review.get('schema_version') == OUTPUT_SCHEMA
              and supported_contract(review.get('schema_version'), scope.get('editorial_policy'))
              and isinstance(entry, dict) and entry.get('outcome') == 'accepted'
              and entry.get('canonical_sha256') == sha(statement)
@@ -215,8 +181,7 @@ def statement_warnings(key: str, statement: bytes) -> list[dict]:
 
 
 def profile_readiness_errors(inv, plan: dict) -> list[dict]:
-    if not four_modes(plan):
-        return []
+    validate_plan_contract(plan)
     errors = []
     def add(code, message, key=None):
         errors.append(diagnostic(code, message, 'plan.json', key))
@@ -247,23 +212,22 @@ def profile_readiness_errors(inv, plan: dict) -> list[dict]:
             add('PAPER_PROOF_NOT_CLOSED', 'Each original principal requires an established node and its own complete proof obligation.', key)
         if not c['closest_prior_results'] or not comparison_ids(c) or not filled(c['actual_difference']):
             add('PAPER_PRIOR_ART_MISSING', 'Identify closest prior-result nodes, supported comparison relations and the precise difference.', key)
-        if rc2_capabilities(plan):
-            covered=set()
-            for binding in c['comparison_bindings']:
-                relation=inv.nodes[binding['comparison_node_id']]
-                prior=binding['prior_result_id']
-                endpoints={e['target'] for e in relation.meta['links'] if e['relation']=='compares_with'}
-                if prior not in c['closest_prior_results'] or prior==key:
-                    add('PAPER_COMPARISON_PRIOR_INVALID','Binding prior must be a distinct declared closest prior.',prior)
-                elif not {key,prior} <= endpoints:
-                    add('PAPER_COMPARISON_ENDPOINT_MISSING',
-                        f'{relation.id} must explicitly compare both {key} and {prior}; proof links do not substitute.',relation.id)
-                elif relation.meta['mathematical_status']!='established':
-                    add('PAPER_COMPARISON_UNVERIFIED','Comparison relation must be established and actually reviewed.',relation.id)
-                else:
-                    covered.add(prior)
-            for prior in set(c['closest_prior_results'])-covered:
-                add('PAPER_COMPARISON_COVERAGE_MISSING','Every closest prior needs an explicit supported pair; no inferred all-pairs coverage.',prior)
+        covered=set()
+        for binding in c['comparison_bindings']:
+            relation=inv.nodes[binding['comparison_node_id']]
+            prior=binding['prior_result_id']
+            endpoints={e['target'] for e in relation.meta['links'] if e['relation']=='compares_with'}
+            if prior not in c['closest_prior_results'] or prior==key:
+                add('PAPER_COMPARISON_PRIOR_INVALID','Binding prior must be a distinct declared closest prior.',prior)
+            elif not {key,prior} <= endpoints:
+                add('PAPER_COMPARISON_ENDPOINT_MISSING',
+                    f'{relation.id} must explicitly compare both {key} and {prior}; proof links do not substitute.',relation.id)
+            elif relation.meta['mathematical_status']!='established':
+                add('PAPER_COMPARISON_UNVERIFIED','Comparison relation must be established and actually reviewed.',relation.id)
+            else:
+                covered.add(prior)
+        for prior in set(c['closest_prior_results'])-covered:
+            add('PAPER_COMPARISON_COVERAGE_MISSING','Every closest prior needs an explicit supported pair; no inferred all-pairs coverage.',prior)
         # A proved original result cannot import a conjecture as a proof premise.
         # Discussion-only frontier selections are not proof dependencies.
         from .dependencies import required_closure
@@ -287,26 +251,24 @@ def profile_readiness_errors(inv, plan: dict) -> list[dict]:
 
 
 def review_scope_template(plan: dict) -> dict:
-    if not four_modes(plan):
-        return {}
+    validate_plan_contract(plan)
     keys = required_readings(plan)
     return {'editorial_policy': policy(plan), 'statement_reviews': {},
-            **({'view':plan['view']} if rc2_capabilities(plan) else {}),
+            'view': plan['view'],
             'mode_findings': {k: {'outcome': 'not_performed', 'finding': '', 'locations': [],
                                 **({'node_ids':[]} if k=='view_focus' else {})} for k in keys},
             'proof_step_findings': {o['node_id']: {s: {'outcome': 'not_performed', 'finding': '', 'locations': []}
                                     for s in o['required_steps']} for o in plan['proof_obligations']},
             'contribution_reviews': {c['node_id']: {'outcome': 'not_performed', 'finding': '', 'locations': [],
                 'closest_prior_results': c['closest_prior_results'], 'prior_art_searches': [],
-                **({'prior_result_checks':[]} if rc2_capabilities(plan) else {}),
+                'prior_result_checks': [],
                 'provenance_check': '', 'authorization_check': '', 'actual_difference': '',
                 'proof_closure': '', 'remaining_caveats': ''}
                 for c in plan['contributions'] if c['classification'] == 'original'}}
 
 
 def semantic_profile_errors(out: Path, plan: dict, review: dict, *, inspection=None) -> list[dict]:
-    if not four_modes(plan):
-        return []
+    validate_plan_contract(plan)
     from .tex import validate_locations
     from .common import safe
     scope = mapping(review.get('scope')); errors = []
@@ -320,14 +282,13 @@ def semantic_profile_errors(out: Path, plan: dict, review: dict, *, inspection=N
     findings = mapping(scope.get('mode_findings'))
     for name in required_readings(plan):
         check_entry(findings.get(name), name)
-    if rc2_capabilities(plan):
-        if scope.get('view') != plan['view']:
-            errors.append(diagnostic('VIEW_REVIEW_MISMATCH','Review the current view; changing only the plan or its hash is not a new reading.','evidence'))
-        ids=mapping(findings.get('view_focus')).get('node_ids')
-        available=set(plan['question_ids']) | {s['node_id'] for s in plan['selections']}
-        available |= {p['node_id'] for p in plan['prerequisites'] if isinstance(p,dict)}
-        if not isinstance(ids,list) or not ids or not all(isinstance(k,str) and k in available for k in ids):
-            errors.append(diagnostic('VIEW_FOCUS_NODE_INVALID','Identify available nodes whose quantities or steps were actually emphasized and read.','evidence'))
+    if scope.get('view') != plan['view']:
+        errors.append(diagnostic('VIEW_REVIEW_MISMATCH','Review the current view; changing only the plan or its hash is not a new reading.','evidence'))
+    ids=mapping(findings.get('view_focus')).get('node_ids')
+    available=set(plan['question_ids']) | {s['node_id'] for s in plan['selections']}
+    available |= {p['node_id'] for p in plan['prerequisites'] if isinstance(p,dict)}
+    if not isinstance(ids,list) or not ids or not all(isinstance(k,str) and k in available for k in ids):
+        errors.append(diagnostic('VIEW_FOCUS_NODE_INVALID','Identify available nodes whose quantities or steps were actually emphasized and read.','evidence'))
     for s in plan['selections']:
         if s['role'] == 'principal_answer':
             key = s['node_id']
@@ -348,7 +309,7 @@ def semantic_profile_errors(out: Path, plan: dict, review: dict, *, inspection=N
             valid_search = isinstance(searches, list) and bool(searches) and all(
                 isinstance(s, dict) and valid_date(s.get('searched_at')) and filled(s.get('query'))
                 and filled(s.get('outcome')) and isinstance(s.get('checked_source_ids'), list)
-                and (rc2_capabilities(plan) or bool(s['checked_source_ids'])) and all(isinstance(x, str) and x.startswith('S-') for x in s['checked_source_ids'])
+                and all(isinstance(x, str) and x.startswith('S-') for x in s['checked_source_ids'])
                 for s in searches)
             # The searched identities must be actual, snapshot-bound authoring source records.
             from .common import read_json
@@ -360,8 +321,7 @@ def semantic_profile_errors(out: Path, plan: dict, review: dict, *, inspection=N
                     or entry.get('closest_prior_results') != c['closest_prior_results']):
                 errors.append(diagnostic('PAPER_CONTRIBUTION_REVIEW_PENDING',
                     'Record actual dated prior-art searches against bound sources, closest results, authorization, precise difference, proof closure and caveats. Software cannot establish novelty.', 'evidence', key))
-            if rc2_capabilities(plan):
-                errors.extend(prior_support_errors(out,c,entry))
+            errors.extend(prior_support_errors(out,c,entry))
     return errors
 
 
@@ -450,12 +410,44 @@ def prior_support_errors(out: Path, contribution: dict, entry: dict) -> list[dic
     return errors
 
 
+def opening_errors(inv: dict, plan: dict) -> list[dict]:
+    """Check literal openings; semantic duties still require actual reading.
+
+    Only current r4 is supported; obsolete input is rejected without mutation.
+    Comments, dormant definitions and false branches are masked by inspect_tex.
+    """
+    validate_plan_contract(plan)
+    errors = []
+    body = inv['body_text']; sections = inv['sections']
+    def add(code, message):
+        errors.append(diagnostic(code, message, 'manuscript/main.tex'))
+    first = sections[0] if sections else None
+    abstracts = list(re.finditer(r'\\begin\s*\{abstract\}(.*?)\\end\s*\{abstract\}', body, re.S))
+    if plan['profile'] == 'paper':
+        if len(abstracts) != 1 or not abstracts[0].group(1).strip() or (first and abstracts[0].end() > first['start']):
+            add('PAPER_ABSTRACT_REQUIRED', 'Paper requires one concise research abstract before Introduction; honestly distinguish candidate claims from proved contributions.')
+        if not first or first['starred'] or first['title'] != 'Introduction':
+            add('PAPER_INTRODUCTION_REQUIRED', 'Paper begins with numbered Introduction: closest work, exact difficulty, complete results, actual differences, idea and proof route.')
+        return errors
+    if re.search(r'\\(?:begin|end)\s*\{abstract\}', body):
+        add('PROFILE_ABSTRACT_FORBIDDEN', 'Minimal, Thematic and Lecture have no independent abstract or summary block; place brief problem positioning inside the first section.')
+    prefix = body[:first['start']] if first else body
+    # Title and a necessary draft status are the only visible pre-section text.
+    prefix = re.sub(r'\\maketitle\b', '', prefix)
+    prefix = re.sub(r'\\textbf\s*\{\s*DRAFT(?:\\)?_UNVERIFIED\b[^{}]*\}', '', prefix)
+    prefix = re.sub(r'\\(?:noindent|par|smallskip|medskip|bigskip)\b', '', prefix)
+    if prefix.strip():
+        add('PROFILE_PRESECTION_TEXT_FORBIDDEN', 'Enter the first section directly after title and necessary status; Overview, Preface and untitled pre-section prose cannot replace an abstract.')
+    if not first or first['starred']:
+        add('PROFILE_FIRST_SECTION_REQUIRED', 'Begin the body with a numbered section completing this mode\'s first-section duties.')
+    return errors
+
+
 def structure_errors(inv, plan: dict, nodes: dict, expanded: str) -> tuple[list[dict], list[dict]]:
-    if not four_modes(plan):
-        return [], [diagnostic('LEGACY_EDITORIAL_POLICY', 'Only the historical 2.0.0 policy is being checked; this is not vNext acceptance.')]
-    errors = []; warnings = []
+    validate_plan_contract(plan)
+    errors = opening_errors(inv, plan); warnings = []
     sections = inv['sections']; numbered = [s for s in sections if not s['starred']]
-    if strict_old_minimal(plan):
+    if strict_minimal(plan):
         if [s['title'] for s in numbered] != MINIMAL_SECTIONS:
             errors.append(diagnostic('MINIMAL_THREE_SECTIONS_REQUIRED', 'Use exactly the three ordered numbered main sections: ' + ' / '.join(MINIMAL_SECTIONS), 'manuscript/main.tex'))
         # A fourth unnumbered mathematical section is not a bibliography escape.
@@ -465,6 +457,7 @@ def structure_errors(inv, plan: dict, nodes: dict, expanded: str) -> tuple[list[
             errors.append(diagnostic('MINIMAL_RESULTS_FIRST', 'Do not put background or a bibliography before Main Results.', 'manuscript/main.tex'))
         if re.search(r'\\(?:setcounter|addtocounter)\s*\{(?:secnumdepth|section)\}', expanded) or re.search(r'\\appendix\b', expanded):
             errors.append(diagnostic('MINIMAL_NUMBERING_UNSUPPORTED', 'Do not suppress or reset the three main section numbers; use normal article numbering.', 'manuscript/main.tex'))
+    first_principals = set()
     for selection in plan['selections']:
         if selection['role'] != 'principal_answer':
             continue
@@ -473,10 +466,16 @@ def structure_errors(inv, plan: dict, nodes: dict, expanded: str) -> tuple[list[
         from .tex import visible_source
         visible_statement = visible_source(statement.decode('utf-8')).strip()
         candidates = [r for r in inv['results'] if visible_statement and visible_statement in r['text']]
+        if any(r['section_index'] == 0 for r in candidates):
+            first_principals.add(key)
         if not candidates:
             errors.append(diagnostic('PRINCIPAL_RESULT_ENVIRONMENT_MISSING', 'Put the full principal canonical input in a theorem/proposition/corollary/lemma environment.', 'manuscript/main.tex', key))
-        elif strict_old_minimal(plan) and not any(r['section_index'] == 0 for r in candidates):
+        elif strict_minimal(plan) and not any(r['section_index'] == 0 for r in candidates):
             errors.append(diagnostic('MINIMAL_PRINCIPAL_NOT_FIRST', 'Every principal belongs in Main Results, independently of view.', 'manuscript/main.tex', key))
+        elif plan['profile'] == 'paper' and not any(r['section_index'] == 0 for r in candidates):
+            errors.append(diagnostic('PAPER_PRINCIPAL_NOT_FIRST', 'State each complete principal result in Introduction; later proofs do not replace the first-section statement.', 'manuscript/main.tex', key))
+    if plan['profile'] in {'thematic', 'lecture'} and not first_principals:
+        errors.append(diagnostic('PROFILE_GOAL_NOT_FIRST', 'The first section must completely state a representative principal or core goal theorem; later technical branches may follow the mode\'s reading order.', 'manuscript/main.tex'))
     if plan['profile'] == 'paper' and not plan['draft'] and re.search(r'DRAFT(?:\\)?_UNVERIFIED', inv['body_text']):
         errors.append(diagnostic('PAPER_DRAFT_NOTICE_REMAINS', 'Resolve all draft conditions before explicitly promoting and rereviewing a Paper.', 'manuscript/main.tex'))
     return errors, warnings
@@ -490,11 +489,12 @@ def outline(plan: dict, order: list[str], nodes: dict | None = None) -> str:
         'lecture': 'Early goal theorem -> needed prerequisites/model -> construction -> worked lemmas/estimates -> closed promised proof -> useful boundary example. Titles and section count are editable.',
         'paper': 'Contributions and closest prior work -> new mechanism -> complete proofs -> justified consequences. Research-note or longer article structures are equally valid.',
     }
-    if current(plan) and plan['profile'] == 'minimal':
-        section_plans['minimal'] = ('Brief result map -> local problem units: complete principal, needed points, '
-            'decisive connections and first use or boundary nearby. Shared tools may be established once, '
-            'with their exact interface recalled at each consumer. These are responsibilities, not fixed headings. '
-            'A three-section layout is an explicit design choice: explain why it suits this reader and scope.')
+    section_plans.update(
+        minimal='\n'.join(f'{i}. {title}' for i, title in enumerate(MINIMAL_SECTIONS, 1)) +
+            '\nExactly three numbered body sections; complete ALL principals in Main Results. Build only consumed ingredients in section 2 and execute each decisive connection to its principal in section 3. References are separate; subsections are allowed. No result quota.',
+        thematic='First section: Questions and Principal Results (topic-specific title allowed), with exact questions, complete representative results, common objects and comparison conditions. Then explain structural difficulties, actual method mechanisms and supported synthesis under comparable conditions. No paper-by-paper abstracts or invented competing route. Later sections may split or combine; no fixed count.',
+        lecture='First section: Goal Theorem and Proof Strategy (topic-specific title allowed), with learning goals, complete core theorem and faithful learning/proof route; explain what later constructions solve. Then teach prerequisites, constructions, calculations, important branch statements and every promised derivation in learning order. Do not front-load all teaching lemmas. No fixed section count.',
+        paper='Concise honest abstract, then Introduction: closest prior work, specific unresolved difficulty, complete results, precise supported differences, new idea and proof route. Later establish needed definitions and exact external inputs, new constructions/estimates/lemmas and complete principal proofs. Do not merely repeat the abstract; no fixed section count. Unverified contributions remain DRAFT_UNVERIFIED.')
     lines = ['# Exposition Contract', '', f'Mode: {plan["profile"]}', f'Editorial policy: {policy(plan)}',
              f'Fixed snapshot: {plan["snapshot_id"]}', '', '## Target and reader', plan['audience'],
              GOALS[plan['profile']], 'Questions: ' + ', '.join(plan['question_ids']),
@@ -511,20 +511,20 @@ def outline(plan: dict, order: list[str], nodes: dict | None = None) -> str:
              '', '## Limits and statement concerns',
              'PENDING: identify unproved/uncalled branches and exact node sections for slow reading. Inspect each principal alone and its neighboring prose; repair deficient canonical statements in KB, review and freeze a new snapshot.',
              '', '## Reading rhythm',
-             ('Target about 2-3 actual typeset lines for ordinary explanatory prose. Longer blocks trigger editorial review; record concrete reasons for necessary continuous proofs or full statements. Read the final PDF and bind page, source range, finding, repair or exception to its hash. Never force source breaks, shrink type, insert decorative formulas or drop hypotheses to meet this target.' if current(plan) else
-              'Prefer short prose alternating with mathematically useful displays. About four TYPESet lines is the recorded editorial heuristic, never a source-line count, formula quota or permission to drop hypotheses.'),
+             ('Target about 2-3 actual typeset lines for ordinary explanatory prose. Longer blocks trigger editorial review; record concrete reasons for necessary continuous proofs or full statements. Read the final PDF and bind page, source range, finding, repair or exception to its hash. Never force source breaks, shrink type, insert decorative formulas or drop hypotheses to meet this target.' ),
              '', '## Review boundary',
              'No semantic, originality, reader-comprehension or page review was performed by prepare. Project overview may cover many questions and routes; this outline selects just this manuscript.']
-    if current(plan):
-        lines += ['', '## Coverage and actual understanding tasks',
-                  'PENDING: independently reconstruct the necessary conversions from the reader goal and exact result before comparing the authored proof-obligation list; record omissions and repairs.',
-                  'PENDING: reconstruct the fast route, reproduce decisive slow steps, and change a condition to identify the first failed step. Record actual outcomes and body locations in obligation_coverage, fast_route_reconstruction, slow_step_reproduction and condition_transfer; nonempty text is not mathematical acceptance.']
-    if rc2_capabilities(plan):
-        lines += ['', '## View-specific work', VIEW_TASKS[plan['view']],
-                  'PENDING: replace these navigation suggestions with the actual quantities, operations, node consumers and manuscript locations. Preserve all principal results, decisive boundaries and mode proof promises.',
-                  *[f'- [[{s["node_id"]}]]: {s["reason"]}' for s in plan['selections']]]
-        if nodes is not None and not any(view_match(nodes[s['node_id']].meta,plan['view'],s['role']) for s in plan['selections']):
-            lines += ['PENDING: no dedicated '+plan['view']+' candidate exists in this selected closure. State the evidence gap or justify why no extra material is needed; return to KB for any new claim. Do not invent a node or drop the main result.']
+    lines += ['', '## Coverage and actual understanding tasks',
+              'PENDING: independently reconstruct the necessary conversions from the reader goal and exact result before comparing the authored proof-obligation list; record omissions and repairs.',
+              'PENDING: reconstruct the fast route, reproduce decisive slow steps, and change a condition to identify the first failed step. Record actual outcomes and body locations in obligation_coverage, fast_route_reconstruction, slow_step_reproduction and condition_transfer; nonempty text is not mathematical acceptance.']
+    lines += ['', '## Opening contract',
+              ('Paper has one concise research abstract before Introduction. State decisive hypotheses, actual contribution and mechanism honestly; Introduction performs the separate prior-work and proof-route duties.' if plan['profile'] == 'paper' else
+               'No abstract, Overview, Preface or untitled pre-section summary. After title and necessary status enter the first section directly; put brief problem positioning there. Complete mathematical statements cannot be replaced by a conclusion summary.')]
+    lines += ['', '## View-specific work', VIEW_TASKS[plan['view']],
+              'PENDING: replace these navigation suggestions with the actual quantities, operations, node consumers and manuscript locations. Preserve all principal results, decisive boundaries and mode proof promises.',
+              *[f'- [[{s["node_id"]}]]: {s["reason"]}' for s in plan['selections']]]
+    if nodes is not None and not any(view_match(nodes[s['node_id']].meta,plan['view'],s['role']) for s in plan['selections']):
+        lines += ['PENDING: no dedicated '+plan['view']+' candidate exists in this selected closure. State the evidence gap or justify why no extra material is needed; return to KB for any new claim. Do not invent a node or drop the main result.']
     if plan['profile'] == 'paper':
         lines += ['', '## Contribution contract',
                   'PENDING: audit every plan contribution against authorized provenance, closest verified prior results, supported difference, complete proof and caveats. No closed original contribution: DRAFT_UNVERIFIED only.']

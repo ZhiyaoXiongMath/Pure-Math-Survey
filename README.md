@@ -1,141 +1,108 @@
-# Pure Math Survey
-
-> **软件版本 2.1.0 发布准备；tag 与 GitHub Release 尚未发布。** 当前可复制仓库中的完整技能目录，或从源码构建本地安装包。四模式契约见[成文模式](skills/pure-math-survey/references/editions.md)。
-> r3 Minimal 默认采用局部问题单元，就近组织完整结果、必要支点、关键连接与首次使用；旧 r2/rc1、rc2 保留严格三节政策；Thematic 核查路线比较；Lecture 兑现逐步证明；Paper 需授权原创贡献、最接近前人成果核查与闭合证明，默认只生成内部草稿。软件校验不保证数学正确、原创性或读者理解。
-> 知识 schema 为 2.0.0，新输出计划与新版政策审阅为 2.2.0；旧快照、正文和审阅不被静默迁移，历史 accepted 不构成新版政策验收。
-
+# Pure Math Survey — R4 开发预览
 
 **简体中文** | [English](README.en.md)
 
-**Pure Math Survey 2.1.0** 面向维护数学知识和撰写文章的作者：先建立有原始文献依据的知识库，再从固定的知识快照撰写所需的英文综述、讲义或研究论文草稿。
+为需要整理数学文献、维护可追溯知识库，并撰写英文综述、讲义或研究草稿的作者提供工作流程：先真实阅读来源，构建可理解的快慢知识，再从审阅后的固定快照写出所请求的稿件。只建知识时不生成文章。
 
-知识项目保存明确的问题、定义、结论、证明机制、结果之间的关系、例子、适用边界及对应的文献证据。它可以独立维护，不必生成文章。作者或代理负责数学阅读与写作；工具负责检查文件约定、固定输入、证据关联和实际编译。
+**本次为 `v2.1.0-r4-preview.1` 预发布，软件版本仍为 2.1.0。** 工程检查已通过，第二轮真实数学端到端测试仍在运行，不能据此称为稳定版或五项数学全部达标。详见[导师进度与验证范围](docs/r4/development-status.md)。
 
-| 写作模式 | 适用需求 |
+## 安装完整 skill
+
+1. 打开 [GitHub 预发布页](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/tag/v2.1.0-r4-preview.1)，下载附件 `pure-math-survey-2.1.0.zip` 和 `pure-math-survey-2.1.0.zip.sha256`。安装 ZIP 与 GitHub 自动生成的源码 ZIP 是不同文件。
+2. 核对下载文件的 SHA-256，解压，把完整 `pure-math-survey/` 文件夹复制到宿主的用户 skill 目录。例如 Codex 的默认用户目录为 `~/.codex/skills/`；若宿主配置了其他目录，以该配置为准。保留 SKILL、references、scripts 和 assets，不能只复制 SKILL.md。
+3. 在能够访问你的项目和来源文件的新聊天中引用 `$pure-math-survey`。调用聊天保留当前模型；运行控制台创建的文献、知识、写作及审阅工作聊天统一使用实际 `gpt-6-astra / ultra` 参数。
+
+需要宿主支持新建、读取、等待和发送任务给 Codex 工作聊天，并可用 Astra/ultra。确定性脚本需要 Python 3.10+ 标准库；生成 PDF 还需 pdfLaTeX、BibTeX、样式所用 TeX 包和 Poppler 的 pdfinfo/pdftoppm。缺少能力时控制台会报告具体阻碍，不以串行角色扮演冒充实际派发。
+
+正常安装和使用无需创建符号链接，也不需要本次工程测试使用的 UAC 提权步骤；该弹窗用于测试实际符号链接的安全拒绝，系统权限设置没有被修改。[构建与页面检查要求](skills/pure-math-survey/references/layout-and-build.md)提供安装内的原生流程。
+
+## 第一次使用：先建立知识库
+
+把下面提示中的目录改成自己的可写项目路径；附上已有来源，或允许控制台查找原始来源。明确哪些目录可读、哪些不可读：
+
+```text
+使用 $pure-math-survey，在 work/matrix-positivity 建立数学知识库。
+主题：有限维实对称分块矩阵的正定性；要求首块可逆，排除奇异首块变体。
+读者：掌握本科线性代数。请解释对象、全部条件、两向论证、实际使用的构造及边界。
+先只构建和审阅知识，不生成文章或 PDF。查找并真实阅读支持这些结论的原始来源。
+允许读取完整已安装 skill、我提供的来源和本项目；仅在本项目及其独占工作目录写入。
+其他私人目录不在授权读取范围内；如需更多输入，请说明具体缺口。
+本聊天作为控制台。我授权在本项目内新建必要的 Codex 工作聊天，全部使用
+ gpt-6-astra / ultra，负责文献、成对快慢知识、写作和非作者审阅；授权本控制台
+向这些聊天发送任务、继续、修订和停止指令，并读取结果交付。
+```
+
+这是用户实际发送的授权，文档中的提示本身不产生权限。已有同范围的有效授权会继续使用；只在宿主确有要求且缺少授权时补一次具体授权。控制台把准确的安装、来源和输出路径边界传给每个 worker，worker 不递归创建聊天。禁止全局同名 skill 与禁止所有全局辅助 skill 的范围不同，实际限制必须被遵守。
+
+控制台组织来源阅读、知识候选及非作者审阅，核对返回的真实文件和证据，再单写整合权威知识。快层说明目标、输入、关键操作、输出、用途和条件；对应慢层完成承诺的推导与精确外部定理接口。你得到可编辑知识节点、项目综览、来源／审阅记录和明确的缺口；冻结快照只固定字节，不自动证明数学就绪。
+
+## 再请求一份稿件
+
+知识审阅后，可在同一聊天继续：
+
+```text
+请基于这个知识项目写一份英文 Minimal 综述，view=integrated，范围保持不变。
+读者仍掌握本科线性代数；完整陈述主结果，展示决定性的两向论证和条件用途。
+不要增加其他模式，也不要把已知结论称为原创。请交付可编辑 TeX 和可读 PDF；
+只有实际通过当前交付检查时才提供可重建文章包，否则说明草稿状态或阻碍。
+沿用本项目的工作聊天授权和读写边界。
+```
+
+控制台先协调这份稿件的具体读者与证明承诺，取得相应的真实非作者知识核查，把新证据纳入新快照，再由写作者完成正文。`prepare` 只生成固定材料和未完成脚手架；它不会自动写出合格证明。完成稿件还需要实际数学／成文审阅、TeX 构建、全部 PDF 页面观察及适用的解包重建。
+
+正常完成的文章项目含 `outputs/ID/plan.json`、`outline.md`、`manuscript/main.tex`、固定 `generated/` 和 `materials/`、`build/main.pdf` 及对应审阅／构建证据；正式许可通过时另有可重建 ZIP。这是交付结构说明，不表示本 README 的初始化示例已生成这些文件。知识-only 项目没有隐含稿件。
+
+要更新知识，说明新来源、纠正或新增问题，要求先核查并回流 live KB，再冻结新快照；旧快照和已交付文件保持不变。要再写 Lecture 或其他输出，给出新的读者／证明深度和数量，控制台取得相应证据并创建新输出，不覆盖旧稿。你无需手工填写审阅 JSON；这些记录由实际工作者完成并由控制台核对。未执行的工作不能写成 accepted。
+
+## 选择模式
+
+| 模式 | 适合什么任务 | 必须形成的正文 |
+|---|---|---|
+| **minimal**（默认） | 快速理解完整结果与决定性理由 | 无摘要；严格 Main Results、Key Mathematical Ingredients、Connecting the Ingredients 三节；全部完整主结果在第一节。 |
+| thematic | 理解专题中的真实方法及可比结论 | 无摘要；首节准确提出问题与代表性完整结果，后续分析困难、方法机制与有依据的综合。 |
+| lecture | 学会复现构造、计算和证明 | 无摘要；首节给出完整核心目标定理及忠实路线，后续按声明的读者前提兑现推导与首次应用。 |
+| paper | 整理研究贡献或内部研究草稿 | 保留简洁摘要和完整 Introduction；准确比较已有工作并完成证明。默认显著 DRAFT_UNVERIFIED。 |
+
+只有 Minimal 固定主体节数／标题。默认所请求稿件为 minimal + integrated；只生成所需模式和数量。五种 view：integrated、foundations、results、methods、boundaries，改变解释重点而不改变事实。四模式共享一个 canonical 数学权威和不可变快照。
+
+当前流程保留 F1–F4：实际正文中的证明／主结果定位、view 与设计一致性、真实比较及原始来源支持、未完成设计／草稿安全；同时要求义务覆盖、快路线重建、慢步骤复现和条件改变核查。普通解释文字主动以约 2–3 个正常排版行为目标，必要长陈述有具体理由，不能删假设或缩字凑行数。详见[模式契约](skills/pure-math-survey/references/editions.md)与[知识到稿件](skills/pure-math-survey/references/knowledge-to-manuscript.md)。
+
+已知结果的正确证明不等于原创贡献。未经核实的 Paper 可以提供显著草稿及预览 PDF，正式研究 package 必须拒绝；编译成功、AI 非作者审阅或软件测试不证明原创性、外部同行评审或真实学生学习效果。
+
+## 可选：工程 CLI 的真实初始化示例
+
+聊天是日常入口，CLI 用于文件操作和工程检查，不负责派发聊天。下面是实际执行过的初始化与结构验证；在包含解压后 `pure-math-survey/` 的目录中，新建 UTF-8 `scope-input.md`：
+
+```markdown
+# Scope
+
+Build a source-grounded knowledge project on positivity of finite real symmetric block matrices with an invertible leading block. Exclude singular-pivot variants. Readers know undergraduate linear algebra. This initialization demonstration does not request a manuscript or certify any theorem.
+```
+
+在可写的演示目录运行：
+
+```sh
+python pure-math-survey/scripts/survey.py --version --json
+python pure-math-survey/scripts/survey.py init --output my-topic --topic matrix-positivity --scope scope-input.md --json
+python pure-math-survey/scripts/survey.py kb validate my-topic --json
+```
+
+源码检出时，脚本相对路径为 `skills/pure-math-survey/scripts/survey.py`。本次实际调用同一版本 CLI，得到：
+
+| 调用 | 实际结果 |
 |---|---|
-| **minimal**（默认） | 快速掌握精确答案、核心机制和关键边界。 |
-| thematic | 围绕一个问题理解相关结果及证明路线。 |
-| lecture | 学习前置知识、计算步骤和明确要求展开的证明。 |
-| paper | 核查获授权的原创贡献、最接近前人成果与完整证明；默认仅生成未验证内部草稿。 |
+| --version | version=2.1.0；policy=four-modes-2026-10-13-r4；仅支持输出 schema 2.2.0 / 当前 r4。 |
+| init | INITIALIZED；review_status=pending；outputs=[]。 |
+| kb validate | VALID；node_count=0；source_count=0；警告 SEMANTIC_NOT_CERTIFIED。 |
 
-请求生成文章时，默认采用 **minimal + integrated**，只生成用户要求的模式。基础、结果、方法和边界是可以交叠的知识视角，不要求拆成若干卷；只有用户明确指定的页数上限才是硬性长度约束。
+生成 `my-topic/project.json`、`scope.md` 和 `knowledge/{overview.md,conventions.tex,discovery.md,coverage.json}`。这是空的未验证知识项目，没有审阅通过、文章、PDF 或文章包；结构有效不等于数学就绪。真实来源阅读、知识写作及审阅是后续步骤，不能用这项小演示冒充完整数学端到端验收。
 
-## 安装
+## 当前验证、支持范围与许可
 
-当前请将本仓库中完整的 [skills/pure-math-survey](skills/pure-math-survey/) 文件夹复制到宿主应用的 skills 目录。也可以在仓库根目录构建本地安装包：
+当前 Windows 独立安装的 **280/280 工程测试通过、0 skipped**；69 个安装成员／68 个运行资源的身份一致，3 页中性 TeX 构建检查通过。它们是工程与样式证据，不是五项数学全部通过的范例。第一轮整项未达标，已有部分范围内的数学／PDF 证据；当前第 2 轮继续完成。用户已要求不启动第 3 轮；若第 2 轮不达标就停止并报告，不继续运行代码修复。Schur Paper 本轮非作者知识审阅已完成、无需返修，但普通 kb readiness --plan 因已知结果缺少原创贡献而阻断；仍将完成真实 DRAFT_UNVERIFIED 预览、正式交付拒绝与三种变体检查。此项正在独立核实，最终 E05 尚未验收；这不是已解决结论，也不概括为所有 Paper 都有确定缺陷。详情见[开发进度](docs/r4/development-status.md)。
 
-```sh
-python skills/pure-math-survey/scripts/package_release.py --output ../pure-math-survey-2.1.0.zip
-```
+软件版本为 2.1.0，知识／快照 schema 为 2.0.0，输出／政策审阅 schema 为 2.2.0，当前政策为 four-modes-2026-10-13-r4。仅支持当前 r4；明确旧／未知契约会被拒绝且原文件不改，不提供 recorded 放行、历史模板选择或迁移服务。reprepare 保留作者正文／outline／样式，旧快照和证据不能通过手改哈希升级为 accepted。日常使用没有本次开发测试的固定三轮上限。
 
-解压后，将其中完整的 `pure-math-survey` 文件夹放入宿主应用的 skills 目录。构建脚本同时生成包内文件清单与 ZIP 的 SHA-256 校验文件。`v2.1.0` tag 和 GitHub Release 尚未发布，目前没有该版本的正式下载附件。下方示例保存在仓库中，无需单独下载示例即可使用 skill。
-本版本的软件版本为 2.1.0；知识与快照 schema 为 2.0.0，新计划及新版政策审阅 schema 为 2.2.0。旧软件不能读取新计划；旧成果按显式历史政策读取，不自动迁移。
+阅读[完整入口](skills/pure-math-survey/SKILL.md)、[命令与字段](skills/pure-math-survey/references/contracts.md)、[验证边界](skills/pure-math-survey/references/validation.md)。软件安装 ZIP、数学文章包和 GitHub 软件 Release 是不同对象。旧生成范例已移出当前公开集合；失败稿不作为通过范例展示。
 
-## 使用
-
-```text
-使用 $pure-math-survey，为[精确主题]建立知识库，暂时不要写文章。
-```
-
-```text
-使用 $pure-math-survey，基于已经审阅的知识项目，为[读者群体]撰写一篇关于[主题]的 minimal 英文综述。
-```
-
-```text
-使用 $pure-math-survey，从这个知识快照撰写英文讲义，完整展开[指定步骤]的证明。
-```
-
-详细说明见[工作流程](skills/pure-math-survey/SKILL.md)、[文件约定与命令](skills/pure-math-survey/references/contracts.md)和[验证边界](skills/pure-math-survey/references/validation.md)。
-写作中发现的新结论应先回到知识项目中审阅，再形成新快照。生成的陈述和已有写作材料都要与快照核对。作者自查与独立审阅分别记录；编译成功和文件校验不能证明数学正确。
-
-## 示例
-
-### r3：九篇文章与可编辑知识项目
-
-[r3 示例入口](examples/r3/README.md)包含比较几何 Minimal／Lecture、时间紧性 Thematic 与 methods／boundaries 配对稿，以及三个局部例子和明确标记的 Paper 草稿，共九篇、54 页。公开树保留经审阅的原始正文、知识快照、PDF 和页面图片。团队内非作者审阅不等于外部同行评审；重新构建及安装后的验证仍须针对新产物执行。
-
-### dHYM：写作与排版参考
-
-这份六页的 balanced dHYM 综述由作者经过多轮专门润色，是主要的成文与排版参考。它从精确的可解性结论进入证明机制，再就地引入稳定性定义，并给出明确的等号边界例子。它的页数、提纲和结论数量不构成其他综述的要求。
-
-- [阅读 PDF](examples/dhym-balanced/dhym-survey-revised.pdf)
-- [独立 TeX 源文件](examples/dhym-balanced/dhym-survey-revised.tex)
-- [如何使用这份写作参考](skills/pure-math-survey/assets/reference-samples/dhym-balanced/README.md)
-
-上述示例目录只有 `.tex` 和 `.pdf` 两个文件。TeX 已包含所需的自定义样式和参考文献，数学正文未改变；PDF 保留作者提供的原文件。
-
-### Schur 补：知识库到文章的流程示例
-
-[下载 Schur 补示例](examples/schur-complement/pure-math-survey-2.0.4-schur-example.zip)。它包含九个知识节点、实际的文献阅读记录、固定的知识快照，以及两页 minimal 综述和三页 lecture 讲义，用于演示完整工作流程。记录的审阅方式是作者自查，未声称独立数学审阅；原始文献 PDF 不随示例分发。
-
-### 输入输出示例：Schur 补
-
-**输入：**
-
-```text
-使用 $pure-math-survey，研究有限维实对称分块矩阵在左上块可逆时的严格正定判据。
-先建立知识库并审阅原始来源，再从同一快照分别写 minimal 英文综述和 lecture 英文讲义，
-说明严格不等式的边界，并排除奇异主块的一般推广。
-```
-
-**对应输出：** 仓库中的 Schur 补示例提供 `project/` 知识项目、固定快照、
-`pdf/schur-minimal.pdf`（两页）和 `pdf/schur-lecture.pdf`（三页），以及各自的 TeX 正文和审阅记录。
-这些是该示例已经完成的成果；新主题需要实际阅读、写作与核查，初始化命令只建立项目，不会自动生成文章。
-
-公开示例已移除旧构建历史、临时编译文件和原始命令日志；构建与渲染记录中的机器路径已脱敏，
-数学内容、知识快照、PDF 和页面图片保持不变，并重新绑定了实际页面检查记录。
-
-## 环境要求与开发
-
-知识库命令行工具只使用 Python 3.10+ 标准库。生成 PDF 需要 pdfLaTeX、BibTeX 和 `math-review.sty` 加载的 TeX 宏包；页数检查和页面渲染使用 Poppler（`pdfinfo`、`pdftoppm`）。字体优先使用 STIX2，缺失时会报告改用 Latin Modern。可选的 PDF 图像比较工具还使用 PyMuPDF 和 Pillow。
-
-```sh
-python -m unittest discover -s tests -v
-python skills/pure-math-survey/scripts/validate_assets.py --json
-python skills/pure-math-survey/scripts/package_release.py --output ../pure-math-survey-2.1.0.zip
-python tools/verify_release.py ../pure-math-survey-2.1.0.zip --report ../pure-math-survey-2.1.0-verification.json
-```
-
-测试覆盖快照与材料完整性、范围明确的审阅、TeX 正文检查、历史记录和打包，并包含实际 TeX 编译。测试中人工构造的审阅记录仅用于软件测试。Linux CI 使用 Python 3.10 和 3.12；Windows 若无创建符号链接的权限，会明确跳过对应的一项测试。
-
-参见[版本说明](CHANGELOG.md)。当前版本不包含服务器、向量数据库、研究调度器或 Research Studio 桥接功能；r3 要求知识库自身具有可用快路线和可复现慢解释，其实际质量须按任务验证。
-
-## 许可证
-
-本项目的 skill 指令、脚本、模板及说明文档采用 [MIT 许可证](LICENSE)，版权声明为 `Copyright (c) 2026 ZhiyaoXiongMath`。
-
-数学示例材料单独保留：`examples/` 和 `skills/pure-math-survey/assets/reference-samples/dhym-balanced/` 下的内容不在本次 MIT 授权范围内，包含其中的 TeX、PDF、参考文献及示例项目。此次添加许可证不为这些材料授予额外的复用许可，也不改变第三方材料原有的权利。
-
-## 验证证据与边界
-
-[rc2 候选验证记录](docs/rc2/CANDIDATE.md)保留该阶段的实际结果和提交标识，不能替代正式版最终提交的验证。rc2 保留历史示例，新增 Simon–Maitre–Barrett–Süli 三篇原始论文的实际知识项目、配对的 methods／boundaries 文稿及新的 Schur 讲义。[可编辑项目](examples/rc2/projects/time-compactness/README.md)和有明确范围的作者／页面观察记录均予保留。历史候选材料中的已审阅 PDF、页面图片和构建记录只证明其对应字节；重新构建的 PDF 需要自己的视觉审阅。
-
-另见[需求与实现对照](docs/vnext/requirements.md)、[实际验证及限制](docs/vnext/validation.md)和[七个已有基准文稿](examples/vnext/README.md)。这些历史记录中的六个已知数学样例曾编译并由作者重读；Paper 边界样例有意保持不可正式交付。独立数学审阅、真实读者反馈以及真正原创 Paper 的原创性与完整证明质量仍未验证。软件正式发布不改变这些限制。
-
-## r3 日常使用职责与证据
-
-日常使用 main 固定完整请求、最新纠正、读者可执行操作与项目 revision，负责唯一集成和实物验收。
-按需要使用真实可用工具向隔离候选任务委派来源、知识、审阅和 PDF 工作，记录实际任务 ID、输入、
-状态和接收。拒收过期 revision；数学冲突回来源；接替前冻结旧写者；迟到结果只保留候选。
-无委派能力时串行执行相同职责并如实说明。保存文件／补丁、任务实际回答、哈希和未完成项，
-使停止／恢复不依赖聊天可读。这不同于开发阶段 main，也不是常驻调度平台。
-knowledge-only 不新增文章，不调用文章 prepare。
-
-KB 具有 overview、问题路线、节点三个阅读尺度，共用单一 canonical。快路线显示输入、关键操作
-和决定条件，链接到具体慢层小节；慢层兑现承诺推导、精确导入与本次应用，并反向标明路线和消费处。
-文章中形成的可复用解释回 live KB，经审阅和新 snapshot 后采用。按本次用法区分 Assumed／
-Refreshable／Bridge-required。先从目标与读者逆推义务，再检查作者清单；保存快层重建、慢层实作、
-条件改变的实际回答、失败和修复。保留所有明确主题分支；七分支回归不是每个用户的强制课程。
-
-四模式普通解释正文主动以正常字号页宽下约 2–3 个实际排版行为目标。长块须改进或记录具体位置、
-保留理由、曾考虑的改法、最终 PDF 哈希和复看范围；禁止 TeX 源码计行、装饰公式、强制换行、缩字体
-或删条件。实际检查所有页面。五 view 改变真实读者任务，不改变模式职责或数学事实。
-保留 F1 正文定位、F2 视角／设计、F3 比较与前人 primary 支持、F4 草稿／设计安全。
-Paper 默认显著 DRAFT_UNVERIFIED。
-
-软件仍为 2.1.0，KB／snapshot schema 2.0.0，output／review schema 2.2.0；r3 政策为
-`four-modes-2026-10-12-r3`，与 rc2 分开。旧字节和 accepted 保持原样；recorded 读取不授权当前
-正式打包。正式 tag／Release 继续暂停。规范文字不等于验收完成；实际内容、PDF、独立安装和关键
-复核须针对固定候选留证。分开报告程序、数学、讲解任务、PDF 检查和真实读者反馈；团队／AI 审阅
-不是外部同行或学生实测。无实际原创输入与相应审阅，真实 Paper 原创性及完整研究证明质量仍为
-NOT VERIFIED。
+指令、脚本、模板和文档遵循 [MIT License](LICENSE)，Copyright (c) 2026 ZhiyaoXiongMath。数学材料及第三方原文保留各自权利；可读取不等于可再分发。公开包不包含私人授权台账或受限原文。

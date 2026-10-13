@@ -1,6 +1,6 @@
 # Selection and length
 
-Only explicit user `limits.max_pages` is a hard page-count limit, measured from the actual PDF. `page_review_threshold` is optional, nullable and nonblocking; no value means no implicit quota. Never shrink normal type or margins, remove necessary hypotheses or alter mathematical scope to fit advice. The supplied six-page dHYM manuscript illustrates a reading experience, not six prescribed pages.
+Only explicit user `limits.max_pages` is a hard page-count limit, measured from the actual PDF. `page_review_threshold` is optional, nullable and nonblocking; no value means no implicit quota. Never shrink normal type or margins, remove necessary hypotheses or alter mathematical scope to fit advice. A supplied reference may illustrate clarity, never prescribe its page count or mathematics scope.
 
 Coverage tracks important candidates per selected question. Plans select nodes with role, full/explained_reference statement treatment, proof treatment and reason. Principal answers must be full. Necessary dependencies must be selected or declared as precisely scoped prerequisites. Explicitly explain important omissions; unrelated KB branches need no omission row.
 
@@ -12,6 +12,4 @@ Retain all explicit user branches and explain their promised depth. A representa
 route may be developed first but cannot stand for completion of every requested branch.
 For a request without a full list, choose a core using the exact question, reusable
 constructions and reader cost; compare real new tools and later reuse instead of theorem
-fame, node count or formula brevity. Minimal under r3 keeps local results/points/connections
-near first use and retains every necessary input. Only historical r2/rc1 and rc2 force
-the strict three-section layout. The seven-branch benchmark is not a universal syllabus.
+fame, node count or formula brevity. Minimal/r4 keeps all complete principals in Main Results, consumed tools in Key Mathematical Ingredients and actual decisive reasoning in Connecting the Ingredients. Three sections do not permit shrinking scope. This installation supports current r4 only; old files are preserved, not reclassified or run through a compatibility route. A topic-specific branch set is not a universal syllabus.

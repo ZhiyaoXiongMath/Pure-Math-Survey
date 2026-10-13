@@ -48,5 +48,4 @@ some to every, semipositive to positive, or conditional to unconditional.
 
 Use English mathematical prose and appropriate established author attributions. Do
 not invent decorative names. Examples must calculate, distinguish hypotheses or expose
-a real boundary. The historical balanced dHYM sample is a local writing reference,
-not a new-policy acceptance record or a fixed outline/page target.
+a real boundary. Primary sources and current templates govern new work. Historical generated samples are not current writing authorities or acceptance evidence. Follow the mode-specific opening and body duties in editions.md; all modes share the same canonical fast/slow knowledge.

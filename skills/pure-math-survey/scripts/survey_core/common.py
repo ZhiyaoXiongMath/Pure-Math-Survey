@@ -49,7 +49,7 @@ def decode(text: str, path: str = '') -> Any:
         raise SurveyError('JSON_INVALID', str(e), path) from e
 
 def read_json(path: Path) -> Any:
-    return decode(path.read_text(encoding='utf-8'), path.name)
+    return decode(native_path(path).read_text(encoding='utf-8'), path.name)
 
 def relative(value: Any) -> str:
     require(isinstance(value, str) and value and '\\' not in value and ':' not in value and '\x00' not in value,
@@ -58,16 +58,45 @@ def relative(value: Any) -> str:
     require(not p.is_absolute() and all(s not in ('', '.', '..') for s in value.split('/')), 'UNSAFE_PATH', 'Path escapes or aliases project', value)
     return value
 
+
+def logical_path(path: Path) -> Path:
+    """One identity for ordinary and native Windows spellings; no path waiver."""
+    value = str(path.absolute())
+    if os.name == 'nt':
+        if value.startswith('\\\\?\\UNC\\'):
+            value = '\\\\' + value[8:]
+        elif value.startswith('\\\\?\\'):
+            value = value[4:]
+    return Path(value)
+
+
+def native_path(path: Path, *, extended: bool = False) -> Path:
+    """Use Win32 extended I/O for long paths without changing manifest names."""
+    path = logical_path(path)
+    value = str(path)
+    if os.name == 'nt' and (extended or len(value) >= 248):
+        value = ('\\\\?\\UNC\\' + value[2:]) if value.startswith('\\\\') else ('\\\\?\\' + value)
+        return Path(value)
+    return path
+
+
+def resolved_path(path: Path) -> Path:
+    """Resolve through native I/O, then compare only logical path identities."""
+    return logical_path(native_path(path).resolve())
+
 def safe(root: Path, value: str, exists: bool = False) -> Path:
     value = relative(value)
-    root = root.absolute()
-    require(not root.is_symlink(), 'UNSAFE_PATH', 'Project root is a symlink', root.name)
+    root = logical_path(root)
+    require(not native_path(root).is_symlink(), 'UNSAFE_PATH', 'Project root is a symlink', root.name)
     p = root
     for part in PurePosixPath(value).parts:
         p /= part
-        require(not p.is_symlink(), 'UNSAFE_PATH', 'Symlink is not allowed', value)
-    require(root.resolve() == p.resolve() or root.resolve() in p.resolve().parents,
+        require(not native_path(p).is_symlink(), 'UNSAFE_PATH', 'Symlink is not allowed', value)
+    resolved_root = resolved_path(root)
+    resolved = resolved_path(p)
+    require(resolved_root == resolved or resolved_root in resolved.parents,
             'UNSAFE_PATH', 'Resolved path escapes root', value)
+    p = native_path(p)
     if exists:
         require(p.is_file(), 'UNKNOWN_REFERENCE', 'Referenced file is missing', value)
     return p
@@ -76,14 +105,14 @@ def relpath(root: Path, value: str | Path) -> str:
     p = Path(value)
     if p.is_absolute():
         try:
-            value = p.absolute().relative_to(root.absolute()).as_posix()
+            value = logical_path(p).relative_to(logical_path(root)).as_posix()
         except ValueError as e:
             raise SurveyError('UNSAFE_PATH', 'File is outside project', p.name) from e
     else:
         # Existing cwd-relative CLI paths may include the project folder.
         try:
-            if p.is_file():
-                value = p.absolute().relative_to(root.absolute()).as_posix()
+            if native_path(p).is_file():
+                value = logical_path(p).relative_to(logical_path(root)).as_posix()
         except ValueError:
             pass
     return relative(str(value))
@@ -95,17 +124,26 @@ def file_inventory(root: Path, paths: list[str]) -> list[dict]:
     return [{'path': p, 'sha256': file_hash(root, p), 'bytes': safe(root, p, True).stat().st_size} for p in sorted(set(paths))]
 
 def all_files(root: Path, prefix: str = '') -> list[str]:
+    root = logical_path(root)
+    require(not native_path(root).is_symlink(), 'UNSAFE_PATH', 'Project root is a symlink', root.name)
     base = safe(root, prefix) if prefix else root
-    if not base.exists():
+    if not native_path(base).exists():
         return []
     result = []
-    for p in sorted(base.rglob('*')):
-        require(not p.is_symlink(), 'UNSAFE_PATH', 'Symlink found', p.relative_to(root).as_posix())
-        if p.is_file():
-            result.append(p.relative_to(root).as_posix())
-    return result
+    pending = [base]
+    while pending:
+        directory = pending.pop()
+        for p in native_path(directory, extended=True).iterdir():
+            name = logical_path(p).relative_to(root).as_posix()
+            require(not native_path(p).is_symlink(), 'UNSAFE_PATH', 'Symlink found', name)
+            if native_path(p).is_dir():
+                pending.append(p)
+            elif native_path(p).is_file():
+                result.append(name)
+    return sorted(result)
 
 def atomic_bytes(path: Path, data: bytes) -> None:
+    path = native_path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     fd, name = tempfile.mkstemp(prefix='.' + path.name + '.', dir=path.parent)
     try:

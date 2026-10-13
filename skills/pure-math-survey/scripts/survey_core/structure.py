@@ -2,6 +2,7 @@
 from __future__ import annotations
 import hashlib
 import re
+from .common import native_path, resolved_path
 from collections import Counter
 from pathlib import Path, PurePosixPath
 
@@ -114,20 +115,20 @@ def checked_path(root: Path, value: str, context: str, errors: list[str]) -> Pat
         return None
     path = root / value
     try:
-        path.resolve().relative_to(root.resolve())
+        resolved_path(path).relative_to(resolved_path(root))
     except ValueError:
         errors.append(f"{context}: path escapes project root: {value}")
         return None
-    if not path.is_file():
+    if not native_path(path).is_file():
         errors.append(f"{context}: missing file {value}")
         return None
-    if path.stat().st_size == 0:
+    if native_path(path).stat().st_size == 0:
         errors.append(f"{context}: empty file {value}")
-    return path.resolve()
+    return native_path(resolved_path(path))
 
 def expand_tex(path: Path, project: Path, errors: list[str], main_dir: Path | None = None,
                stack: tuple[Path, ...] = ()) -> tuple[str, Counter[Path]]:
-    path = path.resolve()
+    path = native_path(resolved_path(path))
     main_dir = main_dir or path.parent
     if path in stack:
         errors.append(f"cyclic TeX input: {path.name}")
@@ -143,7 +144,7 @@ def expand_tex(path: Path, project: Path, errors: list[str], main_dir: Path | No
             return ""
         target = main_dir / value
         try:
-            relative = target.resolve().relative_to(project.resolve()).as_posix()
+            relative = resolved_path(target).relative_to(resolved_path(project)).as_posix()
         except ValueError:
             errors.append(f"{path.name}: TeX input escapes project: {value}")
             return ""

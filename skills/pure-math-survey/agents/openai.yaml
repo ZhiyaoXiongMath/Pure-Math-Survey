@@ -1,7 +1,4 @@
 interface:
   display_name: "Pure Math Survey"
-  short_description: "Knowledge-first four-mode mathematical exposition"
-  default_prompt: "Use $pure-math-survey to build source-grounded fast/slow knowledge, coordinate scoped work as main, and write only requested r3 outputs with local Minimal units, actual PDF review and honest Paper draft limits."
-
-# Follow the installed four-profile and versioned review contracts.
-# Paper is draft-only until actual authorized novelty and complete-proof review.
+  short_description: "Reviewed fast/slow knowledge and four writing modes"
+  default_prompt: "Use $pure-math-survey for my mathematical task with current r4; this chat is the controller. I authorize necessary project-scoped Codex worker chats using gpt-6-astra / ultra for sources, paired fast/slow knowledge, writing and non-author review, and task/continuation/revision/stop messages to them; carry my exact read/write boundaries, coordinate each requested output's reader/proof promises, and deliver only my requested outputs."

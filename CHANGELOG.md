@@ -1,3 +1,26 @@
+# v2.1.0-r4-preview.1 — development preview (2026-10-13)
+
+Software remains 2.1.0. This prerelease publishes the frozen r4 runtime for inspection,
+with clearer bilingual installation, chat invocation and executable CLI examples.
+It does not certify the five mathematical end-to-end cases: Round 2 is still running,
+and the user has stopped authorization for a third round. A known-result Paper
+knowledge-readiness block observed in Round 2 is under independent review; draft
+and expected-refusal evidence is still being collected. The default branch is unchanged.
+
+Windows isolated-install regression: 280 tests pass with no skips, including actual
+file/directory symlink rejection. Neutral TeX builds and earlier three-page style
+observations are engineering evidence, not mathematical acceptance.
+
+# R4 rule update — software 2.1.0
+
+- Current policy four-modes-2026-10-13-r4 restores strict Minimal three sections and all principals in section one. Minimal/Thematic/Lecture omit abstracts; Paper keeps its concise abstract and full Introduction duties.
+- The calling chat is the controller and preserves its model. Human-authorized work uses actual Astra/ultra Codex chats, worker role isolation, deduplication, fixed inputs, non-author critical acceptance, single-writer canonical integration and bounded stop/recovery.
+- Install controller/worker/start resources, shared canonical fast/slow-to-manuscript instructions and an optional local task-ledger helper. The CLI remains deterministic file/build validation.
+- Remove old generated public examples and bundled reference samples. New examples require fresh generation and actual acceptance; rules and bookkeeping tests do not claim those runs succeeded.
+- Preserve software 2.1.0, knowledge/snapshot schema 2.0.0 and output/review schema 2.2.0. Earlier policy records remain historical files; the current runtime supports only r4. No old accepted evidence upgrades automatically.
+
+The entries below are historical development records. Old artifact paths describe their original revision; removed examples remain in Git history/private backups and are not current product inputs or recommendations. Historical task-specific publication states remain historical, not general skill instructions.
+
 # r3 integrated development candidate — software 2.1.0, not a published release
 
 - Specify KB-native fast/slow routes at overview/problem/node scales, one canonical,

@@ -1,11 +1,26 @@
 """Question-relative selection, explicit paired spines and proof promises."""
 from __future__ import annotations
 from pathlib import Path
-from .common import VERSION, all_files, require, result, safe, write_json, writer, identifier
+from .common import relpath, VERSION, all_files, require, result, safe, write_json, writer, identifier
 from .dependencies import required_closure
 from .knowledge import Inventory, inventory
 from .models import load_plan
 from .snapshots import load_snapshot
+
+
+def promise_projection(plan: dict) -> dict:
+    """Existing mathematical plan fields, without a circular snapshot identity."""
+    from .profiles import validate_plan_contract
+    validate_plan_contract(plan)
+    return {k: plan[k] for k in ('output_id', 'profile', 'view', 'audience', 'reader_goals',
+            'question_ids', 'prerequisites', 'selections', 'proof_obligations', 'contributions')}
+
+
+def promise_request(plan: dict) -> tuple[str, bytes]:
+    from .common import canonical, sha
+    data = canonical(promise_projection(plan)) + b'\n'
+    # Content-addressed requests never overwrite earlier reviewed promises.
+    return f"evidence/p/{sha(data)}.json", data
 
 def consumption(inv: Inventory, plan: dict) -> set[str]:
     explain = {s['node_id'] for s in plan['selections'] if s['proof_treatment'] not in {'citation','none'}}
@@ -17,10 +32,8 @@ def consumption(inv: Inventory, plan: dict) -> set[str]:
         from .profiles import comparison_ids
         seeds.update(claim['closest_prior_results']); seeds.update(comparison_ids(claim))
     ids=required_closure(inv.nodes, seeds, explain)
-    from .profiles import rc2_capabilities
-    if rc2_capabilities(plan):
-        from .reviews import comparison_evidence_closure
-        ids=comparison_evidence_closure(inv,ids)
+    from .reviews import comparison_evidence_closure
+    ids=comparison_evidence_closure(inv,ids)
     return ids
 
 def consumed_paths(inv: Inventory, plan: dict) -> set[str]:
@@ -86,7 +99,7 @@ def validate_plan(root: Path, plan: dict, *, compare: bool = True) -> Inventory:
         for path in sorted((root/'outputs').glob('*/plan.json')):
             other = load_plan(path)
             if other['output_id'] != plan['output_id'] and other.get('comparison_group')==plan['comparison_group']:
-                require(spine(plan)==spine(other), 'PAIRED_CORE_MISMATCH', 'Explicit paired outputs must share snapshot, questions, principal answers and decisive boundaries', path.relative_to(root).as_posix())
+                require(spine(plan)==spine(other), 'PAIRED_CORE_MISMATCH', 'Explicit paired outputs must share snapshot, questions, principal answers and decisive boundaries', relpath(root, path))
     return inv
 
 def create_plan(root: Path, output_id: str, snapshot_id: str, profile: str='minimal', view: str='integrated',
@@ -97,13 +110,25 @@ def create_plan(root: Path, output_id: str, snapshot_id: str, profile: str='mini
     require(profile in PROFILES and view in FACETS|{'integrated'}, 'CONTRACT_INVALID', 'Invalid profile/view')
     _, frozen = load_snapshot(root, snapshot_id); inv = inventory(frozen)
     questions = questions or [k for k,n in inv.nodes.items() if n.meta['kind']=='question']
-    principals = principals or sorted({k for q in inv.coverage['questions'] if q['question_id'] in questions for k in q['answer_nodes']})
-    seeds = set(principals); roles = {k:'principal_answer' for k in principals}
+    answer_candidates = {k for q in inv.coverage['questions'] if q['question_id'] in questions for k in q['answer_nodes']}
+    # An unassessed result is a legal explicit/draft target. A substantive open
+    # question remains a frontier, not an automatically asserted proved answer.
+    requested_principals = principals or sorted(answer_candidates)
+    require(all(key in inv.nodes for key in requested_principals), 'UNKNOWN_REFERENCE', 'Requested principal is not a known node', 'plan.json')
+    principal_questions = {key for key in requested_principals if inv.nodes[key].meta['kind'] == 'question'}
+    principals = [key for key in requested_principals if key not in principal_questions]
+    require(principals, 'PLAN_INVALID', 'Select an actual principal result; open questions remain frontier material', 'plan.json')
+    seeds = set(principals) | principal_questions; roles = {k:'principal_answer' for k in principals}
+    roles.update({key: 'frontier' if inv.nodes[key].meta['mathematical_status'] in {'open','conjectural','unassessed'} else 'background'
+                  for key in principal_questions})
     for q in inv.coverage['questions']:
         if q['question_id'] in questions:
-            for field,role in [('mechanism_nodes','essential_bridge'),('boundary_nodes','boundary')]:
+            for field,role in [('answer_nodes','background'),('mechanism_nodes','essential_bridge'),('boundary_nodes','boundary')]:
                 seeds.update(q[field]); roles.update({k:role for k in q[field] if k not in roles})
-    ids = required_closure(inv.nodes, seeds | set(questions), seeds) - set(questions)
+    ids = required_closure(inv.nodes, seeds | set(questions), seeds) - (set(questions) - set(roles))
+    for key in ids:
+        if inv.nodes[key].meta['kind'] == 'question' and roles.get(key) != 'principal_answer':
+            roles[key] = 'frontier' if inv.nodes[key].meta['mathematical_status'] in {'open','conjectural','unassessed'} else roles.get(key,'background')
     from .profiles import view_match, view_reason, VIEW_TASKS
     selections = []
     for key in sorted(ids,key=lambda k:(0 if roles.get(k)=='principal_answer' else
@@ -140,10 +165,10 @@ def create_plan(root: Path, output_id: str, snapshot_id: str, profile: str='mini
             'actual_difference':'', 'proof_status':'unverified',
             'gaps':['Contribution, closest prior work and proof closure have not been reviewed.']} for key in principals]
     target = safe(root, f'outputs/{output_id}/plan.json')
-    require(not target.exists(), 'DESTINATION_EXISTS', 'Output plan already exists', target.relative_to(root).as_posix())
+    require(not target.exists(), 'DESTINATION_EXISTS', 'Output plan already exists', relpath(root, target))
     # Round-trip through the strict loader before committing.
     from .models import PROFILES, FACETS
     require(profile in PROFILES and view in FACETS|{'integrated'}, 'CONTRACT_INVALID', 'Invalid profile/view')
     validate_plan(root,plan)
     with writer(root): write_json(target,plan)
-    return result('output.plan','PLANNED',{'plan':target.relative_to(root).as_posix(),'profile':profile,'view':view,'review_status':'pending'})
+    return result('output.plan','PLANNED',{'plan':relpath(root, target),'profile':profile,'view':view,'review_status':'pending'})

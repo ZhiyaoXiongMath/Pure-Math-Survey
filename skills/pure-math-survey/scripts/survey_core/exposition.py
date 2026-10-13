@@ -10,22 +10,21 @@ from .common import diagnostic, safe
 
 DEFAULT_AUDIENCE = ('[[PMS_PENDING:audience]] Specify topic-specific callable '
                     'capabilities, refreshable inputs and bridges to establish.')
-RC1_AUDIENCE = ('General undergraduate mathematics and early doctoral background '
+VAGUE_AUDIENCE = ('General undergraduate mathematics and early doctoral background '
                'in the relevant field; specify the actual callable capabilities for this topic.')
 PENDING = re.compile(r'(?<!\\)\[\[PMS_PENDING:[A-Za-z0-9_.-]+\]\]')
 PREVIEW_DESIGN_CODES = {'EXPOSITION_DESIGN_INCOMPLETE', 'EXPOSITION_DESIGN_MISSING'}
 
 
 def check_exposition_design(out: Path, plan: dict) -> dict:
-    from .profiles import rc2_capabilities, GOALS
-    if not rc2_capabilities(plan):
-        return {'status': 'NOT_EVALUATED_RECORDED', 'errors': [],
-                'meaning': 'Historical design bytes are preserved, not certified under rc2.'}
+    from .profiles import current, GOALS
+    from .profiles import validate_plan_contract
+    validate_plan_contract(plan)
     errors = []
     def add(message, path='outline.md', code='EXPOSITION_DESIGN_INCOMPLETE', key=None):
         errors.append(diagnostic(code, message, path, key))
     audience = plan.get('audience', '')
-    if not isinstance(audience,str) or not audience.strip() or audience.strip() in {DEFAULT_AUDIENCE, RC1_AUDIENCE} or PENDING.search(audience):
+    if not isinstance(audience,str) or not audience.strip() or audience.strip() in {DEFAULT_AUDIENCE, VAGUE_AUDIENCE} or PENDING.search(audience):
         add('audience: replace the default with executable capabilities and inputs to refresh/build.', 'plan.json')
     goals = plan.get('reader_goals', [])
     if (not isinstance(goals,list) or not goals or any(not isinstance(g,str) or not g.strip() or
@@ -41,7 +40,7 @@ def check_exposition_design(out: Path, plan: dict) -> dict:
     for match in PENDING.finditer(text):
         add(f'Line {text.count(chr(10),0,match.start())+1}: unresolved {match[0]}')
     fence = None
-    known_defaults = {RC1_AUDIENCE, DEFAULT_AUDIENCE, *GOALS.values()}
+    known_defaults = {VAGUE_AUDIENCE, DEFAULT_AUDIENCE, *GOALS.values()}
     for number, line in enumerate(text.splitlines(),1):
         stripped = line.strip()
         mark = re.match(r'^(`{3,}|~{3,})',stripped)

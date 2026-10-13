@@ -1,3 +1,5 @@
+> Historical development record: all policy claims, artifact paths, results and command transcripts below apply to that earlier revision. Removed examples/reports/tools remain in Git history or private backups; they are not current instructions, answer inputs or r4 acceptance. Follow [current product workflow](../r4/workflow.md) for new work.
+
 # rc2 baseline, red tests, and explicit contract decision
 
 Status: development in progress, NOT a completed rc2 release.
