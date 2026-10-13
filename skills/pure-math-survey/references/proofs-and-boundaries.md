@@ -62,3 +62,62 @@ Perform fast reconstruction, a concrete slow derivation and a condition-change t
 saving actual attempts, failures and repairs. A route failing is not proof the theorem
 is false. Knowledge-only uses real node/route review findings, never an article created
 to obtain locations; article records bind their actual substantive body.
+
+
+## Review handoff and candidate acceptance
+
+Finish the concrete plan's audience, reader goals and exact required_steps before
+requesting review; generated authoring prompts are rejected. Author the actual
+outline/design as part of the writing responsibility. The request is the existing
+promise_projection of that plan, with one stable content-addressed identity;
+changing snapshot_id alone does not change the promises. Do not handwrite a second
+version of the promise list or treat template generation as reading.
+
+```sh
+python scripts/survey.py review template PROJECT --kind mathematical --id N-RESULT --plan outputs/ARTICLE/plan.json --to evidence/reviews/NEW.json --json
+python scripts/survey.py review validate PROJECT --record evidence/reviews/NEW.json --record evidence/reviews/NEW-COVERAGE.json --plan outputs/ARTICLE/plan.json --json
+```
+
+Mathematical templates include applicable canonical statements in the requested
+node's necessary dependency/comparison scope, not only principal answers. They
+leave the actual reviewer, date, statement findings, checked proof_steps and
+local-derivation evidence_basis unfinished. Source templates expose original-text
+reading mode, version and locators. Coverage templates identify all four knowledge
+checks; real findings cite bound knowledge subsections. A nonauthor reconstructs
+obligations and records only actions actually checked, with source/KB locations
+and gaps. A separate AI task is not external peer review.
+
+Batch validation uses the same field, binding, statement, proof and coverage rules.
+It reports independent omissions across records and scope nodes; stale records
+report binding failures before dependent proof-step consequences. --plan requires
+plan-specific mathematical candidates to identify the actual output, bind the
+exact generated request and name the actual independent reviewer. Validation is
+mechanical evidence checking, not mathematical acceptance.
+
+Prepare candidate files in a project-local .cache/CANDIDATE directory whose
+members mirror project-relative paths. Generate and perform reviews against a
+complete working view of the final candidate knowledge, source and coverage bytes;
+do not refresh old accepted hashes. When mathematics changes, first align the
+authored preparatory snapshot and plan in that working project before generating
+the request. Copy only the resulting changed knowledge and fresh evidence members
+into the candidate directory. Review records and promise requests must use new
+paths; historical evidence and snapshots cannot be replaced. Supported candidate
+members are under the declared knowledge root, evidence/reviews, evidence/p or
+evidence/source-checks. Project/scope, outputs, snapshots, symlinks, traversal,
+deletions and arbitrary project files are excluded.
+
+```sh
+python scripts/survey.py review accept PROJECT --candidate .cache/CANDIDATE --plan outputs/ARTICLE/plan.json --json
+python scripts/survey.py kb freeze PROJECT --json
+# Explicitly update the existing plan's snapshot_id to the returned reviewed snapshot.
+python scripts/survey.py kb readiness PROJECT --plan outputs/ARTICLE/plan.json --json
+python scripts/survey.py output prepare PROJECT --plan outputs/ARTICLE/plan.json --json
+```
+
+Accept stages a combined final byte view, batch-checks its fresh review records
+and runs existing readiness against that live view. It holds the existing writer
+lock, compares the plan/candidate/live inputs for concurrent changes, checks final
+installed bytes, and restores touched files on installation failure. Ordinary
+validation failures leave live knowledge/evidence unchanged. It does not freeze,
+adopt, prepare, perform reading or turn a Paper eligibility failure into success.
+Those responsibilities and PR03's knowledge/Paper separation remain explicit.

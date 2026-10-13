@@ -50,10 +50,11 @@ def consumed_paths(inv: Inventory, plan: dict) -> set[str]:
             if inv.sources[key]['access'].get(field): paths.add(inv.sources[key]['access'][field])
     return paths
 
-def validate_plan(root: Path, plan: dict, *, compare: bool = True) -> Inventory:
+def validate_plan(root: Path, plan: dict, *, compare: bool = True, inv: Inventory | None = None) -> Inventory:
     from .profiles import validate_plan_contract, validate_profile_selection
     validate_plan_contract(plan)
-    _, frozen = load_snapshot(root, plan['snapshot_id']); inv = inventory(frozen)
+    if inv is None:
+        _, frozen = load_snapshot(root, plan['snapshot_id']); inv = inventory(frozen)
     selected = {s['node_id']: s for s in plan['selections']}
     require(len(selected) == len(plan['selections']), 'DUPLICATE_ID', 'Duplicate selection in plan', 'plan.json')
     omissions = {o['node_id'] for o in plan['omissions']}

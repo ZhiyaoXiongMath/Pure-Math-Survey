@@ -2,7 +2,7 @@
 
 [简体中文](README.md) | **English**
 
-This is preview `v2.1.0-r4-preview.1` (software 2.1.0); mathematical end-to-end acceptance is still under verification. [Development status](docs/r4/development-status.md) records actual progress.
+This is preview `v2.1.0-r4-preview.1` (software 2.1.0); mathematical end-to-end acceptance is still under verification. [Stage status](docs/development/STATUS.md) records verified development stages; [historical preview notes](docs/r4/development-status.md) preserve the earlier scope.
 
 For authors organizing mathematical literature, maintaining traceable knowledge, and writing English surveys, lectures or research drafts.
 
@@ -111,5 +111,7 @@ flowchart TD
 Plans/proof promises are fixed before output-specific knowledge review; the diagram's manuscript plan implements that reviewed design. Freezing fixes bytes, not readiness. `prepare` supplies materials/scaffolding; writers still author the body. Compilation, rendering and hashes replace neither mathematical checking nor all-page observation. Unmet conditions are reported, not waived.
 
 Knowledge delivers overview/nodes/sources/evidence. Articles add plan, outline, `manuscript/main.tex`, fixed materials, `build/main.pdf` and review records. New sources/corrections return to knowledge review before a new snapshot, preserving old files. Specify each additional mode, audience and count: a snapshot may be shared, with separate writing/review.
+
+The PR02 candidate supplies pending `review template` checks for applicable canonical statements and dependencies, aggregate `review validate` diagnostics, and staged `review accept` validation of final candidate bytes with rollback on failure. Acceptance still requires a separate freeze and explicit snapshot adoption. See [review handoff](skills/pure-math-survey/references/proofs-and-boundaries.md#review-handoff-and-candidate-acceptance) and the [development contract](docs/development/CONTRACT.md).
 
 Only current r4 is supported; old/unknown output contracts are rejected without file modification. See [entrypoint](skills/pure-math-survey/SKILL.md) and [validation limits](skills/pure-math-survey/references/validation.md). AI review is not external peer review or originality certification. Code/instructions/templates use [MIT License](LICENSE); mathematical materials and third-party sources retain their rights.

@@ -6,9 +6,11 @@ from .common import VERSION, all_files, diagnostic, file_hash, read_json, requir
 from .models import fields
 from .dependencies import required_closure
 
+REVIEW_FIELDS = {'review_id':str,'kind':str,'reviewer_mode':str,'inputs':list,'findings':list,'unchecked_items':list,'disposition':str}
+
 def load_review(path: Path) -> dict:
     obj = read_json(path)
-    fields(obj, {'review_id':str,'kind':str,'reviewer_mode':str,'inputs':list,'findings':list,'unchecked_items':list,'disposition':str}, path.name)
+    fields(obj, REVIEW_FIELDS, path.name)
     if 'schema_version' in obj:
         require(obj['schema_version'] in (VERSION, '2.2.0'),'SCHEMA_UNSUPPORTED','Unsupported review schema',path.name)
     require(isinstance(obj.get('scope',{}),dict),'REVIEW_INVALID','Review scope must be an object',path.name)
@@ -156,10 +158,19 @@ def plan_mathematical_template(root: Path, plan_path: Path, keys: list[str]) -> 
             'PLAN_LOCATION_MISMATCH', 'Read only a current plan inside this project\'s outputs')
     plan_path = safe(root, relpath(root, plan_path), True)
     plan = load_plan(plan_path)
+    from .profiles import filled
+    from .exposition import PENDING, DEFAULT_AUDIENCE, VAGUE_AUDIENCE
+    require(filled(plan['audience']) and plan['audience'] not in {DEFAULT_AUDIENCE, VAGUE_AUDIENCE}
+            and not PENDING.search(plan['audience'])
+            and all(filled(goal) and not PENDING.search(goal) for goal in plan['reader_goals']),
+            'EXPOSITION_DESIGN_INCOMPLETE', 'Author actual reader capabilities and goals before requesting plan review', 'plan.json')
+    require(all(filled(step) and not PENDING.search(step) for item in plan['proof_obligations'] for step in item['required_steps']),
+            'PROOF_OBLIGATION_UNMET', 'Replace generated prompts with actual exact step promises before requesting review', 'plan.json')
     require(resolved_path(plan_path) == resolved_path(safe(root, f"outputs/{plan['output_id']}/plan.json")),
             'PLAN_LOCATION_MISMATCH', 'Use this project\'s actual current plan')
     frozen = validate_plan(root, plan); live = inventory(root)
     require(keys and set(keys) <= consumption(frozen, plan), 'UNKNOWN_REFERENCE', 'Review only nodes consumed by this plan')
+    keys = sorted(comparison_evidence_closure(live, required_closure(live.nodes, set(keys))))
     paths = set()
     for key in keys:
         old = mathematical_inputs(frozen, key); present = mathematical_inputs(live, key)
@@ -175,9 +186,9 @@ def plan_mathematical_template(root: Path, plan_path: Path, keys: list[str]) -> 
             atomic_bytes(target, data)
     paths.add(request_path)
     scope = {'editorial_policy': POLICY, 'node_ids': keys, 'output_ids': [plan['output_id']],
-             'proof_steps': {key: [] for key in keys}, 'statement_reviews': {
+             'proof_steps': {key: [] for key in keys}, 'evidence_basis': '', 'statement_reviews': {
                  key: principal_template(live.nodes[key].statement) for key in keys
-                 if any(s['node_id'] == key and s['role'] == 'principal_answer' for s in plan['selections'])}}
+                 if live.nodes[key].statement is not None}}
     template = review_template(root, 'mathematical', keys, paths, scope)
     template['unchecked_items'].append('A real nonauthor must read the bound request and slow KB sections, record actual per-action findings/locations, and copy only genuinely checked exact required_steps into scope.proof_steps. Missing derivations require revise; narrative praise, string similarity and template generation are not acceptance. Keep all detailed teaching promises. Integrate new evidence, freeze, and explicitly adopt the new snapshot before formal readiness.')
     return template, request_path
@@ -374,7 +385,23 @@ def knowledge_scope_errors(inv, question_id: str, review: dict) -> list[dict]:
 
 def review_template(root:Path,kind:str,keys:list[str],required:set[str],scope:dict|None=None)->dict:
     from .profiles import POLICY, OUTPUT_SCHEMA
+    supplied_scope = scope is not None
     scope = dict(scope or { {'source':'source_ids','mathematical':'node_ids','coverage':'question_ids'}.get(kind,'output_ids'):keys})
+    if kind == 'mathematical':
+        from .knowledge import inventory
+        inv = inventory(root)
+        if not supplied_scope:
+            keys = sorted(comparison_evidence_closure(inv, required_closure(inv.nodes, set(keys))))
+            scope['node_ids'] = keys
+        scope.setdefault('editorial_policy', POLICY)
+        scope.setdefault('proof_steps', {key: [] for key in keys})
+        scope.setdefault('evidence_basis', '')
+        from .profiles import principal_template
+        scope.setdefault('statement_reviews', {key: principal_template(inv.nodes[key].statement)
+                          for key in keys if inv.nodes[key].statement is not None})
+    if kind == 'source':
+        scope.setdefault('source_reading', {key: {'mode': 'not_performed', 'version': '',
+                         'locators': [], 'raw_bytes_unavailable_reason': ''} for key in keys})
     if kind in {'output_semantic', 'visual'}:
         scope.setdefault('editorial_policy', POLICY)
     selected_policy = scope.get('editorial_policy')
@@ -382,6 +409,192 @@ def review_template(root:Path,kind:str,keys:list[str],required:set[str],scope:di
             'SCHEMA_UNSUPPORTED', 'Only current r4 review policy is supported')
     version = OUTPUT_SCHEMA if 'editorial_policy' in scope else VERSION
     return {'schema_version':version,'review_id':'REPLACE-WITH-STABLE-REVIEW-ID','kind':kind,'reviewer_mode':'not_performed',
-            'reviewed_at':None,'inputs':[{'path':p,'sha256':file_hash(root,p)} for p in sorted(required)],
+            'reviewer':'','reviewed_at':None,'inputs':[{'path':p,'sha256':file_hash(root,p)} for p in sorted(required)],
             'scope':scope, 'findings':[],
             'unchecked_items':['Actual scoped reading and substantive findings have not been recorded.'], 'disposition':'revise'}
+
+
+def mathematical_scope_errors(inv, key: str, review: dict, plan: dict | None = None,
+                              *, principal: bool = False, all_statements: bool = False) -> list[dict]:
+    """One mathematical scope rule for readiness and candidate validation."""
+    from .profiles import statement_errors, filled
+    node = inv.nodes[key]; scope = review.get('scope', {})
+    canonical = node.statement is not None and (principal or all_statements or 'output_ids' in scope)
+    errors = statement_errors(key, node.statement, review) if canonical else []
+    if plan is not None:
+        if all_statements and 'output_ids' not in scope:
+            errors.append(diagnostic('PLAN_REVIEW_SCOPE_MISMATCH', 'Plan-specific candidate must bind the generated promise request and actual output scope.', 'evidence', key))
+        errors.extend(plan_promise_scope_errors(inv.root, plan, review))
+        promised = {step for obligation in plan['proof_obligations'] if obligation['node_id'] == key
+                    for step in obligation['required_steps']}
+        missing = promised - set(scope.get('proof_steps', {}).get(key, []))
+        if missing:
+            errors.append(diagnostic('PROOF_OBLIGATION_UNMET',
+                'Candidate mathematical review omits promised steps: ' + '; '.join(sorted(missing)), node.path, key))
+    if all_statements and key not in scope.get('proof_steps', {}):
+        errors.append(diagnostic('REVIEW_SCOPE_INSUFFICIENT', 'Record the actual checked actions for this node in proof_steps, even when no proof action applies.', node.path, key))
+    if all_statements and node.meta['origin'] == 'local_derivation' and not filled(scope.get('evidence_basis')):
+        errors.append(diagnostic('MATHEMATICAL_REVIEW_PENDING', 'Local derivation review must state its actual proof basis', node.path, key))
+    return errors
+
+
+def review_record_errors(root: Path, path: str) -> tuple[dict | None, list[dict]]:
+    """Aggregate independent typed omissions before dependent strict loading."""
+    from .common import SurveyError
+    errors = []
+    try:
+        file = safe(root, path, True); obj = read_json(file)
+        fields(obj, {**REVIEW_FIELDS, 'scope': dict}, path, errors=errors)
+        if isinstance(obj, dict):
+            if 'reviewed_at' not in obj:
+                errors.append(diagnostic('REVIEW_INVALID', 'Review requires an explicit reviewed_at date or null', path))
+            if obj.get('reviewer_mode') == 'independent_review':
+                fields(obj, {'reviewer': str}, path, errors=errors)
+            if isinstance(obj.get('inputs'), list):
+                for index, binding in enumerate(obj['inputs']):
+                    fields(binding, {'path': str, 'sha256': str}, f'{path}:inputs[{index}]', errors=errors)
+        if errors: return None, errors
+        return load_review(file), []
+    except SurveyError as exc:
+        return None, [exc.diagnostic]
+
+
+def validate_reviews(root: Path, paths: list[str], plan: dict | None = None) -> dict:
+    """Read-only batch gate; a stale record yields its binding root failures."""
+    from .knowledge import inventory
+    from .common import SurveyError, result
+    records = []; errors = []
+    for path in sorted(set(paths)):
+        record, found = review_record_errors(root, path); errors.extend(found)
+        if record is not None: records.append((path, record))
+    # Preflight stored records through the same loader. Inventory can then
+    # continue with valid records without hiding independent batch omissions.
+    loaded = dict(records); knowledge_records = []
+    for path in all_files(root, 'evidence/reviews'):
+        if not path.endswith('.json'): continue
+        if path in loaded:
+            knowledge_records.append((path, loaded[path]))
+        elif path not in paths:
+            record, found = review_record_errors(root, path); errors.extend(found)
+            if record is not None: knowledge_records.append((path, record))
+    try:
+        inv = inventory(root, review_records=knowledge_records)
+    except SurveyError as exc:
+        if exc.diagnostic not in errors: errors.append(exc.diagnostic)
+        return result('review.validate', 'NEEDS_WORK', {'records': sorted(set(paths))}, errors=errors)
+    for path, record in records:
+        bindings = check_review_bindings(root, record)
+        if bindings:
+            errors.extend(bindings); continue
+        if record['disposition'] != 'accepted' or record['reviewer_mode'] == 'not_performed' or blocking_unchecked(record):
+            errors.append(diagnostic('REVIEW_PENDING', 'Actual accepted scoped reading and blocking unchecked work remain.', path))
+        kind = record['kind']; scope = record['scope']
+        field = {'source':'source_ids', 'mathematical':'node_ids', 'coverage':'question_ids'}.get(kind)
+        if field is None:
+            errors.append(diagnostic('REVIEW_INVALID', 'Knowledge candidates require source, mathematical or coverage reviews.', path)); continue
+        keys = scope.get(field)
+        known = inv.sources if kind == 'source' else inv.nodes
+        if not isinstance(keys, list) or not keys or not all(isinstance(key, str) and key in known for key in keys):
+            errors.append(diagnostic('REVIEW_SCOPE_INSUFFICIENT', f'{field} must identify actual project inputs.', path)); continue
+        if kind == 'coverage' and any(inv.nodes[key].meta['kind'] != 'question' for key in keys):
+            errors.append(diagnostic('REVIEW_SCOPE_INSUFFICIENT', 'Coverage scope must identify question nodes.', path)); continue
+        if kind == 'mathematical':
+            necessary = comparison_evidence_closure(inv, required_closure(inv.nodes, set(keys)))
+            if necessary - set(keys):
+                errors.append(diagnostic('REVIEW_SCOPE_INSUFFICIENT', 'Mathematical scope omits necessary nodes: ' + ', '.join(sorted(necessary - set(keys))), path))
+            keys = sorted(necessary)
+        for key in keys:
+            try:
+                required = {'source':source_inputs, 'mathematical':mathematical_inputs, 'coverage':coverage_inputs}[kind](inv, key)
+                found = check_review_bindings(root, record, required)
+                if not found and kind == 'mathematical':
+                    found += mathematical_scope_errors(inv, key, record, plan, all_statements=True)
+                if not found and kind == 'coverage':
+                    found += knowledge_scope_errors(inv, key, record)
+                errors.extend(found)
+            except SurveyError as exc:
+                errors.append(exc.diagnostic)
+    # Multiple scope nodes share many inputs; identical root findings appear once.
+    unique = {tuple(item.items()): item for item in errors}
+    return result('review.validate', 'NEEDS_WORK' if unique else 'VALID',
+                  {'records': sorted(set(paths)), 'meaning': 'mechanical evidence checks only'}, errors=list(unique.values()))
+
+
+def accept_review_candidate(root: Path, candidate_path: str, plan_path: str) -> dict:
+    """Ordinary-file staging under the existing writer, with byte rollback.
+
+    Candidates mirror project-relative knowledge/evidence paths under .cache.
+    They never contain plans, snapshots, deletions or replacements of reviews.
+    Freeze and explicit plan adoption remain separate operations.
+    """
+    import shutil
+    import tempfile
+    from .common import (atomic_bytes, file_inventory, native_path, result, writer)
+    from .knowledge import inventory
+    from .models import load_plan
+    from .readiness import assess_readiness
+    from .plans import validate_plan
+    from .profiles import filled
+    require(candidate_path.startswith('.cache/'), 'UNSAFE_PATH', 'Candidate must be a project-local .cache directory', candidate_path)
+    candidate = safe(root, candidate_path)
+    require(candidate.is_dir(), 'UNKNOWN_REFERENCE', 'Candidate directory is missing', candidate_path)
+    require(plan_path.startswith('outputs/'), 'PLAN_LOCATION_MISMATCH', 'Use the actual authored output plan', plan_path)
+    with writer(root):
+        plan_file = safe(root, plan_path, True); plan_bytes = plan_file.read_bytes(); plan = load_plan(plan_file)
+        require(plan_path == f"outputs/{plan['output_id']}/plan.json", 'PLAN_LOCATION_MISMATCH', 'Use the actual authored output plan', plan_path)
+        validate_plan(root, plan)
+        require(all(filled(step) for item in plan['proof_obligations'] for step in item['required_steps']),
+                'PROOF_OBLIGATION_UNMET', 'Complete actual promises before candidate review', plan_path)
+        inv = inventory(root); paths = all_files(candidate)
+        require(paths, 'CONTRACT_INVALID', 'Candidate is empty', candidate_path)
+        kr = inv.project['knowledge_root']
+        allowed = (kr + '/', 'evidence/reviews/', 'evidence/p/', 'evidence/source-checks/')
+        for path in paths:
+            require(not path.startswith(('outputs/', 'snapshots/', '.cache/')) and path not in {'project.json', inv.project['scope_file']}
+                    and path.startswith(allowed), 'UNSAFE_PATH', 'Candidate member is outside knowledge/review inputs', path)
+            if path.startswith(('evidence/reviews/', 'evidence/p/')):
+                require(not safe(root, path).exists(), 'DESTINATION_EXISTS', 'Evidence history is immutable; choose a new record/request', path)
+        changes = {path: safe(candidate, path, True).read_bytes() for path in paths}
+        before = {path: safe(root, path).read_bytes() if safe(root, path).is_file() else None for path in paths}
+        baseline = file_inventory(root, inv.files)
+        candidate_inventory = file_inventory(candidate, paths)
+        stage = Path(tempfile.mkdtemp(prefix='.review-', dir=safe(root, '.cache')))
+        applied = []
+        try:
+            for path in inv.files: atomic_bytes(safe(stage, path), safe(root, path, True).read_bytes())
+            for path, data in changes.items(): atomic_bytes(safe(stage, path), data)
+            review_paths = [path for path in paths if path.startswith('evidence/reviews/') and path.endswith('.json')]
+            require(review_paths, 'REVIEW_SCOPE_INSUFFICIENT', 'Candidate must contain fresh scoped reviews', candidate_path)
+            report = validate_reviews(stage, review_paths, plan)
+            if report['errors']: return result('review.accept', 'NEEDS_WORK', errors=report['errors'])
+            readiness = assess_readiness(stage, plan, live=True)
+            if readiness['errors']: return result('review.accept', 'NEEDS_WORK', errors=readiness['errors'])
+            require(file_inventory(root, inventory(root).files) == baseline
+                    and safe(root, plan_path, True).read_bytes() == plan_bytes
+                    and file_inventory(candidate, all_files(candidate)) == candidate_inventory
+                    and all((safe(root, path).read_bytes() if safe(root, path).is_file() else None) == data
+                            for path, data in before.items()),
+                    'REVIEW_INPUT_CHANGED', 'Live knowledge, plan or candidate changed during validation; retry', candidate_path)
+            for path, data in changes.items():
+                # Recheck destination safety and identity before each replacement.
+                target = safe(root, path)
+                require((target.read_bytes() if target.is_file() else None) == before[path],
+                        'REVIEW_INPUT_CHANGED', 'Candidate destination changed during installation', path)
+                applied.append(path); atomic_bytes(target, data)
+            require(safe(root, plan_path, True).read_bytes() == plan_bytes,
+                    'REVIEW_INPUT_CHANGED', 'Plan changed during installation', plan_path)
+            final = assess_readiness(root, plan, live=True)
+            require(not final['errors']
+                    and file_inventory(root, inventory(root).files) == file_inventory(stage, inventory(stage).files),
+                    'REVIEW_INPUT_CHANGED', 'Final accepted bytes differ from staged validation', candidate_path)
+        except Exception:
+            for path in reversed(applied):
+                target = safe(root, path)
+                if before[path] is None: target.unlink(missing_ok=True)
+                else: atomic_bytes(target, before[path])
+            raise
+        finally:
+            shutil.rmtree(native_path(stage, extended=True))
+    return result('review.accept', 'ACCEPTED', {'paths': paths,
+                  'next': 'Freeze final bytes and explicitly adopt the snapshot before readiness/prepare.',
+                  'meaning': 'Mechanical checks preserve human assertions; no mathematical reading is performed.'})

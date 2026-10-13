@@ -6,9 +6,10 @@ from .models import load_plan
 from .plans import consumption,validate_plan
 from .reviews import coverage_inputs,find_review,mathematical_inputs,reviews_in,source_inputs
 
-def assess_readiness(root:Path,plan:dict|Path)->dict:
+def assess_readiness(root:Path,plan:dict|Path, *, live:bool=False)->dict:
     if isinstance(plan,Path):plan=load_plan(plan)
-    inv=validate_plan(root,plan); records=reviews_in(inv.root); ids=consumption(inv,plan)
+    from .knowledge import inventory
+    inv=validate_plan(root,plan,inv=inventory(root) if live else None); records=reviews_in(inv.root); ids=consumption(inv,plan)
     from .profiles import profile_readiness_errors, statement_errors, statement_warnings, mapping
     errors=profile_readiness_errors(inv, plan);warnings=[];used=[]; valid_math={}
     principals={s['node_id'] for s in plan['selections'] if s['role']=='principal_answer'}
@@ -53,16 +54,8 @@ def assess_readiness(root:Path,plan:dict|Path)->dict:
             # Select a review satisfying this plan, not merely the first valid
             # historical reading of these bytes. A different mode can promise
             # different steps without changing the authoritative statement.
-            found = statement_errors(key, n.statement, r) if principal_check else []
-            from .reviews import plan_promise_scope_errors
-            found += plan_promise_scope_errors(inv.root, plan, r)
-            promised = set(obligations.get(key, {}).get('required_steps', []))
-            done = r.get('scope', {}).get('proof_steps', {}).get(key, [])
-            missing = promised - set(done)
-            if missing:
-                found.append(diagnostic('PROOF_OBLIGATION_UNMET',
-                    'Candidate mathematical review omits promised steps: ' + '; '.join(sorted(missing)), n.path, key))
-            return found
+            from .reviews import mathematical_scope_errors
+            return mathematical_scope_errors(inv, key, r, plan, principal=principal_check)
         r,diagnostics=find_review(inv.root,records,'mathematical','node_ids',key,mathematical_inputs(inv,key),extra_check=candidate_check); errors.extend(diagnostics)
         if principal_check and r is None: errors.extend(statement_errors(key,n.statement,{}))
         if not r:add('MATHEMATICAL_REVIEW_PENDING','Need an accepted mathematical reading of the node and necessary fixed inputs',n.path,key)

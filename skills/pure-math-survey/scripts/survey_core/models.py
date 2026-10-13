@@ -12,12 +12,19 @@ STATUSES = {'unassessed', 'established', 'conjectural', 'open', 'refuted', 'not_
 RELATIONS = {'uses_definition', 'proof_input', 'explained_by', 'explains', 'compares_with', 'refutes', 'specializes'}
 from .profiles import PROFILES, validate_plan_contract
 
-def fields(obj: dict, required: dict[str, type], path: str = '') -> None:
-    require(isinstance(obj, dict), 'CONTRACT_INVALID', 'Expected JSON object', path)
+def fields(obj: dict, required: dict[str, type], path: str = '', *, errors: list | None = None) -> None:
+    from .common import diagnostic
+    def check(ok, code, message):
+        if errors is None:
+            require(ok, code, message, path)
+        elif not ok:
+            errors.append(diagnostic(code, message, path))
+    check(isinstance(obj, dict), 'CONTRACT_INVALID', 'Expected JSON object')
+    if not isinstance(obj, dict): return
     for name, typ in required.items():
-        require(name in obj and type(obj[name]) is typ, 'CONTRACT_INVALID', f'{name}: expected {typ.__name__}', path)
-    if 'schema_version' in required:
-        require(obj['schema_version'] == VERSION, 'SCHEMA_UNSUPPORTED', f"Unsupported schema: {obj['schema_version']}", path)
+        check(name in obj and type(obj[name]) is typ, 'CONTRACT_INVALID', f'{name}: expected {typ.__name__}')
+    if 'schema_version' in required and isinstance(obj.get('schema_version'), str):
+        check(obj['schema_version'] == VERSION, 'SCHEMA_UNSUPPORTED', f"Unsupported schema: {obj['schema_version']}")
 
 def text(value: object, path: str, field: str) -> None:
     require(isinstance(value, str) and bool(value.strip()), 'CONTRACT_INVALID', f'{field}: nonempty text required', path)
@@ -37,13 +44,13 @@ def node_bytes(meta:dict,body:str)->bytes:
     return ('---\n'+json.dumps(meta,ensure_ascii=False,indent=2)+'\n---\n\n'+body.rstrip()+'\n').encode('utf-8')
 
 
-def load_project(root: Path) -> dict:
+def load_project(root: Path, *, check_reviews: bool = True) -> dict:
     require(not (root / 'project-manifest.json').exists(), 'SCHEMA_UNSUPPORTED',
             'Only the current project.json contract is supported', 'project-manifest.json')
     candidates = list((root / 'evidence/reviews').glob('*.json'))
     candidates += list((root / 'outputs').glob('*/evidence/reviews/*.json'))
     candidates += list((root / 'outputs').glob('*/evidence/*review*.json'))
-    for path in candidates:
+    for path in candidates if check_reviews else []:
         review = read_json(safe(root, relpath(root, path), True))
         if isinstance(review, dict) and 'review_id' in review:
             require(isinstance(review.get('scope'), dict), 'REVIEW_FORMAT_UNSUPPORTED',

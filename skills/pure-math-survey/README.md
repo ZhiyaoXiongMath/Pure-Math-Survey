@@ -33,6 +33,8 @@ Default requested output is **minimal + integrated**. Generate only requested mo
 
 Coordinate all requested outputs' concrete reader capabilities and exact proof promises before final knowledge review. A non-author reviewer reconstructs obligations, actually checks each promised step and records exact scope.proof_steps with real findings/locators and gaps. Fresh live evidence precedes a new snapshot and explicit plan adoption/prepare. Never copy labels into accepted records, edit old snapshots or refresh old accepted hashes. Existing task-specific feedback/recheck and stop allowances govern the whole process; there is no extra repair route or universal product round limit.
 
+Use `review validate` for batch evidence diagnostics and `review accept` for final candidate staging with rollback; freeze and explicitly adopt afterward. Templates cover applicable canonical dependencies and remain pending. See [review handoff](references/proofs-and-boundaries.md#review-handoff-and-candidate-acceptance).
+
 ## Install and verify
 
 Copy this complete folder to your host skills directory, or run the scripts directly.

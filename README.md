@@ -2,7 +2,7 @@
 
 **简体中文** | [English](README.en.md)
 
-当前为 `v2.1.0-r4-preview.1` 预览版（软件 2.1.0），数学端到端验收仍在验证；[开发状态](docs/r4/development-status.md)记录实际进度。
+当前为 `v2.1.0-r4-preview.1` 预览版（软件 2.1.0），数学端到端验收仍在验证；[阶段状态](docs/development/STATUS.md)记录已核实的开发阶段；[历史预览记录](docs/r4/development-status.md)保留此前范围。
 
 面向整理数学文献、维护可追溯知识库、撰写英文综述、讲义或研究草稿的作者。
 
@@ -106,5 +106,7 @@ flowchart TD
 计划和证明承诺会在输出相关知识审阅前明确；图中的“稿件计划”落实已审阅的设计。冻结只固定字节，不授予数学就绪；`prepare` 只生成固定材料和脚手架，写作者仍须实际成文。编译、渲染和哈希不能代替数学核查或逐页观察；条件不满足时说明阻碍，不降低标准放行。
 
 知识交付包含综览、节点、来源和证据；文章另有计划、outline、`manuscript/main.tex`、固定材料、`build/main.pdf` 及审阅记录。新来源或纠正先回知识层核查，再形成新快照，旧文件保持不变。多输出分别指定模式、读者和数量，可以共享同一快照，但须独立写作与审阅。
+
+PR02 候选的 `review template` 为实际适用 canonical 与依赖生成 pending 核查项；`review validate` 批量列出独立缺项；`review accept` 在项目内暂存并核对候选最终字节，失败时回滚。接收后仍须 freeze 和显式采用快照。实际接口见[审阅与接收](skills/pure-math-survey/references/proofs-and-boundaries.md#review-handoff-and-candidate-acceptance)，阶段边界见[开发合同](docs/development/CONTRACT.md)。
 
 当前仅支持 r4，旧／未知输出契约明确拒绝且原文件不改。更多说明见[完整入口](skills/pure-math-survey/SKILL.md)和[验证边界](skills/pure-math-survey/references/validation.md)。AI 审阅不等于外部同行评审或原创性认证。代码、指令和模板遵循 [MIT License](LICENSE)；数学材料及第三方来源保留各自权利。

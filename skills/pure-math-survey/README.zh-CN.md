@@ -55,3 +55,6 @@ python scripts/survey.py init --output my-topic --topic my-topic --scope my-scop
 旧生成文章、知识项目及 reference-sample 集合已从当前树和安装资源移除；Git 历史／私人备份保留原身份，不能导入作为答案或新验收。当前公开范例须从原始来源新生成并真正独立验收；本说明不宣称这些测试已运行。
 
 指令、脚本、模板和文档遵循[MIT License](LICENSE)，Copyright (c) 2026 ZhiyaoXiongMath。数学范例及第三方原文保留各自权利；可读取不等于可再分发。私人授权／调度记录与受限原文不进入公开包。
+
+
+`review validate` 批量报告证据缺项，`review accept` 暂存校验候选最终字节并在失败时回滚；随后仍须 freeze 与显式采用。模板覆盖适用 canonical 依赖且保持 pending。见[审阅与接收](references/proofs-and-boundaries.md#review-handoff-and-candidate-acceptance)。

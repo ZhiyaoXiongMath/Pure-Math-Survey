@@ -61,8 +61,9 @@ class WorkflowBindings(unittest.TestCase):
                       reviewer='Distinct synthetic reviewer identity, not a real reading',
                       reviewed_at=now(), findings=[v.SYNTH], unchecked_items=[], disposition='accepted')
         record['scope']['proof_steps']['N-main'] = list(plan['proof_obligations'][0]['required_steps'])
-        item = record['scope']['statement_reviews']['N-main']; item['outcome'] = 'accepted'
-        item.update({key: v.SYNTH for key in STATEMENT_ASPECTS})
+        for item in record['scope']['statement_reviews'].values():
+            item['outcome'] = 'accepted'
+            item.update({key: v.SYNTH for key in STATEMENT_ASPECTS})
         record['scope']['evidence_basis'] = v.SYNTH
         return record, request
 
@@ -160,7 +161,7 @@ class WorkflowBindings(unittest.TestCase):
         self.assertEqual(safe(self.t.root, expected_path, True).read_bytes(), data)
         projection = json.loads(data); self.assertNotIn('snapshot_id', projection)
         self.assertEqual(projection['proof_obligations'], plan['proof_obligations'])
-        self.assertEqual(record['scope']['proof_steps'], {'N-main': []})
+        self.assertEqual(record['scope']['proof_steps'], {'N-def': [], 'N-main': []})
         self.assertEqual(record['scope']['statement_reviews']['N-main']['outcome'], 'not_performed')
         self.assertEqual((record['disposition'], record['reviewer_mode']), ('revise', 'not_performed'))
         again = subprocess.run(args, capture_output=True, text=True)
@@ -219,14 +220,15 @@ class WorkflowBindings(unittest.TestCase):
             self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
             response = json.loads(run.stdout)['artifacts']; request = response['promise_request']
             record = response['review']
-            self.assertEqual(record['scope']['proof_steps'], {'N-main': []})
+            self.assertEqual(record['scope']['proof_steps'], {'N-def': [], 'N-main': []})
             # Explicit synthetic independent record tests consumption only.
             record.update(review_id='SYNTHETIC-DEEP-PLAN', reviewer_mode='independent_review',
                           reviewer='Distinct synthetic reviewer; not an actual mathematical reading',
                           reviewed_at=now(), findings=[v.SYNTH], unchecked_items=[], disposition='accepted')
             record['scope']['proof_steps']['N-main'] = list(plan['proof_obligations'][0]['required_steps'])
-            item = record['scope']['statement_reviews']['N-main']; item['outcome'] = 'accepted'
-            item.update({key: v.SYNTH for key in STATEMENT_ASPECTS})
+            for item in record['scope']['statement_reviews'].values():
+                item['outcome'] = 'accepted'
+                item.update({key: v.SYNTH for key in STATEMENT_ASPECTS})
             record['scope']['evidence_basis'] = v.SYNTH
             write_json(deep/'evidence/reviews/deep-request.json', record)
             sid = freeze_snapshot(deep)['artifacts']['snapshot_id']
@@ -375,3 +377,202 @@ class WorkflowBindings(unittest.TestCase):
 
 
 if __name__ == '__main__': unittest.main()
+
+
+class ReviewCandidateWorkflow(unittest.TestCase):
+    setUp = WorkflowBindings.setUp
+    tearDown = WorkflowBindings.tearDown
+    detailed_plan = WorkflowBindings.detailed_plan
+    adopt = WorkflowBindings.adopt
+    """All assertions below are SYNTHETIC engineering fixtures, never readings."""
+
+    def candidate(self):
+        from survey_core.reviews import review_template, coverage_inputs, knowledge_scope_template
+        p, plan = self.detailed_plan()
+        keys = ['N-main', 'N-def', 'N-q']
+        record, request = plan_mathematical_template(self.t.root, p, keys)
+        record.update(review_id='SYNTHETIC-CANDIDATE-MATH', reviewer_mode='independent_review',
+                      reviewer='Distinct synthetic fixture identity; no mathematical reading',
+                      reviewed_at=now(), findings=[v.SYNTH], unchecked_items=[], disposition='accepted')
+        record['scope']['proof_steps']['N-main'] = list(plan['proof_obligations'][0]['required_steps'])
+        record['scope']['evidence_basis'] = v.SYNTH
+        for item in record['scope']['statement_reviews'].values():
+            item.update(outcome='accepted', **{key: v.SYNTH for key in STATEMENT_ASPECTS})
+        inv = inventory(self.t.root)
+        cov = read_json(self.t.root/'knowledge/coverage.json')
+        cov['questions'][0]['rationale'] += ' SYNTHETIC candidate byte transition.'
+        candidate = self.t.root/'.cache/candidate'
+        write_json(candidate/'knowledge/coverage.json', cov)
+        coverage = review_template(self.t.root, 'coverage', ['N-q'], coverage_inputs(inv, 'N-q'),
+                                  knowledge_scope_template(inv, ['N-q']))
+        coverage.update(review_id='SYNTHETIC-CANDIDATE-COVERAGE', reviewer_mode='independent_review',
+                        reviewer='Distinct synthetic fixture identity', reviewed_at=now(), unchecked_items=[], disposition='accepted')
+        from survey_core.profiles import UNDERSTANDING_READINGS
+        coverage['findings'] = [f'{task}: {v.SYNTH} [Actual fixture section](knowledge/nodes/N-q.md#software-fixture)'
+                                for task in UNDERSTANDING_READINGS]
+        for binding in coverage['inputs']:
+            if binding['path'] == 'knowledge/coverage.json':
+                binding['sha256'] = sha((candidate/'knowledge/coverage.json').read_bytes())
+        write_json(candidate/'evidence/reviews/candidate-math.json', record)
+        write_json(candidate/'evidence/reviews/candidate-coverage.json', coverage)
+        return p, plan, candidate, record, request
+
+    def accept(self, p):
+        from survey_core.reviews import accept_review_candidate
+        return accept_review_candidate(self.t.root, '.cache/candidate', relpath(self.t.root, p))
+
+    def live_bytes(self):
+        return {path: safe(self.t.root, path, True).read_bytes() for path in inventory(self.t.root).files}
+
+    def test_candidate_cli_complete_plan_promise_review_stage_freeze_adopt_prepare(self):
+        p, plan, candidate, record, request = self.candidate()
+        old_snapshot, old_files = load_snapshot(self.t.root, plan['snapshot_id'])
+        old_manifest = copy.deepcopy(old_snapshot)
+        old_reviews = {path.name: path.read_bytes() for path in (self.t.root/'evidence/reviews').glob('*.json')}
+        run = subprocess.run([sys.executable, str(SCRIPTS/'survey.py'), 'review', 'accept', str(self.t.root),
+                              '--candidate', '.cache/candidate', '--plan', relpath(self.t.root, p), '--json'],
+                             capture_output=True, text=True)
+        self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
+        self.assertEqual(json.loads(run.stdout)['status'], 'ACCEPTED')
+        self.assertEqual(load_snapshot(self.t.root, plan['snapshot_id'])[0], old_manifest)
+        for name, data in old_reviews.items(): self.assertEqual((self.t.root/'evidence/reviews'/name).read_bytes(), data)
+        self.assertEqual(read_json(p)['snapshot_id'], plan['snapshot_id'])
+        self.adopt(p, plan)
+        self.assertEqual(assess_readiness(self.t.root, plan)['status'], 'READY')
+        self.assertEqual(prepare_output(self.t.root, p)['status'], 'PREPARED')
+        verify_generated(self.t.root, plan)
+        self.assertEqual(promise_request(plan)[0], request)
+        run = subprocess.run([sys.executable, str(SCRIPTS/'survey.py'), 'review', 'validate', str(self.t.root),
+                              '--record', 'evidence/reviews/candidate-math.json',
+                              '--record', 'evidence/reviews/candidate-coverage.json', '--plan', relpath(self.t.root, p), '--json'],
+                             capture_output=True, text=True)
+        self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
+        self.assertFalse(list((self.t.root/'.cache').glob('.review-*')))
+
+    def test_pending_templates_cover_every_scoped_canonical_and_real_identity_slots(self):
+        from survey_core.reviews import review_template, mathematical_inputs
+        p, plan = self.detailed_plan()
+        template, request = plan_mathematical_template(self.t.root, p, ['N-main'])
+        self.assertEqual(set(template['scope']['statement_reviews']), {'N-main', 'N-def'})
+        self.assertEqual(template['scope']['proof_steps'], {'N-main': [], 'N-def': []})
+        self.assertEqual(template['reviewer'], '')
+        self.assertEqual(template['scope']['evidence_basis'], '')
+        self.assertEqual(template['reviewer_mode'], 'not_performed')
+        self.assertIsNone(template['reviewed_at'])
+        self.assertTrue(template['unchecked_items'])
+        inv = inventory(self.t.root)
+        generic = review_template(self.t.root, 'mathematical', ['N-def'], mathematical_inputs(inv, 'N-def'))
+        self.assertEqual(set(generic['scope']['statement_reviews']), {'N-def'})
+        self.assertEqual(generic['scope']['statement_reviews']['N-def']['outcome'], 'not_performed')
+
+    def test_batch_aggregates_independent_missing_fields_and_valid_record_omissions(self):
+        from survey_core.reviews import validate_reviews
+        p, plan, candidate, record, request = self.candidate()
+        write_json(self.t.root/'evidence/reviews/missing-a.json', {'kind': 'mathematical', 'inputs': [{}]})
+        write_json(self.t.root/'.cache/missing-b.json', {'review_id': 'SYNTHETIC'})
+        del record['scope']['statement_reviews']['N-def']
+        record['scope']['proof_steps'].pop('N-q')
+        write_json(self.t.root/'.cache/omissions.json', record)
+        report = validate_reviews(self.t.root, ['evidence/reviews/missing-a.json', '.cache/missing-b.json', '.cache/omissions.json'], plan)
+        self.assertEqual(report['status'], 'NEEDS_WORK')
+        fields = [error for error in report['errors'] if error['code'] == 'CONTRACT_INVALID']
+        self.assertGreater(len(fields), 10)
+        self.assertTrue(any(error['node_id'] == 'N-def' for error in report['errors']))
+        self.assertTrue(any(error['node_id'] == 'N-q' for error in report['errors']))
+
+    def test_canonical_omission_and_wrong_promise_reject_without_live_mutation(self):
+        for defect in ('canonical', 'promise', 'generic', 'author'):
+            with self.subTest(defect=defect):
+                p, plan, candidate, record, request = self.candidate()
+                before = self.live_bytes()
+                if defect == 'canonical': record['scope']['statement_reviews'].pop('N-def')
+                elif defect == 'promise': record['inputs'] = [binding for binding in record['inputs'] if binding['path'] != request]
+                elif defect == 'generic': record['scope'].pop('output_ids')
+                else: record['reviewer_mode'] = 'author_reread'
+                write_json(candidate/'evidence/reviews/candidate-math.json', record)
+                result = self.accept(p)
+                self.assertEqual(result['status'], 'NEEDS_WORK')
+                self.assertEqual(self.live_bytes(), before)
+                shutil.rmtree(candidate)
+                shutil.rmtree(p.parent)
+
+    def test_stale_bytes_report_binding_root_without_false_step_omissions(self):
+        p, plan, candidate, record, request = self.candidate()
+        path = candidate/'knowledge/nodes/N-main.md'; path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes((self.t.root/'knowledge/nodes/N-main.md').read_bytes() + b'\nSynthetic changed body.\n')
+        before = self.live_bytes(); result = self.accept(p)
+        self.assertEqual(result['status'], 'NEEDS_WORK')
+        codes = {error['code'] for error in result['errors']}
+        self.assertIn('REVIEW_STALE', codes)
+        self.assertNotIn('PROOF_OBLIGATION_UNMET', codes)
+        self.assertEqual(self.live_bytes(), before)
+
+    def test_candidate_path_escape_symlink_and_existing_evidence_are_rejected(self):
+        from survey_core.reviews import accept_review_candidate
+        p, plan, candidate, record, request = self.candidate(); before = self.live_bytes()
+        self.t.failcode('UNSAFE_PATH', accept_review_candidate, self.t.root, '../candidate', relpath(self.t.root, p))
+        write_json(candidate/'outputs/forbidden/plan.json', plan)
+        self.t.failcode('UNSAFE_PATH', self.accept, p)
+        shutil.rmtree(candidate/'outputs')
+        write_json(candidate/'evidence/reviews/new-N-main.json', record)
+        self.t.failcode('DESTINATION_EXISTS', self.accept, p)
+        (candidate/'evidence/reviews/new-N-main.json').unlink()
+        link = candidate/'knowledge/escaped.md'
+        try: link.symlink_to(self.t.root/'knowledge/overview.md')
+        except (OSError, NotImplementedError) as exc: self.skipTest(f'Actual symlink creation unavailable: {exc}')
+        self.t.failcode('UNSAFE_PATH', self.accept, p)
+        link.unlink()
+        self.assertEqual(self.live_bytes(), before)
+
+    def test_concurrent_plan_candidate_and_live_inputs_reject_staging(self):
+        from survey_core.readiness import assess_readiness as actual
+        for target in ('plan', 'candidate', 'live'):
+            with self.subTest(target=target):
+                p, plan, candidate, record, request = self.candidate()
+                before = self.live_bytes()
+                changed = False
+                def assess(root, value, **kwargs):
+                    nonlocal changed
+                    result = actual(root, value, **kwargs)
+                    if not changed:
+                        changed = True
+                        path = p if target == 'plan' else candidate/'knowledge/coverage.json' if target == 'candidate' else self.t.root/'knowledge/discovery.md'
+                        path.write_bytes(path.read_bytes() + b'\n')
+                    return result
+                with patch('survey_core.readiness.assess_readiness', assess):
+                    self.t.failcode('REVIEW_INPUT_CHANGED', self.accept, p)
+                self.assertFalse((self.t.root/'evidence/reviews/candidate-math.json').exists())
+                if target == 'live': (self.t.root/'knowledge/discovery.md').write_bytes(before['knowledge/discovery.md'])
+                self.assertEqual(self.live_bytes(), before)
+                shutil.rmtree(candidate); shutil.rmtree(p.parent)
+
+    def test_writer_conflict_and_partial_install_failure_restore_all_original_bytes(self):
+        from survey_core.common import writer, atomic_bytes as actual
+        p, plan, candidate, record, request = self.candidate(); before = self.live_bytes()
+        with writer(self.t.root): self.t.failcode('WRITER_LOCKED', self.accept, p)
+        failed = False
+        def write(path, data):
+            nonlocal failed
+            actual(path, data)
+            if path == self.t.root/'evidence/reviews/candidate-math.json' and not failed:
+                failed = True
+                raise OSError('Synthetic post-write installation failure')
+        with patch('survey_core.common.atomic_bytes', write):
+            with self.assertRaisesRegex(OSError, 'Synthetic'): self.accept(p)
+        self.assertTrue(failed)
+        self.assertEqual(self.live_bytes(), before)
+        self.assertFalse(list((self.t.root/'.cache').glob('.review-*')))
+        self.assertFalse((self.t.root/'.survey-write.lock').exists())
+
+
+    def test_unfinished_author_promises_do_not_create_a_request(self):
+        p, plan = self.detailed_plan()
+        plan['proof_obligations'][0]['required_steps'] = ['PENDING: perform a real derivation']
+        write_json(p, plan)
+        request, data = promise_request(plan)
+        self.t.failcode('PROOF_OBLIGATION_UNMET', plan_mathematical_template, self.t.root, p, ['N-main'])
+        self.assertFalse(safe(self.t.root, request).exists())
+        plan['proof_obligations'][0]['required_steps'] = [v.STEP]
+        plan['reader_goals'] = ['[[PMS_PENDING:reader_goals]] Unfinished authoring prompt']
+        write_json(p, plan)
+        self.t.failcode('EXPOSITION_DESIGN_INCOMPLETE', plan_mathematical_template, self.t.root, p, ['N-main'])
