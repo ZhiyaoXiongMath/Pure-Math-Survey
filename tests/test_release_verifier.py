@@ -81,45 +81,135 @@ class R4VerifierContracts(unittest.TestCase):
             wrong=copy.deepcopy(actual);wrong[key]=value
             with self.subTest(key=key),self.assertRaises(AssertionError):verifier.assert_installed_contract(wrong)
 
+    @staticmethod
+    def installed_lines(platform='posix'):
+        """Synthetic verbose log with all mandatory regressions, never a real run."""
+        lines=[f'test_case ({name}.Current.test_case) ... ok'
+               for name in verifier.REQUIRED_SUITES]
+        for identity,required_os in sorted(verifier.PLATFORM_ONLY_TESTS.items()):
+            outcome='ok' if platform==required_os else "skipped 'another-platform only'"
+            lines.append(f'{identity.rsplit(".",1)[-1]} ({identity}) ... {outcome}')
+        for identity in sorted(verifier.CAPABILITY_REQUIRED_TESTS):
+            lines.append(f'{identity.rsplit(".",1)[-1]} ({identity}) ... ok')
+        return lines
+
+    @staticmethod
+    def installed_log(lines):
+        skips=sum(' ... skipped ' in line for line in lines)
+        return ('\n'.join(lines)+f'\nRan {len(lines)} tests in 2s\n'
+                +(f'OK (skipped={skips})' if skips else 'OK'))
+
     def test_current_suites_must_really_execute_without_skips_or_failures(self):
-        with self.assertRaises(AssertionError):verifier.installed_regression_summary('Ran 189 tests in 2s\nOK')
-        lines=[f'test_case ({name}.Current.test_case) ... ok' for name in verifier.REQUIRED_SUITES]
-        for index in range(len(lines)):
-            for outcome in ('skipped reason','FAIL','ERROR'):
+        with self.assertRaises(AssertionError):
+            verifier.installed_regression_summary('Ran 189 tests in 2s\nOK')
+        lines=self.installed_lines()
+        for name in verifier.REQUIRED_SUITES:
+            bad=[line for line in lines if f'({name}.' not in line]
+            with self.subTest(missing_suite=name),self.assertRaises(AssertionError):
+                verifier.installed_regression_summary(self.installed_log(bad))
+        for name in verifier.REQUIRED_SUITES:
+            index=next(i for i,line in enumerate(lines) if f'({name}.' in line)
+            for outcome in ("skipped 'unavailable'",'FAIL','ERROR'):
                 bad=lines.copy();bad[index]=bad[index].replace('... ok',f'... {outcome}')
-                with self.subTest(suite=verifier.REQUIRED_SUITES[index],outcome=outcome),self.assertRaises(AssertionError):
-                    verifier.installed_regression_summary('\n'.join(bad)+'\nRan 190 tests in 2s\nOK')
-            with self.subTest(missing=verifier.REQUIRED_SUITES[index]),self.assertRaises(AssertionError):
-                verifier.installed_regression_summary('\n'.join(lines[:index]+lines[index+1:])+'\nRan 190 tests in 2s\nOK')
-        summary=verifier.installed_regression_summary('\n'.join(lines)+'\nRan 190 tests in 2s\nOK')
-        self.assertEqual(summary['tests'],190)
+                with self.subTest(suite=name,outcome=outcome),self.assertRaises(AssertionError):
+                    verifier.installed_regression_summary(self.installed_log(bad))
+        with patch.object(verifier.os,'name','posix'):
+            summary=verifier.installed_regression_summary(self.installed_log(lines))
+        self.assertEqual(summary['tests'],len(lines))
         self.assertEqual(summary['required_suites'],{name:1 for name in verifier.REQUIRED_SUITES})
+        self.assertEqual(summary['status'],'PASS')
+        self.assertEqual(len(summary['not_applicable_tests']),3)
+        self.assertEqual(summary['unverified_tests'],[])
+        self.assertEqual(summary['executed'],len(lines)-3)
 
     def test_windows_symlink_permission_skip_is_incomplete_never_pass(self):
-        lines=[f'test_case ({name}.Current.test_case) ... ok' for name in verifier.REQUIRED_SUITES]
-        unavailable=('test_native_identity_still_rejects_symlink_escape '
-            '(test_workflow_bindings.WorkflowBindings.test_native_identity_still_rejects_symlink_escape) '
-            '... skipped "OS did not authorize directory symlink creation: [WinError 1314] denied"')
-        log='\n'.join(lines+[unavailable])+'\nRan 5 tests in 2s\nOK (skipped=1)'
+        lines=self.installed_lines('nt')
+        identity='test_workflow_bindings.WorkflowBindings.test_native_identity_still_rejects_symlink_escape'
+        index=next(i for i,line in enumerate(lines) if f'({identity})' in line)
+        unavailable=(lines[index].replace('... ok',
+            '... skipped "OS did not authorize directory symlink creation: [WinError 1314] denied"'))
+        lines[index]=unavailable
         with patch.object(verifier.os,'name','nt'):
-            result=verifier.installed_regression_summary(log)
+            result=verifier.installed_regression_summary(self.installed_log(lines))
             self.assertEqual(result['status'],'INCOMPLETE')
+            self.assertEqual(result['not_applicable_tests'],[])
+            self.assertEqual(result['unverified_capability_tests'],[unavailable])
             self.assertEqual(result['unverified_tests'],[unavailable])
-            for bad in (log.replace('WinError 1314','WinError 5'),
-                        log.replace('... skipped "OS','... ERROR "OS'),
-                        log.replace('WorkflowBindings.test_native','Other.test_native'),
-                        log.replace(lines[2]+'\n','')):
-                with self.subTest(log=bad),self.assertRaises(AssertionError):
-                    verifier.installed_regression_summary(bad)
+            # Even a misleading or unfamiliar reason may never reclassify this
+            # current-platform symlink check as NOT_APPLICABLE.
+            for reason in ('WinError 5','Windows path syntax','arbitrary'):
+                bad=lines.copy();bad[index]=unavailable.replace(
+                    'OS did not authorize directory symlink creation: [WinError 1314] denied',reason)
+                self.assertEqual(verifier.installed_regression_summary(
+                    self.installed_log(bad))['status'],'INCOMPLETE')
+            for outcome in ('FAIL','ERROR'):
+                bad=lines.copy();bad[index]=unavailable.split('... skipped ')[0]+'... '+outcome
+                with self.subTest(outcome=outcome),self.assertRaises(AssertionError):
+                    verifier.installed_regression_summary(self.installed_log(bad))
         with patch.object(verifier.os,'name','posix'),self.assertRaises(AssertionError):
-            verifier.installed_regression_summary(log)
+            verifier.installed_regression_summary(self.installed_log(lines))
 
     def test_nonrequired_skipped_test_also_prevents_regression_pass(self):
-        lines=[f'test_case ({name}.Current.test_case) ... ok' for name in verifier.REQUIRED_SUITES]
-        skipped='test_optional (test_other.Optional.test_optional) ... skipped "unavailable"'
-        result=verifier.installed_regression_summary('\n'.join(lines+[skipped])+'\nRan 5 tests in 2s\nOK (skipped=1)')
+        lines=self.installed_lines()
+        skipped="test_optional (test_other.Optional.test_optional) ... skipped 'unavailable'"
+        with patch.object(verifier.os,'name','posix'):
+            result=verifier.installed_regression_summary(self.installed_log(lines+[skipped]))
         self.assertEqual(result['status'],'INCOMPLETE')
+        self.assertEqual(result['unexpected_skip_tests'],[skipped])
         self.assertEqual(result['unverified_tests'],[skipped])
+
+    def test_linux_symlinks_and_windows_only_cases_are_distinct(self):
+        lines=self.installed_lines()
+        with patch.object(verifier.os,'name','posix'):
+            result=verifier.installed_regression_summary(self.installed_log(lines))
+            self.assertEqual(result['status'],'PASS')
+            self.assertEqual(len(result['not_applicable_tests']),3)
+            self.assertEqual(result['unverified_capability_tests'],[])
+            for identity in verifier.CAPABILITY_REQUIRED_TESTS:
+                index=next(i for i,line in enumerate(lines) if f'({identity})' in line)
+                bad=lines.copy()
+                bad[index]=bad[index].replace('... ok'," ... skipped 'capability unavailable'")
+                summary=verifier.installed_regression_summary(self.installed_log(bad))
+                self.assertEqual(summary['status'],'INCOMPLETE')
+                self.assertEqual(len(summary['unverified_capability_tests']),1)
+
+    def test_platform_required_and_missing_checks_never_pass(self):
+        linux=self.installed_lines()
+        win=self.installed_lines('nt')
+        with patch.object(verifier.os,'name','nt'):
+            self.assertEqual(verifier.installed_regression_summary(
+                self.installed_log(win))['status'],'PASS')
+            for identity in verifier.PLATFORM_ONLY_TESTS:
+                index=next(i for i,line in enumerate(win) if f'({identity})' in line)
+                bad=win.copy();bad[index]=bad[index].replace('... ok',
+                    " ... skipped 'permission or implementation missing'")
+                self.assertEqual(verifier.installed_regression_summary(
+                    self.installed_log(bad))['status'],'INCOMPLETE')
+        with patch.object(verifier.os,'name','posix'):
+            for identity in verifier.PLATFORM_ONLY_TESTS:
+                index=next(i for i,line in enumerate(linux) if f'({identity})' in line)
+                bad=linux.copy();bad[index]=bad[index].replace(
+                    "... skipped 'another-platform only'",'... ok')
+                with self.assertRaises(AssertionError):
+                    verifier.installed_regression_summary(self.installed_log(bad))
+            for identity in [*verifier.PLATFORM_ONLY_TESTS,
+                             *verifier.CAPABILITY_REQUIRED_TESTS]:
+                bad=[line for line in linux if f'({identity})' not in line]
+                with self.subTest(missing=identity),self.assertRaises(AssertionError):
+                    verifier.installed_regression_summary(self.installed_log(bad))
+
+    def test_unittest_totals_duplicate_and_partial_logs_cannot_pass(self):
+        lines=self.installed_lines()
+        with patch.object(verifier.os,'name','posix'):
+            good=self.installed_log(lines)
+            for log in (good.replace(f'Ran {len(lines)} tests', 'Ran 999 tests'),
+                        good.replace('OK (skipped=3)','OK (skipped=2)'),
+                        good.replace('OK (skipped=3)','FAILED (failures=1)'),
+                        self.installed_log(lines+[lines[0]]),
+                        good.replace(lines[0],lines[0].replace(
+                            '(test_current_policy.Current.', '(test_other.Current.'))):
+                with self.subTest(log=log[-100:]),self.assertRaises(AssertionError):
+                    verifier.installed_regression_summary(log)
 
     def test_nonvisual_current_semantic_failure_cannot_hide_behind_new_pdf_work(self):
         result={'artifacts':{'editorial_policy':verifier.EXPECTED_POLICY,'readiness':'READY',
