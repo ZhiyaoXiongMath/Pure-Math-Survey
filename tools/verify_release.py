@@ -78,7 +78,8 @@ CAPABILITY_REQUIRED_TESTS = frozenset({
 UNITTEST_RESULT = re.compile(
     # Python 3.10 prints (module.Class), whereas 3.12 prints
     # (module.Class.test_method). Both identify the same discovered test.
-    r'^(test\w+) \((test_\w+\.\w+)(?:\.(test\w+))?\) \.\.\. (ok|skipped .+|FAIL|ERROR)
+    r'^(test\w+) \((test_\w+\.\w+)(?:\.(test\w+))?\) \.\.\. (ok|skipped .+|FAIL|ERROR)$'
+)
 
 def installed_regression_summary(stderr:str)->dict:
     """Only another OS's declared tests are N/A; every other skip is unresolved.
