@@ -467,20 +467,25 @@ def validate_reviews(root: Path, paths: list[str], plan: dict | None = None) -> 
         if record is not None: records.append((path, record))
     # Preflight stored records through the same loader. Inventory can then
     # continue with valid records without hiding independent batch omissions.
-    loaded = dict(records); knowledge_records = []
+    loaded = dict(records); knowledge_records = []; unsafe_records = set()
     for path in all_files(root, 'evidence/reviews'):
         if not path.endswith('.json'): continue
-        if path in loaded:
-            knowledge_records.append((path, loaded[path]))
-        elif path not in paths:
+        record = loaded.get(path)
+        if record is None and path not in paths:
             record, found = review_record_errors(root, path); errors.extend(found)
-            if record is not None: knowledge_records.append((path, record))
+        if record is None: continue
+        try:
+            knowledge_review_input_paths(root, [(path, record)])
+        except SurveyError as exc:
+            errors.append(exc.diagnostic); unsafe_records.add(path); continue
+        knowledge_records.append((path, record))
     try:
         inv = inventory(root, review_records=knowledge_records)
     except SurveyError as exc:
         if exc.diagnostic not in errors: errors.append(exc.diagnostic)
         return result('review.validate', 'NEEDS_WORK', {'records': sorted(set(paths))}, errors=errors)
     for path, record in records:
+        if path in unsafe_records: continue
         try:
             bindings = check_review_bindings(root, record)
         except SurveyError as exc:

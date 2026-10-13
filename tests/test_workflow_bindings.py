@@ -631,7 +631,7 @@ class ReviewCandidateWorkflow(unittest.TestCase):
     def test_matching_candidate_steps_cannot_bypass_pending_proof_prompt(self):
         self.unfinished_matching_candidate('proof')
 
-    def test_batch_unsafe_binding_keeps_independent_canonical_omissions(self):
+    def batch_unsafe_binding(self, directory, *, malformed=False):
         from survey_core.reviews import validate_reviews
         p, plan, candidate, record, request = self.candidate()
         alias = self.t.root/'support/alias.md'; alias.parent.mkdir(parents=True, exist_ok=True)
@@ -640,13 +640,20 @@ class ReviewCandidateWorkflow(unittest.TestCase):
         unsafe = copy.deepcopy(record)
         unsafe['review_id'] = 'SYNTHETIC-UNSAFE-BATCH-BINDING'
         unsafe['inputs'].append({'path': 'support/alias.md', 'sha256': sha(alias.read_bytes())})
-        write_json(self.t.root/'.cache/unsafe-record.json', unsafe)
+        unsafe_path = directory + '/unsafe-record.json'
+        write_json(self.t.root/unsafe_path, unsafe)
         missing = copy.deepcopy(record)
         missing['review_id'] = 'SYNTHETIC-INDEPENDENT-CANONICAL-OMISSIONS'
         missing['scope']['statement_reviews'].pop('N-main')
         missing['scope']['statement_reviews'].pop('N-def')
-        write_json(self.t.root/'.cache/missing-statements.json', missing)
-        report = validate_reviews(self.t.root, ['.cache/unsafe-record.json', '.cache/missing-statements.json'], plan)
+        missing_path = directory + '/missing-statements.json'
+        write_json(self.t.root/missing_path, missing)
+        paths = [unsafe_path, missing_path]
+        if malformed:
+            malformed_path = directory + '/malformed-record.json'
+            write_json(self.t.root/malformed_path, {'kind': 'mathematical', 'inputs': [{}]})
+            paths.append(malformed_path)
+        report = validate_reviews(self.t.root, paths, plan)
         self.assertEqual(report['status'], 'NEEDS_WORK')
         self.assertTrue(any(error['code'] == 'UNSAFE_PATH' and error['path'] == 'support/alias.md'
                             for error in report['errors']))
@@ -654,6 +661,15 @@ class ReviewCandidateWorkflow(unittest.TestCase):
                    if error['code'] == 'PRINCIPAL_SELF_CONTAINED_REVIEW_PENDING'}
         self.assertEqual(omitted, {'N-main', 'N-def'})
         self.assertFalse(any(error['code'] == 'PROOF_OBLIGATION_UNMET' for error in report['errors']))
+        if malformed:
+            self.assertTrue(any(error['code'] == 'CONTRACT_INVALID' and error['path'] == malformed_path
+                                for error in report['errors']))
+
+    def test_batch_unsafe_binding_keeps_independent_canonical_omissions(self):
+        self.batch_unsafe_binding('.cache')
+
+    def test_stored_unsafe_and_malformed_reviews_keep_independent_canonical_omissions(self):
+        self.batch_unsafe_binding('evidence/reviews', malformed=True)
 
     def test_candidate_capture_change_cannot_rebaseline_old_staged_bytes(self):
         from survey_core.common import file_inventory as actual
