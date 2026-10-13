@@ -58,3 +58,71 @@ jobs:
             ${{ runner.temp }}/tests.log
           if-no-files-found: error
           retention-days: 30
+
+  validate-windows:
+    runs-on: windows-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Install TeX and PDF tools on Windows
+        shell: pwsh
+        run: |
+          choco install miktex.install poppler --yes --no-progress
+          if ($LASTEXITCODE -ne 0) { throw "Windows MiKTeX/Poppler installation failed: $LASTEXITCODE" }
+          $texDir = 'C:\Program Files\MiKTeX\miktex\bin\x64'
+          if (-not (Test-Path (Join-Path $texDir 'pdflatex.exe'))) {
+            throw 'MiKTeX pdflatex.exe is missing; Windows TeX verification cannot be claimed'
+          }
+          $texDir | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          $env:PATH = "$texDir;$env:PATH"
+          initexmf --set-config-value='[MPM]AutoInstall=yes'
+          if ($LASTEXITCODE -ne 0) { throw 'MiKTeX noninteractive package installation is unavailable' }
+          if (-not (Get-Command pdftoppm -ErrorAction SilentlyContinue)) {
+            throw 'Poppler pdftoppm is missing; Windows PDF verification cannot be claimed'
+          }
+      - name: Run Windows behavior tests, including paths, symlinks and Job Objects
+        shell: pwsh
+        run: |
+          python -m unittest discover -s tests -v 2>&1 | Tee-Object -FilePath "$env:RUNNER_TEMP\tests.log"
+          if ($LASTEXITCODE -ne 0) { throw "Windows unittest regression run failed: $LASTEXITCODE" }
+      - name: Validate installed resources and create Windows archive
+        shell: pwsh
+        run: |
+          python skills/pure-math-survey/scripts/validate_assets.py --json
+          if ($LASTEXITCODE -ne 0) { throw 'Windows asset validation failed' }
+          python skills/pure-math-survey/scripts/package_release.py --output "$env:RUNNER_TEMP\pure-math-survey-2.1.0.zip"
+          if ($LASTEXITCODE -ne 0) { throw 'Windows archive packaging failed' }
+      - name: Verify Windows isolated installation and neutral TeX smoke
+        shell: pwsh
+        run: |
+          python tools/verify_release.py "$env:RUNNER_TEMP\pure-math-survey-2.1.0.zip" --engineering-only --report "$env:RUNNER_TEMP\clean-install.json" --keep-work-directory --work-directory "$env:RUNNER_TEMP\pms-work"
+          if ($LASTEXITCODE -ne 0) { throw 'Windows isolated installed verification failed or is INCOMPLETE' }
+      - name: Retain Windows smoke and installation evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: windows-smoke-python-3.12-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/pms-work/pms-*/tex-smoke/**/*.pdf
+            ${{ runner.temp }}/pms-work/pms-*/tex-smoke/build-report.json
+            ${{ runner.temp }}/clean-install.json
+            ${{ runner.temp }}/tests.log
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Retain Windows package and validation evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: windows-validation-python-3.12-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/pure-math-survey-2.1.0.zip
+            ${{ runner.temp }}/pure-math-survey-2.1.0.zip.sha256
+            ${{ runner.temp }}/clean-install.json
+            ${{ runner.temp }}/tests.log
+          if-no-files-found: warn
+          retention-days: 30
