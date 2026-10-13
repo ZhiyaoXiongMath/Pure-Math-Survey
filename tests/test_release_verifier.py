@@ -13,7 +13,7 @@ import sys
 import tempfile
 import unittest
 from unittest.mock import patch
-from contextlib import redirect_stdout
+from contextlib import redirect_stdout, redirect_stderr
 from io import StringIO
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -294,9 +294,14 @@ class R4VerifierContracts(unittest.TestCase):
             self.assertNotIn('output manifest',report['failure'])
 
     def test_engineering_only_and_explicit_full_manifest_conflict(self):
-        with patch.object(sys,'argv',['verify_release','missing.zip','--engineering-only','--manifest','explicit.json']):
+        # argparse correctly emits an error here. Capture it so unittest -v
+        # retains one complete test result line for the installed verifier.
+        stderr=StringIO()
+        with patch.object(sys,'argv',['verify_release','missing.zip','--engineering-only','--manifest','explicit.json']), redirect_stderr(stderr):
             with self.assertRaises(SystemExit) as caught:verifier.main()
             self.assertEqual(caught.exception.code,2)
+        self.assertIn('Choose engineering-only or the full five-output manifest',
+                      stderr.getvalue())
 
     def test_example_failure_records_keep_progress_and_actual_log_location(self):
         with tempfile.TemporaryDirectory() as td:
