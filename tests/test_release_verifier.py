@@ -182,7 +182,7 @@ class R4VerifierContracts(unittest.TestCase):
             for identity in verifier.PLATFORM_ONLY_TESTS:
                 index=next(i for i,line in enumerate(win) if f'({identity})' in line)
                 bad=win.copy();bad[index]=bad[index].replace('... ok',
-                    " ... skipped 'permission or implementation missing'")
+                    "... skipped 'permission or implementation missing'")
                 self.assertEqual(verifier.installed_regression_summary(
                     self.installed_log(bad))['status'],'INCOMPLETE')
         with patch.object(verifier.os,'name','posix'):
