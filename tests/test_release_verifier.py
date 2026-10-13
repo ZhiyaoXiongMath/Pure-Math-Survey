@@ -7,6 +7,7 @@ import hashlib
 import base64
 import time
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -94,34 +95,75 @@ class R4VerifierContracts(unittest.TestCase):
         return lines
 
     @staticmethod
-    def installed_log(lines):
+    def installed_log(lines, python310=False):
+        # Actual Python 3.10 unittest -v omits the method in parentheses.
+        # Python 3.12 repeats it. Keep the same canonical test identity.
+        if python310:
+            lines=[re.sub(r'\((test_\w+\.\w+)\.(test\w+)\) \.\.\.',
+                          r'(\1) ...', line) for line in lines]
         skips=sum(' ... skipped ' in line for line in lines)
         return ('\n'.join(lines)+f'\nRan {len(lines)} tests in 2s\n'
                 +(f'OK (skipped={skips})' if skips else 'OK'))
 
     def test_current_suites_must_really_execute_without_skips_or_failures(self):
-        with self.assertRaises(AssertionError):
-            verifier.installed_regression_summary('Ran 189 tests in 2s\nOK')
-        lines=self.installed_lines()
-        for name in verifier.REQUIRED_SUITES:
-            bad=[line for line in lines if f'({name}.' not in line]
-            with self.subTest(missing_suite=name),self.assertRaises(AssertionError):
-                verifier.installed_regression_summary(self.installed_log(bad))
-        for name in verifier.REQUIRED_SUITES:
-            index=next(i for i,line in enumerate(lines) if f'({name}.' in line)
-            for outcome in ("skipped 'unavailable'",'FAIL','ERROR'):
-                bad=lines.copy();bad[index]=bad[index].replace('... ok',f'... {outcome}')
-                with self.subTest(suite=name,outcome=outcome),self.assertRaises(AssertionError):
-                    verifier.installed_regression_summary(self.installed_log(bad))
         with patch.object(verifier.os,'name','posix'):
+            with self.assertRaises(AssertionError):
+                verifier.installed_regression_summary('Ran 189 tests in 2s\nOK')
+            lines=self.installed_lines()
+            for name in verifier.REQUIRED_SUITES:
+                bad=[line for line in lines if f'({name}.' not in line]
+                with self.subTest(missing_suite=name),self.assertRaises(AssertionError):
+                    verifier.installed_regression_summary(self.installed_log(bad))
+            for name in verifier.REQUIRED_SUITES:
+                index=next(i for i,line in enumerate(lines) if f'({name}.' in line)
+                for outcome in ("skipped 'unavailable'",'FAIL','ERROR'):
+                    bad=lines.copy();bad[index]=bad[index].replace('... ok',f'... {outcome}')
+                    with self.subTest(suite=name,outcome=outcome):
+                        if outcome.startswith('skipped ') and name=='test_workflow_bindings':
+                            # This suite still executes its real symlink test.
+                            # A skipped companion must be INCOMPLETE, not an
+                            # exception or a PASS, despite other tests being ok.
+                            result=verifier.installed_regression_summary(self.installed_log(bad))
+                            self.assertEqual(result['status'],'INCOMPLETE')
+                            self.assertIn(bad[index],result['unexpected_skip_tests'])
+                        else:
+                            # Missing a required suite execution, or any real
+                            # failure/error, is a broken regression run.
+                            with self.assertRaises(AssertionError):
+                                verifier.installed_regression_summary(self.installed_log(bad))
             summary=verifier.installed_regression_summary(self.installed_log(lines))
         self.assertEqual(summary['tests'],len(lines))
-        self.assertEqual(summary['required_suites'],{name:1 for name in verifier.REQUIRED_SUITES})
+        self.assertEqual(summary['required_suites'],
+                         {name:sum(f'({name}.' in line for line in lines)
+                          for name in verifier.REQUIRED_SUITES})
         self.assertEqual(summary['status'],'PASS')
         self.assertEqual(len(summary['not_applicable_tests']),3)
         self.assertEqual(summary['unverified_tests'],[])
         self.assertEqual(summary['executed'],len(lines)-3)
 
+    def test_real_python_310_and_312_verbose_formats_normalize_to_same_identity(self):
+        for platform in ('posix','nt'):
+            lines=self.installed_lines(platform)
+            with patch.object(verifier.os,'name',platform):
+                for old_format in (True,False):
+                    with self.subTest(platform=platform,python310=old_format):
+                        report=verifier.installed_regression_summary(
+                            self.installed_log(lines,python310=old_format))
+                        self.assertEqual(report['status'],'PASS')
+                        self.assertEqual(report['tests'],len(lines))
+                        self.assertEqual(len(report['not_applicable_tests']),
+                                         3 if platform=='posix' else 0)
+                        self.assertEqual(report['unverified_tests'],[])
+                        # A skipped required symlink is not N/A under either
+                        # unittest format, even when its skip reason says so.
+                        capability=next(iter(sorted(verifier.CAPABILITY_REQUIRED_TESTS)))
+                        bad=lines.copy()
+                        index=next(i for i,line in enumerate(bad) if f'({capability})' in line)
+                        bad[index]=bad[index].replace('... ok',"... skipped 'unavailable'")
+                        report=verifier.installed_regression_summary(
+                            self.installed_log(bad,python310=old_format))
+                        self.assertEqual(report['status'],'INCOMPLETE')
+                        self.assertEqual(len(report['unverified_capability_tests']),1)
     def test_windows_symlink_permission_skip_is_incomplete_never_pass(self):
         lines=self.installed_lines('nt')
         identity='test_workflow_bindings.WorkflowBindings.test_native_identity_still_rejects_symlink_escape'
