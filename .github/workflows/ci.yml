@@ -102,8 +102,38 @@ jobs:
         run: |
           python tools/verify_release.py "$env:RUNNER_TEMP\pure-math-survey-2.1.0.zip" --engineering-only --report "$env:RUNNER_TEMP\clean-install.json" --keep-work-directory --work-directory "$env:RUNNER_TEMP\pms-work"
           if ($LASTEXITCODE -ne 0) { throw 'Windows isolated installed verification failed or is INCOMPLETE' }
+      - name: Require complete Windows success artifacts
+        shell: pwsh
+        run: |
+          $required = @(
+            (Join-Path $env:RUNNER_TEMP 'tests.log'),
+            (Join-Path $env:RUNNER_TEMP 'clean-install.json'),
+            (Join-Path $env:RUNNER_TEMP 'pure-math-survey-2.1.0.zip'),
+            (Join-Path $env:RUNNER_TEMP 'pure-math-survey-2.1.0.zip.sha256')
+          )
+          $workRoot = Join-Path $env:RUNNER_TEMP 'pms-work'
+          if (-not (Test-Path -LiteralPath $workRoot -PathType Container)) {
+            throw 'Windows isolated-install workspace is missing'
+          }
+          $workspaces = @(Get-ChildItem -LiteralPath $workRoot -Directory -Filter 'pms-*')
+          if ($workspaces.Count -ne 1) {
+            throw "Expected one Windows isolated-install workspace; found $($workspaces.Count)"
+          }
+          $smokeDir = Join-Path $workspaces[0].FullName 'tex-smoke'
+          $required += Join-Path $smokeDir 'build-report.json'
+          foreach ($file in $required) {
+            if (-not (Test-Path -LiteralPath $file -PathType Leaf) -or
+                (Get-Item -LiteralPath $file).Length -eq 0) {
+              throw "Required Windows CI artifact missing or empty: $file"
+            }
+          }
+          $pdfs = @(Get-ChildItem -LiteralPath $smokeDir -Filter '*.pdf' -File -Recurse -ErrorAction Stop)
+          if ($pdfs.Count -eq 0 -or @($pdfs | Where-Object { $_.Length -eq 0 }).Count -ne 0) {
+            throw 'Windows TeX smoke PDF is missing or empty'
+          }
+          Write-Host "Confirmed $($required.Count) required nonempty files and $($pdfs.Count) nonempty smoke PDF(s)"
       - name: Retain Windows smoke and installation evidence
-        if: always()
+        if: success()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: windows-smoke-python-3.12-${{ github.sha }}
@@ -112,10 +142,10 @@ jobs:
             ${{ runner.temp }}/pms-work/pms-*/tex-smoke/build-report.json
             ${{ runner.temp }}/clean-install.json
             ${{ runner.temp }}/tests.log
-          if-no-files-found: warn
+          if-no-files-found: error
           retention-days: 30
       - name: Retain Windows package and validation evidence
-        if: always()
+        if: success()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: windows-validation-python-3.12-${{ github.sha }}
@@ -124,5 +154,19 @@ jobs:
             ${{ runner.temp }}/pure-math-survey-2.1.0.zip.sha256
             ${{ runner.temp }}/clean-install.json
             ${{ runner.temp }}/tests.log
+          if-no-files-found: error
+          retention-days: 30
+      - name: Retain Windows diagnostics after failure (not acceptance)
+        if: failure()
+        continue-on-error: true
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: windows-failure-diagnostics-python-3.12-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/tests.log
+            ${{ runner.temp }}/clean-install.json
+            ${{ runner.temp }}/pure-math-survey-2.1.0.zip.sha256
+            ${{ runner.temp }}/pms-work/pms-*/tex-smoke/build-report.json
+            ${{ runner.temp }}/pms-work/pms-*/tex-smoke/**/*.log
           if-no-files-found: warn
           retention-days: 30
