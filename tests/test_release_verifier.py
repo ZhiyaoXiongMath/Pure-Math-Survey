@@ -168,7 +168,7 @@ class R4VerifierContracts(unittest.TestCase):
             for identity in verifier.CAPABILITY_REQUIRED_TESTS:
                 index=next(i for i,line in enumerate(lines) if f'({identity})' in line)
                 bad=lines.copy()
-                bad[index]=bad[index].replace('... ok'," ... skipped 'capability unavailable'")
+                bad[index]=bad[index].replace('... ok',"... skipped 'capability unavailable'")
                 summary=verifier.installed_regression_summary(self.installed_log(bad))
                 self.assertEqual(summary['status'],'INCOMPLETE')
                 self.assertEqual(len(summary['unverified_capability_tests']),1)
