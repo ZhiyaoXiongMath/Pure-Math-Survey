@@ -2,81 +2,114 @@
 
 [简体中文](README.md) | **English**
 
-This is preview `v2.1.0-r4-preview.1` (software 2.1.0); mathematical end-to-end validation is ongoing. [Development status](docs/r4/development-status.md) records the observed progress separately.
+This is preview `v2.1.0-r4-preview.1` (software 2.1.0); mathematical end-to-end acceptance is still under verification. [Development status](docs/r4/development-status.md) records actual progress.
 
-For authors reading mathematics, maintaining knowledge, and writing English surveys, lecture notes or research drafts. Read original sources, organize traceable results, conditions, arguments and boundaries, then write only the requested manuscripts.
+For authors organizing mathematical literature, maintaining traceable knowledge, and writing English surveys, lectures or research drafts.
 
-## Install
+## Modes
 
-Download `pure-math-survey-2.1.0.zip` and its `.zip.sha256` attachment from the [Release page](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/tag/v2.1.0-r4-preview.1); verify SHA-256. Use the complete installation ZIP, rather than GitHub's automatically generated source ZIP.
+| Mode | Task and structure |
+|---|---|
+| **Minimal** | Understand complete results and decisive reasons concisely; no abstract, exactly Main Results / Key Mathematical Ingredients / Connecting the Ingredients, all complete principals in section one. |
+| **Thematic** | Explore topical questions, genuine methods and synthesis under comparable conditions; no abstract, precise questions and representative complete results first. |
+| **Lecture** | Reproduce constructions, calculations and proofs; no abstract, a full goal theorem and faithful route guide teaching derivations. |
+| **Paper** | Organize research materials; concise abstract and full Introduction, accurate contribution position and arguments; visibly DRAFT_UNVERIFIED by default. |
 
-Copy the complete `pure-math-survey/` folder to your host's skills directory (Codex default: `~/.codex/skills/`), including references, scripts and assets. Invoke `$pure-math-survey` in a new chat.
+**Minimal + integrated** defaults only when an article is requested without a mode. Five views—integrated, foundations, results, methods, boundaries—change emphasis, not facts or duties; generate only requested counts. Knowledge-only is not a fifth article mode and produces no manuscript.
 
-The host needs work-chat creation, reading, waiting and task-message tools, and available `gpt-6-astra / ultra`. Scripts use Python 3.10+ standard library. PDF building additionally requires pdfLaTeX, BibTeX, the style's TeX packages and Poppler. Missing capabilities are reported; see [build requirements](skills/pure-math-survey/references/layout-and-build.md).
+Known results cannot be called original. Formal Paper research delivery requires real authorization, contribution verification and complete proofs; unverified drafts cannot be formally packaged. See [mode contracts](skills/pure-math-survey/references/editions.md).
+
+## Start prompts
+
+Download the complete `pure-math-survey-2.1.0.zip` and `pure-math-survey-2.1.0.zip.sha256` from the [Release page](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/tag/v2.1.0-r4-preview.1). Verify and copy the whole extracted `pure-math-survey/` into the host skills directory (for example Codex's `~/.codex/skills/`), retaining references, scripts and assets. The automatically generated Source code ZIP is not the installation ZIP.
+
+The host needs work-chat creation/read/wait/task-message tools and available `gpt-6-astra / ultra`. Scripts use Python 3.10+ standard library; PDFs need pdfLaTeX, BibTeX, the style's TeX packages and Poppler. Missing capabilities are reported; see [build requirements](skills/pure-math-survey/references/layout-and-build.md).
+
+In a new chat send the shared authorization together with one prompt below. Replace brackets with your topic, audience, sources and project. These describe **requests and expected delivery, not completed mathematical examples**.
+
+```text
+This chat is the controller. I authorize gpt-6-astra / ultra work chats within [project path]
+for sources, fast/slow knowledge, writing and non-author review, and task/continuation/revision/
+stop messages to them; read their results. Read the complete installed skill, specified sources
+and this project; write only within the project.
+```
+
+**Minimal**
+
+```text
+Use $pure-math-survey with [source files/URLs] for [topic and scope], for readers with
+[background]. Write one English Minimal, view=integrated, with complete principals,
+necessary ingredients and decisive reasons.
+```
+
+Expected: editable TeX, inspected PDF, and a rebuildable package when delivery permission passes.
+
+**Thematic**
+
+```text
+Use $pure-math-survey with [source files/URLs] for [topic and scope], for readers with
+[background]. Write one English Thematic around real questions/methods and synthesize
+results under comparable conditions.
+```
+
+Expected: thematic TeX/PDF with actual source/review evidence, and an eligible rebuildable package.
+
+**Lecture**
+
+```text
+Use $pure-math-survey with [source files/URLs] to teach [topic and scope], for readers with
+[background]. Write one English Lecture fully developing [specified constructions,
+calculations or proof steps], with disclosed external inputs.
+```
+
+Expected: lecture TeX/PDF fulfilling the promised derivations, and an eligible rebuildable package.
+
+**Paper**
+
+```text
+Use $pure-math-survey with [my research materials and original sources] for [problem and scope],
+for readers with [background]. Write one English Paper working draft; distinguish known,
+candidate and unverified content, invent no originality, and retain DRAFT_UNVERIFIED.
+```
+
+Expected: visibly marked draft TeX and an allowed preview PDF; no formal article package without research-delivery verification.
+
+**Knowledge only**
+
+```text
+Use $pure-math-survey to read [source files/URLs] and build knowledge for [topic and scope],
+for readers with [background]. Explain results, conditions, fast routes and slow derivations;
+do not produce an article or PDF.
+```
+
+Expected: overview, editable nodes, source/review records and explicit gaps. Authorization comes from your actual instruction and is reused within scope; users do not manually fill review JSON.
 
 ## How it runs
 
-Your calling chat is the controller and keeps its current model settings. Specify mathematical scope, audience, sources and outputs. The controller:
+The calling chat is the controller and keeps its model. It dispatches real work chats, reads actual files and is the sole canonical knowledge integration writer. Fast passages explain goals, inputs, operations and uses; slow passages perform derivations and precise external-theorem applications. Non-authors check the requested proof promises.
 
-1. Actually creates Astra/ultra work chats to read original sources and check versions, conditions and citations.
-2. Builds fast/slow knowledge: fast passages explain goals, inputs, decisive operations and uses; slow passages perform corresponding derivations and precise external-theorem applications.
-3. Arranges non-author review of knowledge and requested proof promises, inspects returned files, and is the sole knowledge integration writer.
-4. Freezes an immutable snapshot. Knowledge-only requests stop with knowledge and evidence.
-5. Assigns separate writers to requested manuscripts, consuming the fixed snapshot and actually writing TeX. `prepare` supplies materials and a scaffold, not a finished article.
-6. Obtains non-author mathematical/exposition review, builds PDFs, inspects every page and supplies an applicable rebuildable package only after delivery checks pass.
-
-Users do not manually fill review JSON. Compilation/hashes do not replace mathematical checks. Unverified Paper stays visibly `DRAFT_UNVERIFIED` and formal research packaging rejects it; known results cannot be presented as original.
-
-## Copyable start prompt
-
-Replace the project, topic and source boundaries, then personally send the authorization:
-
-```text
-Use $pure-math-survey at work/matrix-positivity. Study positivity of finite real symmetric
-block matrices with an invertible leading block; exclude singular-pivot variants.
-Readers know undergraduate linear algebra. Build knowledge only for now, without an article
-or PDF. Read supplied original sources and find originals as needed; explain all conditions,
-both implications and boundaries. Read the complete installed skill, specified sources and
-this project; write only in its work directories. This chat is the controller. I authorize
-necessary gpt-6-astra / ultra work chats for sources, fast/slow knowledge, writing and non-author
-review, and task/continuation/revision/stop messages to them; read their results. Explain any
-additional read access needed.
+```mermaid
+flowchart TD
+    A["Calling chat: controller"] --> B["Read actual original sources"]
+    B --> C["Paired fast/slow knowledge"]
+    C --> P["Knowledge goals and manuscript proof promises"]
+    P --> D["Non-author knowledge review"]
+    D -->|"Necessary knowledge revisions"| C
+    D -->|"Required checks complete"| E["Fixed immutable snapshot"]
+    E -->|"Knowledge only"| K["Knowledge and evidence delivery"]
+    E -->|"Article requested"| F["Adopt the reviewed manuscript plan"]
+    F --> G["Separate writer completes TeX"]
+    G --> H["Mathematical and exposition review"]
+    H -->|"Knowledge or argument gaps"| C
+    H -->|"Body revisions"| G
+    H -->|"Required review complete"| I["Compile PDF"]
+    I --> J["Actually inspect every page"]
+    J -->|"Layout revisions"| G
+    J -->|"Actual delivery permission"| L["Eligible package or marked draft delivery"]
 ```
 
-Authorization is reused within scope; workers obey boundaries without recursive dispatch. Documentation alone grants no permission.
+Plans/proof promises are fixed before output-specific knowledge review; the diagram's manuscript plan implements that reviewed design. Freezing fixes bytes, not readiness. `prepare` supplies materials/scaffolding; writers still author the body. Compilation, rendering and hashes replace neither mathematical checking nor all-page observation. Unmet conditions are reported, not waived.
 
-Then request “One English Minimal/integrated with unchanged scope/audience, full results, decisive reasons and TeX/PDF; an eligible rebuildable package, reusing authorization.” Articles can be requested initially; default is Minimal + integrated.
+Knowledge delivers overview/nodes/sources/evidence. Articles add plan, outline, `manuscript/main.tex`, fixed materials, `build/main.pdf` and review records. New sources/corrections return to knowledge review before a new snapshot, preserving old files. Specify each additional mode, audience and count: a snapshot may be shared, with separate writing/review.
 
-Knowledge delivers overview, nodes, source/review records and gaps. Manuscripts add plan, outline, `manuscript/main.tex`, fixed materials, `build/main.pdf` and evidence; these are not generated by the small example below. Updates review corrections/new sources and freeze anew, preserving old files. Specify each additional output's audience, mode and count; a snapshot can be shared with separate writing/review.
-
-## Modes and emphasis
-
-| Mode | Purpose and structure |
-|---|---|
-| Minimal | No abstract; Main Results / Key Mathematical Ingredients / Connecting the Ingredients, with all complete principals in section one. |
-| Thematic | No abstract; precise questions, representative results, genuine methods and synthesis under comparable conditions. |
-| Lecture | No abstract; full goal theorem, faithful route and reproducible constructions/calculations/proofs. |
-| Paper | Concise abstract and full Introduction, accurate contribution position/proofs; unverified draft by default, with additional gates for original-research delivery. |
-
-Five views—integrated, foundations, results, methods, boundaries—change emphasis, not facts or mode duties. Only requested outputs are generated. See [mode contracts](skills/pure-math-survey/references/editions.md).
-
-## Real CLI example (optional)
-
-Chat is the daily entrypoint; CLI handles files. An actual run used UTF-8 `scope-input.md`:
-
-```markdown
-# Scope
-
-Build a source-grounded knowledge project on positivity of finite real symmetric block matrices with an invertible leading block. Exclude singular-pivot variants. Readers know undergraduate linear algebra. This initialization demonstration does not request a manuscript or certify any theorem.
-```
-
-From the installation ZIP's extracted parent directory:
-
-```sh
-python pure-math-survey/scripts/survey.py init --output my-topic --topic matrix-positivity --scope scope-input.md --json
-python pure-math-survey/scripts/survey.py kb validate my-topic --json
-```
-
-Actual results: `INITIALIZED`, `review_status=pending`, `outputs=[]`; validation returned `VALID`, zero nodes/sources and `SEMANTIC_NOT_CERTIFIED`. It created project.json, scope.md and knowledge overview/conventions/discovery/coverage files, without an article/PDF. Structure is not mathematical readiness.
-
-Only current r4 is supported; old/unknown output contracts are rejected without file modification. See [entrypoint](skills/pure-math-survey/SKILL.md) and [validation limits](skills/pure-math-survey/references/validation.md). AI review certifies neither external peer review nor originality. Code/instructions/templates use [MIT License](LICENSE); mathematical materials and third-party sources retain their rights.
+Only current r4 is supported; old/unknown output contracts are rejected without file modification. See [entrypoint](skills/pure-math-survey/SKILL.md) and [validation limits](skills/pure-math-survey/references/validation.md). AI review is not external peer review or originality certification. Code/instructions/templates use [MIT License](LICENSE); mathematical materials and third-party sources retain their rights.

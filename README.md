@@ -2,80 +2,109 @@
 
 **简体中文** | [English](README.en.md)
 
-当前为 `v2.1.0-r4-preview.1` 预览版（软件 2.1.0），数学端到端流程仍在验证；[开发状态](docs/r4/development-status.md)单独记录实际进度。
+当前为 `v2.1.0-r4-preview.1` 预览版（软件 2.1.0），数学端到端验收仍在验证；[开发状态](docs/r4/development-status.md)记录实际进度。
 
-面向整理数学文献、维护知识库、撰写英文综述或讲义的作者。先阅读原始来源，把结果、条件、论证和边界组织为可追溯知识，再写用户要求的稿件；也支持研究草稿。
+面向整理数学文献、维护可追溯知识库、撰写英文综述、讲义或研究草稿的作者。
 
-## 安装
+## 模式
 
-在 [Release 页面](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/tag/v2.1.0-r4-preview.1)下载 `pure-math-survey-2.1.0.zip` 和 `.zip.sha256` 附件，核对 SHA-256。使用完整安装 ZIP，不能用 GitHub 自动生成的源码 ZIP 代替。
+| 模式 | 适合的任务与结构 |
+|---|---|
+| **Minimal** | 精炼地理解完整结果与决定性理由；无摘要，严格 Main Results / Key Mathematical Ingredients / Connecting the Ingredients 三节，全部完整主结果在第一节。 |
+| **Thematic** | 理解专题问题、真实方法及可比条件下的综合；无摘要，首节给出准确问题与代表性完整结果。 |
+| **Lecture** | 学会复现构造、计算与证明；无摘要，完整目标定理与忠实路线引导后续教学推导。 |
+| **Paper** | 整理研究材料；有简洁摘要与完整 Introduction，准确定位贡献并论证，默认显著 DRAFT_UNVERIFIED 草稿。 |
 
-解压后把完整 `pure-math-survey/` 放入宿主 skill 目录，如 Codex 默认的 `~/.codex/skills/`。保留 references、scripts、assets，不只复制 SKILL.md。新聊天引用 `$pure-math-survey` 即可开始。
+仅在请求文章且未指定模式时，默认 **Minimal + integrated**。五种 view：integrated、foundations、results、methods、boundaries，改变侧重点而不改变事实或模式责任；只生成用户请求的数量。只建知识不是第五种文章模式，也不会附带生成稿件。
 
-宿主需支持新建、读取、等待及给工作聊天发送任务，并提供 `gpt-6-astra / ultra`。脚本使用 Python 3.10+ 标准库；PDF 构建另需 pdfLaTeX、BibTeX、样式依赖的 TeX 包和 Poppler。缺少能力时报告阻碍；详见[构建要求](skills/pure-math-survey/references/layout-and-build.md)。
+已知结果不能假称原创。Paper 正式研究交付需要真实授权、贡献核查和完整证明；未验证草稿不能正式打包。[模式契约](skills/pure-math-survey/references/editions.md)提供细节。
+
+## 启动提示
+
+先在 [Release 页面](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/tag/v2.1.0-r4-preview.1)下载完整 `pure-math-survey-2.1.0.zip` 及 `pure-math-survey-2.1.0.zip.sha256`，核对后把解压出的整个 `pure-math-survey/` 放入宿主 skill 目录（如 Codex 的 `~/.codex/skills/`），保留 references、scripts、assets。自动生成的 Source code ZIP 不是安装 ZIP。
+
+宿主需支持创建、读取、等待和发送任务给工作聊天，并提供 `gpt-6-astra / ultra`；脚本使用 Python 3.10+ 标准库，PDF 另需 pdfLaTeX、BibTeX、样式所需 TeX 包和 Poppler。缺少能力时报告具体阻碍，见[构建要求](skills/pure-math-survey/references/layout-and-build.md)。
+
+新聊天中，把共用授权和下面一条提示一起发送，将方括号换成自己的主题、读者、来源和项目路径。以下是**请求与预期交付说明，不是本次已完成的数学样稿**。
+
+```text
+本聊天作为控制台。我授权在[项目路径]内创建 gpt-6-astra / ultra 工作聊天，
+负责来源、快慢知识、写作和非作者审阅；授权向它们发送任务、继续、修订、
+停止指令并读取结果。允许读取完整安装 skill、指定来源和本项目，写入仅限本项目。
+```
+
+**Minimal**
+
+```text
+使用 $pure-math-survey，基于[来源文件或URL]研究[主题及范围]，面向[读者基础]，
+写一份英文 Minimal，view=integrated；完整给出主结果、必要支点和决定性理由。
+```
+
+预期：可编辑 TeX、经检查的 PDF，交付许可通过时附可重建包。
+
+**Thematic**
+
+```text
+使用 $pure-math-survey，基于[来源文件或URL]讨论[专题及范围]，面向[读者基础]，
+写一份英文 Thematic；按真实问题和方法组织，并在可比条件下综合结果。
+```
+
+预期：专题稿的 TeX、PDF，以及实际来源与审阅证据；合格时附可重建包。
+
+**Lecture**
+
+```text
+使用 $pure-math-survey，基于[来源文件或URL]讲解[主题及范围]，面向[读者基础]，
+写一份英文 Lecture；完整展开[指定构造、计算或证明步骤]，说明外部输入。
+```
+
+预期：兑现所承诺推导的讲义 TeX、PDF，以及合格时的可重建包。
+
+**Paper**
+
+```text
+使用 $pure-math-survey，基于[我的研究材料及原始来源]整理[问题及范围]，
+面向[读者基础]，写一份英文 Paper 工作草稿；准确区分已知、候选与未验证内容，
+不要虚构原创性，保留 DRAFT_UNVERIFIED 标识。
+```
+
+预期：显著草稿 TeX 与允许的预览 PDF；未经研究交付核查不提供正式文章包。
+
+**只建知识**
+
+```text
+使用 $pure-math-survey，阅读[来源文件或URL]，为[主题及范围]建立知识库，
+面向[读者基础]解释结果、条件、快路线和慢推导；不要生成文章或 PDF。
+```
+
+预期：项目综览、可编辑知识节点、来源／审阅记录与明确缺口。授权来自你实际发送的指令；已有同范围的有效授权会复用，你不需要手填审阅 JSON。
 
 ## 怎么运行
 
-调用聊天就是控制台，保留你当前的模型设置。你说明主题范围、读者、来源和输出后，控制台：
+调用聊天就是控制台，保留当前模型设置；它派发真实工作聊天、读取实际文件，并单写整合权威知识。快层解释目标、输入、关键操作和用途，慢层展开对应推导与外部定理接口；非作者核对所请求稿件的具体证明承诺。
 
-1. 实际派发 Astra/ultra 工作聊天，阅读原始来源，核实版本、条件和引用。
-2. 构建快慢知识：快层解释目标、输入、关键操作和用途；慢层展开对应推导与外部定理接口。
-3. 让非作者审阅知识及所请求稿件的证明承诺，核对实际文件后单写整合知识。
-4. 冻结不可变快照；只建知识的请求在知识与证据处结束。
-5. 为所需稿件安排独立写作者，消费固定快照并实际完成 TeX。`prepare` 只是材料与脚手架，不等于文章。
-6. 非作者核查数学与成文，构建 PDF 并查看全部页面；通过交付检查时提供适用的可重建包。
-
-用户不需要手填审阅 JSON，也不能用编译或哈希代替数学核查。未验证 Paper 保持显著 `DRAFT_UNVERIFIED`，正式研究打包拒绝；已知结果不能虚构为原创。
-
-## 可复制的启动提示
-
-替换项目目录、主题和来源范围，由你实际发送授权：
-
-```text
-使用 $pure-math-survey，在 work/matrix-positivity 建立知识库。
-主题：有限维实对称分块矩阵的正定性，首块可逆，排除奇异首块变体。
-读者掌握本科线性代数。先只建知识，不生成文章或 PDF；阅读我提供的
-原始来源，也可查找原始来源，解释全部条件、两向论证和边界。
-允许读取完整安装 skill、指定来源和本项目；仅在本项目的工作目录写入。
-本聊天是控制台。我授权创建必要的 gpt-6-astra / ultra 工作聊天，负责
-文献、快慢知识、写作和非作者审阅；授权向它们发送任务、继续、修订、
-停止指令并读取结果。其他读取范围如有需要，请具体说明。
+```mermaid
+flowchart TD
+    A["调用聊天：控制台"] --> B["实际阅读原始来源"]
+    B --> C["成对快慢知识"]
+    C --> P["知识目标与稿件证明承诺"]
+    P --> D["非作者知识审阅"]
+    D -->|"必要知识修订"| C
+    D -->|"所需核查完成"| E["固定不可变快照"]
+    E -->|"只建知识"| K["知识与证据交付"]
+    E -->|"请求文章"| F["采用审阅后的稿件计划"]
+    F --> G["独立写作者完成 TeX"]
+    G --> H["数学与成文审阅"]
+    H -->|"知识或论证缺口"| C
+    H -->|"正文修订"| G
+    H -->|"所需审阅完成"| I["编译 PDF"]
+    I --> J["实际查看全部页面"]
+    J -->|"排版修订"| G
+    J -->|"按实际交付许可"| L["适用重建包或显著草稿交付"]
 ```
 
-同范围的有效授权会复用；控制台把真实读写边界传给 worker，worker 不递归派发。仅文档中出现提示并不产生授权。
+计划和证明承诺会在输出相关知识审阅前明确；图中的“稿件计划”落实已审阅的设计。冻结只固定字节，不授予数学就绪；`prepare` 只生成固定材料和脚手架，写作者仍须实际成文。编译、渲染和哈希不能代替数学核查或逐页观察；条件不满足时说明阻碍，不降低标准放行。
 
-后续可以说：“基于这个项目写一份英文 Minimal，view=integrated，范围和读者不变；完整给出主结果与决定性理由，交付 TeX、PDF 和符合条件的重建包，沿用授权。”首次就要文章时也可直接明确这个输出；未指定模式的文章默认 Minimal + integrated。
+知识交付包含综览、节点、来源和证据；文章另有计划、outline、`manuscript/main.tex`、固定材料、`build/main.pdf` 及审阅记录。新来源或纠正先回知识层核查，再形成新快照，旧文件保持不变。多输出分别指定模式、读者和数量，可以共享同一快照，但须独立写作与审阅。
 
-知识交付含综览、节点、来源／审阅记录和缺口。稿件另有计划、outline、`manuscript/main.tex`、固定材料、`build/main.pdf` 和证据；这是交付结构，不表示下方小示例已生成文章。更新时提供新来源或纠正，先核查知识再冻结新快照，旧文件不改。多输出须分别说明读者、模式和数量；可以共享快照，但独立写作和审阅。
-
-## 模式与侧重点
-
-| 模式 | 用途与结构 |
-|---|---|
-| Minimal | 无摘要；Main Results / Key Mathematical Ingredients / Connecting the Ingredients 三节，全部完整主结果在第一节。 |
-| Thematic | 无摘要；准确问题、代表性结果、真实方法及可比条件下的综合。 |
-| Lecture | 无摘要；完整目标定理、忠实路线与可复现的构造／计算／证明。 |
-| Paper | 简洁摘要与完整 Introduction，准确贡献定位和证明；默认未验证草稿，原创正式交付有额外门槛。 |
-
-五种 view：integrated、foundations、results、methods、boundaries。它们改变重点，不改变数学事实或模式责任；只生成所请求的输出。详见[模式契约](skills/pure-math-survey/references/editions.md)。
-
-## 真实 CLI 小示例（可选）
-
-聊天是日常入口，CLI 负责文件操作。已有实跑使用 UTF-8 `scope-input.md`：
-
-```markdown
-# Scope
-
-Build a source-grounded knowledge project on positivity of finite real symmetric block matrices with an invertible leading block. Exclude singular-pivot variants. Readers know undergraduate linear algebra. This initialization demonstration does not request a manuscript or certify any theorem.
-```
-
-在安装 ZIP 解压后的父目录运行：
-
-```sh
-python pure-math-survey/scripts/survey.py init --output my-topic --topic matrix-positivity --scope scope-input.md --json
-python pure-math-survey/scripts/survey.py kb validate my-topic --json
-```
-
-实际结果：`INITIALIZED`、`review_status=pending`、`outputs=[]`；验证为 `VALID`、0 节点、0 来源，并有 `SEMANTIC_NOT_CERTIFIED` 警告。创建了 project.json、scope.md 和 knowledge 下的综览／约定／发现／覆盖文件，没有文章或 PDF。结构有效不等于数学就绪。
-
-当前仅支持 r4，旧／未知输出契约明确拒绝且原文件不改。[完整入口](skills/pure-math-survey/SKILL.md)与[验证边界](skills/pure-math-survey/references/validation.md)说明其余责任；AI 审阅不等于外部同行评审或原创性认证。代码、指令和模板遵循 [MIT License](LICENSE)，数学材料及第三方来源保留各自权利。
+当前仅支持 r4，旧／未知输出契约明确拒绝且原文件不改。更多说明见[完整入口](skills/pure-math-survey/SKILL.md)和[验证边界](skills/pure-math-survey/references/validation.md)。AI 审阅不等于外部同行评审或原创性认证。代码、指令和模板遵循 [MIT License](LICENSE)；数学材料及第三方来源保留各自权利。

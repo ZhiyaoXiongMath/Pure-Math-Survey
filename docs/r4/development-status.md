@@ -13,6 +13,10 @@ This page records the observed scope at prerelease preparation for `v2.1.0-r4-pr
 - 日常安装不需要创建 symlink 或执行这次测试的 UAC 步骤。提权弹窗是实际 symlink 安全拒绝测试；系统权限设置未修改。
 - Normal installation needs neither symlink creation nor that test's UAC step. Elevation exercised actual symlink rejection; system permission settings were not changed.
 
+
+- Linux 的 Python 3.10／3.12 main CI 已完成：[run 38336303282](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/actions/runs/38336303282)。两个安装验证均为 INCOMPLETE：每个 job 的 280 项中，277 项实际执行并通过，3 项 Windows 专用测试跳过（扩展路径／UNC、junction 越界、Windows Job Object）。当前外部安装验证器遇到任何 skip 就报告整体 INCOMPLETE；不能据此称为 Linux 全通过或所有符号链接都未测试。Windows 本机同候选 280/280、零 skip 的独立证据仍成立；本次只记录，不修改运行代码、测试或验证器。
+- Linux Python 3.10/3.12 main CI completed: [run 38336303282](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/actions/runs/38336303282). Both installation validations are INCOMPLETE: each job actually ran and passed 277 of 280 tests, skipping three Windows-specific tests (extended paths/UNC, junction escape and Windows Job Object). The current external installation verifier reports overall INCOMPLETE on any skip; this is neither complete Linux acceptance nor evidence that all symlink tests were unexecuted. Same-candidate independent Windows evidence remains 280/280 with zero skips. This finding is recorded without changing runtime code, tests or verifier.
+
 ## 第一轮 / Round 1
 
 五项整项结论均为失败，但原因并非“全部数学都错误”。保留原轮次与证据，不展示失败稿为通过的公开范例。
@@ -31,11 +35,11 @@ All five whole-case verdicts failed; this does not mean all the mathematics was 
 
 Generic repairs address current-r4-only support, safe snapshot closure of declared review inputs, detailed reader/proof promises for all requested outputs with actual non-author step checks, substantive question retention, and accurate read-boundary propagation/enforcement. Installed resources provide native source/PDF all-page inspection and rebuilding; templates and pending requests do not grant acceptance.
 
-当前优先完成第 2 轮 E01 Minimal 端到端测试，其余测试安全暂停；暂停不代表失败或通过。最新用户指令明确不启动第 3 轮；若第 2 轮不达标，就停止并报告，不继续运行代码修复。第一轮仍计数；原三轮上限仅属历史计划，不构成启动第三轮的授权，预发布或换聊天均不重置边界。普通产品没有永久开发轮数限制。用户现已授权 main 更新为当前预览快照；现有 tag 与安装附件不变。这不解除数学草稿的正式研究交付拒绝，也不展示失败稿为通过范例。
+当前第 2 轮 E01 Minimal 已由主控制台接管并优先推进，其余测试安全暂停；暂停不代表失败或通过。最新用户指令明确不启动第 3 轮；若第 2 轮不达标，就停止并报告，不继续运行代码修复。第一轮仍计数；原三轮上限仅属历史计划，不构成启动第三轮的授权，预发布或换聊天均不重置边界。普通产品没有永久开发轮数限制。用户现已授权 main 更新为当前预览快照；现有 tag 与安装附件不变。这不解除数学草稿的正式研究交付拒绝，也不展示失败稿为通过范例。
 
 本轮 Schur Paper 的真实非作者知识审阅已经完成、无需返修，但普通 kb readiness --plan 对该已知结果报告缺少原创贡献并阻断。Schur 的后续预览、拒绝／变体检查和独立核实现均暂停，最终 E05 尚未验收；已有观察保留，不虚构原创性，不写成已解决或所有 Paper 都有确定缺陷。
 
-Current testing prioritizes Round 2 E01 Minimal; other tests are safely paused. Pause is neither failure nor acceptance. The latest human instruction explicitly forbids starting Round 3; if Round 2 does not meet the requirements, stop and report without further runtime fixes. Round 1 remains counted. The original three-round maximum is historical planning, not authorization for Round 3; a prerelease or new chat does not reset the boundary. The ordinary product has no permanent development-round limit. The user has now authorized updating main to the current preview snapshot; the existing tag and installation assets remain unchanged. This does not lift draft formal-research delivery refusal or present failed drafts as accepted exemplars.
+The main controller has taken over and prioritizes Round 2 E01 Minimal; other tests are safely paused. Pause is neither failure nor acceptance. The latest human instruction explicitly forbids starting Round 3; if Round 2 does not meet the requirements, stop and report without further runtime fixes. Round 1 remains counted. The original three-round maximum is historical planning, not authorization for Round 3; a prerelease or new chat does not reset the boundary. The ordinary product has no permanent development-round limit. The user has now authorized updating main to the current preview snapshot; the existing tag and installation assets remain unchanged. This does not lift draft formal-research delivery refusal or present failed drafts as accepted exemplars.
 
 In this round, Schur Paper's actual non-author knowledge review completed without revision, but ordinary kb readiness --plan reports a missing original contribution for this known result and blocks it. Further Schur preview, refusal/variant checks and independent verification are now paused; final E05 acceptance remains pending. Existing observations are preserved without inventing originality or claiming resolution/a defect in every Paper.
 
