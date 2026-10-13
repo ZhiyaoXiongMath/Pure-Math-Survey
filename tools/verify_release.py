@@ -63,25 +63,88 @@ def assert_installed_contract(artifacts:dict)->dict:
     return {'editorial_policy':EXPECTED_POLICY,'supported_contracts':artifacts['supported_output_contracts']}
 
 
+# Declarations correspond to actual @skipUnless guards in the test suite.
+# These are test identities, never substrings or skip-reason whitelists.
+PLATFORM_ONLY_TESTS = {
+    'test_history_longpath.HistoryPaths.test_real_junction_outside_project_is_rejected': 'nt',
+    'test_history_longpath.HistoryPaths.test_extended_prefix_is_idempotent_and_unc_is_preserved': 'nt',
+    'test_release_verifier.R4VerifierContracts.test_exited_parent_inherited_pipe_is_bounded_and_external_process_survives': 'nt',
+}
+CAPABILITY_REQUIRED_TESTS = frozenset({
+    'test_v2.Contracts.test_H21_actual_symlink_rejected_when_available',
+    'test_workflow_bindings.WorkflowBindings.test_native_identity_still_rejects_symlink_escape',
+    'test_output_review.OutputReview.test_U22_real_build_then_failed_attempt_preserves_prior_build',
+})
+UNITTEST_RESULT = re.compile(
+    r'^(test\w+) \((test_\w+\.\w+\.(test\w+))\) \.\.\. (ok|skipped .+|FAIL|ERROR)$')
+
+
 def installed_regression_summary(stderr:str)->dict:
-    count=re.search(r'Ran (\d+) tests',stderr)
-    suites={name:[line for line in stderr.splitlines() if f'({name}.' in line]
-            for name in REQUIRED_SUITES}
-    def unavailable_windows_symlink(line:str)->bool:
-        return (os.name=='nt' and line.startswith(
-            'test_native_identity_still_rejects_symlink_escape '
-            '(test_workflow_bindings.WorkflowBindings.test_native_identity_still_rejects_symlink_escape) ... skipped ')
-            and 'OS did not authorize directory symlink creation: [WinError 1314]' in line)
-    if not count or any(not rows or not any(line.rstrip().endswith('... ok') for line in rows)
-                        or any(not line.rstrip().endswith('... ok')
-                               and not unavailable_windows_symlink(line) for line in rows)
-                        for rows in suites.values()):
-        raise AssertionError('Installed current policy, workflow and dispatch regressions must actually execute without skips')
-    skipped=[line for line in stderr.splitlines() if ') ... skipped ' in line]
-    return {'tests':int(count[1]),'required_suites':{name:len(rows) for name,rows in suites.items()},
-            'status':'INCOMPLETE' if skipped else 'PASS',
-            'unverified_tests':skipped,
-            'synthetic_gates_are_not_mathematical_acceptance':True}
+    """Only another OS's declared tests are N/A; every other skip is unresolved.
+
+    Parse real verbose unittest identities, not arbitrary skip messages. Check
+    the reported total and skip count so missing/partial logs cannot look green.
+    """
+    outcomes = {}
+    for line in stderr.splitlines():
+        match = UNITTEST_RESULT.fullmatch(line)
+        if not match:
+            continue
+        display_name, identity, method, status = match.groups()
+        if display_name != method or identity in outcomes:
+            raise AssertionError('Malformed or duplicate installed unittest identity: '+identity)
+        outcomes[identity] = (status.split(' ',1)[0],line)
+
+    counts = re.findall(r'(?m)^Ran (\d+) tests? in [^\r\n]+$',stderr)
+    summaries = re.findall(r'(?m)^OK(?: \(skipped=(\d+)\))?$',stderr)
+    if len(counts)!=1 or len(summaries)!=1 or not outcomes:
+        raise AssertionError('Installed unittest completion summary is absent or ambiguous')
+    total = int(counts[0])
+    skipped = sum(status=='skipped' for status,_ in outcomes.values())
+    if total!=len(outcomes) or skipped!=int(summaries[0] or 0):
+        raise AssertionError('Installed unittest counts do not match the actual verbose test outcomes')
+    if any(status not in {'ok','skipped'} for status,_ in outcomes.values()):
+        raise AssertionError('Installed regressions contain an actual test failure')
+
+    suites = {name:[value for identity,value in outcomes.items()
+                    if identity.startswith(name+'.')] for name in REQUIRED_SUITES}
+    if any(not rows or not any(status=='ok' for status,_ in rows)
+           for rows in suites.values()):
+        raise AssertionError('Required installed policy, workflow and dispatch suites must execute')
+
+    not_applicable=[];unverified_capability=[];unexpected=[]
+    for identity,required_os in PLATFORM_ONLY_TESTS.items():
+        if identity not in outcomes:
+            raise AssertionError('Declared platform regression missing: '+identity)
+        status,line = outcomes[identity]
+        if os.name!=required_os:
+            if status!='skipped':
+                raise AssertionError('Another-platform-only test was not skipped: '+identity)
+            not_applicable.append(line)
+        elif status=='skipped':
+            unverified_capability.append(line)
+    for identity in CAPABILITY_REQUIRED_TESTS:
+        if identity not in outcomes:
+            raise AssertionError('Required capability regression missing: '+identity)
+        status,line=outcomes[identity]
+        if status=='skipped':
+            unverified_capability.append(line)
+    declared=set(PLATFORM_ONLY_TESTS)|CAPABILITY_REQUIRED_TESTS
+    for identity,(status,line) in outcomes.items():
+        if status=='skipped' and identity not in declared:
+            unexpected.append(line)
+    unverified=unverified_capability+unexpected
+    return {
+        'tests':total,'executed':total-skipped,
+        'required_suites':{name:len(rows) for name,rows in suites.items()},
+        'platform':'windows' if os.name=='nt' else sys.platform,
+        'status':'INCOMPLETE' if unverified else 'PASS',
+        'not_applicable_tests':not_applicable,
+        'unverified_capability_tests':unverified_capability,
+        'unexpected_skip_tests':unexpected,
+        'unverified_tests':unverified,
+        'synthetic_gates_are_not_mathematical_acceptance':True,
+    }
 
 
 def windows_job_process(command:list[str],**kwargs)->subprocess.Popen:
@@ -449,7 +512,7 @@ def main()->int:
                 report.pop('incomplete',None)
             if report['installed_regression']['unverified_tests']:
                 report['status']='INCOMPLETE'
-                incomplete.append('Installed regression tests skipped; real symlink rejection remains unverified on this host and must execute in a capable environment')
+                incomplete.append('Installed platform-applicable tests skipped; capability or unexpected skips must be resolved on this host')
             if incomplete:
                 report['incomplete']=incomplete
                 report['workspace']['retained']=True
