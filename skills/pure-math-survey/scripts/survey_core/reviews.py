@@ -158,14 +158,11 @@ def plan_mathematical_template(root: Path, plan_path: Path, keys: list[str]) -> 
             'PLAN_LOCATION_MISMATCH', 'Read only a current plan inside this project\'s outputs')
     plan_path = safe(root, relpath(root, plan_path), True)
     plan = load_plan(plan_path)
-    from .profiles import filled
-    from .exposition import PENDING, DEFAULT_AUDIENCE, VAGUE_AUDIENCE
-    require(filled(plan['audience']) and plan['audience'] not in {DEFAULT_AUDIENCE, VAGUE_AUDIENCE}
-            and not PENDING.search(plan['audience'])
-            and all(filled(goal) and not PENDING.search(goal) for goal in plan['reader_goals']),
-            'EXPOSITION_DESIGN_INCOMPLETE', 'Author actual reader capabilities and goals before requesting plan review', 'plan.json')
-    require(all(filled(step) and not PENDING.search(step) for item in plan['proof_obligations'] for step in item['required_steps']),
-            'PROOF_OBLIGATION_UNMET', 'Replace generated prompts with actual exact step promises before requesting review', 'plan.json')
+    from .plans import authored_promise_errors
+    authoring = authored_promise_errors(plan)
+    if authoring:
+        error = authoring[0]
+        require(False, error['code'], error['message'], error['path'])
     require(resolved_path(plan_path) == resolved_path(safe(root, f"outputs/{plan['output_id']}/plan.json")),
             'PLAN_LOCATION_MISMATCH', 'Use this project\'s actual current plan')
     frozen = validate_plan(root, plan); live = inventory(root)
@@ -463,7 +460,8 @@ def validate_reviews(root: Path, paths: list[str], plan: dict | None = None) -> 
     """Read-only batch gate; a stale record yields its binding root failures."""
     from .knowledge import inventory
     from .common import SurveyError, result
-    records = []; errors = []
+    from .plans import authored_promise_errors
+    records = []; errors = authored_promise_errors(plan) if plan is not None else []
     for path in sorted(set(paths)):
         record, found = review_record_errors(root, path); errors.extend(found)
         if record is not None: records.append((path, record))
@@ -483,7 +481,10 @@ def validate_reviews(root: Path, paths: list[str], plan: dict | None = None) -> 
         if exc.diagnostic not in errors: errors.append(exc.diagnostic)
         return result('review.validate', 'NEEDS_WORK', {'records': sorted(set(paths))}, errors=errors)
     for path, record in records:
-        bindings = check_review_bindings(root, record)
+        try:
+            bindings = check_review_bindings(root, record)
+        except SurveyError as exc:
+            errors.append(exc.diagnostic); continue
         if bindings:
             errors.extend(bindings); continue
         if record['disposition'] != 'accepted' or record['reviewer_mode'] == 'not_performed' or blocking_unchecked(record):
@@ -529,12 +530,11 @@ def accept_review_candidate(root: Path, candidate_path: str, plan_path: str) -> 
     """
     import shutil
     import tempfile
-    from .common import (atomic_bytes, file_inventory, native_path, result, writer)
+    from .common import (atomic_bytes, file_inventory, native_path, result, sha, writer)
     from .knowledge import inventory
     from .models import load_plan
     from .readiness import assess_readiness
-    from .plans import validate_plan
-    from .profiles import filled
+    from .plans import validate_plan, authored_promise_errors
     require(candidate_path.startswith('.cache/'), 'UNSAFE_PATH', 'Candidate must be a project-local .cache directory', candidate_path)
     candidate = safe(root, candidate_path)
     require(candidate.is_dir(), 'UNKNOWN_REFERENCE', 'Candidate directory is missing', candidate_path)
@@ -543,8 +543,8 @@ def accept_review_candidate(root: Path, candidate_path: str, plan_path: str) -> 
         plan_file = safe(root, plan_path, True); plan_bytes = plan_file.read_bytes(); plan = load_plan(plan_file)
         require(plan_path == f"outputs/{plan['output_id']}/plan.json", 'PLAN_LOCATION_MISMATCH', 'Use the actual authored output plan', plan_path)
         validate_plan(root, plan)
-        require(all(filled(step) for item in plan['proof_obligations'] for step in item['required_steps']),
-                'PROOF_OBLIGATION_UNMET', 'Complete actual promises before candidate review', plan_path)
+        authoring = authored_promise_errors(plan)
+        if authoring: return result('review.accept', 'NEEDS_WORK', errors=authoring)
         inv = inventory(root); paths = all_files(candidate)
         require(paths, 'CONTRACT_INVALID', 'Candidate is empty', candidate_path)
         kr = inv.project['knowledge_root']
@@ -557,7 +557,8 @@ def accept_review_candidate(root: Path, candidate_path: str, plan_path: str) -> 
         changes = {path: safe(candidate, path, True).read_bytes() for path in paths}
         before = {path: safe(root, path).read_bytes() if safe(root, path).is_file() else None for path in paths}
         baseline = file_inventory(root, inv.files)
-        candidate_inventory = file_inventory(candidate, paths)
+        candidate_inventory = [{'path': path, 'sha256': sha(data), 'bytes': len(data)}
+                               for path, data in sorted(changes.items())]
         stage = Path(tempfile.mkdtemp(prefix='.review-', dir=safe(root, '.cache')))
         applied = []
         try:
@@ -585,8 +586,10 @@ def accept_review_candidate(root: Path, candidate_path: str, plan_path: str) -> 
                     'REVIEW_INPUT_CHANGED', 'Plan changed during installation', plan_path)
             final = assess_readiness(root, plan, live=True)
             require(not final['errors']
-                    and file_inventory(root, inventory(root).files) == file_inventory(stage, inventory(stage).files),
-                    'REVIEW_INPUT_CHANGED', 'Final accepted bytes differ from staged validation', candidate_path)
+                    and file_inventory(root, inventory(root).files) == file_inventory(stage, inventory(stage).files)
+                    and safe(root, plan_path, True).read_bytes() == plan_bytes
+                    and file_inventory(candidate, all_files(candidate)) == candidate_inventory,
+                    'REVIEW_INPUT_CHANGED', 'Final knowledge, plan or candidate bytes differ from staged validation', candidate_path)
         except Exception:
             for path in reversed(applied):
                 target = safe(root, path)

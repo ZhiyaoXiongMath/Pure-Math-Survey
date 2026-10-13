@@ -376,7 +376,6 @@ class WorkflowBindings(unittest.TestCase):
         self.t.failcode('PLAN_INVALID', create_plan, self.t.root, 'only-inquiry', sid, principals=['N-inquiry'], draft=True)
 
 
-if __name__ == '__main__': unittest.main()
 
 
 class ReviewCandidateWorkflow(unittest.TestCase):
@@ -546,6 +545,138 @@ class ReviewCandidateWorkflow(unittest.TestCase):
                 self.assertEqual(self.live_bytes(), before)
                 shutil.rmtree(candidate); shutil.rmtree(p.parent)
 
+    def post_install_change(self, target):
+        from survey_core.readiness import assess_readiness as actual
+        p, plan, candidate, record, request = self.candidate()
+        before = self.live_bytes(); changed = False
+        changed_path = p if target == 'plan' else candidate/'knowledge/coverage.json' if target == 'candidate_bytes' else candidate/'knowledge/late.md'
+        def assess(root, value, **kwargs):
+            nonlocal changed
+            result = actual(root, value, **kwargs)
+            if root == self.t.root:
+                self.assertEqual(result['status'], 'READY')
+                self.assertTrue((self.t.root/'evidence/reviews/candidate-math.json').is_file())
+                changed = True
+                if target == 'plan':
+                    updated = read_json(p)
+                    updated['reader_goals'].append('SYNTHETIC concurrent new reader promise after installation.')
+                    self.assertNotEqual(promise_request(updated)[0], request)
+                    write_json(p, updated)
+                elif target == 'candidate_bytes':
+                    updated = read_json(changed_path)
+                    updated['questions'][0]['rationale'] += ' SYNTHETIC concurrent candidate revision.'
+                    write_json(changed_path, updated)
+                else:
+                    changed_path.write_bytes(b'SYNTHETIC concurrent new candidate member.\n')
+            return result
+        with patch('survey_core.readiness.assess_readiness', assess):
+            self.t.failcode('REVIEW_INPUT_CHANGED', self.accept, p)
+        self.assertTrue(changed)
+        self.assertEqual(self.live_bytes(), before)
+        self.assertFalse((self.t.root/'evidence/reviews/candidate-math.json').exists())
+        self.assertFalse((self.t.root/'evidence/reviews/candidate-coverage.json').exists())
+        self.assertFalse(list((self.t.root/'.cache').glob('.review-*')))
+        self.assertFalse((self.t.root/'.survey-write.lock').exists())
+        # Rollback owns installed files, not the concurrent actor's inputs.
+        self.assertTrue(changed_path.is_file())
+        if target == 'plan': self.assertNotEqual(promise_request(read_json(p))[0], request)
+        elif target == 'candidate_bytes': self.assertIn('concurrent candidate revision', read_json(changed_path)['questions'][0]['rationale'])
+
+    def test_post_install_plan_change_restores_live_bytes(self):
+        self.post_install_change('plan')
+
+    def test_post_install_candidate_byte_change_restores_live_bytes(self):
+        self.post_install_change('candidate_bytes')
+
+    def test_post_install_candidate_membership_change_restores_live_bytes(self):
+        self.post_install_change('candidate_members')
+
+    def unfinished_matching_candidate(self, target):
+        from survey_core.exposition import DEFAULT_AUDIENCE
+        from survey_core.reviews import validate_reviews
+        p, plan, candidate, record, request = self.candidate(); before = self.live_bytes()
+        if target == 'reader':
+            plan['audience'] = DEFAULT_AUDIENCE
+            plan['reader_goals'] = ['[[PMS_PENDING:reader_goals]] Unfinished synthetic goals.']
+            code = 'EXPOSITION_DESIGN_INCOMPLETE'
+        else:
+            plan['proof_obligations'][0]['required_steps'] = ['[[PMS_PENDING:proof]]']
+            record['scope']['proof_steps']['N-main'] = ['[[PMS_PENDING:proof]]']
+            code = 'PROOF_OBLIGATION_UNMET'
+        write_json(p, plan)
+        new_request, data = promise_request(plan)
+        self.assertNotEqual(new_request, request)
+        target_file = safe(candidate, new_request)
+        target_file.parent.mkdir(parents=True, exist_ok=True); target_file.write_bytes(data)
+        record['inputs'] = [binding for binding in record['inputs'] if binding['path'] != request]
+        record['inputs'].append({'path': new_request, 'sha256': sha(data)})
+        record_path = candidate/'evidence/reviews/candidate-math.json'; write_json(record_path, record)
+        # Exact projection/hash/checked strings deliberately match the unfinished
+        # actual plan. They must not bypass the same authoring rule as template.
+        report = self.accept(p)
+        self.assertEqual(report['status'], 'NEEDS_WORK')
+        self.assertIn(code, {error['code'] for error in report['errors']})
+        batch = validate_reviews(self.t.root, [relpath(self.t.root, record_path)], plan)
+        self.assertIn(code, {error['code'] for error in batch['errors']})
+        self.t.failcode(code, plan_mathematical_template, self.t.root, p, ['N-main'])
+        self.assertEqual(self.live_bytes(), before)
+        self.assertFalse((self.t.root/'evidence/reviews/candidate-math.json').exists())
+        self.assertFalse(safe(self.t.root, new_request).exists())
+        self.assertFalse(list((self.t.root/'.cache').glob('.review-*')))
+        self.assertFalse((self.t.root/'.survey-write.lock').exists())
+
+    def test_matching_candidate_request_cannot_bypass_unfinished_reader_design(self):
+        self.unfinished_matching_candidate('reader')
+
+    def test_matching_candidate_steps_cannot_bypass_pending_proof_prompt(self):
+        self.unfinished_matching_candidate('proof')
+
+    def test_batch_unsafe_binding_keeps_independent_canonical_omissions(self):
+        from survey_core.reviews import validate_reviews
+        p, plan, candidate, record, request = self.candidate()
+        alias = self.t.root/'support/alias.md'; alias.parent.mkdir(parents=True, exist_ok=True)
+        try: alias.symlink_to(self.t.root/'knowledge/nodes/N-main.md')
+        except (OSError, NotImplementedError) as exc: self.skipTest(f'Actual symlink creation unavailable: {exc}')
+        unsafe = copy.deepcopy(record)
+        unsafe['review_id'] = 'SYNTHETIC-UNSAFE-BATCH-BINDING'
+        unsafe['inputs'].append({'path': 'support/alias.md', 'sha256': sha(alias.read_bytes())})
+        write_json(self.t.root/'.cache/unsafe-record.json', unsafe)
+        missing = copy.deepcopy(record)
+        missing['review_id'] = 'SYNTHETIC-INDEPENDENT-CANONICAL-OMISSIONS'
+        missing['scope']['statement_reviews'].pop('N-main')
+        missing['scope']['statement_reviews'].pop('N-def')
+        write_json(self.t.root/'.cache/missing-statements.json', missing)
+        report = validate_reviews(self.t.root, ['.cache/unsafe-record.json', '.cache/missing-statements.json'], plan)
+        self.assertEqual(report['status'], 'NEEDS_WORK')
+        self.assertTrue(any(error['code'] == 'UNSAFE_PATH' and error['path'] == 'support/alias.md'
+                            for error in report['errors']))
+        omitted = {error['node_id'] for error in report['errors']
+                   if error['code'] == 'PRINCIPAL_SELF_CONTAINED_REVIEW_PENDING'}
+        self.assertEqual(omitted, {'N-main', 'N-def'})
+        self.assertFalse(any(error['code'] == 'PROOF_OBLIGATION_UNMET' for error in report['errors']))
+
+    def test_candidate_capture_change_cannot_rebaseline_old_staged_bytes(self):
+        from survey_core.common import file_inventory as actual
+        p, plan, candidate, record, request = self.candidate(); before = self.live_bytes()
+        changed = False
+        def capture(root, paths):
+            nonlocal changed
+            if root == candidate and not changed:
+                changed = True
+                coverage = candidate/'knowledge/coverage.json'
+                updated = read_json(coverage)
+                updated['questions'][0]['rationale'] += ' SYNTHETIC capture-window mutation.'
+                write_json(coverage, updated)
+            return actual(root, paths)
+        with patch('survey_core.common.file_inventory', capture):
+            self.t.failcode('REVIEW_INPUT_CHANGED', self.accept, p)
+        self.assertTrue(changed)
+        self.assertEqual(self.live_bytes(), before)
+        self.assertFalse((self.t.root/'evidence/reviews/candidate-math.json').exists())
+        self.assertIn('capture-window mutation', read_json(candidate/'knowledge/coverage.json')['questions'][0]['rationale'])
+        self.assertFalse(list((self.t.root/'.cache').glob('.review-*')))
+        self.assertFalse((self.t.root/'.survey-write.lock').exists())
+
     def test_writer_conflict_and_partial_install_failure_restore_all_original_bytes(self):
         from survey_core.common import writer, atomic_bytes as actual
         p, plan, candidate, record, request = self.candidate(); before = self.live_bytes()
@@ -576,3 +707,6 @@ class ReviewCandidateWorkflow(unittest.TestCase):
         plan['reader_goals'] = ['[[PMS_PENDING:reader_goals]] Unfinished authoring prompt']
         write_json(p, plan)
         self.t.failcode('EXPOSITION_DESIGN_INCOMPLETE', plan_mathematical_template, self.t.root, p, ['N-main'])
+
+
+if __name__ == '__main__': unittest.main()
