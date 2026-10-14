@@ -1,10 +1,13 @@
 """Neutral SYNTHETIC engineering fixtures; no literature reading or license audit."""
 import copy
+import json
 import shutil
+import subprocess
+import sys
 import unittest
 from unittest.mock import patch
 import test_vnext as v
-from test_v2 import read_json, write_json, synthetic_reviews, now, SurveyError
+from test_v2 import read_json, write_json, synthetic_reviews, now, SurveyError, SCRIPTS
 from survey_core.common import file_hash, relpath, safe, all_files
 from survey_core.knowledge import inventory, validate_knowledge
 from survey_core.readiness import assess_readiness, assess_eligibility
@@ -57,6 +60,65 @@ class SourceEligibility(unittest.TestCase):
         return accept_review_candidate(self.root,'.cache/source-candidate',relpath(self.root,p))
     def bytes(self):
         return {p:safe(self.root,p,True).read_bytes() for p in inventory(self.root).files}
+
+    def cli(self, *args, exit_code=0):
+        run=subprocess.run([sys.executable,'-I',str(SCRIPTS/'survey.py'),*map(str,args),'--json'],
+                           capture_output=True,text=True)
+        self.assertEqual(run.returncode,exit_code,run.stdout+run.stderr)
+        self.assertEqual(run.stderr,'')
+        return json.loads(run.stdout)
+
+    def test_cli_retained_bytes_without_hash_are_unverified_and_keep_gates(self):
+        p,plan=self.t.paper()
+        source=read_json(self.root/SOURCE);source['access']['material_sha256']=None
+        write_json(self.root/SOURCE,source);self.reset_reviews()
+        report=self.cli('kb','validate',self.root)
+        self.assertEqual(report['status'],'VALID')
+        facts=report['artifacts']['source_facts'][0]
+        self.assertEqual(facts['bytes'],'UNVERIFIED')
+        self.assertIsNone(facts['recorded_sha256'])
+        self.assertEqual(facts['reading'],'UNVERIFIED')
+        review=self.cli('review','validate',self.root,'--record',REVIEW,exit_code=3)
+        self.assertIn('SOURCE_MATERIAL_MISMATCH',self.codes(review))
+        plan['snapshot_id']=freeze_snapshot(self.root)['artifacts']['snapshot_id'];write_json(p,plan)
+        ready=self.cli('kb','readiness',self.root,'--plan',p,exit_code=3)
+        self.assertEqual(ready['status'],'NEEDS_WORK')
+        self.assertIn('SOURCE_MATERIAL_MISMATCH',self.codes(ready))
+        self.assertEqual(ready['artifacts']['source_facts'][0]['bytes'],'UNVERIFIED')
+        # Research qualification stays independent; it cannot bypass readiness.
+        eligibility=self.cli('output','validate',self.root,'--output',plan['output_id'],'--stage','eligibility')
+        self.assertEqual(eligibility['status'],'ELIGIBLE')
+        draft=self.cli('output','prepare',self.root,'--plan',p)
+        self.assertEqual(draft['status'],'DRAFT_PREPARED')
+        self.assertIn('Paper Draft',(p.parent/'manuscript/main.tex').read_text())
+        release=self.cli('output','validate',self.root,'--output',plan['output_id'],'--stage','release',exit_code=3)
+        self.assertIn('DRAFT_NOT_RELEASABLE',self.codes(release))
+        plan['draft']=False;write_json(p,plan)
+        formal=self.cli('output','prepare',self.root,'--plan',p,exit_code=3)
+        self.assertIn('READINESS_REQUIRED',self.codes(formal))
+        plan['contributions'][0]['authorization']='';write_json(p,plan)
+        eligibility=self.cli('output','validate',self.root,'--output',plan['output_id'],'--stage','eligibility')
+        self.assertEqual(eligibility['status'],'UNVERIFIED')
+        self.assertIn('PAPER_PROVENANCE_UNVERIFIED',self.codes(eligibility))
+        formal=self.cli('output','prepare',self.root,'--plan',p,exit_code=2)
+        self.assertIn('RESEARCH_ELIGIBILITY_REQUIRED',self.codes(formal))
+
+    def test_cli_retained_bytes_matching_hash_are_verified(self):
+        report=self.cli('kb','validate',self.root)
+        self.assertEqual(report['status'],'VALID')
+        facts=report['artifacts']['source_facts'][0]
+        self.assertEqual(facts['bytes'],'VERIFIED')
+        self.assertEqual(facts['recorded_sha256'],file_hash(self.root,'knowledge/material.txt'))
+
+    def test_cli_retained_bytes_mismatching_hash_are_rejected(self):
+        source=read_json(self.root/SOURCE);source['access']['material_sha256']='0'*64
+        write_json(self.root/SOURCE,source)
+        report=self.cli('kb','validate',self.root)
+        self.assertEqual(report['status'],'VALID')
+        facts=report['artifacts']['source_facts'][0]
+        self.assertEqual(facts['bytes'],'REJECTED')
+        self.assertEqual(facts['recorded_sha256'],'0'*64)
+        self.assertNotEqual(facts['recorded_sha256'],file_hash(self.root,'knowledge/material.txt'))
 
     def test_positive_binding_permission_note_and_pending_template(self):
         path=self.root/'evidence/source-checks/permission.md';path.write_text(SYNTH)

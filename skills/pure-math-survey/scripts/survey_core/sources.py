@@ -14,7 +14,7 @@ def fact(record, allowed):
 def source_facts(inv, sid, review=None, locators=None):
     source=inv.sources[sid]; access=source['access']; raw=access.get('local_path'); digest=access.get('material_sha256')
     bytes_status='UNVERIFIED'
-    if raw: bytes_status='VERIFIED' if digest and file_hash(inv.root,raw)==digest else 'REJECTED'
+    if raw and digest: bytes_status='VERIFIED' if file_hash(inv.root,raw)==digest else 'REJECTED'
     return {'source_id':sid, 'controlling_version':source['version'],
             'access':fact(access.get('availability'), {'accessible','unavailable','unknown'}),
             'reading':'VERIFIED' if review and not source_scope_errors(inv,sid,review,locators,check_access=False) else 'UNVERIFIED',
