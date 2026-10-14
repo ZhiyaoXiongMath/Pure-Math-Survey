@@ -53,7 +53,8 @@ def freeze_snapshot(root: Path) -> dict:
         snapshots = safe(root, 'snapshots'); snapshots.mkdir(exist_ok=True)
         target = snapshots / sid
         if target.exists():
-            load_snapshot(root, sid)
+            _, frozen = load_snapshot(root, sid)
+            require_public_originals(inventory(frozen))
             return result('kb.freeze', 'REUSED', {'snapshot_id': sid, 'manifest': f'snapshots/{sid}/manifest.json'})
         stage = Path(tempfile.mkdtemp(prefix='.pending-', dir=snapshots))
         try:
@@ -65,6 +66,9 @@ def freeze_snapshot(root: Path) -> dict:
             require(all(sha(safe(stage / 'files', p, True).read_bytes()) == digest
                         for p, digest in matching_bindings), 'SNAPSHOT_INPUT_CHANGED',
                     'A valid review input binding was lost while staging; retry')
+            # The initial inventory can predate captured metadata. Authorize
+            # the actual staged byte view before publishing a named snapshot.
+            require_public_originals(inventory(stage / 'files'))
             write_json(stage / 'manifest.json', {**value, 'snapshot_id': sid})
             stage.rename(target)
             try:

@@ -279,3 +279,47 @@ class SourceEligibility(unittest.TestCase):
         self.assertEqual(assess_readiness(self.root,plan)['status'],'READY')
         report=self.accept(p);self.assertEqual(report['status'],'ACCEPTED',report['errors'])
         self.assertEqual(record['scope']['source_reading']['S-test']['locators'],['Synthetic fixture paragraph 1'])
+
+    def test_freeze_rechecks_final_captured_source_permission_before_publish(self):
+        from survey_core.sources import require_public_originals as actual
+        source_before=(self.root/SOURCE).read_bytes()
+        for visibility,permission,code in (('private','denied','SOURCE_PRIVATE_ORIGINAL'),
+                                           ('public','denied','SOURCE_REDISTRIBUTION_REJECTED')):
+            with self.subTest(visibility=visibility,permission=permission):
+                (self.root/SOURCE).write_bytes(source_before)
+                captured=[]
+                def revoke_after_initial_check(inv):
+                    actual(inv);captured.append(inv.root)
+                    if inv.root==self.root:
+                        source=read_json(self.root/SOURCE)
+                        source['access']['material_visibility']=visibility
+                        source['access']['redistribution'].update(status=permission,
+                            basis='Synthetic explicit refusal during capture.')
+                        write_json(self.root/SOURCE,source)
+                with patch('survey_core.sources.require_public_originals',side_effect=revoke_after_initial_check):
+                    self.t.failcode(code,freeze_snapshot,self.root)
+                self.assertEqual(captured,[self.root])  # The second guard rejects its captured bytes.
+                snapshots=self.root/'snapshots'
+                self.assertFalse(list(snapshots.iterdir()))
+                self.assertFalse((self.root/'.survey-write.lock').exists())
+
+    def test_freeze_reuse_checks_captured_bytes_without_rewriting_history(self):
+        from survey_core.sources import require_public_originals as actual
+        before=(self.root/SOURCE).read_bytes();source=read_json(self.root/SOURCE)
+        source['access']['material_visibility']='private'
+        source['access']['redistribution'].update(status='denied',basis='Synthetic historical refusal.')
+        write_json(self.root/SOURCE,source)
+        # Construct a synthetic unsafe historical snapshot only to test refusal
+        # of its reuse. This mocked fixture does not represent product acceptance.
+        with patch('survey_core.sources.require_public_originals',return_value=None):
+            sid=freeze_snapshot(self.root)['artifacts']['snapshot_id']
+        folder=self.root/'snapshots'/sid
+        historical={p.relative_to(folder).as_posix():p.read_bytes() for p in folder.rglob('*') if p.is_file()}
+        (self.root/SOURCE).write_bytes(before)
+        def revoke_after_initial_check(inv):
+            actual(inv)
+            if inv.root==self.root:write_json(self.root/SOURCE,source)
+        with patch('survey_core.sources.require_public_originals',side_effect=revoke_after_initial_check):
+            self.t.failcode('SOURCE_PRIVATE_ORIGINAL',freeze_snapshot,self.root)
+        self.assertEqual(list((self.root/'snapshots').iterdir()),[folder])
+        self.assertEqual({p.relative_to(folder).as_posix():p.read_bytes() for p in folder.rglob('*') if p.is_file()},historical)
