@@ -58,3 +58,5 @@ python scripts/survey.py init --output my-topic --topic my-topic --scope my-scop
 
 
 `review validate` 批量报告证据缺项，`review accept` 暂存校验候选最终字节并在失败时回滚；随后仍须 freeze 与显式采用。模板覆盖适用 canonical 依赖且保持 pending。见[审阅与接收](references/proofs-and-boundaries.md#review-handoff-and-candidate-acceptance)。
+
+原文访问、实际阅读范围、可验证字节与再分发权限独立据实报告；私有或未授权原文字节不能进入公开项目快照。知识 READY 与 Paper 正式研究资格分别设门槛。见[来源证据](references/research-and-evidence.md)。

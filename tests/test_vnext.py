@@ -131,7 +131,7 @@ class VNext(unittest.TestCase):
                 links=[] if getattr(self,'isolated_comparison',False) else [('N-main','compares_with'),('N-prior','compares_with')],status='established')
         synthetic_reviews(self.root);synthetic_policy_reviews(self.root)
         source_path=self.root/'evidence/reviews/source-S-test.json';source_review=read_json(source_path)
-        source_review['scope']['source_reading']={'S-test':dict(mode='original_text_local',version='Fixture v1',locators=['Synthetic fixture paragraph 1'])}
+        source_review['scope']['source_reading']={'S-test':dict(mode='original_text_local',version='Fixture v1',locators=['Synthetic fixture paragraph 1'],reading_scope=SYNTH,unchecked_items=[])}
         write_json(source_path,source_review)
         p,v=self.make('paper')
         for key in ['N-prior','N-compare']:
@@ -291,21 +291,25 @@ class VNext(unittest.TestCase):
         run=subprocess.run([sys.executable,str(SCRIPTS/'survey.py'),'review','template',str(self.root),'--kind','mathematical','--id','N-main','--principal-statements','--json'],capture_output=True,text=True)
         self.assertEqual(run.returncode,0,run.stdout);import json
         r=json.loads(run.stdout)['artifacts']['review'];self.assertEqual(r['schema_version'],OUTPUT_SCHEMA);self.assertEqual(r['scope']['statement_reviews']['N-main']['outcome'],'not_performed')
+    def eligibility(self,plan):
+        from survey_core.readiness import assess_eligibility
+        return {e['code'] for e in assess_eligibility(self.root,plan)['errors']}
+
     def test_V28_paper_defaults_draft_even_without_draft_flag(self):
         p,v=self.make('paper',draft=False);self.assertTrue(v['draft']);self.assertEqual(v['contributions'][0]['classification'],'unverified')
-        self.assertIn('PAPER_ORIGINAL_CONTRIBUTION_MISSING',self.readiness(v))
+        self.assertIn('PAPER_ORIGINAL_CONTRIBUTION_MISSING',self.eligibility(v))
     def test_V29_paper_no_prior_art_cannot_be_formal(self):
         p,v=self.paper();v['contributions'][0]['closest_prior_results']=[]
-        self.assertIn('PAPER_PRIOR_ART_MISSING',self.readiness(v))
+        self.assertIn('PAPER_PRIOR_ART_MISSING',self.eligibility(v))
     def test_V30_paper_gap_or_incomplete_proof_cannot_be_formal(self):
-        p,v=self.paper();self.assertFalse(self.readiness(v),self.readiness(v))
-        c=v['contributions'][0];c['gaps']=['Unproved uniform estimate.'];self.assertIn('PAPER_PROOF_GAP',self.readiness(v))
-        c['gaps']=[];c['proof_status']='incomplete';self.assertIn('PAPER_PROOF_NOT_CLOSED',self.readiness(v))
+        p,v=self.paper();self.assertFalse(self.eligibility(v),self.eligibility(v))
+        c=v['contributions'][0];c['gaps']=['Unproved uniform estimate.'];self.assertIn('PAPER_PROOF_GAP',self.eligibility(v))
+        c['gaps']=[];c['proof_status']='incomplete';self.assertIn('PAPER_PROOF_NOT_CLOSED',self.eligibility(v))
     def test_V31_classic_result_cannot_supply_paper_originality(self):
         p,v=self.paper();v['contributions'][0]['classification']='known'
-        self.assertIn('PAPER_ORIGINAL_CONTRIBUTION_MISSING',self.readiness(v))
+        self.assertIn('PAPER_ORIGINAL_CONTRIBUTION_MISSING',self.eligibility(v))
     def test_V32_paper_requires_authorized_provenance_and_comparison_relation(self):
-        p,v=self.paper();v['contributions'][0]['authorization']='';self.assertIn('PAPER_PROVENANCE_UNVERIFIED',self.readiness(v))
+        p,v=self.paper();v['contributions'][0]['authorization']='';self.assertIn('PAPER_PROVENANCE_UNVERIFIED',self.eligibility(v))
         v['contributions'][0]['comparison_bindings'][0]['comparison_node_id']='N-def';self.failcode('CONTRIBUTION_INVALID',validate_plan,self.root,v)
     def test_V33_paper_unknown_prior_and_self_prior_rejected(self):
         p,v=self.paper();c=v['contributions'][0];c['closest_prior_results']=['N-absent']
@@ -319,7 +323,7 @@ class VNext(unittest.TestCase):
         self.assertFalse((self.base/'no.zip').exists())
     def test_V35_paper_boolean_flip_still_blocked(self):
         p,v=self.authored('paper');v['draft']=False;write_json(p,v)
-        self.failcode('READINESS_REQUIRED',prepare_output,self.root,p)
+        self.failcode('RESEARCH_ELIGIBILITY_REQUIRED',prepare_output,self.root,p)
     def test_V36_paper_semantic_prior_art_is_additional_to_lecture(self):
         p,v=self.paper();prepare_output(self.root,p)
         r=self.sem(p,v);key='N-main';loc=r['scope']['principal_locations'][key]

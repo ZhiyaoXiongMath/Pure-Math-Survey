@@ -6,7 +6,7 @@ from test_v2 import putnode, write_json, read_json, now, SurveyError
 from survey_core.knowledge import inventory
 from survey_core.models import load_node, node_bytes
 from survey_core.exports import prepare_output
-from survey_core.profiles import profile_readiness_errors, semantic_profile_errors, normalize_locator
+from survey_core.profiles import research_eligibility_errors, semantic_profile_errors, normalize_locator
 from survey_core.reviews import mathematical_inputs, review_template, check_review_bindings, load_review
 from survey_core.release import assess_release
 
@@ -15,7 +15,7 @@ class Prior(unittest.TestCase):
         self.t=v.VNext();self.t.setUp();self.t.editorial_policy=v.POLICY;self.p,self.plan=self.t.paper()
     def tearDown(self):self.t.tearDown()
     def ready_codes(self,inv=None,plan=None):
-        return {e['code'] for e in profile_readiness_errors(inv or inventory(self.t.root),plan or self.plan)}
+        return {e['code'] for e in research_eligibility_errors(inv or inventory(self.t.root),plan or self.plan)}
     def semantic(self):
         prepare_output(self.t.root,self.p);r=self.t.sem(self.p,self.plan)
         e=r['scope']['contribution_reviews']['N-main']

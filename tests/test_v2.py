@@ -56,10 +56,13 @@ def synthetic_reviews(root):
                 item = principal_template(inv.nodes[key].statement); item['outcome'] = 'accepted'
                 item.update({k: 'Synthetic aspect finding, not mathematical acceptance.' for k in STATEMENT_ASPECTS})
                 scope['statement_reviews'][key] = item
+        elif kind == 'source':
+            scope={'source_ids':[key], 'source_reading':{key:dict(mode='original_text_local',version='Fixture v1',
+                locators=['Synthetic fixture paragraph 1'],reading_scope='Synthetic supporting statement only; no actual mathematical reading.',unchecked_items=[])}}
         elif kind == 'coverage':
             scope = knowledge_scope_template(inv, [key])
         r=review_template(root,kind,[key],inputs,scope)
-        r.update({'review_id':'SYNTHETIC-'+kind+'-'+key,'reviewer_mode':'author_reread','reviewed_at':now(),
+        r.update({'review_id':'SYNTHETIC-'+kind+'-'+key,'reviewer_mode':'author_reread','reviewer':'Synthetic fixture author; no actual reading.', 'reviewed_at':now(),
                   'findings':['Synthetic accepted-state input for software gate testing only; not actual research acceptance.'],
                   'unchecked_items':[],'disposition':'accepted'})
         r['scope']['evidence_basis']='Synthetic software fixture; not a claim of an executed independent mathematical review.'
@@ -81,7 +84,9 @@ def fixture(root,reviewed=False,second=False):
     write_json(root/'knowledge/sources/S-test.json',{'schema_version':VERSION,'id':'S-test','kind':'primary','title':'Synthetic software fixture','authors':['Test harness'],
                'publication_status':'unpublished','identifiers':{'user_file':'Synthetic software test material'},'version':'Fixture v1',
                'access':{'state':'full_text_read' if reviewed else 'metadata_only','checked_at':now() if reviewed else None,
-                         'material_sha256':file_hash(root,'knowledge/material.txt'),'local_path':'knowledge/material.txt','reading_note':'evidence/source-checks/test.md'}})
+                         'material_sha256':file_hash(root,'knowledge/material.txt'),'local_path':'knowledge/material.txt','reading_note':'evidence/source-checks/test.md', 'material_visibility':'public',
+                         'availability':dict(status='accessible',checked_at=now(),basis='Synthetic fixture bytes accessible to test harness.'),
+                         'redistribution':dict(status='granted',checked_at=now(),basis='Synthetic test material authored by this fixture; no external license claim.')}})
     qs=[{'question_id':'N-q','answer_nodes':['N-main'],'mechanism_nodes':[],'boundary_nodes':[],'gaps':[] if reviewed else ['Actual review not performed.'],
          'assessment':'adequate' if reviewed else 'pending','rationale':'A bounded synthetic software test; not a literature completeness claim.'}]
     if second:

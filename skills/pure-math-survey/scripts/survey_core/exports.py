@@ -60,8 +60,11 @@ def expected_materials(inv,plan:dict,ready:dict)->dict[str,bytes]:
     actually used by this selection are included even though they are not
     ordinary consumed knowledge paths. Their declared byte closure stays fixed.
     """
-    raw_files={s['access'].get('local_path') for s in inv.sources.values()}
-    paths=authoring_input_paths(inv,plan,ready)-raw_files
+    from .sources import require_public_originals
+    require_public_originals(inv)
+    from .sources import original_input_paths
+    inputs=authoring_input_paths(inv,plan,ready)
+    paths=inputs-original_input_paths(inv,inputs)
     return {p:safe(inv.root,p,True).read_bytes() for p in sorted(paths)}
 
 def prepare_output(root:Path,plan_path:Path,draft:bool=False)->dict:
@@ -71,15 +74,19 @@ def prepare_output(root:Path,plan_path:Path,draft:bool=False)->dict:
         plan={**plan,'draft':True}
         with writer(root):write_json(plan_path,plan)
     inv=validate_plan(root,plan);ready=assess_readiness(root,plan)
+    from .readiness import assess_eligibility
+    eligibility=assess_eligibility(root,plan)
+    require(plan['draft'] or eligibility['status'] in {'ELIGIBLE','NOT_APPLICABLE'},
+            'RESEARCH_ELIGIBILITY_REQUIRED','Paper requires research eligibility before formal preparation; use explicit draft preview','plan.json')
     require(plan['draft'] or ready['status']=='READY','READINESS_REQUIRED','Formal preparation requires readiness; use explicit --draft for an internal manuscript','plan.json')
     data=expected_generated(inv,plan); ids=consumption(inv,plan);inputs=authoring_input_paths(inv,plan,ready)
-    raw_files={s['access'].get('local_path') for s in inv.sources.values()}
     materials=expected_materials(inv,plan,ready)
+    from .sources import original_input_paths
     manifest={'schema_version':VERSION,'snapshot_id':plan['snapshot_id'],'output_id':plan['output_id'],
               'plan_sha256':sha(canonical(plan)),'draft':plan['draft'],'consumed_nodes':sorted(ids),
               'consumed_inputs':file_inventory(inv.root,sorted(inputs)),
               'generated_files':[{'path':'generated/'+p,'sha256':sha(b),'bytes':len(b)} for p,b in sorted(data.items())],
-              'raw_sources_omitted':sorted(x for x in raw_files if x and x in inputs),
+              'raw_sources_omitted':sorted(original_input_paths(inv,inputs)),
               'meaning':'Exact stored bytes are reused; independent mathematical and output readings are still required.'}
     with writer(root):
         stage=Path(tempfile.mkdtemp(prefix='.prepare-',dir=native_path(out, extended=True)))
@@ -114,10 +121,10 @@ def prepare_output(root:Path,plan_path:Path,draft:bool=False)->dict:
                     (principals if s['role']=='principal_answer' else ingredients).append(snippet)
             task='\\placeholder{'+tex_text(VIEW_TASKS[plan['view']])+'}'
             text=template.replace('@@TITLE@@',tex_text(plan['title'])).replace('@@STATEMENTS@@','\n'.join(snippets)).replace('@@PRINCIPALS@@','\n'.join(principals)).replace('@@INGREDIENTS@@','\n'.join(ingredients)).replace('@@VIEW_TASK@@',task)
-            notice='\\noindent\\textbf{DRAFT\\_UNVERIFIED: source and mathematical review may be incomplete.}\n' if plan['draft'] else ''
+            notice=('\\noindent\\textbf{Paper Draft -- DRAFT\\_UNVERIFIED: research authorization, contribution and proof checks are incomplete.}\n' if plan['profile']=='paper' else '\\noindent\\textbf{DRAFT\\_UNVERIFIED: source and mathematical review may be incomplete.}\n') if plan['draft'] else ''
             atomic_bytes(out/'manuscript/main.tex',text.replace('@@DRAFT@@',notice).encode())
     from .exposition import check_exposition_design
-    return result('output.prepare','DRAFT_PREPARED' if plan['draft'] else 'PREPARED',{'output':relpath(root, out),'snapshot_id':plan['snapshot_id'],'readiness':ready,'main_preserved':True,
+    return result('output.prepare','DRAFT_PREPARED' if plan['draft'] else 'PREPARED',{'output':relpath(root, out),'snapshot_id':plan['snapshot_id'],'readiness':ready,'research_eligibility':eligibility,'preview_allowed':plan['draft'],'main_preserved':True,
         'exposition_design':check_exposition_design(out,plan),'authorship':'SCAFFOLD: preparation is not completed writing or review.'})
 
 def verify_generated(root:Path,plan:dict)->dict:
@@ -176,7 +183,14 @@ def validate_structure(root:Path,output_id:str)->dict:
         if s['statement_treatment']=='full' and path not in scan.body_inputs:
             errors.append(diagnostic('CANONICAL_STATEMENT_MISSING','Full selected statement is not literally included in the visible manuscript body',path,s['node_id']))
     body=text.split(r'\begin{document}',1)[-1].split(r'\end{document}',1)[0]
-    if plan['draft'] and not re.search(r'DRAFT(?:\\)?_UNVERIFIED|DRAFT\\_UNVERIFIED',body):
+    from .readiness import assess_eligibility
+    eligibility=assess_eligibility(root,plan)
+    needs_draft=plan['draft'] or eligibility['status'] in {'UNVERIFIED','REJECTED'}
+    if plan['profile']=='paper' and not plan['draft'] and needs_draft:
+        errors.append(diagnostic('RESEARCH_ELIGIBILITY_REQUIRED','Changing draft=false does not grant formal research eligibility.','plan.json'))
+    prominent=re.search(r'\\textbf\{[^{}]*Paper Draft[^{}]*DRAFT(?:\\)?_UNVERIFIED[^{}]*\}',body.split(r'\section',1)[0])
+    notice=bool(prominent) if plan['profile']=='paper' else bool(re.search(r'DRAFT(?:\\)?_UNVERIFIED|DRAFT\\_UNVERIFIED',body))
+    if needs_draft and not notice:
         errors.append(diagnostic('DRAFT_NOTICE_MISSING','Unverified manuscript must visibly identify its draft status','manuscript/main.tex'))
     from .profiles import structure_errors
     profile_errors, profile_warnings = structure_errors(inv, plan, validate_plan(root, plan).nodes, text)

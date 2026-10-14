@@ -22,3 +22,7 @@ examples/rc2/**/history/
 examples/rc2/**/evidence/pages/
 examples/vnext/projects/schur/outputs/rc2-lecture/history/
 examples/vnext/projects/schur/outputs/rc2-lecture/evidence/pages/
+
+# Private source originals must stay outside public project inputs.
+**/.private/
+**/private/

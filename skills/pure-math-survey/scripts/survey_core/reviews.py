@@ -192,7 +192,7 @@ def plan_mathematical_template(root: Path, plan_path: Path, keys: list[str]) -> 
 
 def source_inputs(inv, source_id:str)->set[str]:
     s=inv.sources[source_id]; out={inv.source_paths[source_id]}
-    for field in ('reading_note','local_path'):
+    for field in ('reading_note','local_path','permission_note'):
         if s['access'].get(field):out.add(s['access'][field])
     return out
 
@@ -397,8 +397,10 @@ def review_template(root:Path,kind:str,keys:list[str],required:set[str],scope:di
         scope.setdefault('statement_reviews', {key: principal_template(inv.nodes[key].statement)
                           for key in keys if inv.nodes[key].statement is not None})
     if kind == 'source':
-        scope.setdefault('source_reading', {key: {'mode': 'not_performed', 'version': '',
-                         'locators': [], 'raw_bytes_unavailable_reason': ''} for key in keys})
+        from .knowledge import inventory
+        inv = inventory(root)
+        scope.setdefault('source_reading', {key: {'mode': 'not_performed', 'version': inv.sources[key]['version'] or '',
+                         'locators': [], 'reading_scope': '', 'unchecked_items': ['Actual source reading not performed.'], 'raw_bytes_unavailable_reason': ''} for key in keys})
     if kind in {'output_semantic', 'visual'}:
         scope.setdefault('editorial_policy', POLICY)
     selected_policy = scope.get('editorial_policy')
@@ -484,6 +486,8 @@ def validate_reviews(root: Path, paths: list[str], plan: dict | None = None) -> 
     except SurveyError as exc:
         if exc.diagnostic not in errors: errors.append(exc.diagnostic)
         return result('review.validate', 'NEEDS_WORK', {'records': sorted(set(paths))}, errors=errors)
+    from .sources import public_original_errors
+    errors.extend(public_original_errors(inv))
     for path, record in records:
         if path in unsafe_records: continue
         try:
@@ -513,6 +517,14 @@ def validate_reviews(root: Path, paths: list[str], plan: dict | None = None) -> 
             try:
                 required = {'source':source_inputs, 'mathematical':mathematical_inputs, 'coverage':coverage_inputs}[kind](inv, key)
                 found = check_review_bindings(root, record, required)
+                if not found and kind == 'source':
+                    from .sources import source_scope_errors
+                    locators = None
+                    if plan is not None:
+                        from .plans import consumption
+                        locators = [ref['locator'] for node in consumption(inv, plan) for ref in inv.nodes[node].meta['sources']
+                                    if ref['source_id'] == key and ref['role'] == 'support']
+                    found += source_scope_errors(inv, key, record, locators)
                 if not found and kind == 'mathematical':
                     found += mathematical_scope_errors(inv, key, record, plan, all_statements=True)
                 if not found and kind == 'coverage':

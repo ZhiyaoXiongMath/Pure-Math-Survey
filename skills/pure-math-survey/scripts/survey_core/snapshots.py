@@ -41,6 +41,8 @@ def verify_snapshot(root: Path, snapshot_id: str) -> dict:
 def freeze_snapshot(root: Path) -> dict:
     with writer(root):
         inv = inventory(root)
+        from .sources import require_public_originals
+        require_public_originals(inv)
         contents = {p: safe(root, p, True).read_bytes() for p in inv.files}
         from .reviews import reviews_in
         matching_bindings = [(b['path'], b['sha256']) for _, r in reviews_in(root)

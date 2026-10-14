@@ -83,6 +83,7 @@ REQUIRED_FILES = {
     'scripts/survey_core/release.py',
     'scripts/survey_core/reviews.py',
     'scripts/survey_core/snapshots.py',
+    'scripts/survey_core/sources.py',
     'scripts/survey_core/structure.py',
     'scripts/survey_core/tex.py',
     'scripts/validate_assets.py',

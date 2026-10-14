@@ -11,7 +11,7 @@ from test_v2 import read_json, write_json, now, putnode
 from survey_core.tex import validate_locations
 from survey_core.exports import prepare_output, validate_structure
 from survey_core.profiles import semantic_profile_errors, outline
-from survey_core.readiness import assess_readiness
+from survey_core.readiness import assess_readiness, assess_eligibility
 from survey_core.reviews import mathematical_inputs, review_template, check_review_bindings
 from survey_core.knowledge import inventory
 
@@ -82,7 +82,7 @@ class Hardening(unittest.TestCase):
         self.assertNotEqual(a[1],b[1])
     def test_PRIOR01_isolated_relation_is_not_comparison(self):
         t=self.fixture; t.isolated_comparison=True; p,v=t.paper(); v['draft']=False
-        errors=assess_readiness(t.root,v)['errors']
+        errors=assess_eligibility(t.root,v)['errors']
         self.assertIn('PAPER_COMPARISON_ENDPOINT_MISSING', codes(errors))
     def test_PRIOR09_endpoint_changes_stale_comparison_reading(self):
         t=self.fixture
