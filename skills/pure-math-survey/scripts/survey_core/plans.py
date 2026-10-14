@@ -8,6 +8,24 @@ from .models import load_plan
 from .snapshots import load_snapshot
 
 
+def authored_promise_errors(plan: dict) -> list[dict]:
+    """Shared authoring gate: matching bytes never complete generated prompts."""
+    from .common import diagnostic
+    from .profiles import filled
+    from .exposition import PENDING, DEFAULT_AUDIENCE, VAGUE_AUDIENCE
+    errors = []
+    if not (filled(plan['audience']) and plan['audience'] not in {DEFAULT_AUDIENCE, VAGUE_AUDIENCE}
+            and not PENDING.search(plan['audience'])
+            and all(filled(goal) and not PENDING.search(goal) for goal in plan['reader_goals'])):
+        errors.append(diagnostic('EXPOSITION_DESIGN_INCOMPLETE',
+            'Author actual reader capabilities and goals before requesting plan review', 'plan.json'))
+    if not all(filled(step) and not PENDING.search(step)
+               for item in plan['proof_obligations'] for step in item['required_steps']):
+        errors.append(diagnostic('PROOF_OBLIGATION_UNMET',
+            'Replace generated prompts with actual exact step promises before requesting review', 'plan.json'))
+    return errors
+
+
 def promise_projection(plan: dict) -> dict:
     """Existing mathematical plan fields, without a circular snapshot identity."""
     from .profiles import validate_plan_contract
@@ -50,10 +68,11 @@ def consumed_paths(inv: Inventory, plan: dict) -> set[str]:
             if inv.sources[key]['access'].get(field): paths.add(inv.sources[key]['access'][field])
     return paths
 
-def validate_plan(root: Path, plan: dict, *, compare: bool = True) -> Inventory:
+def validate_plan(root: Path, plan: dict, *, compare: bool = True, inv: Inventory | None = None) -> Inventory:
     from .profiles import validate_plan_contract, validate_profile_selection
     validate_plan_contract(plan)
-    _, frozen = load_snapshot(root, plan['snapshot_id']); inv = inventory(frozen)
+    if inv is None:
+        _, frozen = load_snapshot(root, plan['snapshot_id']); inv = inventory(frozen)
     selected = {s['node_id']: s for s in plan['selections']}
     require(len(selected) == len(plan['selections']), 'DUPLICATE_ID', 'Duplicate selection in plan', 'plan.json')
     omissions = {o['node_id'] for o in plan['omissions']}

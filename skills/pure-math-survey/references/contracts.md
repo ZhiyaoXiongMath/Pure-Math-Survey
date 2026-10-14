@@ -65,7 +65,7 @@ These are references and editorial evidence, not another canonical statement sto
 New-policy mathematical reviews use scope.editorial_policy and statement_reviews keyed
 by principal node. Each entry binds canonical_sha256, outcome and actual observations for
 objects/domain/fixed_and_variable/hypotheses/equations/quantifiers/conclusion/status/
-local_definitions. `review template --principal-statements` produces pending entries.
+local_definitions. `review template` now produces pending entries for all applicable canonical dependencies; `--principal-statements` retains its requested-canonical check. Batch `review validate` and staged `review accept` reuse these rules; see [review handoff](proofs-and-boundaries.md#review-handoff-and-candidate-acceptance).
 Only actual readings may set accepted. Missing new-policy findings cannot inherit an old
 accepted review. Nodes may receive these richer reviews without changing node schemas.
 

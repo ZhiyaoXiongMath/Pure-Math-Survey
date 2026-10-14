@@ -19,8 +19,8 @@ class Inventory:
     coverage: dict
     files: list[str]
 
-def inventory(root: Path) -> Inventory:
-    root = root.absolute(); project = load_project(root)
+def inventory(root: Path, *, review_records: list[tuple[str, dict]] | None = None) -> Inventory:
+    root = root.absolute(); project = load_project(root, check_reviews=review_records is None)
     kr = project['knowledge_root']; scope = project['scope_file']
     require(safe(root, scope, True).read_text(encoding='utf-8').strip(), 'SCOPE_EMPTY', 'Describe objects, quantifiers and exclusions', scope)
     for suffix in ('overview.md', 'conventions.tex', 'discovery.md', 'coverage.json'):
@@ -73,7 +73,7 @@ def inventory(root: Path) -> Inventory:
     from .reviews import load_review, knowledge_review_input_paths
     # Auxiliary input bytes are opaque dependencies, not navigation registries.
     # Stale/missing records remain unchanged and are rejected when consumed.
-    records = [(p, load_review(safe(root, p, True))) for p in all_files(root, 'evidence/reviews') if p.endswith('.json')]
+    records = review_records if review_records is not None else [(p, load_review(safe(root, p, True))) for p in all_files(root, 'evidence/reviews') if p.endswith('.json')]
     paths |= knowledge_review_input_paths(root, records)
     return Inventory(root, project, nodes, sources, source_paths, cov, sorted(paths))
 

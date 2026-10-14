@@ -34,6 +34,8 @@ def parser()->Parser:
         if name=='package':x.add_argument('--to',type=Path,required=True)
         if name=='review-template':x.add_argument('--kind',choices=['output_semantic','visual'],required=True);x.add_argument('--to')
     r=sub.add_parser('review');rs=r.add_subparsers(dest='action',required=True);x=rs.add_parser('template');x.add_argument('project',type=Path);x.add_argument('--kind',choices=['source','mathematical','coverage'],required=True);x.add_argument('--id',action='append',required=True);x.add_argument('--to');x.add_argument('--principal-statements',action='store_true');x.add_argument('--plan',help='Current authored plan for an actual nonauthor mathematical step review; generates only a pending request')
+    x=rs.add_parser('validate');x.add_argument('project',type=Path);x.add_argument('--record',action='append',required=True);x.add_argument('--plan')
+    x=rs.add_parser('accept');x.add_argument('project',type=Path);x.add_argument('--candidate',required=True);x.add_argument('--plan',required=True)
     return p
 
 def execute(a)->dict:
@@ -55,6 +57,14 @@ def execute(a)->dict:
         if a.action=='diff':return diff_snapshots(root,a.old,a.new)
         return assess_readiness(root,safe(root,relpath(root,a.plan),True))
     if a.command=='review':
+        if a.action=='accept':
+            from .reviews import accept_review_candidate
+            return accept_review_candidate(root,relpath(root,a.candidate),relpath(root,a.plan))
+        if a.action=='validate':
+            from .reviews import validate_reviews
+            from .models import load_plan
+            plan=load_plan(safe(root,relpath(root,a.plan),True)) if a.plan else None
+            return validate_reviews(root,[relpath(root,path) for path in a.record],plan)
         if a.plan:
             from .common import require
             require(a.kind == 'mathematical', 'CLI_ARGUMENT_INVALID', '--plan is only for mathematical review')
@@ -68,11 +78,11 @@ def execute(a)->dict:
             from .reviews import knowledge_scope_template
             scope=knowledge_scope_template(inv,a.id)
         if a.principal_statements:
-            from .profiles import POLICY, principal_template
             from .common import require
             require(a.kind=='mathematical', 'CLI_ARGUMENT_INVALID', '--principal-statements is for mathematical review')
             require(all(inv.nodes[k].statement is not None for k in a.id),'CANONICAL_BLOCK_MISSING','Principal review requires canonical statements')
-            scope={'node_ids':a.id,'editorial_policy':POLICY,'statement_reviews':{k:principal_template(inv.nodes[k].statement) for k in a.id}}
+            # Legacy flag retains its canonical requirement; the default
+            # mathematical template covers necessary canonical dependencies.
         request_path = None
         if a.plan:
             from .common import require
