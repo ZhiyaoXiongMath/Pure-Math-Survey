@@ -4,7 +4,7 @@ Use this installed reference with permitted local tools; it does not require rea
 
 ## Required tools and fixed inputs
 
-The core uses Python 3.10+ standard library. TeX builds need pdfLaTeX, BibTeX and packages loaded by the installed assets/templates/math-review.sty (12pt amsart and readable margins). Poppler pdfinfo/pdftoppm provide page counts/images; pdftotext is useful for original-source text, but image inspection is still needed for controlling formulas. `bibtex.original`/`bibtex8` are tried only as recorded available executable alternatives. Use installed scripts and current CLI help, not a different global installation. Current r4 templates are unfinished scaffolds; they do not supply mathematical answers or historical-policy support.
+The core uses Python 3.10+ standard library. TeX builds need pdfLaTeX, BibTeX and packages loaded by the installed assets/templates/math-review.sty (12pt amsart and readable margins). Poppler pdfinfo/pdftoppm provide page counts/images; pdftotext is useful for original-source text, but image inspection is still needed for controlling formulas. `bibtex.original`/`bibtex8` are tried only as recorded available executable alternatives. Use installed scripts and current CLI help, not a different global installation. Current r5 templates are unfinished scaffolds; they do not supply mathematical answers or historical-policy support.
 
 Before build, fix the actual plan/snapshot, authored TeX/style, generated fragments and materials, and verify applicable readiness and substantive findings. `output build` stages those inputs, uses pdfLaTeX without shell escape, runs BibTeX when needed and repeats until auxiliaries stabilize. Actual command results, tool versions, dependencies, log diagnostics, source inputs, PDF hash and page count remain in build/build-report.json. Failed attempts remain evidence; a previous PDF does not make the failed latest attempt pass. Disabled shell escape is not an operating-system sandbox: compile only permitted trusted inputs.
 
@@ -23,7 +23,7 @@ The actual PDF is outputs/ID/build/main.pdf. Read outputs/ID/build/build-report.
 
 Open **each** listed PNG at readable size with the host's permitted local image-view tool, such as `view_image` using the resolved absolute path. The calling tool must actually return the image for inspection; listing filenames, embedding links for the user, rasterizing or extracting text does not establish your observation. Inspect all page bodies, formulas, theorem conditions, glyphs, references, headings, page breaks, clipping/overlap and normal prose rhythm. Zoom/reopen unclear regions as needed. If no permitted visual tool can expose pixels, retain the images and report visual review blocked; do not invent page findings.
 
-Only after actual inspection fill the fresh pending visual record. Preserve its required input bindings and ordered all-page scope; supply concrete page/block/equation observations, corresponding TeX locations, defects/repairs or justified long-block exceptions. Ordinary explanatory prose actively targets about 2–3 normal typeset lines; complete statements/necessary continuous proofs can be longer with specific reasons. Never force breaks, shrink typography, decorate with equations or omit conditions to meet the target.
+Only after actual inspection fill the fresh pending visual record. Preserve its required input bindings and ordered all-page scope; supply concrete page/block/equation observations, corresponding TeX locations, defects/repairs or justified long-block exceptions. Ordinary explanatory prose prefers about 2–3 normal typeset lines; complete statements/necessary continuous proofs can be longer with specific reasons. Never force breaks, shrink typography, decorate with equations or omit conditions to meet the target.
 
 After any repair rebuild and rerender. New PDF/page identities need current evidence; old observations may be reused only for verified identical page images, with honest scope, and do not automatically grant current semantic acceptance. Preserve prior attempts/reviews rather than editing their hashes. A page count or successful command does not prove readability or mathematics.
 
@@ -41,7 +41,7 @@ Replace all placeholders; text/images go only to the worker's allowed evidence/c
 
 ## Actual package rebuild and evidence
 
-Current r4 formal packaging requires the actual release checks. Explicit Paper draft preview stays prominently DRAFT_UNVERIFIED; its formal package refusal is recorded rather than bypassed.
+Current r5 formal packaging requires the actual release checks. Explicit Paper draft preview stays prominently DRAFT_UNVERIFIED; its formal package refusal is recorded rather than bypassed.
 
 For a permitted current article package, extract to a new allowed directory and inspect its member/checksum inventory. From that extracted package run:
 

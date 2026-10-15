@@ -6,7 +6,7 @@ Send this as your own instruction, adding the precise topic, scope, reader prere
 
 For knowledge-only work add: “Build and review knowledge only; do not create an article or PDF.” Otherwise name only the profiles and views you want; omitted profile/view defaults to Minimal/integrated. The caller retains its existing model. This prompt has effect when sent by the human; storing it in a resource does not itself authorize new chats. Existing human authorization in the same scope remains valid and need not be repeated. Host tool permissions still apply.
 
-The controller forwards your exact boundaries with each task. A ban on a global same-named skill differs from a ban on all global helper skills; state the intended restriction accurately. Workers check it before loading helpers and can use the installed native build/page-inspection reference. Current r4 only is supported; old/unknown policy files are left unchanged and are not silently migrated. Any project-specific revision/stop allowance persists without becoming a universal product limit.
+The controller forwards your exact boundaries with each task. A ban on a global same-named skill differs from a ban on all global helper skills; state the intended restriction accurately. Workers check it before loading helpers and can use the installed native build/page-inspection reference. Current r5 only is supported; old/unknown policy files are left unchanged and are not silently migrated. Any project-specific revision/stop allowance persists without becoming a universal product limit.
 
 中文启动语：
 

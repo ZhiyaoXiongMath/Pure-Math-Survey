@@ -1,6 +1,6 @@
-# Maintaining and distributing 2.1.0 / r4
+# Maintaining and distributing 2.1.0 / r5
 
-Change the authoritative layer, regenerate derivatives and run affected behavioral tests. Preserve historical snapshots/manuscripts/review bytes and history; do not rewrite them into r4. This installation supports current r4 only, including strict Minimal three sections. Old/unknown policies receive unsupported diagnostics; historical templates and recorded-policy runtime routes are absent.
+Change the authoritative layer, regenerate derivatives and run affected behavioral tests. Preserve historical snapshots/manuscripts/review bytes and history; do not rewrite them into r5. This installation supports current r5 only, including strict Minimal three sections. Old/unknown policies receive unsupported diagnostics; historical templates and recorded-policy runtime routes are absent.
 
 Run `python scripts/validate_assets.py --json` and repository unittest tests. Validate actual current runtime resources and finite profile/view preparation checks. Build/render actual current manuscripts separately; neutral TeX/style smoke fixtures are not mathematical acceptance or finished exemplars. Old generated examples/reference samples are absent from the current installation and cannot supply new answers.
 

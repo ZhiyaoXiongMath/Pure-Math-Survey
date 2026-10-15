@@ -171,8 +171,8 @@ def validate_structure(root:Path,output_id:str)->dict:
     out=safe(root,'outputs/'+output_id);plan=load_plan(out/'plan.json');verify_generated(root,plan)
     from .tex import inspect_tex
     scan=inspect_tex(out);text=scan.text;used=scan.inputs
-    from .structure import inventory as tex_inventory,public_inventory
-    inv=tex_inventory(text);errors=list(scan.errors);warnings=[]
+    from .structure import inventory as tex_inventory,public_inventory,statement_title_errors
+    inv=tex_inventory(text);errors=list(scan.errors)+statement_title_errors(scan);warnings=[]
     # Ordinary boundary prose is allowed; explicit unfinished scaffold markers are not.
     inv['has_placeholder']=bool(re.search(r'\\placeholder\b|\b(?:TODO|TBD)\b|\[INSERT',text,re.I) or re.search(r'\bPENDING\b',text))
     labels=inv['labels']

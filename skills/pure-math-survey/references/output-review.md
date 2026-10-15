@@ -66,7 +66,7 @@ An unused definition or an empty begin/end wrapper does not hide body content.
 This remains a bounded source model, not a general TeX interpreter or pixel
 visibility proof.
 
-## Current r4 task findings and actual final pages
+## Current r5 task findings and actual final pages
 
 In article `mode_findings`, retain all inherited checks and add the existing-shaped
 `outcome`, `finding`, `locations` entries:
@@ -94,7 +94,7 @@ snapshots remain schema `2.0.0`; this policy-bearing review uses `schema_version
 
 ```json
 {
-  "editorial_policy": "four-modes-2026-10-13-r4",
+  "editorial_policy": "four-modes-2026-10-15-r5",
   "question_ids": ["Q-density"],
   "node_ids": ["Q-density", "N-density", "N-radial-change", "N-zero-boundary"],
   "checks": ["obligation_coverage", "fast_route_reconstruction",
@@ -153,7 +153,7 @@ route/node and source used by the reading. A revision string in
 Missing links/anchors, unbound inputs or changed bytes invalidate the binding;
 passing those checks still does not establish mathematical truth or learning.
 
-For every page of the actual final PDF inspect the active 2–3 normal typeset-line target,
+For every page of the actual final PDF inspect the preferred 2–3 normal typeset-line target,
 usefulness of displays, local symbol definitions, hidden transformations and fragmentation.
 Record actual page/block/equation and corresponding source, finding, impact, repair or
 specific exception reason/alternatives, final PDF hash and reinspection scope. Complete
@@ -164,12 +164,16 @@ only for verified identical page images and do not grant the new output semantic
 New visual records bind the actual final PDF/build/render inputs and all pages.
 
 F2 view/design, F3 explicit comparison pairs plus primary prior support, and F4 draft/design
-safety remain mandatory in current r4. Unsupported old policy/evidence is not renamed or migrated into current acceptance. Paper remains prominently draft unless
+safety remain mandatory in current r5. Unsupported old policy/evidence is not renamed or migrated into current acceptance. Paper remains prominently draft unless
 actual authorization, originality positioning and complete proofs are reviewed. Software,
 mathematics, exposition attempts, PDF checks and real-reader feedback remain five reports.
 
-## R4 opening and actual non-author acceptance
+## R5 opening and actual non-author acceptance
 
 Inspect visible TeX/PDF, not only abstract environment names. Minimal/Thematic/Lecture have no independent or renamed front matter summary; Paper has an accurate concise abstract and full Introduction. Check first-section duties and later mathematical work against editions.md; only Minimal's three-section structure is fixed. Its ingredients must be consumed and every principal must have an actual connection route.
 
 Product critical acceptance requires a non-author worker with a real thread identity, fixed inputs, inspected artifacts and actual findings. Author_reread describes actual self-reading but does not satisfy critical non-author review. Controller integration that changes reviewed mathematics needs fresh review within the task's existing allowance. Distinct chats are not external peer review or evidence of truth. Record actual source/snapshot/author/reviewer identity in existing findings and private dispatch receipts, without new mathematical schema fields.
+
+## r5 editorial semantic review
+
+Use existing whole-manuscript attribution and mode_findings.statement_context/points/connections plus the profile's findings; do not introduce a new review schema. Inspect all actual statement types for automatic numbers, labels/links and absence of descriptive names, including custom heads. Check adjacent visible attribution against the bound source version/locator and hypotheses, including borrowed/adapted/composite results and imported inputs in otherwise local proofs. A local lemma or calculated example needs no invented citation. Inspect whether each consumed auxiliary is established before its first proof use, with justified forward references explicit and independent branches kept separate. Reject unused template lemmas, unsupported comparison, unresolved decisive steps called complete and known results called original. Inspect the fast opening and the actual promised slow actions; the scanner cannot infer reading chronology or source truth. Complex custom typography remains REVIEW_REQUIRED until actual inspection/simplification; compile success alone does not grant semantic or PDF acceptance.

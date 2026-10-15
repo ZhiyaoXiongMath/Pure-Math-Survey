@@ -26,6 +26,8 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended lmodern poppler-utils
       - name: Run behavior tests, including real symlink rejection
+        env:
+          PMS_EDITORIAL_EVIDENCE_DIR: ${{ runner.temp }}/pr04-editorial
         run: |
           set -o pipefail
           python -m unittest discover -s tests -v 2>&1 | tee "$RUNNER_TEMP/tests.log"
@@ -41,6 +43,7 @@ jobs:
         with:
           name: tex-smoke-python-${{ matrix.python }}-${{ github.sha }}
           path: |
+            ${{ runner.temp }}/pr04-editorial/**
             ${{ runner.temp }}/pms-work/pms-*/tex-smoke/**/*.pdf
             ${{ runner.temp }}/pms-work/pms-*/tex-smoke/build-report.json
             ${{ runner.temp }}/clean-install.json
@@ -86,6 +89,8 @@ jobs:
             throw 'Poppler pdftoppm is missing; Windows PDF verification cannot be claimed'
           }
       - name: Run Windows behavior tests, including paths, symlinks and Job Objects
+        env:
+          PMS_EDITORIAL_EVIDENCE_DIR: ${{ runner.temp }}/pr04-editorial
         shell: pwsh
         run: |
           python -m unittest discover -s tests -v 2>&1 | Tee-Object -FilePath "$env:RUNNER_TEMP\tests.log"
@@ -138,6 +143,7 @@ jobs:
         with:
           name: windows-smoke-python-3.12-${{ github.sha }}
           path: |
+            ${{ runner.temp }}/pr04-editorial/**
             ${{ runner.temp }}/pms-work/pms-*/tex-smoke/**/*.pdf
             ${{ runner.temp }}/pms-work/pms-*/tex-smoke/build-report.json
             ${{ runner.temp }}/clean-install.json

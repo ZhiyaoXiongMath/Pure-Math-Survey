@@ -1,4 +1,4 @@
-"""Current r4 understanding and evidence contracts. All accepted fixtures are synthetic software inputs.
+"""Current r5 understanding and evidence contracts. All accepted fixtures are synthetic software inputs.
 
 These tests neither certify mathematics nor simulate a real reader/PDF review.
 """
@@ -42,7 +42,7 @@ class CurrentPolicy(unittest.TestCase):
         p, plan = self.t.authored(); review = self.t.sem(p, plan)
         pairs = [('2.0.0', None), ('2.1.0', 'four-modes-2026-10-11-r2'),
                  (OUTPUT_SCHEMA, 'four-modes-2026-10-12-rc2'), (OUTPUT_SCHEMA, 'four-modes-2026-10-12-r3'),
-                 (OUTPUT_SCHEMA, 'unknown'), (OUTPUT_SCHEMA, []), (OUTPUT_SCHEMA, {})]
+                 (OUTPUT_SCHEMA, 'four-modes-2026-10-13-r4'), (OUTPUT_SCHEMA, 'unknown'), (OUTPUT_SCHEMA, []), (OUTPUT_SCHEMA, {})]
         for schema, policy in pairs:
             with self.subTest(policy=policy):
                 bad = copy.deepcopy(plan); bad.update(schema_version=schema, editorial_policy=policy)

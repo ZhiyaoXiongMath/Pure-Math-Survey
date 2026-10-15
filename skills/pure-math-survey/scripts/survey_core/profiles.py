@@ -1,7 +1,7 @@
 """Versioned exposition policy, not a mathematical decision procedure.
 
 Knowledge remains schema 2.0.0. New plans and policy-bearing reviews use 2.2.0;
-Only current r4 outputs are supported; obsolete inputs are rejected without mutation.
+Only current r5 outputs are supported; obsolete inputs are rejected without mutation.
 All accepted findings below are accountable reader assertions, not inferred truth.
 """
 from __future__ import annotations
@@ -10,7 +10,7 @@ import re
 from .common import diagnostic, require, sha, valid_date
 
 OUTPUT_SCHEMA = '2.2.0'
-POLICY = 'four-modes-2026-10-13-r4'
+POLICY = 'four-modes-2026-10-15-r5'
 POLICIES = {OUTPUT_SCHEMA: (POLICY,)}
 SUPPORTED_CONTRACTS = {(OUTPUT_SCHEMA, POLICY)}
 UNDERSTANDING_READINGS = ('obligation_coverage', 'fast_route_reconstruction',
@@ -421,7 +421,7 @@ def prior_support_errors(out: Path, contribution: dict, entry: dict) -> list[dic
 def opening_errors(inv: dict, plan: dict) -> list[dict]:
     """Check literal openings; semantic duties still require actual reading.
 
-    Only current r4 is supported; obsolete input is rejected without mutation.
+    Only current r5 is supported; obsolete input is rejected without mutation.
     Comments, dormant definitions and false branches are masked by inspect_tex.
     """
     validate_plan_contract(plan)
@@ -508,6 +508,10 @@ def outline(plan: dict, order: list[str], nodes: dict | None = None) -> str:
              GOALS[plan['profile']], 'Questions: ' + ', '.join(plan['question_ids']),
              'Principals: ' + ', '.join(s['node_id'] for s in plan['selections'] if s['role'] == 'principal_answer'),
              '', 'PENDING: specify what this topic-specific reader can DO; classify only used inputs as Assumed / Refreshable / Bridge-required, with reasons.',
+             '', '## Fast-first opening and slow-on-demand work',
+             'PENDING: S0 fix reader, snapshot and selected principals; S1 read selected overview/route/node fast passages and identify Question -> Main Claim -> Mechanisms -> Conditions plus actual borrowed/adapted/local/unverified origins; S2 draft the opening using full canonical inputs, indispensable local definitions and adjacent accurate source/version/locator prose.',
+             'PENDING: S3 open precise slow sections only for actual proof promises, conflicting conditions, unknown constants, missing auxiliaries, comparisons or Paper novelty/proof closure; S4 establish consumed auxiliaries before their first proof use; S5 check closure, labels, proof headings and final pages. Record consulted sections and unchecked scope naturally here, without a reading-audit schema. Missing mathematics returns to KB/review/freeze/adoption.',
+             'All statement types retain automatic numbers/labels without descriptive optional names. Proof-target headings and recall status are allowed. Cite each actual borrowed/adapted/composite input nearby; do not force citations for local derivations or infer source truth from a cite token.',
              '', '## Points and decisive connections',
              'PENDING: choose the minimal useful points from the nodes below. For each give its exact input, output and actual consumer; do not copy canonical statements into this outline.',
              'PENDING: work backward from the result, then forward from the reader. Locate the real construction/estimate/variable change, its hypotheses and next input. Distinguish conjunctive premises, alternatives, branches and gaps.',

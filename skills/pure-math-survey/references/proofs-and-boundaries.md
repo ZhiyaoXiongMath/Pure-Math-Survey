@@ -121,3 +121,7 @@ installed bytes, and restores touched files on installation failure. Ordinary
 validation failures leave live knowledge/evidence unchanged. It does not freeze,
 adopt, prepare, perform reading or turn a Paper eligibility failure into success.
 Those responsibilities and PR03's knowledge/Paper separation remain explicit.
+
+## Editorial auxiliaries and their consumers
+
+A reusable precise interface, decisive bottleneck or external theorem's application interface should be stated as a numbered unnamed Lemma/Proposition near and before the proof that first uses it. Separate existence/uniqueness, necessity/sufficiency and independent branches. Explain substitutions and the output passed to the next step. Principal statements may appear in the opening with proofs later; justified forward references must be explicit and traceable. Establishing every auxiliary in one global chain is not required. Existing reviewed derivations may be extracted for exposition without creating redundant canonical nodes; genuinely new facts, hypotheses or comparisons must go back through KB review and freeze. Reordering requires checking labels, proof-target headings and directional prose.

@@ -6,7 +6,7 @@ waives a profile's responsibilities. Knowledge-only work produces no manuscript 
 For a requested output without a profile, use minimal/integrated. Generate only the
 requested profiles. PDF is a delivery format, not a fifth profile.
 
-## Views within current r4
+## Views within current r5
 
 | View | Editable reader task |
 |---|---|
@@ -27,7 +27,7 @@ tasks unfinished within the relevant section. Replace them with actual prose.
 The output reading binds `scope.view`; `view_focus` records a concrete finding,
 available `node_ids`, and reachable substantive manuscript locations.
 
-## Minimal under r4: strict three sections
+## Minimal under r5: strict three sections
 
 No abstract or independent/renamed summary block precedes the first section. The title and necessary status notice lead directly to exactly three numbered mathematical sections:
 
@@ -41,9 +41,9 @@ The second section selects only inputs actually consumed in the third and not al
 
 The third section executes each principal's decisive route through genuine construction, identity, estimate, substitution or justified limit. Show input, operation/intermediate object, output, next use and indispensable condition. Different branches need not become a fictitious unified chain. Routine details may be compressed; decisive reasoning and external theorem interfaces may not. Bare arrows or “standard arguments” are inadequate. Headings alone cannot pass mathematical/exposition review.
 
-## Current r4 support
+## Current r5 support
 
-Only current r4 is supported by this installation. Old/unknown policies receive unsupported diagnostics; there is no historical-template selection, recorded-policy validation or migration route. Keep old files, history and evidence unchanged and use the corresponding historical version if needed. Current r4 still requires all four understanding-review duties. No design reason exempts a current Minimal from its three-section structure.
+Only current r5 is supported by this installation. Old/unknown policies receive unsupported diagnostics; there is no historical-template selection, recorded-policy validation or migration route. Keep old files, history and evidence unchanged and use the corresponding historical version if needed. Current r5 still requires all four understanding-review duties. No design reason exempts a current Minimal from its three-section structure.
 
 ## Thematic: Questions → Approaches → Synthesis
 
@@ -106,9 +106,13 @@ materials and an unfinished scaffold; authors must actually write and review it.
 
 Reconstruct necessary obligations before locating the supplied list. Record actual
 fast-route reconstruction, slow-step reproduction and condition transfer, including
-failed attempts and repairs. All explanatory prose actively targets about 2–3 normal
-actual typeset lines; longer blocks need editing or a specifically located justified
-exception in the final PDF. Profile/view labels, formula density and test counts do
+failed attempts and repairs. All explanatory prose prefers about 2–3 normal
+actual typeset lines; longer blocks are reviewed with significant findings and necessary exceptions located
+in the final PDF, without fragmenting continuous proofs. Profile/view labels, formula density and test counts do
 not prove these responsibilities. See [output review](output-review.md).
 
 See [knowledge-to-manuscript](knowledge-to-manuscript.md) for paired fast/slow consumption and the actual plan/prepare/TeX/PDF sequence.
+
+## Common r5 writing workflow
+
+All four modes start their opening from selected reviewed fast routes, using complete fixed canonical results and nearby exact attribution. Consume precise slow sections for actual proof promises, rather than reading every technical proof before the opening. Minimal proves its decisive connections; Thematic checks nontrivial comparison and each source's normalization/range; Lecture teaches every promised calculation/limit and borrowed example/problem; Paper independently verifies closest work and differences and closes every original proof. No fast summary certifies novelty. Follow S0–S5 in knowledge-to-manuscript.md and the numbered-but-unnamed statement and dependency rules in writing-style.md. Existing schema and review shapes remain unchanged; r4 accepted history is preserved, not migrated.

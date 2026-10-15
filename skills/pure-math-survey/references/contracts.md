@@ -1,6 +1,6 @@
 # Native file fields and reproducible operations
 
-The software runtime is `2.1.0`. Project, knowledge, sources, snapshots and generated/build manifests retain schema `2.0.0`. Current output plans and policy-bearing mathematical/output-semantic reviews use schema `2.2.0` and `four-modes-2026-10-13-r4`. This installation supports current r4 only: explicit old/unknown policies or unsupported inputs are rejected without changing their files. Unchanged format numbers do not grant old-policy support or acceptance. See [output review](output-review.md) for whole-manuscript checks, actual body locations and build history. JSON has no duplicate keys or nonfinite numbers. Stable IDs use letters/digits/dot/underscore/hyphen, with N- and S- prefixes for nodes and sources; each filename equals its ID. All project-relative paths are POSIX, contain no traversal/absolute prefix and cross no symbolic links.
+The software runtime is `2.1.0`. Project, knowledge, sources, snapshots and generated/build manifests retain schema `2.0.0`. Current output plans and policy-bearing mathematical/output-semantic reviews use schema `2.2.0` and `four-modes-2026-10-15-r5`. This installation supports current r5 only: explicit old/unknown policies or unsupported inputs are rejected without changing their files. Unchanged format numbers do not grant old-policy support or acceptance. See [output review](output-review.md) for whole-manuscript checks, actual body locations and build history. JSON has no duplicate keys or nonfinite numbers. Stable IDs use letters/digits/dot/underscore/hyphen, with N- and S- prefixes for nodes and sources; each filename equals its ID. All project-relative paths are POSIX, contain no traversal/absolute prefix and cross no symbolic links.
 
 ## Project and knowledge
 
@@ -51,9 +51,9 @@ python scripts/survey.py kb diff topic --from KB-OLD_FULL_HASH --to KB-NEW_FULL_
 
 These recipes use placeholder IDs. init produces an empty unverified KB; add real scope-specific knowledge, evidence and coverage before a meaningful plan. After output plan, authors complete all concrete promises before the plan-scoped mathematical request. The reviewer performs the actual work; controller integrates fresh evidence, freezes a new snapshot and explicitly adopts its returned ID before readiness/prepare. The code block cannot perform those human/AI readings or plan edits. Prepare makes no mathematical claims and preserves existing prose. Fill review templates only after the actual recorded work. `--draft` permanently marks that plan draft until an explicit reviewed plan change/reprepare; never remove the flag merely to bypass readiness.
 
-## Current r4 output policy (2.2.0)
+## Current r5 output policy (2.2.0)
 
-New r4 plans use `editorial_policy: four-modes-2026-10-13-r4` and `contributions`
+New r5 plans use `editorial_policy: four-modes-2026-10-15-r5` and `contributions`
 (an empty list outside Paper). The `profile` enum is minimal/thematic/lecture/paper.
 Each Paper contribution has `node_id`, classification original/known/conjectural/unverified,
 `provenance`, `authorization`, `actual_difference`, proof_status complete/incomplete/unverified,
@@ -80,9 +80,9 @@ no script claims to decide mathematical truth, comprehension, authorization or n
 
 ## Current support and file protection
 
-Only schema-2.2.0 r4 output plans/policy reviews participate in the current output flow. Explicit old/unknown policy, unsupported schema and mismatched inputs receive unsupported diagnostics, not automatic migration or reclassification. This installation has no old-policy validation/rebuild continuation, recorded-policy release route or historical template selector. Consult a corresponding historical software version for old work; preserve Git history, backups, prior evidence and source files unchanged.
+Only schema-2.2.0 r5 output plans/policy reviews participate in the current output flow. Explicit old/unknown policy, unsupported schema and mismatched inputs receive unsupported diagnostics, not automatic migration or reclassification. This installation has no old-policy validation/rebuild continuation, recorded-policy release route or historical template selector. Consult a corresponding historical software version for old work; preserve Git history, backups, prior evidence and source files unchanged.
 
-Within current r4, repair canonical statements in live knowledge, obtain fresh applicable review, freeze a new snapshot and explicitly adopt it downstream. Reprepare preserves authored manuscript, outline and style; immutable snapshots and prior evidence remain protected. Those file protections are current safety behavior, not promises of backward compatibility. Package requires the current release checks. Never rename an old policy or edit accepted hashes to evade them.
+Within current r5, repair canonical statements in live knowledge, obtain fresh applicable review, freeze a new snapshot and explicitly adopt it downstream. Reprepare preserves authored manuscript, outline and style; immutable snapshots and prior evidence remain protected. Those file protections are current safety behavior, not promises of backward compatibility. Package requires the current release checks. Never rename an old policy or edit accepted hashes to evade them.
 
 ## Current design checks
 
@@ -127,9 +127,9 @@ unknowns, quantifiers, dimension, parameters, regularity and normalization.
 
 ## Current responsibilities and evidence closure
 
-Software 2.1.0, knowledge/snapshot schema 2.0.0 and output/policy-review schema 2.2.0 remain distinct. Current r4 retains four profiles, five views, strict Minimal three sections, F1–F4 and obligation coverage, fast-route reconstruction, slow-step reproduction and condition transfer. Removing old runtime policy/template support removes none of these duties. Old files remain unchanged and old acceptance never upgrades automatically.
+Software 2.1.0, knowledge/snapshot schema 2.0.0 and output/policy-review schema 2.2.0 remain distinct. Current r5 retains four profiles, five views, strict Minimal three sections, F1–F4 and obligation coverage, fast-route reconstruction, slow-step reproduction and condition transfer. Removing old runtime policy/template support removes none of these duties. Old files remain unchanged and old acceptance never upgrades automatically.
 
-R4 reuses existing plan/outline, scope/findings, mode_findings and page_findings. No mathematical schema shape changes or typed route database are introduced. Private invocation/task records are independent local bookkeeping, not node/output/review fields and not public package content. Read dispatch.md for controller/worker authorization, fixed Astra/ultra parameters and task identity handling; the deterministic CLI does not orchestrate chats.
+R5 reuses existing plan/outline, scope/findings, mode_findings and page_findings. No mathematical schema shape changes or typed route database are introduced. Private invocation/task records are independent local bookkeeping, not node/output/review fields and not public package content. Read dispatch.md for controller/worker authorization, fixed Astra/ultra parameters and task identity handling; the deterministic CLI does not orchestrate chats.
 
 Keep actual mathematical review inputs safely inside project-relative, nonsymlink paths. A review may depend on a plan-derived authoring-promise request and source/KB files; all declared legitimate inputs must remain available in the new frozen evidence closure. Do not point frozen review inputs into mutable output directories, recursively include snapshots, or hand-copy files into an existing snapshot. Use fresh live evidence and a new freeze. A closed hash inventory proves availability/identity, not that the reviewer actually checked a promised step.
 

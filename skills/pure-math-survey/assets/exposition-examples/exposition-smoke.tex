@@ -2,6 +2,7 @@
 % Copy this file, both *-body.tex files and math-review.sty to one build directory.
 \documentclass[12pt,reqno]{amsart}
 \usepackage{math-review}
+\newtheorem{claim}[theorem]{Claim}
 \title[Minimizers and iteration]{Minimizers and iteration for a positive quadratic}
 \date{}
 \begin{document}
@@ -21,7 +22,7 @@ $b\in\mathbb R^m$, consider
 \[
 Q(x)=\tfrac12 x^{\mathsf T}Ax-b^{\mathsf T}x,\qquad x\in\mathbb R^m.
 \]
-\begin{definition}
+\begin{definition}\label{def:positive}
 The symmetric matrix $A$ is positive definite when
 $v^{\mathsf T}Av>0$ for every nonzero $v\in\mathbb R^m$.
 \end{definition}
@@ -100,4 +101,55 @@ q=\max\{|1-2\tau|,|1-4\tau|\}=\tfrac12.
 \]
 For every $x_0$, Theorem~\ref{thm:gradient} gives
 $\|x_j-x_*\|_2\leq2^{-j}\|x_0-x_*\|_2$.
+
+% PR04 engineering regression: all statement types retain automatic counters and
+% labels, without optional descriptive names. This is not source/math acceptance.
+\section{Statement interfaces}
+\begin{lemma}\label{lem:square}
+For real $t$, $t^2\geq0$.
+\end{lemma}
+\begin{proof}
+If $t\geq0$, its square is a product of nonnegative numbers. If $t<0$,
+it is the product of two negative numbers and is positive.
+\end{proof}
+\begin{proposition}\label{prop:translated}
+For real $t$, $(t+1)^2\geq0$.
+\end{proposition}
+\begin{proof}
+The real input $t+1$ satisfies Lemma~\ref{lem:square}.
+\end{proof}
+\begin{corollary}\label{cor:positive}
+If $t\in\mathbb R$ and $\varepsilon>0$, then $(t+1)^2+\varepsilon>0$.
+\end{corollary}
+\begin{proof}[Proof of Corollary~\ref{cor:positive}]
+Proposition~\ref{prop:translated} gives $(t+1)^2\geq0$; adding
+$\varepsilon>0$ yields the strict inequality.
+\end{proof}
+\begin{example}\label{ex:square}
+At $t=2$, the translated square is $(2+1)^2=9$.
+\end{example}
+\begin{problem}\label{prob:boundary}
+Can strict positivity hold when $t=-1$ and $\varepsilon=0$?
+\end{problem}
+\begin{remark}\label{rem:boundary}
+For the data in Problem~\ref{prob:boundary}, the value is zero. Hence the
+strict perturbation condition cannot be dropped from the corollary.
+\end{remark}
+\begin{conjecture}\label{conj:fixture}
+The fixture's proposed extension is that $t^2+2t\geq0$ for real $t\geq0$.
+It is not used as a proved input in this document.
+\end{conjecture}
+\begin{claim}\label{claim:interface}
+The real number $(t+1)^2$ supplies the nonnegative input for the addition
+step of Corollary~\ref{cor:positive}.
+\end{claim}
+\begin{proof}
+This is exactly Proposition~\ref{prop:translated}.
+\end{proof}
+Theorem~\ref{thm:quadratic}, Definition~\ref{def:positive},
+Lemma~\ref{lem:square}, Proposition~\ref{prop:translated},
+Corollary~\ref{cor:positive}, Example~\ref{ex:square},
+Problem~\ref{prob:boundary}, Remark~\ref{rem:boundary},
+Conjecture~\ref{conj:fixture} and Claim~\ref{claim:interface} keep their
+numbers and PDF links; \autoref{thm:quadratic} is also linked.
 \end{document}

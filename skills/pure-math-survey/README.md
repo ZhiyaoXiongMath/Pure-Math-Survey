@@ -4,7 +4,7 @@
 
 Build and review source-grounded mathematical knowledge, then write only the requested English survey, lecture or research-paper draft from an immutable snapshot. Knowledge-only requests produce knowledge and evidence without a manuscript or PDF.
 
-Software is **2.1.0**, knowledge/snapshot schema **2.0.0**, output/policy-review schema **2.2.0**, and current editorial policy **four-modes-2026-10-13-r4**. This installation supports current r4 only. Explicit old/unknown policies and unsupported inputs receive clear unsupported diagnostics; their files remain unchanged. There is no recorded-policy validation, historical-template selection or migration service.
+Software is **2.1.0**, knowledge/snapshot schema **2.0.0**, output/policy-review schema **2.2.0**, and current editorial policy **four-modes-2026-10-15-r5**. This installation supports current r5 only. Explicit old/unknown policies and unsupported inputs receive clear unsupported diagnostics; their files remain unchanged. There is no recorded-policy validation, historical-template selection or migration service.
 
 ## Start in the calling chat
 
