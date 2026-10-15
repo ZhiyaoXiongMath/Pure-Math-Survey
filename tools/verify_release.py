@@ -40,9 +40,9 @@ def verification_workspace(report:dict,parent:Path|None=None,keep:bool=False):
         if not workspace['retained']:shutil.rmtree(base)
 
 
-EXPECTED_POLICY = 'four-modes-2026-10-13-r4'
+EXPECTED_POLICY = 'four-modes-2026-10-15-r5'
 EXPECTED_CONTRACTS = {('2.2.0', EXPECTED_POLICY)}
-REQUIRED_SUITES = ('test_current_policy', 'test_r4_policy',
+REQUIRED_SUITES = ('test_current_policy', 'test_r4_policy', 'test_pr04_editorial',
                    'test_workflow_bindings', 'test_dispatch', 'test_source_eligibility')
 
 
@@ -51,7 +51,7 @@ def assert_installed_contract(artifacts:dict)->dict:
     if (artifacts.get('version'), artifacts.get('schema_version'),
             artifacts.get('output_schema_version'), artifacts.get('editorial_policy')) != (
             '2.1.0', '2.0.0', '2.2.0', EXPECTED_POLICY):
-        raise AssertionError('Installed runtime is not software 2.1.0 / KB 2.0.0 / output 2.2.0 / r4')
+        raise AssertionError('Installed runtime is not software 2.1.0 / KB 2.0.0 / output 2.2.0 / r5')
     contracts=artifacts.get('supported_output_contracts')
     if not isinstance(contracts,list) or len(contracts)!=1 or any(
             not isinstance(x,dict) or not isinstance(x.get('schema_version'),str) or
@@ -356,7 +356,7 @@ def verify_outputs(entries:list[dict],base:Path,check,exe:Path,entry:Path,env:di
         for oid in item['outputs']:
             out=project/'outputs'/oid;plan=json.loads((out/'plan.json').read_text(encoding='utf-8'))
             if plan.get('output_id')!=oid or (plan.get('schema_version'),plan.get('editorial_policy'))!=('2.2.0',EXPECTED_POLICY):
-                raise AssertionError('Requested real output does not carry r4 policy: '+oid)
+                raise AssertionError('Requested real output does not carry r5 policy: '+oid)
             profile,view=plan.get('profile'),plan.get('view')
             if profile not in {'minimal','thematic','lecture','paper'}:raise AssertionError('Unknown real output profile')
             if profile=='paper' and plan.get('draft') is not True:raise AssertionError('The current Paper verification input must remain an internal draft: '+oid)

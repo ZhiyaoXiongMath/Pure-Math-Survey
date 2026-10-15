@@ -1,0 +1,104 @@
+\documentclass[12pt,reqno]{amsart}
+\usepackage{math-review}
+\newtheorem{observation}[theorem]{Observation}
+\title{Squares and positive perturbations}
+\date{}
+\begin{document}
+\maketitle
+\section{Main Results}
+We use the fast route of Synthetic Note A, version v1 (2026-10-15):
+take a real number, form its square, and use its nonnegativity before adding
+a strictly positive perturbation. The precise square argument is opened only
+when proving the local translated-square lemma below.
+The following borrowed statement is Synthetic Note A,
+version v1, Theorem~1.1~\cite[Theorem~1.1]{note-a}.
+\begin{theorem}\label{thm:square}
+\input{N-SQUARE.tex}
+\end{theorem}
+We use the phrase Calabi--Yau theorem only as an example of a legal named
+result in ordinary prose; it is not an input to this calculation.
+\section{Key Mathematical Ingredients}
+\begin{definition}\label{def:perturbation}
+A positive perturbation means a real number $\varepsilon>0$ in this note.
+\end{definition}
+The next statement is adapted from Synthetic Note A, version v1,
+Theorem~1.1~\cite[Theorem~1.1]{note-a}: substitute $x=y/2$ and multiply by
+$4>0$. This changes the variable and normalization, with no restriction on
+real $y$.
+\begin{proposition}\label{prop:scaled}
+For every $y\in\mathbb R$, one has $4(y/2)^2=y^2\geq0$.
+\end{proposition}
+\begin{proof}
+The square theorem applies because $y/2\in\mathbb R$. Multiplication by
+$4>0$ preserves the inequality; expanding the square gives the equality.
+\end{proof}
+\begin{lemma}\label{lem:local}
+For every real $x$, $(x+1)^2\geq0$.
+\end{lemma}
+\begin{proof}
+Apply Proposition~\ref{prop:scaled} to the real input $y=2(x+1)$.
+Its output is $4(x+1)^2=[2(x+1)]^2\geq0$; division by $4>0$ proves the claim.
+The external input underlying that proposition is Synthetic Note A,
+version v1~\cite[Theorem~1.1]{note-a}; the normalization and translation here
+are local derivations, not additional claims attributed to that source.
+\end{proof}
+\begin{example}\label{ex:local}
+Our direct calculation at $x=2$ gives $x^2=2\cdot2=4$.
+\end{example}
+The next example is borrowed from Synthetic Note A, version v1,
+Example~1.2~\cite[Example~1.2]{note-a}.
+\begin{example}\label{ex:borrowed}
+At $x=3$ the square is $9$.
+\end{example}
+The following exercise is Synthetic Note A, version v1,
+Problem~1.3~\cite[Problem~1.3]{note-a}.
+\begin{problem}\label{prob:square}
+Prove that the square of an integer is nonnegative.
+\end{problem}
+We reproduce Synthetic Note A's proposed extension, version v1,
+Conjecture~1.4~\cite[Conjecture~1.4]{note-a}, without using it as a premise.
+\begin{conjecture}\label{conj:extension}
+For every nonnegative real $t$, $t^2+2t\geq0$.
+\end{conjecture}
+\begin{remark}\label{rem:boundary}
+Strict positivity of a perturbation is necessary for the next conclusion
+at $x=-1$: taking $\varepsilon=0$ gives zero, not a positive number.
+\end{remark}
+\begin{observation}\label{obs:input}
+For real $x$, the input $x^2$ satisfies the nonnegative-input condition of
+Synthetic Note B, version v2, Theorem~2.1~\cite[Theorem~2.1]{note-b}.
+\end{observation}
+\section{Connecting the Ingredients}
+The next consequence combines Synthetic Note A, version v1,
+Theorem~1.1~\cite[Theorem~1.1]{note-a} with Synthetic Note B, version v2,
+Theorem~2.1~\cite[Theorem~2.1]{note-b}. Neither source alone states this
+composite formulation.
+\begin{corollary}\label{cor:positive}
+For real $x$ and $\varepsilon>0$, $(x+1)^2+\varepsilon>0$.
+\end{corollary}
+\begin{proof}[Proof of Corollary~\ref{cor:positive}]
+By Lemma~\ref{lem:local}, the real number $a=(x+1)^2$ is nonnegative.
+Apply Synthetic Note B's cited theorem to this $a$ and the given strictly
+positive $\varepsilon$; its output is $(x+1)^2+\varepsilon>0$.
+The consumed chain is Proposition~\ref{prop:scaled}, then
+Lemma~\ref{lem:local}, then the addition interface. The conjecture and
+examples above are independent illustrations, not proof premises.
+\end{proof}
+\begin{theoremrecall}{thm:square}
+\input{N-SQUARE.tex}
+\end{theoremrecall}
+Theorem~\ref{thm:square}, Definition~\ref{def:perturbation},
+Proposition~\ref{prop:scaled}, Lemma~\ref{lem:local},
+Examples~\ref{ex:local} and~\ref{ex:borrowed}, Problem~\ref{prob:square},
+Conjecture~\ref{conj:extension}, Remark~\ref{rem:boundary},
+Observation~\ref{obs:input}, and Corollary~\ref{cor:positive}
+retain automatic numbers and links. The original locator ``Theorem 1.1''
+refers to Synthetic Note A, not to a manually assigned manuscript number.
+\begin{thebibliography}{2}
+\bibitem{note-a} Synthetic Note A, pr04-note-a, version v1 (2026-10-15).
+Public engineering fixture, source-a.md, Theorem 1.1, Example 1.2,
+Problem 1.3 and Conjecture 1.4.
+\bibitem{note-b} Synthetic Note B, pr04-note-b, version v2 (2026-10-15).
+Public engineering fixture, source-b.md, Theorem 2.1.
+\end{thebibliography}
+\end{document}

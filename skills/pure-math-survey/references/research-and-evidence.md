@@ -61,3 +61,11 @@ A public project-local original requires `material_visibility:public` plus dated
 | Retained private or unauthorized original/alias | Independently reported | Independently reported | Independently reported | As recorded | Freeze/candidate public-input gate refuses. |
 
 These are fixture outcomes, not executed mathematical readings or legal opinions. Independent source facts, knowledge READY, marked Paper Draft preview and formal research delivery must each be reported with actual performed scope.
+
+## Attribution at first formal use (all four modes)
+
+Actual origin and mathematical use determine attribution, not environment type. A borrowed/equivalent theorem, lemma, proposition or corollary needs adjacent visible prose naming the controlling source and precise theorem/section/page locator. A special case, normalization change or reformulation additionally identifies the changed variables, assumptions, regularity, range or constants and the checked conversion. A composite local consequence names each external input and explains their combination. Bibliography-only listings, comments, hidden branches, a citation with the wrong version/hypotheses, and a source name in an optional theorem title do not satisfy this duty.
+
+Truly local lemmas/calculations/examples do not require fabricated citations. If a local proof uses an external deep input, cite that input at the actual invocation and check its assumptions/output. Borrowed definitions, examples, problems and conjectures need nearby origin; independently formed ones are not forced to have authors. Reusing a correctly attributed local statement later via its label does not require repetitive citation, unless a new input/version is introduced.
+
+Keep canonical bytes unchanged: put the origin prose before/after the generated input's enclosing statement, not a rewritten statement. Author and non-author use existing source/mathematical/coverage/output_semantic/contribution records, statement_context and attribution findings to verify source identity, version, locator, quantifiers, constants and actual support. A nonempty cite is only a structural candidate, never semantic PASS; unresolved source facts remain REVIEW_REQUIRED. Do not add per-environment provenance records or reread unchanged sources mechanically.

@@ -111,4 +111,4 @@ flowchart TD
 
 PR02 候选的 `review template` 为实际适用 canonical 与依赖生成 pending 核查项；`review validate` 批量列出独立缺项；`review accept` 在项目内暂存并核对候选最终字节，失败时回滚。接收后仍须 freeze 和显式采用快照。实际接口见[审阅与接收](skills/pure-math-survey/references/proofs-and-boundaries.md#review-handoff-and-candidate-acceptance)，阶段边界见[开发合同](docs/development/CONTRACT.md)。
 
-当前仅支持 r4，旧／未知输出契约明确拒绝且原文件不改。更多说明见[完整入口](skills/pure-math-survey/SKILL.md)和[验证边界](skills/pure-math-survey/references/validation.md)。AI 审阅不等于外部同行评审或原创性认证。代码、指令和模板遵循 [MIT License](LICENSE)；数学材料及第三方来源保留各自权利。
+当前开发分支采用 `four-modes-2026-10-15-r5` 写作政策（软件与 schema 不变），仅支持该当前政策，旧／未知输出契约明确拒绝且原文件不改。更多说明见[完整入口](skills/pure-math-survey/SKILL.md)和[验证边界](skills/pure-math-survey/references/validation.md)。AI 审阅不等于外部同行评审或原创性认证。代码、指令和模板遵循 [MIT License](LICENSE)；数学材料及第三方来源保留各自权利。

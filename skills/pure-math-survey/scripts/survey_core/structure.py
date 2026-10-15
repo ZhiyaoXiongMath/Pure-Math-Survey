@@ -7,6 +7,8 @@ from collections import Counter
 from pathlib import Path, PurePosixPath
 
 RESULTS = {'theorem', 'proposition', 'lemma', 'corollary'}
+STATEMENTS = RESULTS | {'definition', 'example', 'problem', 'remark', 'conjecture',
+                        'claim', 'observation', 'assumption', 'question', 'exercise'}
 LABEL = re.compile(r'\\label\s*\{([^{}]+)\}')
 BEGIN = re.compile(r'\\begin\s*\{(theorem|proposition|lemma|corollary|proof|theoremrecall)\}')
 SECTION = re.compile(r'\\section(\*)?\s*(?:\[[^\]]*\]\s*)?\{')
@@ -16,6 +18,58 @@ PLACEHOLDER = re.compile(r'\\placeholder\b|\b(?:PENDING|TODO|TBD)\b|\[INSERT', r
 
 
 INPUT_RE = re.compile(r"\\(?:input|include)\s*\{([^}]+)\}")
+
+def statement_title_errors(inspection) -> list[dict]:
+    """Bounded literal title check, using the existing reachability scan.
+
+    Custom amsthm environments are included. Arbitrary heading macros/styles
+    require actual manual inspection rather than a claim of automatic safety.
+    Proof-target headings and the supported recall status are not statement names.
+    No citation quota or mathematical attribution decision is made here.
+    """
+    from .common import diagnostic
+    from .tex import TOKEN, _space, _group_end
+    body = inspection.text.split(r'\begin{document}', 1)[-1].split(r'\end{document}', 1)[0]
+    declared = inspection.statement_environments
+    environments = STATEMENTS | set(declared)
+    environments |= {name+'*' for name in STATEMENTS}
+    environments -= {'theoremrecall', 'proof'}
+    errors = []; used = set()
+    for token in TOKEN.finditer(body):
+        if token[0] != r'\begin':
+            continue
+        start = _space(body,token.end()); end = _group_end(body,start)
+        if start >= len(body) or body[start] != '{':
+            continue
+        env = body[start+1:end-1]
+        if env in inspection.custom_environment_heads:
+            location = inspection.custom_environment_heads[env]
+            errors.append(diagnostic('STATEMENT_HEADING_REVIEW_REQUIRED',
+                f'Line {location["line"]}: called custom environment {env} has a nonliteral heading/body wrapper; inspect its actual PDF for statement names and numbering or simplify it.', location['path']))
+        if env not in environments:
+            continue
+        used.add(env)
+        if env in inspection.unnumbered_statements or (env.endswith('*') and env[:-1] in STATEMENTS):
+            errors.append(diagnostic('STATEMENT_NUMBERING_REQUIRED',
+                f'{env}: use the numbered mathematical statement type; retain automatic numbering and labels.', 'manuscript/main.tex'))
+        if body[_space(body,end):].startswith('['):
+            errors.append(diagnostic('STATEMENT_DESCRIPTIVE_TITLE',
+                f'{env}: remove the optional descriptive title; keep the type, automatic number and label. Put terminology and accurate attribution in adjacent visible prose.',
+                'manuscript/main.tex'))
+        heading = declared.get(env, env)
+        if re.search(r'[\[\]()]', heading):
+            errors.append(diagnostic('STATEMENT_DESCRIPTIVE_TITLE',
+                f'{env}: literal declaration embeds a parenthesized/bracketed descriptive heading. Retain only its statement type.', 'manuscript/main.tex'))
+        elif heading.lower() not in STATEMENTS | {'fact', 'result', 'assertion'}:
+            errors.append(diagnostic('STATEMENT_HEADING_REVIEW_REQUIRED',
+                f'{env}: custom heading cannot be certified by the literal scanner; inspect its actual numbered PDF heading and remove any descriptive name.', 'manuscript/main.tex'))
+    if used:
+        for location in inspection.heading_customizations:
+            if location['style'] is not None and not any(inspection.statement_styles.get(env) == location['style'] for env in used):
+                continue
+            errors.append(diagnostic('STATEMENT_HEADING_REVIEW_REQUIRED',
+                f'Line {location["line"]}: custom theorem heading/style requires actual PDF inspection for numbering and absence of descriptive names; simplify to a literal type for automatic validation.', location['path']))
+    return errors
 
 def strip_comments(text: str) -> str:
     lines = []
@@ -45,11 +99,15 @@ def group_end(text: str, start: int) -> int:
     raise ValueError('unclosed braced section heading')
 
 def inventory(expanded: str) -> dict:
+    from .tex import TOKEN
     text = strip_comments(expanded)
     # Inventory numbers are offsets in the body, not source-file line claims.
     body = text.split(r'\begin{document}', 1)[-1].split(r'\end{document}', 1)[0]
+    command_offsets = {m.start() for m in TOKEN.finditer(body)}
     sections = []
     for m in SECTION.finditer(body):
+        if m.start() not in command_offsets:
+            continue
         end = group_end(body, m.end()-1)
         title = body[m.end():end-1]
         lm = re.match(r'\s*\\label\s*\{([^{}]+)\}', body[end:])
@@ -60,6 +118,8 @@ def inventory(expanded: str) -> dict:
         sec['end'] = sections[i+1]['start'] if i+1 < len(sections) else len(body)
     blocks = []
     for m in BEGIN.finditer(body):
+        if m.start() not in command_offsets:
+            continue
         env = m.group(1)
         close = re.search(r'\\end\s*\{' + re.escape(env) + r'\}', body[m.end():])
         if not close:

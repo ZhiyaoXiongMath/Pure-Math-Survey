@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 import re
 
-from .common import native_path, relpath, resolved_path, SurveyError, diagnostic, require, safe
+from .common import native_path, relpath, resolved_path, SurveyError, diagnostic, require, safe, SKILL_ROOT
 
 TOKEN = re.compile(r'\\(?:[A-Za-z@]+|[^A-Za-z@])')
 INPUT = re.compile(r'\\(?:input|include)\s*\{([^{}]+)\}')
@@ -24,7 +24,8 @@ DYNAMIC = {'csname', 'expandafter', 'scantokens', 'catcode', 'includeonly', 'let
            'directlua', 'write', 'read', 'openin', 'openout', 'everypar', 'everymath',
            'everydisplay', 'afterassignment', 'setbox', 'sbox', 'savebox', 'usebox'}
 STRUCTURAL = DEFINITIONS | DYNAMIC | {'input', 'include', 'begin', 'end', 'endinput',
-                                    'iftrue', 'iffalse', 'else', 'fi'}
+                                    'iftrue', 'iffalse', 'else', 'fi', 'newtheorem',
+                                    'newtheoremstyle', 'theoremstyle', 'verb'}
 
 
 def _blank(text: str) -> str:
@@ -57,11 +58,27 @@ def _space(text: str, i: int) -> int:
 
 
 def _comments(text: str) -> str:
-    chars = list(text); i = 0
+    chars = list(text); i = 0; command_names = set()
     while i < len(text):
         if text[i] == '\\':
             token = TOKEN.match(text, i)
-            i = token.end() if token else i + 1
+            if token and token[0][1:] in DEFINITIONS:
+                j = _space(text,token.end())
+                if text[j:j+1] == '*':
+                    j = _space(text,j+1)
+                if text[j:j+1] == '{':
+                    j = _space(text,j+1)
+                name_token = TOKEN.match(text,j)
+                if name_token:
+                    command_names.add(name_token.start())
+            if token and token[0] == r'\verb' and token.start() not in command_names:
+                j = token.end()
+                if j < len(text) and text[j] == '*':
+                    j += 1
+                end = text.find(text[j], j+1) if j < len(text) and not text[j].isspace() else -1
+                i = end+1 if end >= 0 and '\n' not in text[j:end] else token.end()
+            else:
+                i = token.end() if token else i + 1
         elif text[i] == '%':
             end = text.find('\n', i)
             end = len(text) if end < 0 else end
@@ -95,6 +112,23 @@ def _definition(text: str, token: re.Match) -> tuple[int, str, str]:
 def _lex(text: str) -> tuple[str, list[tuple[int, str, str]], list[tuple[int, str]]]:
     """Mask while preserving every original offset and newline (CRLF is normalized)."""
     text = _comments(text)
+    # Inline quoted source/code is not an executed statement. Mask before any
+    # command/conditional scan, preserving original offsets and line identities.
+    chars = list(text); skip = 0
+    for token in TOKEN.finditer(text):
+        if token.start() < skip:
+            continue
+        if token[0][1:] in DEFINITIONS:
+            skip = _definition(text,token)[0]; continue
+        if token[0] != r'\verb':
+            continue
+        j = token.end()
+        if j < len(text) and text[j] == '*':
+            j += 1
+        end = text.find(text[j],j+1) if j < len(text) and not text[j].isspace() else -1
+        if end >= 0 and '\n' not in text[j:end]:
+            skip = end+1; chars[token.start():skip] = _blank(text[token.start():skip])
+    text = ''.join(chars)
     begins = {m.start() for m in TOKEN.finditer(text) if m[0] == r'\begin'}
     text = BLOCK.sub(lambda m: _blank(m[0]) if m.start() in begins else m[0], text)
     chars = list(text); definitions = []; issues = []
@@ -191,12 +225,18 @@ class Inspection:
     errors: list[dict]
     body_lines: dict[str, set[int]] = field(default_factory=dict)
     content_lines: dict[str, set[int]] = field(default_factory=dict)
+    statement_environments: dict[str, str] = field(default_factory=dict)
+    heading_customizations: list[dict] = field(default_factory=list)
+    statement_styles: dict[str, str] = field(default_factory=dict)
+    unnumbered_statements: set[str] = field(default_factory=set)
+    custom_environment_heads: dict[str, dict] = field(default_factory=dict)
 
 
 def inspect_tex(out: Path) -> Inspection:
     out = resolved_path(out); main = safe(out, 'manuscript/main.tex', True)
     scan = Inspection('', {'manuscript/main.tex'}, set(), [], [])
     cache = {}; definitions = {}; executable = []; loaded_styles = set()
+    theorem_style = 'plain'
 
     def issue(rel: str, text: str, pos: int, message: str):
         scan.errors.append(diagnostic('REVIEW_LOCATION_UNVERIFIABLE',
@@ -213,6 +253,7 @@ def inspect_tex(out: Path) -> Inspection:
                 scan.content_lines.setdefault(rel, set()).add(line)
 
     def visit(path: Path, active: tuple[Path, ...], in_body: bool, is_main=False) -> tuple[str, bool]:
+        nonlocal theorem_style
         rel = relpath(out, path)
         require(path not in active, 'TEX_INPUT_CYCLE', 'Recursive literal TeX input', rel)
         scan.inputs.add(rel)
@@ -238,6 +279,19 @@ def inspect_tex(out: Path) -> Inspection:
         endinput = next((t.start() for t in tokens if t[0] == r'\endinput'), len(text))
         stop = min(stop, endinput)
         body_end = min(body_end, stop)
+        command_offsets = {t.start() for t in tokens}
+        for pos, name, body in defs:
+            if pos < stop and name.startswith('environment:') and name != 'environment:theoremrecall':
+                if _meaningful(body).strip():
+                    scan.custom_environment_heads[name.split(':',1)[1]] = {'path':rel,'line':raw.count('\n',0,pos)+1}
+            if pos < stop and name in {'thmhead', 'thmhead@plain', '@begintheorem', '@opargbegintheorem',
+                                      'theoremname', 'lemmaname', 'propositionname', 'thetheorem',
+                                      'thelemma', 'theproposition', 'thecorollary', 'thedefinition',
+                                      'theexample', 'theproblem', 'theremark', 'theconjecture'}:
+                scan.heading_customizations.append({'path':rel, 'line':raw.count('\n',0,pos)+1, 'style':None})
+        for match in re.finditer(r'\\newtheoremstyle\s*\{([^{}]+)\}', text[:stop]):
+            if match.start() in command_offsets:
+                scan.heading_customizations.append({'path':rel, 'line':raw.count('\n',0,match.start())+1, 'style':match[1]})
         for pos, name, body in defs:
             if pos < stop:
                 definitions.setdefault(name, []).append((rel, pos, body))
@@ -253,6 +307,27 @@ def inspect_tex(out: Path) -> Inspection:
                 continue
             name = token[0][1:]
             executable.append((rel, raw, token.start(), name))
+            # Preserve execution order across literal inputs and local packages.
+            # This inventories only amsthm's literal declaration interface.
+            if name in {'newtheorem', 'theoremstyle'}:
+                j = _space(text, token.end()); starred = text[j:j+1] == '*'
+                if starred:
+                    j = _space(text,j+1)
+                end = _group_end(text,j)
+                if j < stop and text[j] == '{' and end <= stop:
+                    env = text[j+1:end-1]
+                    if name == 'theoremstyle':
+                        theorem_style = env
+                    else:
+                        j = _space(text,end)
+                        if j < stop and text[j] == '[':
+                            j = _space(text,_group_end(text,j,'[',']'))
+                        end = _group_end(text,j)
+                        if j < stop and text[j] == '{' and end <= stop:
+                            scan.statement_environments[env] = text[j+1:end-1]
+                            scan.statement_styles[env] = theorem_style
+                            if starred:
+                                scan.unnumbered_statements.add(env)
             if name in {'begin', 'end'}:
                 j = _space(text, token.end()); end = _group_end(text, j)
                 if end > j and text[j] == '{':
@@ -304,9 +379,22 @@ def inspect_tex(out: Path) -> Inspection:
         return ''.join(chunks), has_content
 
     scan.text, _ = visit(main, (), False, True)
+    # This shipped literal recall wrapper only sets a heading and opens/closes
+    # the unnumbered recalled display. Trust neither a rewritten wrapper nor a
+    # same-named replacement helper. Its enclosed input is scanned normally.
+    recall_names = {'environment:theoremrecall', 'mathreviewrecallheading'}
+    shipped_style = (SKILL_ROOT/'assets/templates/math-review.sty').read_bytes()
+    expected_recall = {name:body for _,name,body in _lex(shipped_style.decode('utf-8'))[1] if name in recall_names}
+    trusted_recall = (scan.statement_environments.get('mathreviewrecalledtheorem') == r'\mathreviewrecallheading' and
+        'mathreviewrecalledtheorem' in scan.unnumbered_statements and
+        'environment:mathreviewrecalledtheorem' not in definitions and all(len(definitions.get(name,[])) == 1 and
+        definitions[name][0][0] == 'manuscript/math-review.sty' and
+        definitions[name][0][2] == expected_recall.get(name) for name in recall_names))
     # Ordinary mathematical notation aliases are allowed. Resolve only risk,
     # not TeX expansion: an indirect call into empty/control code is uncertified.
     def risky(name: str, visiting: frozenset[str] = frozenset()) -> bool:
+        if name == 'environment:theoremrecall' and trusted_recall:
+            return False
         if name in visiting:
             return True
         for _, _, body in definitions.get(name, []):

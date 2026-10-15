@@ -14,7 +14,7 @@ An output outline selects this reader's points, decisive connections and proof-d
 choices. Teaching order is not identical to dependency order. These layers share one
 canonical node authority; new mathematics discovered in either returns to the KB.
 
-The incremental profiles.py module holds current r4 editorial policy, plan constraints
+The incremental profiles.py module holds current r5 editorial policy, plan constraints
 and evidence checks. It is not a second knowledge store or mathematical reasoner.
 Existing source, snapshot, material-integrity, build, review and package mechanisms remain.
 New output/review contracts coexist with unchanged schema-2.0.0 knowledge and snapshots.
@@ -29,7 +29,7 @@ The controller alone integrates canonical live KB and shared indexes; workers ow
 
 Resolve hypothesis/conclusion conflicts against sources, not majority vote or completion order. New reusable explanations and mathematical corrections return to reviewed live KB and a new snapshot. Integration changing reviewed mathematics requires fresh corresponding review. Evidence remains file-bound; refreshed hashes cannot replace actual reading. Historical bytes and accepted records retain their identity.
 
-Coordinate every planned output's exact reader and proof promises early. Non-author knowledge review performs the specified steps and records only actually checked exact scope.proof_steps with findings/locators/gaps. Safe plan-derived promise evidence and its declared source/KB inputs belong in fresh live evidence before freeze; mutable output paths are not frozen evidence dependencies. Adopt the new snapshot explicitly before prepare. Current r4 only is supported; old/unknown policy is rejected without modifying its files. Immutable file protection is not old-version runtime compatibility.
+Coordinate every planned output's exact reader and proof promises early. Non-author knowledge review performs the specified steps and records only actually checked exact scope.proof_steps with findings/locators/gaps. Safe plan-derived promise evidence and its declared source/KB inputs belong in fresh live evidence before freeze; mutable output paths are not frozen evidence dependencies. Adopt the new snapshot explicitly before prepare. Current r5 only is supported; old/unknown policy is rejected without modifying its files. Immutable file protection is not old-version runtime compatibility.
 
 On user stop or a configured limit, cease dispatch, send authorized stop messages, save remaining work and quarantine late results. Report still-running chats when immediate interruption is unavailable. Recovery reconciles ledger, files and actual task state; it does not reset iteration limits or perform an entire already-applicable reception again. Private task records and restricted sources do not belong in public software/article bundles.
 

@@ -20,7 +20,7 @@ CLI envelopes are `{operation,status,errors,warnings,artifacts}` under `--json`.
 
 Literal TeX scanning cannot evaluate arbitrary macro conditionals or prove a theorem. Source texts/TeX must be trusted: disabled shell escape is not an operating-system sandbox. Build and review reports are transparent local assertions, not signed independent attestations.
 
-## Separate current r4 evidence and remaining verification
+## Separate current r5 evidence and remaining verification
 
 Knowledge-only acceptance needs usable fast routes, reproducible slow explanations,
 condition tests and a reverse-obligation audit bound to actual nodes/routes. No article

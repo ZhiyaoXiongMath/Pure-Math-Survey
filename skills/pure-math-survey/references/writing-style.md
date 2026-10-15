@@ -1,8 +1,8 @@
 # Mathematical writing and self-contained results
 
-Actively organize ordinary explanatory prose around **about 2–3 normal actual typeset
-lines** in every mode. More than about three lines triggers editorial review for hidden
-objects, conditions, estimates or transformations; improve blocks that can be improved.
+Prefer ordinary explanatory prose around **about 2–3 normal actual typeset
+lines** in every mode. Review longer blocks for hidden objects, conditions, estimates or transformations;
+improve them when the mathematical argument benefits.
 Measure normal font size, line width and margins in the actual PDF, not TeX source lines.
 For Markdown/HTML knowledge use an agreed normal reading width, not any narrow window. At a natural mathematical turn, display the decisive object,
 condition, equation, transformation, estimate or output and explain its role nearby.
@@ -15,8 +15,8 @@ proof or remove hypotheses to satisfy the target. Complete statements, necessary
 and continuous proofs may exceed it after considering a better mathematical arrangement.
 This is neither an automatic failure for every four-line block nor a formula every three
 lines. Bibliographies, code, tables and title/author matter use their own readability checks.
-For each retained long explanatory block record actual PDF page/block and source location,
-purpose, specific reason, alternatives considered, hidden-object check and final result.
+Record actual PDF page/block and source locations for significant readability findings,
+repairs and necessary exceptions, with their mathematical purpose and considered alternatives.
 Bind observations and repairs to the final PDF SHA-256 and reinspection scope. Inspect
 every page; do not claim a blanket theorem/mode exception or an automatic readability
 score. Use existing semantic/page findings, not a new approval database.
@@ -49,3 +49,11 @@ some to every, semipositive to positive, or conditional to unconditional.
 Use English mathematical prose and appropriate established author attributions. Do
 not invent decorative names. Examples must calculate, distinguish hypotheses or expose
 a real boundary. Primary sources and current templates govern new work. Historical generated samples are not current writing authorities or acceptance evidence. Follow the mode-specific opening and body duties in editions.md; all modes share the same canonical fast/slow knowledge.
+
+## Numbered statement types without descriptive names
+
+Apply to theorem, lemma, proposition, corollary, definition, example, problem, remark, conjecture and custom claim/observation/assumption/question/exercise equivalents. Keep the existing counters, automatic numbering, labels and supported ref/autoref links. Do not use optional descriptive names such as `\begin{definition}[Phase]`, or hide a name in a custom theorem head. Do not convert numbered environments to unnumbered ones. Ordinary unnumbered layout environments gain no artificial numbers.
+
+Write a term inside its definition, or explain a result's purpose/source in adjoining prose. The phrase “Calabi--Yau theorem” in prose and an external locator “Theorem 1.5” are legal. `\begin{proof}[Proof of Theorem~\ref{thm:main}]` names the proof target and remains legal; theoremrecall's “(recalled)” is a status cue. Equation/align/itemize/abstract/figure/table options are outside this rule. The literal scanner checks reachable statement uses and literal newtheorem declarations; unsupported custom heading code needs actual manual PDF review, never a claim that a regex proved its typography safe.
+
+Prefer local self-contained important auxiliaries before their first consuming proof; the opening may announce principal results early. Use real labels and references rather than hand-typed result numbers. After reordering inspect proof headings, above/below/following/previous, PDF links and page references. Use itemize for parallel hypotheses, conclusions or independent routes; keep one continuous argument in connected prose. Paragraph length is a preference, not a reason to fragment a continuous proof. A title names the mathematical problem, without mode/KB/fast/slow development terms.

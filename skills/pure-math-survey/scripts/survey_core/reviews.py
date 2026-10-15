@@ -30,7 +30,7 @@ def load_review(path: Path) -> dict:
     if not current({'schema_version': obj.get('schema_version'),
                             'editorial_policy': obj.get('scope', {}).get('editorial_policy')}):
         require(not set(UNDERSTANDING_READINGS) & set(mode_findings),
-                'SCHEMA_UNSUPPORTED', 'Understanding responsibilities require the current r4 policy', path.name)
+                'SCHEMA_UNSUPPORTED', 'Understanding responsibilities require the current r5 policy', path.name)
     if obj.get('schema_version') != '2.2.0':
         scope = obj.get('scope', {})
         findings=scope.get('mode_findings',{})
@@ -53,7 +53,7 @@ def load_review(path: Path) -> dict:
     require(obj['kind'] in {'source','mathematical','coverage','output_semantic','visual'},'REVIEW_INVALID','Invalid review kind',path.name)
     if obj['kind'] in {'output_semantic', 'visual'}:
         require(current({'schema_version': obj.get('schema_version'), 'editorial_policy': obj.get('scope', {}).get('editorial_policy')}),
-                'SCHEMA_UNSUPPORTED', 'Output reviews require current r4; obsolete inputs are not migrated', path.name)
+                'SCHEMA_UNSUPPORTED', 'Output reviews require current r5; obsolete inputs are not migrated', path.name)
     require(obj['reviewer_mode'] in {'author_reread','independent_review','not_performed'},'REVIEW_INVALID','Do not label self-review independent',path.name)
     require(obj['disposition'] in {'accepted','revise','limited'} and 'reviewed_at' in obj,'REVIEW_INVALID','Invalid review disposition/date',path.name)
     require(obj['reviewed_at'] is None or valid_date(obj['reviewed_at']),'REVIEW_INVALID','Review date is not a real nonfuture date',path.name)
@@ -225,7 +225,7 @@ def coverage_inputs(inv,question_id:str)->set[str]:
 
 
 def knowledge_scope_template(inv, question_ids: list[str]) -> dict:
-    """Use existing scope fields for the current r4 question-route reading."""
+    """Use existing scope fields for the current r5 question-route reading."""
     from .profiles import POLICY, UNDERSTANDING_READINGS
     nodes = set(question_ids)
     for q in inv.coverage['questions']:
@@ -341,7 +341,7 @@ def knowledge_scope_errors(inv, question_id: str, review: dict) -> list[dict]:
     if not current({'schema_version': review.get('schema_version'),
                             'editorial_policy': scope.get('editorial_policy')}):
         fail('KNOWLEDGE_REVIEW_POLICY_REASSESSMENT_REQUIRED',
-             'Record the four current r4 knowledge tasks against these node and route bytes; earlier-policy acceptance does not supply them.')
+             'Record the four current r5 knowledge tasks against these node and route bytes; earlier-policy acceptance does not supply them.')
         return errors
     expected = knowledge_scope_template(inv, [question_id])
     checks = scope.get('checks', [])
@@ -405,7 +405,7 @@ def review_template(root:Path,kind:str,keys:list[str],required:set[str],scope:di
         scope.setdefault('editorial_policy', POLICY)
     selected_policy = scope.get('editorial_policy')
     require('editorial_policy' not in scope or selected_policy == POLICY,
-            'SCHEMA_UNSUPPORTED', 'Only current r4 review policy is supported')
+            'SCHEMA_UNSUPPORTED', 'Only current r5 review policy is supported')
     version = OUTPUT_SCHEMA if 'editorial_policy' in scope else VERSION
     return {'schema_version':version,'review_id':'REPLACE-WITH-STABLE-REVIEW-ID','kind':kind,'reviewer_mode':'not_performed',
             'reviewer':'','reviewed_at':None,'inputs':[{'path':p,'sha256':file_hash(root,p)} for p in sorted(required)],
