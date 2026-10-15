@@ -18,7 +18,7 @@ from test_v2 import SKILL
 from survey_core.exports import prepare_output, validate_structure
 from survey_core.profiles import POLICY, VIEW_TASKS
 from survey_core.structure import STATEMENTS, statement_title_errors
-from survey_core.tex import inspect_tex
+from survey_core.tex import inspect_tex, validate_locations
 
 FIXTURE = Path(__file__).parent/'fixtures/pr04-editorial'
 OPENING = ('The following borrowed statement is Synthetic Note A,\n'
@@ -105,6 +105,16 @@ class LiteralStatementPolicy(unittest.TestCase):
     def test_redefined_inline_literal_control_is_not_certified(self):
         self.check(r'\verb|quoted|', r'\renewcommand{\verb}{Hidden content}')
         self.assertIn('REVIEW_LOCATION_UNVERIFIABLE', {e['code'] for e in inspect_tex(self.out).errors})
+
+    def test_quoted_verbatim_with_legal_opening_whitespace_is_inert(self):
+        quoted = (r'\begin{theorem}[Quoted source title] $x=x$.\end{theorem}')
+        for opening in (r'\begin {verbatim}', '\\begin\n{verbatim}'):
+            with self.subTest(opening=opening):
+                source = opening+'\n'+quoted+'\n'+r'\end{verbatim}'
+                self.assertEqual(self.check(source), [])
+                visible = source+'\n'+r'\begin{theorem}[Visible name] $x=x$.\end{theorem}'
+                errors = self.check(visible)
+                self.assertEqual([e['code'] for e in errors], ['STATEMENT_DESCRIPTIVE_TITLE'])
 
     def test_actual_literal_input_title_detected_but_unused_file_not_scanned(self):
         (self.out/'manuscript/part.tex').write_text(
@@ -203,6 +213,38 @@ class SyntheticReadingFixtures(unittest.TestCase):
             r'\newtheorem*{mathreviewrecalledtheorem}{Theorem (Hidden name)}'))
         self.assertIn('REVIEW_LOCATION_UNVERIFIABLE', {e['code'] for e in inspect_tex(self.out).errors})
 
+    def test_recall_command_replacements_cannot_certify_canonical_locations(self):
+        generated=self.out/'generated/statements';generated.mkdir(parents=True)
+        shutil.copy2(FIXTURE/'N-SQUARE.tex',generated/'N-SQUARE.tex')
+        original=self.positive.replace(r'\input{N-SQUARE.tex}',
+            r'\input{../generated/statements/N-SQUARE.tex}')
+        main=self.out/'manuscript/main.tex'
+        recall_input=original.rindex(r'\input{../generated/statements/N-SQUARE.tex}')
+        line=original.count('\n',0,recall_input)+1
+        location=[dict(path='manuscript/main.tex',line_start=line,line_end=line)]
+        main.write_text(original)
+        scan=inspect_tex(self.out)
+        self.assertEqual(scan.errors, [])
+        self.assertEqual(validate_locations(self.out,location,node_id='N-SQUARE',
+            canonical=True,inspection=scan), [])
+        replacements={
+            'inner_box_pair': r'\renewcommand{\mathreviewrecalledtheorem}{\setbox0=\vbox\bgroup}'
+                r'\renewcommand{\endmathreviewrecalledtheorem}{\egroup}',
+            'inner_descriptive_head': r'\renewcommand{\mathreviewrecalledtheorem}{\textbf{Theorem (Hidden name).}}'
+                r'\renewcommand{\endmathreviewrecalledtheorem}{}',
+            'inner_end_only': r'\def\endmathreviewrecalledtheorem{\egroup}',
+            'outer_begin': r'\renewcommand{\theoremrecall}[1]{\setbox0=\vbox\bgroup}',
+            'outer_end': r'\def\endtheoremrecall{\egroup}',
+        }
+        for name,replacement in replacements.items():
+            with self.subTest(replacement=name):
+                # Same line count keeps the canonical-location probe fixed.
+                main.write_text(original.replace(r'\begin{document}',replacement+r'\begin{document}'))
+                scan=inspect_tex(self.out)
+                self.assertIn('REVIEW_LOCATION_UNVERIFIABLE',{e['code'] for e in scan.errors})
+                self.assertIn('REVIEW_LOCATION_UNVERIFIABLE',{e['code'] for e in validate_locations(
+                    self.out,location,node_id='N-SQUARE',canonical=True,inspection=scan)})
+
     def test_actual_source_notes_and_semantic_mutations_remain_review_required(self):
         self.assertEqual(statement_title_errors(inspect_tex(self.out)),[])
         cases=semantic_cases(self.positive)
@@ -232,7 +274,12 @@ class SyntheticReadingFixtures(unittest.TestCase):
             named=named.replace('\\begin{'+env+'}', '\\begin{'+env+'}[Description]',1)
         named=named.replace(r'\newtheorem{observation}[theorem]{Observation}',
                             r'\newtheorem{observation}[theorem]{Observation (Custom name)}')
-        for name,body in [('positive',self.positive),('named-negative',named)]:
+        quoted=self.positive.replace(r'\section{Main Results}',
+            '\\section{Main Results}\n\\begin {verbatim}\n'
+            '\\begin{theorem}[Quoted source title] $x=x$.\\end{theorem}\n'
+            '\\end{verbatim}\n')
+        for name,body in [('positive',self.positive),('named-negative',named),
+                          ('quoted-source-boundary',quoted)]:
             with self.subTest(candidate=name):
                 (folder/'main.tex').write_text(body)
                 self.assertEqual(bool(statement_title_errors(inspect_tex(self.out))),name=='named-negative')

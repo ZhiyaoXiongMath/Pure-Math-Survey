@@ -16,7 +16,7 @@ from .common import native_path, relpath, resolved_path, SurveyError, diagnostic
 
 TOKEN = re.compile(r'\\(?:[A-Za-z@]+|[^A-Za-z@])')
 INPUT = re.compile(r'\\(?:input|include)\s*\{([^{}]+)\}')
-BLOCK = re.compile(r'\\begin\{(verbatim\*?|Verbatim|comment|lstlisting|minted)\}.*?\\end\{\1\}', re.S)
+BLOCK = re.compile(r'\\begin\s*\{(verbatim\*?|Verbatim|comment|lstlisting|minted)\}.*?\\end\{\1\}', re.S)
 DEFINITIONS = {'newcommand', 'renewcommand', 'providecommand', 'DeclareRobustCommand',
                'def', 'gdef', 'edef', 'xdef', 'newenvironment', 'renewenvironment'}
 DYNAMIC = {'csname', 'expandafter', 'scantokens', 'catcode', 'includeonly', 'let',
@@ -383,11 +383,16 @@ def inspect_tex(out: Path) -> Inspection:
     # the unnumbered recalled display. Trust neither a rewritten wrapper nor a
     # same-named replacement helper. Its enclosed input is scanned normally.
     recall_names = {'environment:theoremrecall', 'mathreviewrecallheading'}
+    # newenvironment/newtheorem create begin/end commands indirectly. Ordinary
+    # command replacement of either pair must revoke this narrow exemption too.
+    recall_replacements = {'theoremrecall', 'endtheoremrecall',
+                           'mathreviewrecalledtheorem', 'endmathreviewrecalledtheorem',
+                           'environment:mathreviewrecalledtheorem'}
     shipped_style = (SKILL_ROOT/'assets/templates/math-review.sty').read_bytes()
     expected_recall = {name:body for _,name,body in _lex(shipped_style.decode('utf-8'))[1] if name in recall_names}
     trusted_recall = (scan.statement_environments.get('mathreviewrecalledtheorem') == r'\mathreviewrecallheading' and
         'mathreviewrecalledtheorem' in scan.unnumbered_statements and
-        'environment:mathreviewrecalledtheorem' not in definitions and all(len(definitions.get(name,[])) == 1 and
+        not recall_replacements.intersection(definitions) and all(len(definitions.get(name,[])) == 1 and
         definitions[name][0][0] == 'manuscript/math-review.sty' and
         definitions[name][0][2] == expected_recall.get(name) for name in recall_names))
     # Ordinary mathematical notation aliases are allowed. Resolve only risk,
