@@ -1,7 +1,7 @@
 """Plan-scoped evidence gate; structure, hashes and statuses do not prove mathematics."""
 from __future__ import annotations
 from pathlib import Path
-from .common import diagnostic, file_hash, require, result, safe, valid_date
+from .common import diagnostic, result, valid_date
 from .models import load_plan
 from .plans import consumption,validate_plan
 from .reviews import coverage_inputs,find_review,mathematical_inputs,reviews_in,source_inputs
@@ -10,38 +10,30 @@ def assess_readiness(root:Path,plan:dict|Path, *, live:bool=False)->dict:
     if isinstance(plan,Path):plan=load_plan(plan)
     from .knowledge import inventory
     inv=validate_plan(root,plan,inv=inventory(root) if live else None); records=reviews_in(inv.root); ids=consumption(inv,plan)
-    from .profiles import profile_readiness_errors, statement_errors, statement_warnings, mapping
+    from .profiles import profile_readiness_errors, statement_errors, statement_warnings
     errors=profile_readiness_errors(inv, plan);warnings=[];used=[]; valid_math={}
     principals={s['node_id'] for s in plan['selections'] if s['role']=='principal_answer'}
     obligations={o['node_id']:o for o in plan['proof_obligations']}
     supplied_originals={c['node_id'] for c in plan.get('contributions', []) if c['classification']=='original' and c['authorization'].strip()}
     def add(code,message,path='',node_id=None):errors.append(diagnostic(code,message,path,node_id))
+    from .sources import source_scope_errors, source_facts, public_original_errors
+    errors += public_original_errors(inv); facts=[]
     sources={s['source_id'] for k in ids for s in inv.nodes[k].meta['sources'] if s['role']=='support'}
     for sid in sorted(sources):
         s=inv.sources[sid];a=s['access'];p=inv.source_paths[sid]
         if s['kind']!='primary':
             add('SOURCE_REVIEW_MISSING','Supplied manuscript is provenance, not original-source verification',p);continue
-        if s.get('version_conflicts'):
-            add('SOURCE_VERSION_CONFLICT','Unresolved source-version candidates remain; resolve identities and locators before release',p)
-        if not s['version']:
-            add('SOURCE_VERSION_CONFLICT','Record the exact controlling version, not an inferred latest version',p)
-        r,diagnostics=find_review(inv.root,records,'source','source_ids',sid,source_inputs(inv,sid));errors.extend(diagnostics)
-        if a['state']!='full_text_read' or not valid_date(a['checked_at']) or not a.get('reading_note') or r is None:
-            add('SOURCE_REVIEW_MISSING','Need actual original-text reading, dated locators and an accepted input-bound review',p)
-        if a.get('local_path'):
-            if not a.get('material_sha256') or file_hash(inv.root,a['local_path'])!=a['material_sha256']:
-                add('SOURCE_MATERIAL_MISMATCH','Local source bytes differ from the declared original material hash',p)
-        else:
-            reading=mapping(mapping((r or {}).get('scope',{}).get('source_reading')).get(sid))
-            locators=reading.get('locators')
-            valid= (a.get('material_hash_unavailable_reason') and s['identifiers'].get('url') and
-                    reading.get('mode')=='original_text_online' and reading.get('version')==s['version'] and
-                    isinstance(locators,list) and locators and all(isinstance(x,str) and x.strip() for x in locators)
-                    and reading.get('raw_bytes_unavailable_reason'))
-            if not valid:add('SOURCE_REVIEW_MISSING','No retained raw file: require an explicit original-text online reading scope, exact version, locator list and material-access limitation',p)
-            elif a.get('material_sha256'):
-                warnings.append(diagnostic('SOURCE_RAW_BYTES_NOT_RETAINED','A raw-source hash is recorded, but no in-project copy is available to rehash; source reading is documented with this retention limitation.',p))
-            else:warnings.append(diagnostic('SOURCE_RAW_HASH_UNAVAILABLE','Original text was read online; no raw-source hash or retained byte copy is available.',p))
+        locators=[ref['locator'] for key in ids for ref in inv.nodes[key].meta['sources'] if ref['source_id']==sid and ref['role']=='support']
+        check=lambda r, sid=sid, locators=locators: source_scope_errors(inv,sid,r,locators,check_access=False)
+        r,diagnostics=find_review(inv.root,records,'source','source_ids',sid,source_inputs(inv,sid),extra_check=check)
+        errors.extend(diagnostics)
+        errors.extend(source_scope_errors(inv,sid,r,locators))
+        facts.append(source_facts(inv,sid,r,locators))
+        if not a.get('local_path'):
+            code='SOURCE_RAW_BYTES_NOT_RETAINED' if a.get('material_sha256') else 'SOURCE_RAW_HASH_UNAVAILABLE'
+            warnings.append(diagnostic(code,'Original bytes cannot be rehashed here; recorded reading/hash is not a retained-byte certificate.',p))
+        permission=facts[-1]['redistribution']
+        if permission!='VERIFIED': warnings.append(diagnostic('SOURCE_REDISTRIBUTION_'+permission,'Original-byte redistribution remains '+permission+'; citation and reading do not grant it.',p))
         if r:used.append(r['review_id'])
     for key in sorted(ids):
         n=inv.nodes[key];m=n.meta
@@ -95,4 +87,16 @@ def assess_readiness(root:Path,plan:dict|Path, *, live:bool=False)->dict:
     for e in errors:
         k=(e['code'],e['path'],e['node_id'],e['message'])
         if k not in seen:seen.add(k);unique.append(e)
-    return result('kb.readiness','NEEDS_WORK' if unique else 'READY',{'snapshot_id':plan['snapshot_id'],'consumed_nodes':sorted(ids),'used_review_ids':sorted(set(used))},unique,warnings)
+    return result('kb.readiness','NEEDS_WORK' if unique else 'READY',{'snapshot_id':plan['snapshot_id'],'consumed_nodes':sorted(ids),'used_review_ids':sorted(set(used)),'source_facts':facts},unique,warnings)
+
+
+def assess_eligibility(root:Path, plan:dict|Path)->dict:
+    """Research gate, separate from knowledge readiness and draft preview."""
+    if isinstance(plan,Path): plan=load_plan(plan)
+    inv=validate_plan(root,plan)
+    from .profiles import research_eligibility_errors
+    errors=research_eligibility_errors(inv,plan)
+    status='NOT_APPLICABLE' if plan['profile']!='paper' else ('UNVERIFIED' if errors else 'ELIGIBLE')
+    if any(e['code']=='PAPER_ORIGINAL_CONTRIBUTION_MISSING' for e in errors): status='REJECTED'
+    return result('output.eligibility',status,{'profile':plan['profile'], 'formal_research_candidate':status=='ELIGIBLE',
+        'meaning':'Plan/snapshot evidence only; formal delivery also requires current knowledge, contribution/manuscript, build and page reviews.'},errors=errors)

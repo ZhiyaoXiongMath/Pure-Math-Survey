@@ -35,3 +35,6 @@ original example means actual Paper originality/full research-proof quality is N
 Other AI tasks are not external independent peers. Rules, scaffolds and passing software
 checks do not establish r4's content, final PDF, installed behavior or critical review;
 those require their own actual evidence on the fixed integrated candidate.
+
+
+PR03 source batch/candidate checks reuse source metadata/reading-note/original/permission-note byte bindings, controlling-version/consumed-locator reading scope and public-original safety checks. A pending template never reads or licenses a source. `output validate --stage eligibility` is the separate Paper plan research gate; full `--stage release` still requires actual contribution/manuscript/build/page evidence. Engineering fixtures are explicitly synthetic and cannot establish research acceptance.

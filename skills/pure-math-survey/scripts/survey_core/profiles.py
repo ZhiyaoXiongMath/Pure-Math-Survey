@@ -192,6 +192,14 @@ def profile_readiness_errors(inv, plan: dict) -> list[dict]:
             add('PRINCIPAL_STATUS_UNVERIFIED', 'An unassessed, open or conjectural principal is draft-only, not a proved main result.', s['node_id'])
     if plan['profile'] == 'lecture' and not any(o['treatment'] == 'complete' for o in plan['proof_obligations']):
         add('LECTURE_PROOF_PROMISE_MISSING', 'Lecture must teach actual promised derivations; imported inputs may remain external.')
+    return errors
+
+
+def research_eligibility_errors(inv, plan: dict) -> list[dict]:
+    validate_plan_contract(plan)
+    errors = []
+    def add(code, message, key=None):
+        errors.append(diagnostic(code, message, 'plan.json', key))
     if plan['profile'] != 'paper':
         return errors
     originals = [c for c in plan['contributions'] if c['classification'] == 'original']

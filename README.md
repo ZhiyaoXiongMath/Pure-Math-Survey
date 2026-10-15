@@ -19,6 +19,8 @@
 
 已知结果不能假称原创。Paper 正式研究交付需要真实授权、贡献核查和完整证明；未验证草稿不能正式打包。[模式契约](skills/pure-math-survey/references/editions.md)提供细节。
 
+原文访问、实际阅读范围、可重哈希字节与原文字节再分发权限分别据实记录。私人原文应保留在公开项目之外；项目内原文须明确 public 与真实再分发授权才能 freeze。在线／私有阅读可支持知识 READY，同时字节或再分发仍为 UNVERIFIED／REJECTED。知识 READY 不授予 Paper 正式研究资格；显著标识的 Paper Draft 可预览。见[来源证据](skills/pure-math-survey/references/research-and-evidence.md)。
+
 ## 启动提示
 
 先在 [Release 页面](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/tag/v2.1.0-r4-preview.1)下载完整 `pure-math-survey-2.1.0.zip` 及 `pure-math-survey-2.1.0.zip.sha256`，核对后把解压出的整个 `pure-math-survey/` 放入宿主 skill 目录（如 Codex 的 `~/.codex/skills/`），保留 references、scripts、assets。自动生成的 Source code ZIP 不是安装 ZIP。

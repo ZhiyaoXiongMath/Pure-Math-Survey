@@ -15,10 +15,11 @@ class OnlineSources(unittest.TestCase):
         source['access'].update(local_path=None,material_hash_unavailable_reason='Synthetic fixture: original bytes not retained in this project.')
         if not retain_hash:source['access']['material_sha256']=None
         write_json(p,source)
+        (self.t.root/'knowledge/material.txt').unlink(missing_ok=True)
         synthetic_reviews(self.t.root);v.synthetic_policy_reviews(self.t.root)
         rp=self.t.root/'evidence/reviews/source-S-test.json';review=read_json(rp)
         review['scope']['source_reading']=None if malformed_scope else {'S-test':dict(mode='original_text_online',version='Fixture v1',
-            locators=['Synthetic fixture paragraph 1'] if locators is None else locators,
+            locators=['Synthetic fixture paragraph 1'] if locators is None else locators,reading_scope='Synthetic supporting statement only, not a real reading.',unchecked_items=[],
             raw_bytes_unavailable_reason='Synthetic test of a source-retention limitation, not a real source reading.')}
         write_json(rp,review)
     def test_known_hash_distinguished_from_missing_hash_without_certifying_bytes(self):

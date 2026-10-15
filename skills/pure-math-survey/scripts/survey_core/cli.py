@@ -29,7 +29,7 @@ def parser()->Parser:
             x.add_argument('--question',action='append');x.add_argument('--principal',action='append');x.add_argument('--title');x.add_argument('--draft',action='store_true');x.add_argument('--comparison-group');x.add_argument('--max-pages',type=int)
         else:x.add_argument('--output',required=True)
         if name=='validate':
-            x.add_argument('--stage',choices=['plan','structure','release'],default='plan')
+            x.add_argument('--stage',choices=['plan','structure','eligibility','release'],default='plan')
         if name=='render':x.add_argument('--dpi',type=int,default=120)
         if name=='package':x.add_argument('--to',type=Path,required=True)
         if name=='review-template':x.add_argument('--kind',choices=['output_semantic','visual'],required=True);x.add_argument('--to')
@@ -119,6 +119,9 @@ def execute(a)->dict:
         if a.action=='render':return render_output(root,a.output,a.dpi)
         if a.action=='package':return package_output(root,a.output,a.to)
         if a.action=='validate':
+            if a.stage=='eligibility':
+                from .readiness import assess_eligibility
+                return assess_eligibility(root,load_plan(out/'plan.json'))
             if a.stage=='release':return assess_release(root,a.output)
             if a.stage=='structure':return validate_structure(root,a.output)
             plan=load_plan(out/'plan.json');inv=validate_plan(root,plan)

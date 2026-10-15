@@ -121,7 +121,7 @@ def load_source(path: Path, relative_path: str | None = None) -> dict:
         require(key in a and (a[key] is None or isinstance(a[key], str)), 'CONTRACT_INVALID', f'access.{key} must be explicit', loc)
     require(a['checked_at'] is None or valid_date(a['checked_at']), 'CONTRACT_INVALID', 'Invalid actual reading date', loc)
     require(a['material_sha256'] is None or bool(re.fullmatch('[a-f0-9]{64}', a['material_sha256'])), 'CONTRACT_INVALID', 'Invalid material SHA-256', loc)
-    for key in ('local_path', 'reading_note'):
+    for key in ('local_path', 'reading_note', 'permission_note'):
         if a.get(key) is not None:
             relative(a[key])
     return obj

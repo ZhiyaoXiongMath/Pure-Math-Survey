@@ -61,7 +61,7 @@ def inventory(root: Path, *, review_records: list[tuple[str, dict]] | None = Non
                 require(key in nodes, 'UNKNOWN_REFERENCE', f'coverage.{group}: {key}', kr + '/coverage.json', key)
     paths = set(['project.json', scope] + all_files(root, kr) + all_files(root, 'evidence'))
     for key, src in sources.items():
-        for f in ('local_path', 'reading_note'):
+        for f in ('local_path', 'reading_note', 'permission_note'):
             path = src['access'].get(f)
             if path:
                 safe(root, path, True); paths.add(path)
@@ -77,11 +77,22 @@ def inventory(root: Path, *, review_records: list[tuple[str, dict]] | None = Non
     paths |= knowledge_review_input_paths(root, records)
     return Inventory(root, project, nodes, sources, source_paths, cov, sorted(paths))
 
+def _source_facts(inv):
+    from .sources import source_facts, source_scope_errors
+    from .reviews import find_review, reviews_in, source_inputs
+    records=reviews_in(inv.root); rows=[]
+    for sid in sorted(inv.sources):
+        review,_=find_review(inv.root,records,'source','source_ids',sid,source_inputs(inv,sid),
+                            extra_check=lambda r,sid=sid: source_scope_errors(inv,sid,r,check_access=False))
+        rows.append(source_facts(inv,sid,review))
+    return rows
+
+
 def validate_knowledge(root: Path) -> dict:
     inv = inventory(root)
     pending = [k for k, n in inv.nodes.items() if n.meta['mathematical_status'] == 'unassessed']
     return result('kb.validate', 'VALID', {'project_id': inv.project['project_id'], 'node_count': len(inv.nodes), 'source_count': len(inv.sources),
-                 'unassessed_nodes': pending, 'outputs_required': False}, warnings=[diagnostic('SEMANTIC_NOT_CERTIFIED', 'Structural validity is not mathematical readiness.')])
+                 'unassessed_nodes': pending, 'outputs_required': False, 'source_facts': _source_facts(inv)}, warnings=[diagnostic('SEMANTIC_NOT_CERTIFIED', 'Structural validity is not mathematical readiness.')])
 
 def init_project(destination: Path, topic: str, scope: Path, title: str | None = None, language: str = 'en') -> dict:
     require(identifier(topic), 'CONTRACT_INVALID', 'Invalid topic/project ID')

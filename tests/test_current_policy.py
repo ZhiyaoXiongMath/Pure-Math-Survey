@@ -141,7 +141,7 @@ class CurrentPolicy(unittest.TestCase):
         self.t.failcode('CANONICAL_STATEMENT_CHANGED', verify_generated, self.t.root, plan)
         p, paper = self.t.make('paper', 'paper-default', draft=False)
         self.assertTrue(paper['draft'])
-        self.assertIn('PAPER_ORIGINAL_CONTRIBUTION_MISSING', self.t.readiness(paper))
+        self.assertIn('PAPER_ORIGINAL_CONTRIBUTION_MISSING', self.t.eligibility(paper))
 
 
 class CurrentKnowledgeReview(unittest.TestCase):

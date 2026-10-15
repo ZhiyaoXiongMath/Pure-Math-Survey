@@ -64,7 +64,7 @@ def consumed_paths(inv: Inventory, plan: dict) -> set[str]:
         sources.update(s['source_id'] for s in inv.nodes[key].meta['sources'])
     for key in sources:
         paths.add(inv.source_paths[key])
-        for field in ('reading_note','local_path'):
+        for field in ('reading_note','local_path','permission_note'):
             if inv.sources[key]['access'].get(field): paths.add(inv.sources[key]['access'][field])
     return paths
 

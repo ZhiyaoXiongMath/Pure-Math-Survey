@@ -19,6 +19,8 @@ For authors organizing mathematical literature, maintaining traceable knowledge,
 
 Known results cannot be called original. Formal Paper research delivery requires real authorization, contribution verification and complete proofs; unverified drafts cannot be formally packaged. See [mode contracts](skills/pure-math-survey/references/editions.md).
 
+Source access, scoped original-text reading, rehashable bytes and original-byte redistribution are separate recorded facts. Private originals stay outside public project inputs; retained originals require explicit public visibility and actual redistribution authorization before freeze. Online/private reading may support knowledge READY while bytes or redistribution remain UNVERIFIED/REJECTED. Knowledge READY does not confer Paper research eligibility; a visibly marked Paper Draft can be previewed. See [source evidence](skills/pure-math-survey/references/research-and-evidence.md).
+
 ## Start prompts
 
 Download the complete `pure-math-survey-2.1.0.zip` and `pure-math-survey-2.1.0.zip.sha256` from the [Release page](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/tag/v2.1.0-r4-preview.1). Verify and copy the whole extracted `pure-math-survey/` into the host skills directory (for example Codex's `~/.codex/skills/`), retaining references, scripts and assets. The automatically generated Source code ZIP is not the installation ZIP.

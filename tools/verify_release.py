@@ -43,7 +43,7 @@ def verification_workspace(report:dict,parent:Path|None=None,keep:bool=False):
 EXPECTED_POLICY = 'four-modes-2026-10-13-r4'
 EXPECTED_CONTRACTS = {('2.2.0', EXPECTED_POLICY)}
 REQUIRED_SUITES = ('test_current_policy', 'test_r4_policy',
-                   'test_workflow_bindings', 'test_dispatch')
+                   'test_workflow_bindings', 'test_dispatch', 'test_source_eligibility')
 
 
 def assert_installed_contract(artifacts:dict)->dict:

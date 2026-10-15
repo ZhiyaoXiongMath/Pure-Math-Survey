@@ -9,7 +9,7 @@ import zipfile
 from .common import FONT_SUFFIXES,SKILL_ROOT,all_files,diagnostic,file_hash,file_inventory,read_json,require,result,safe,sha,write_json,writer
 from .models import load_plan
 from .exports import output_inputs,validate_structure
-from .readiness import assess_readiness
+from .readiness import assess_readiness,assess_eligibility
 from .reviews import check_review_bindings,blocking_unchecked,reviews_in
 from .build import check_build
 from .tex import validate_locations
@@ -42,7 +42,8 @@ def semantic_scope_errors(out:Path,plan:dict,consumed_nodes:list[str],review:dic
 
 def assess_release(root:Path,output_id:str)->dict:
     out=safe(root,'outputs/'+output_id);plan=load_plan(out/'plan.json')
-    ready=assess_readiness(root,plan);errors=list(ready['errors']);warnings=list(ready['warnings']);used=[]
+    ready=assess_readiness(root,plan);eligibility=assess_eligibility(root,plan)
+    errors=list(ready['errors'])+eligibility['errors'];warnings=list(ready['warnings']);used=[]
     from .profiles import POLICY, current, policy
     if plan['draft']:errors.append(diagnostic('DRAFT_NOT_RELEASABLE','Internal unverified drafts cannot be packaged as formal output','plan.json'))
     structure=validate_structure(root,output_id);errors+=structure['errors'];warnings+=structure['warnings']
@@ -95,7 +96,7 @@ def assess_release(root:Path,output_id:str)->dict:
     return result('output.release',status,{'output_id':output_id,'snapshot_id':plan['snapshot_id'],
                   'pages':built.get('pages'),'editorial_policy':policy(plan),
                   'evaluated_policy':POLICY,
-                  'release_authorized':status=='RELEASABLE','used_output_review_ids':used,'readiness':ready['status']},errors,warnings)
+                  'release_authorized':status=='RELEASABLE','used_output_review_ids':used,'readiness':ready['status'],'research_eligibility':eligibility['status'],'source_facts':ready['artifacts']['source_facts']},errors,warnings)
 
 def package_output(root:Path,output_id:str,destination:Path)->dict:
     check=assess_release(root,output_id)
@@ -107,6 +108,12 @@ def package_output(root:Path,output_id:str,destination:Path)->dict:
     out=safe(root,'outputs/'+output_id);paths=set(output_inputs(out))|set(all_files(out,'evidence'))|set(all_files(out,'build'))
     # A package contains the writing materials, not the entire knowledge project or external source archive.
     data={p:safe(out,p,True).read_bytes() for p in sorted(paths)}
+    from .plans import validate_plan
+    inv=validate_plan(root,load_plan(out/'plan.json'))
+    original_hashes={s['access'].get('material_sha256') for s in inv.sources.values()}-{None}
+    for path,b in data.items():
+        require(not any(part.casefold() in {'private','.private'} for part in path.split('/'))
+                and sha(b) not in original_hashes,'SOURCE_ORIGINAL_NOT_PACKAGED','Original bytes and private paths cannot enter manuscript packages',path)
     data['rebuild.py']=(SKILL_ROOT/'assets/rebuild/rebuild.py').read_bytes()
     data['runtime/build_checks.py']=(SKILL_ROOT/'scripts/build_checks.py').read_bytes()
     data['release-check.json']=(json.dumps(check,ensure_ascii=False,indent=2)+'\n').encode()

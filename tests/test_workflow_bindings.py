@@ -318,7 +318,7 @@ class WorkflowBindings(unittest.TestCase):
 
     def test_coverage_pending_remains_separate_from_honest_paper_refusal(self):
         p, plan = self.t.make('paper')
-        self.assertIn('PAPER_ORIGINAL_CONTRIBUTION_MISSING', self.t.readiness(plan))
+        self.assertIn('PAPER_ORIGINAL_CONTRIBUTION_MISSING', self.t.eligibility(plan))
         coverage = self.t.root/'knowledge/coverage.json'; value = read_json(coverage)
         value['questions'][0]['assessment'] = 'pending'; write_json(coverage, value); self.adopt(p, plan)
         self.assertIn('COVERAGE_PENDING', self.t.readiness(plan))

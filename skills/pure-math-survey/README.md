@@ -57,3 +57,5 @@ Formal article packaging requires current-policy RELEASABLE evidence. Unverified
 Old generated example manuscripts, knowledge projects and reference-sample bundles are removed from the current tree and installation. Historical identities remain recoverable in Git history/private backups; do not import them as answers or new acceptance. Current public exemplars require fresh source-grounded generation and actual independent acceptance; this documentation does not claim those tests have run.
 
 Instructions, scripts, templates and documentation are covered by the [MIT License](LICENSE), Copyright (c) 2026 ZhiyaoXiongMath. Mathematical example materials and third-party originals retain their separate rights; access is not redistribution permission. Private authorization/dispatch notes and restricted source texts are excluded from public bundles.
+
+Source access, actual scoped reading, verifiable bytes and original redistribution permission are independent facts; private/unauthorized original bytes cannot be frozen in a public project. Knowledge READY and Paper research eligibility have separate gates. See [source evidence](references/research-and-evidence.md).
