@@ -1,3 +1,36 @@
+# Pure Math Survey 2.1.0 (2026-10-16)
+
+Release preparation for software **2.1.0**, KB/snapshot schema **2.0.0**,
+output/review schema **2.2.0**, and editorial policy **four-modes-2026-10-15-r5**.
+Publication is established only by the non-prerelease `v2.1.0` GitHub Release
+and its verified installation assets; this entry does not announce publication.
+See [release notes and validation limits](docs/releases/v2.1.0.md).
+
+- Provide Minimal, Thematic, Lecture and visibly unverified Paper drafts from
+  one reviewed, immutable knowledge snapshot, with fast-first openings,
+  proof-dependent slow passages, numbered statements without descriptive titles,
+  nearby attribution and explicit proof promises.
+- Retain staged review handoff, source/version/reading/byte/redistribution
+  distinctions, and separate knowledge readiness from formal Paper eligibility.
+- Include portable path and source-integrity checks, Linux/Windows installation
+  validation, Windows descendant cleanup, and the procfs test-race correction
+  without weakening descendant-termination assertions.
+- Update bilingual repository installation instructions and current status;
+  preserve the r4 prerelease and all historical reports and identities.
+
+The merged baseline passed required Linux Python 3.10/3.12 and Windows Python 3.12
+CI. A completed, scoped real comparison-theorem KB-to-four-output acceptance is
+reused because runtime and mathematical rules are unchanged. Its three formal
+expository packages and known-result Paper draft retain their original permissions;
+Paper eligibility/formal-delivery refusal remains expected. Four disclosed process
+exceptions and all unverified scope remain. Historical E01–E05 failures/pauses are
+not upgraded, and no originality, external human peer review, student learning or
+cross-platform mathematical-reconstruction certification is implied.
+
+## Historical development records
+
+The entries below retain the status and limitations observed at their own revisions.
+
 # v2.1.0-r4-preview.1 — development preview (2026-10-13)
 
 Software remains 2.1.0. This prerelease publishes the frozen r4 runtime for inspection,
