@@ -1,8 +1,8 @@
-# Pure Math Survey — Preview
+# Pure Math Survey 2.1.0
 
 [简体中文](README.md) | **English**
 
-This is preview `v2.1.0-r4-preview.1` (software 2.1.0); mathematical end-to-end acceptance is still under verification. [Stage status](docs/development/STATUS.md) records verified development stages; [historical preview notes](docs/r4/development-status.md) preserve the earlier scope.
+Software is **2.1.0**, knowledge/snapshot schema **2.0.0**, output/review schema **2.2.0**, and the current editorial policy is **four-modes-2026-10-15-r5**. The four development stages and CI race fix are merged; completed comparison-theorem mathematical acceptance is reused within its verified scope. See [release notes and validation limits](docs/releases/v2.1.0.md) and [stage status](docs/development/STATUS.md). [GitHub Releases](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases) determines publication status; release-preparation documentation or RELEASE_READY does not mean publication has occurred. [Historical preview notes](docs/r4/development-status.md) preserve the earlier scope.
 
 For authors organizing mathematical literature, maintaining traceable knowledge, and writing English surveys, lectures or research drafts.
 
@@ -21,11 +21,31 @@ Known results cannot be called original. Formal Paper research delivery requires
 
 Source access, scoped original-text reading, rehashable bytes and original-byte redistribution are separate recorded facts. Private originals stay outside public project inputs; retained originals require explicit public visibility and actual redistribution authorization before freeze. Online/private reading may support knowledge READY while bytes or redistribution remain UNVERIFIED/REJECTED. Knowledge READY does not confer Paper research eligibility; a visibly marked Paper Draft can be previewed. See [source evidence](skills/pure-math-survey/references/research-and-evidence.md).
 
-## Start prompts
+## Install and verify
 
-Download the complete `pure-math-survey-2.1.0.zip` and `pure-math-survey-2.1.0.zip.sha256` from the [Release page](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/tag/v2.1.0-r4-preview.1). Verify and copy the whole extracted `pure-math-survey/` into the host skills directory (for example Codex's `~/.codex/skills/`), retaining references, scripts and assets. The automatically generated Source code ZIP is not the installation ZIP.
+For a formal installation, select the non-prerelease `v2.1.0` in [Releases](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases) and download its complete `pure-math-survey-2.1.0.zip` and `pure-math-survey-2.1.0.zip.sha256`. If that formal version or either asset is absent, formal publication is incomplete. `v2.1.0-r4-preview.1` remains a historical prerelease and cannot substitute for the formal version. The automatically generated Source code ZIP is not the installation ZIP.
+
+With Python 3.10+, run these commands in a new directory containing both assets. Here `python` means that interpreter; substitute `python3` if that is its command name on your system:
+
+```sh
+python -c "import hashlib,pathlib; p=pathlib.Path('pure-math-survey-2.1.0.zip'); expected=pathlib.Path(str(p)+'.sha256').read_text().split()[0]; actual=hashlib.sha256(p.read_bytes()).hexdigest(); print('SHA-256 OK' if actual == expected else 'SHA-256 MISMATCH'); raise SystemExit(0 if actual == expected else 1)"
+python -m zipfile -t pure-math-survey-2.1.0.zip
+python -m zipfile -e pure-math-survey-2.1.0.zip pms-install
+python -B pms-install/pure-math-survey/scripts/survey.py --version --json
+```
+
+The first two commands should report `SHA-256 OK` and `Done testing`; extract and use the package only after successful checks. The last command should return JSON with `status: OK` and `artifacts` containing `version: 2.1.0`, `schema_version: 2.0.0`, `output_schema_version: 2.2.0`, and `editorial_policy: four-modes-2026-10-15-r5`. Then copy the whole extracted `pure-math-survey/` into the host skills directory (for example Codex's `~/.codex/skills/`), retaining references, scripts and assets. Preserve an existing installation before replacing it.
+
+Before formal assets are published, a checked-out candidate source tree can also build a local verification package. From its repository root, run the following, then use the same verification commands above. This verifies a candidate and does not establish publication:
+
+```sh
+python -B skills/pure-math-survey/scripts/package_release.py --output ../pms-install-check/pure-math-survey-2.1.0.zip
+cd ../pms-install-check
+```
 
 The host needs work-chat creation/read/wait/task-message tools and available `gpt-6-astra / ultra`. Scripts use Python 3.10+ standard library; PDFs need pdfLaTeX, BibTeX, the style's TeX packages and Poppler. Missing capabilities are reported; see [build requirements](skills/pure-math-survey/references/layout-and-build.md).
+
+## Start prompts
 
 In a new chat send the shared authorization together with one prompt below. Replace brackets with your topic, audience, sources and project. These describe **requests and expected delivery, not completed mathematical examples**.
 
@@ -116,4 +136,10 @@ Knowledge delivers overview/nodes/sources/evidence. Articles add plan, outline, 
 
 The PR02 candidate supplies pending `review template` checks for applicable canonical statements and dependencies, aggregate `review validate` diagnostics, and staged `review accept` validation of final candidate bytes with rollback on failure. Acceptance still requires a separate freeze and explicit snapshot adoption. See [review handoff](skills/pure-math-survey/references/proofs-and-boundaries.md#review-handoff-and-candidate-acceptance) and the [development contract](docs/development/CONTRACT.md).
 
-The development branch uses editorial policy `four-modes-2026-10-15-r5` with unchanged software/schema versions; only this current policy is supported; old/unknown output contracts are rejected without file modification. See [entrypoint](skills/pure-math-survey/SKILL.md) and [validation limits](skills/pure-math-survey/references/validation.md). AI review is not external peer review or originality certification. Code/instructions/templates use [MIT License](LICENSE); mathematical materials and third-party sources retain their rights.
+This version supports only editorial policy `four-modes-2026-10-15-r5`; old/unknown output contracts are rejected without file modification. See [entrypoint](skills/pure-math-survey/SKILL.md) and [validation limits](skills/pure-math-survey/references/validation.md). AI review is not external peer review or originality certification. Code/instructions/templates use [MIT License](LICENSE); mathematical materials and third-party sources retain their rights.
+
+## Verified scope
+
+The merged software baseline passed regression, isolated-installation and neutral TeX smoke checks on Linux Python 3.10, Linux Python 3.12 and Windows Python 3.12; see [actual main CI](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/actions/runs/38846120380). Release-preparation changes additionally require the same three checks and independent non-author review for their current HEAD.
+
+The completed real comparison-theorem task covers one frozen KB, four modes with 50 manuscript/draft pages, and independent mathematical and all-page review. Minimal, Thematic and Lecture were packaged under their respective delivery permissions; known-result Paper stays `DRAFT_UNVERIFIED`, with eligibility and formal delivery rejected as expected. This acceptance retains four process/bookkeeping exceptions and unverified scope; it is not an unqualified protocol PASS. It does not turn historical E01–E05 failures or pauses into an all-cases pass, or establish originality, formal original-research eligibility, external human academic peer review, real student learning outcomes or cross-platform mathematical reconstruction. Private sources and original acceptance artifacts are excluded from public software distribution.

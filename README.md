@@ -1,8 +1,8 @@
-# Pure Math Survey — 预览版
+# Pure Math Survey 2.1.0
 
 **简体中文** | [English](README.en.md)
 
-当前为 `v2.1.0-r4-preview.1` 预览版（软件 2.1.0），数学端到端验收仍在验证；[阶段状态](docs/development/STATUS.md)记录已核实的开发阶段；[历史预览记录](docs/r4/development-status.md)保留此前范围。
+软件版本 **2.1.0**，知识／快照 schema **2.0.0**，输出／审阅 schema **2.2.0**，当前写作政策 **four-modes-2026-10-15-r5**。四阶段开发及 CI 竞态修复已合并，已完成的比较定理数学验收按其限定范围复用。见[发行说明与验证边界](docs/releases/v2.1.0.md)和[阶段状态](docs/development/STATUS.md)。正式发布状态以 [GitHub Releases](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases) 为准；发行准备文档或 RELEASE_READY 不表示已经发布。[历史预览记录](docs/r4/development-status.md)保留此前范围。
 
 面向整理数学文献、维护可追溯知识库、撰写英文综述、讲义或研究草稿的作者。
 
@@ -21,11 +21,31 @@
 
 原文访问、实际阅读范围、可重哈希字节与原文字节再分发权限分别据实记录。私人原文应保留在公开项目之外；项目内原文须明确 public 与真实再分发授权才能 freeze。在线／私有阅读可支持知识 READY，同时字节或再分发仍为 UNVERIFIED／REJECTED。知识 READY 不授予 Paper 正式研究资格；显著标识的 Paper Draft 可预览。见[来源证据](skills/pure-math-survey/references/research-and-evidence.md)。
 
-## 启动提示
+## 安装与核验
 
-先在 [Release 页面](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases/tag/v2.1.0-r4-preview.1)下载完整 `pure-math-survey-2.1.0.zip` 及 `pure-math-survey-2.1.0.zip.sha256`，核对后把解压出的整个 `pure-math-survey/` 放入宿主 skill 目录（如 Codex 的 `~/.codex/skills/`），保留 references、scripts、assets。自动生成的 Source code ZIP 不是安装 ZIP。
+正式安装时，在 [Releases](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases) 中选择非预发布的 `v2.1.0`，下载其完整 `pure-math-survey-2.1.0.zip` 和 `pure-math-survey-2.1.0.zip.sha256`。若没有该正式版本或两个附件，正式发行尚未完成；`v2.1.0-r4-preview.1` 保留为历史预发布，不能替代正式版本。自动生成的 Source code ZIP 不是安装 ZIP。
+
+使用 Python 3.10+，在存放这两个附件的新目录中执行。下文 `python` 指该解释器；若系统命令名为 `python3`，相应替换：
+
+```sh
+python -c "import hashlib,pathlib; p=pathlib.Path('pure-math-survey-2.1.0.zip'); expected=pathlib.Path(str(p)+'.sha256').read_text().split()[0]; actual=hashlib.sha256(p.read_bytes()).hexdigest(); print('SHA-256 OK' if actual == expected else 'SHA-256 MISMATCH'); raise SystemExit(0 if actual == expected else 1)"
+python -m zipfile -t pure-math-survey-2.1.0.zip
+python -m zipfile -e pure-math-survey-2.1.0.zip pms-install
+python -B pms-install/pure-math-survey/scripts/survey.py --version --json
+```
+
+前两步应报告 `SHA-256 OK` 和 `Done testing`；仅在校验成功后解压、使用。最后一步的 JSON 应为 `status: OK`，其中 `artifacts` 包含 `version: 2.1.0`、`schema_version: 2.0.0`、`output_schema_version: 2.2.0`、`editorial_policy: four-modes-2026-10-15-r5`。再把解压出的整个 `pure-math-survey/` 放入宿主 skill 目录（如 Codex 的 `~/.codex/skills/`），保留 references、scripts、assets；先保留已有安装，避免直接覆盖。
+
+正式附件尚未发布时，也可从检出的候选源码根目录构建本地检查包，再执行上述相同核验步骤。这是候选验证，不表示正式发布：
+
+```sh
+python -B skills/pure-math-survey/scripts/package_release.py --output ../pms-install-check/pure-math-survey-2.1.0.zip
+cd ../pms-install-check
+```
 
 宿主需支持创建、读取、等待和发送任务给工作聊天，并提供 `gpt-6-astra / ultra`；脚本使用 Python 3.10+ 标准库，PDF 另需 pdfLaTeX、BibTeX、样式所需 TeX 包和 Poppler。缺少能力时报告具体阻碍，见[构建要求](skills/pure-math-survey/references/layout-and-build.md)。
+
+## 启动提示
 
 新聊天中，把共用授权和下面一条提示一起发送，将方括号换成自己的主题、读者、来源和项目路径。以下是**请求与预期交付说明，不是本次已完成的数学样稿**。
 
@@ -111,4 +131,10 @@ flowchart TD
 
 PR02 候选的 `review template` 为实际适用 canonical 与依赖生成 pending 核查项；`review validate` 批量列出独立缺项；`review accept` 在项目内暂存并核对候选最终字节，失败时回滚。接收后仍须 freeze 和显式采用快照。实际接口见[审阅与接收](skills/pure-math-survey/references/proofs-and-boundaries.md#review-handoff-and-candidate-acceptance)，阶段边界见[开发合同](docs/development/CONTRACT.md)。
 
-当前开发分支采用 `four-modes-2026-10-15-r5` 写作政策（软件与 schema 不变），仅支持该当前政策，旧／未知输出契约明确拒绝且原文件不改。更多说明见[完整入口](skills/pure-math-survey/SKILL.md)和[验证边界](skills/pure-math-survey/references/validation.md)。AI 审阅不等于外部同行评审或原创性认证。代码、指令和模板遵循 [MIT License](LICENSE)；数学材料及第三方来源保留各自权利。
+当前版本仅支持 `four-modes-2026-10-15-r5` 写作政策，旧／未知输出契约明确拒绝且原文件不改。更多说明见[完整入口](skills/pure-math-survey/SKILL.md)和[验证边界](skills/pure-math-survey/references/validation.md)。AI 审阅不等于外部同行评审或原创性认证。代码、指令和模板遵循 [MIT License](LICENSE)；数学材料及第三方来源保留各自权利。
+
+## 已验证范围
+
+合并后的软件基线已通过 Linux Python 3.10、Linux Python 3.12、Windows Python 3.12 的回归、隔离安装与中性 TeX smoke；见[实际 main CI](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/actions/runs/38846120380)。发行准备改动还须通过其当前 HEAD 的同三项 CI 和独立非作者审查。
+
+已完成的真实比较定理任务涵盖一个冻结 KB、四种模式共 50 页的正文／草稿及独立数学与逐页审阅。Minimal、Thematic、Lecture 已按各自许可完成文章打包；已知结果 Paper 保持 `DRAFT_UNVERIFIED`，资格与正式交付被预期拒绝。该验收保留四项流程／记账例外和未验证范围，不是无例外的协议 PASS。它不把历史 E01–E05 的失败或暂停改为全部通过，也不证明原创性、正式原创研究资格、外部人工学术同行评审、真实学生学习效果或跨平台数学重建。私人来源和验收原件不随软件公开分发。
