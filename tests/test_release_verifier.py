@@ -2,6 +2,7 @@
 from pathlib import Path
 import importlib.util
 import copy
+import errno
 import json
 import hashlib
 import base64
@@ -402,6 +403,64 @@ class R4VerifierContracts(unittest.TestCase):
                 verifier.verify_outputs([{'path':project,'outputs':['paper']}],base/'work',lambda *a,**k:{},
                     Path(sys.executable),Path('unused'),{},900,False)
 
+    def _assert_posix_process_terminated(self,pid):
+        try:
+            state=Path(f'/proc/{pid}/stat').read_text()
+        except (FileNotFoundError,ProcessLookupError):
+            # procfs can disappear during open/read; confirm the PID is gone too.
+            with self.assertRaises(ProcessLookupError):os.kill(pid,0)
+        else:
+            self.assertEqual(state.split()[2],'Z','Descendant is still running after timeout cleanup')
+
+    def test_disappearing_procfs_requires_missing_pid(self):
+        for error in (FileNotFoundError(errno.ENOENT,'process disappeared'),
+                      ProcessLookupError(errno.ESRCH,'process disappeared')):
+            with self.subTest(error=type(error).__name__), \
+                    patch.object(Path,'read_text',autospec=True,side_effect=error) as read, \
+                    patch.object(os,'kill',side_effect=ProcessLookupError(errno.ESRCH,'no such process')) as kill:
+                self._assert_posix_process_terminated(12345)
+                read.assert_called_once_with(Path('/proc/12345/stat'))
+                kill.assert_called_once_with(12345,0)
+
+    def test_disappearing_procfs_does_not_accept_live_pid(self):
+        for error in (FileNotFoundError(errno.ENOENT,'process disappeared'),
+                      ProcessLookupError(errno.ESRCH,'process disappeared')):
+            with self.subTest(error=type(error).__name__), \
+                    patch.object(Path,'read_text',side_effect=error), \
+                    patch.object(os,'kill',return_value=None) as kill:
+                with self.assertRaises(AssertionError):self._assert_posix_process_terminated(12345)
+                kill.assert_called_once_with(12345,0)
+
+    def test_procfs_requires_zombie_state(self):
+        for state in ('Z','R','S','D','T','I'):
+            with self.subTest(state=state), \
+                    patch.object(Path,'read_text',return_value=f'12345 (python) {state} 1'), \
+                    patch.object(os,'kill') as kill:
+                if state=='Z':self._assert_posix_process_terminated(12345)
+                else:
+                    with self.assertRaises(AssertionError):self._assert_posix_process_terminated(12345)
+                kill.assert_not_called()
+
+    def test_procfs_unexpected_read_errors_propagate(self):
+        for error in (PermissionError(errno.EACCES,'permission denied'),
+                      OSError(errno.EIO,'unexpected read failure')):
+            with self.subTest(error=type(error).__name__), \
+                    patch.object(Path,'read_text',side_effect=error), \
+                    patch.object(os,'kill') as kill:
+                with self.assertRaises(type(error)) as caught:self._assert_posix_process_terminated(12345)
+                self.assertIs(caught.exception,error)
+                kill.assert_not_called()
+
+    def test_procfs_unexpected_pid_probe_errors_propagate(self):
+        for error in (PermissionError(errno.EPERM,'permission denied'),
+                      OSError(errno.EIO,'unexpected probe failure')):
+            with self.subTest(error=type(error).__name__), \
+                    patch.object(Path,'read_text',side_effect=FileNotFoundError(errno.ENOENT,'process disappeared')), \
+                    patch.object(os,'kill',side_effect=error) as kill:
+                with self.assertRaises(type(error)) as caught:self._assert_posix_process_terminated(12345)
+                self.assertIs(caught.exception,error)
+                kill.assert_called_once_with(12345,0)
+
     def test_timeout_terminates_descendants_not_only_the_python_parent(self):
         with tempfile.TemporaryDirectory() as td:
             base=Path(td);pid_file=base/'child.pid'
@@ -430,10 +489,7 @@ class R4VerifierContracts(unittest.TestCase):
                     finally:kernel.CloseHandle(handle)
                 else:self.assertEqual(ctypes.get_last_error(),87,'Unable to confirm child process termination')
             else:
-                state=Path(f'/proc/{pid}/stat')
-                if state.exists():self.assertEqual(state.read_text().split()[2],'Z')
-                else:
-                    with self.assertRaises(ProcessLookupError):os.kill(pid,0)
+                self._assert_posix_process_terminated(pid)
             self.assertEqual(report['checks'][0]['termination']['returncode'],0)
             self.assertIn('child spawned',report['checks'][0]['stdout'])
 
