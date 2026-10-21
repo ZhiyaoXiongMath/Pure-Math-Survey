@@ -11,8 +11,8 @@ import tempfile
 from typing import Any, Iterator
 
 # VERSION is the stable on-disk contract, not the executable release.
-VERSION = '2.0.0'
-SOFTWARE_VERSION = '2.4.1-dev.2'
+VERSION = '3.0.0'
+SOFTWARE_VERSION = '2.4.1-dev.3'
 RUNTIME_CONTRACT = 'minimal-lean-2.4.1'
 SKILL_ROOT = Path(__file__).resolve().parents[2]
 FONT_SUFFIXES = {'.ttf', '.otf', '.ttc', '.woff', '.woff2', '.pfb', '.pfa'}

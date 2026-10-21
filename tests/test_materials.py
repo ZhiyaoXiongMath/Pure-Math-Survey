@@ -14,10 +14,6 @@ class AuthoringMaterials(unittest.TestCase):
         self.base=Path(self.tmp.name)
         self.root=fixture(self.base/'project')
         self.plan_path=plan(self.root)
-        value=read_json(self.plan_path)
-        value['audience']='Synthetic reader can substitute a real number and multiply zero.'
-        value['reader_goals']=['Use x=0 to reconstruct x times x equals zero; no mathematical certification.']
-        write_json(self.plan_path,value)
         authored_toy(self.root)
         self.out=self.plan_path.parent
         (self.out/'outline.md').write_text('Synthetic design: state x=0, identify real multiplication, then substitute zero in x times x. Software fixture only.\n',encoding='utf-8')

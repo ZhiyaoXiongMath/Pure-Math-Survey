@@ -2,16 +2,16 @@
 
 **简体中文** | [English](README.md)
 
-当前开发候选为 **2.4.1-dev.2**，政策 `minimal-transition-pr02`，运行合同 `minimal-lean-2.4.1`。本 PR02 候选支持**在当前会话中建立知识库及撰写 Minimal**，不表示 2.4.1 已正式发布。知识／快照 schema 暂为 2.0.0，输出 schema 暂为 2.2.0；轻量 schema 和 rules.v22 最终版式属于后续阶段。
+当前开发候选为 **2.4.1-dev.3**，政策 `minimal-transition-pr03`，运行合同 `minimal-lean-2.4.1`。本 PR03 候选支持**在当前会话中建立知识库及撰写 Minimal**，不表示 2.4.1 已正式发布。知识和输出 schema 均为 3.0.0；轻量知识库保存同源单元、连接和短索引，rules.v22 最终版式仍属 PR04 工作。
 
-以固定版本的数学来源建立 canonical 知识，英文 Minimal 直接复用同一份正式陈述。文章采用 Main Results、Key Mathematical Ingredients、Connecting the Ingredients 三节，保留完整条件与结论，正确命名、定义并使用核心概念，准确注明来源，以简短文字解释关键连接。运行不指定模型、不强制子聊天，不要求审核角色、审核记录或成对快慢长稿。
+以固定版本的数学来源建立 canonical 知识，英文 Minimal 直接复用同一份正式陈述。文章采用 Main Results、Key Mathematical Ingredients、Connecting the Ingredients 三节，保留完整条件与结论，正确命名、定义并使用核心概念，准确注明来源，以简短文字解释关键连接。运行不指定模型、不强制子聊天，不要求审核角色、审核记录或成对快慢长稿。只建库交付来源、约定、知识单元、连接与索引；文章计划直接使用当前 KB，快照可选。重复 prepare 更新派生输入并保留已写稿件、提纲及样式；单元可连同依赖定义、约定和来源定位独立导出。
 
 ```text
 在当前会话使用 $pure-math-survey，阅读[来源文件或 URL 及版本]，研究[范围]，
 面向[读者]建立 canonical 知识库，并用同一份正式陈述写一篇英文 Minimal。
 ```
 
-只建库时说明“只交付知识库，不生成稿件或 PDF”。TeX-only 时说明只交付可编辑 TeX，PDF 和实际页数未测量。Thematic、Lecture、Paper 以及非 integrated view 明确不支持。缺少新运行合同的旧项目保持不变，不提供自动迁移。
+只建库时说明“只交付知识库，不生成稿件或 PDF”。TeX-only 时说明只交付可编辑 TeX，PDF 和实际页数未测量。Thematic、Lecture、Paper 以及非 integrated view 明确不支持。旧 schema 2.x 项目保持不变；仅有相同运行合同不代表符合 schema 3.0.0，不提供自动迁移。
 
 ## 候选安装
 

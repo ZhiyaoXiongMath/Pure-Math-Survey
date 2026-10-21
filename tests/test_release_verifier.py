@@ -66,7 +66,7 @@ class ReleaseVerifierEvidence(unittest.TestCase):
 class MinimalVerifierContracts(unittest.TestCase):
     """Candidate identity, test evidence and process containment checks."""
     def valid_version(self):
-        return {'version':'2.4.1-dev.2','schema_version':'2.0.0','output_schema_version':'2.2.0',
+        return {'version':'2.4.1-dev.3','schema_version':'3.0.0','output_schema_version':'3.0.0',
                 'runtime_contract':verifier.EXPECTED_RUNTIME,
                 'editorial_policy':verifier.EXPECTED_POLICY,
                 'supported_output_contracts':[{'schema_version':s,'editorial_policy':p}
@@ -77,12 +77,12 @@ class MinimalVerifierContracts(unittest.TestCase):
         verifier.assert_installed_contract(actual)
         for key,value in (('editorial_policy','four-modes-2026-10-12-rc2'),
                           ('runtime_contract','legacy'),
-                          ('version','2.2.0'),('schema_version','2.1.0'),
+                          ('version','3.0.0'),('schema_version','2.1.0'),
                           ('supported_output_contracts',[]),
                           ('supported_output_contracts',actual['supported_output_contracts']+[
-                              {'schema_version':'2.0.0','editorial_policy':'legacy-2.0.0'}]),
+                              {'schema_version':'3.0.0','editorial_policy':'legacy-2.0.0'}]),
                           ('supported_output_contracts',[
-                              {'schema_version':'2.2.0','editorial_policy':'four-modes-2026-10-12-r3'}])):
+                              {'schema_version':'3.0.0','editorial_policy':'four-modes-2026-10-12-r3'}])):
             wrong=copy.deepcopy(actual);wrong[key]=value
             with self.subTest(key=key),self.assertRaises(AssertionError):verifier.assert_installed_contract(wrong)
 

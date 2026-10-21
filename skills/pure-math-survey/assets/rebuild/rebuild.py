@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Rebuild a byte-verified Survey manuscript package without a skill installation.
 
-Does not copy historical approval to the new PDF. TeX inputs must be trusted.
+Build evidence only; no mathematical certification. TeX inputs must be trusted.
 """
 from __future__ import annotations
 import argparse
@@ -44,6 +44,8 @@ def main()->int:
     root=Path(__file__).resolve().parent;dest=args.output.resolve()
     if dest.exists() or root==dest or root in dest.parents:raise ValueError('Use a new destination outside the package')
     m=json.loads((root/'package-manifest.json').read_text(encoding='utf-8'))
+    if m.get('schema_version')!='3.0.0' or not isinstance(m.get('input_hash'),str) or not re.fullmatch('[a-f0-9]{64}',m['input_hash']):
+        raise ValueError('Unsupported package identity; expected schema 3.0.0 and prepared input hash')
     expected={x['path'] for x in m['files']}|{'package-manifest.json'}
     actual={p.relative_to(root).as_posix() for p in root.rglob('*') if p.is_file() and '__pycache__' not in p.parts}
     if actual!=expected:raise ValueError('Package has missing or extra members')
@@ -56,13 +58,13 @@ def main()->int:
     from build_checks import log_issues,log_warnings
     dest.mkdir(parents=True);build=dest/'build';build.mkdir()
     for folder in ('manuscript','generated'):shutil.copytree(root/folder,dest/folder)
-    report={'status':'FAILED','snapshot_id':m['snapshot_id'],'commands':[],'layout':layout,'review_status':'NOT_REVIEWED_NEW_BUILD','source_package_verified':True}
+    report={'status':'FAILED','input_hash':m['input_hash'],'commands':[],'layout':layout,'meaning':'Actual build only; mathematics is not certified','source_package_verified':True}
     try:
         engine=tool('pdflatex');bib=tool('bibtex','bibtex.original','bibtex8');previous=None;bibbed=False;stable=False
         for i in range(1,7):
             r=command([engine,'-no-shell-escape','-interaction=nonstopmode','-halt-on-error','-recorder','-output-directory=../build',*(['-jobname=main'] if layout else []),tex_argument],dest/'manuscript');report['commands'].append(r)
             if r['returncode']:raise RuntimeError('TeX failed')
-            aux=(build/'main.aux').read_text(errors='replace')
+            aux=(build/'main.aux').read_text(encoding='utf-8',errors='replace')
             if '\\bibdata' in aux and '\\citation' in aux and not bibbed:
                 r=command([bib,'main'],build);report['commands'].append(r)
                 if r['returncode']:raise RuntimeError('BibTeX failed')
@@ -70,7 +72,7 @@ def main()->int:
             digest=sha(b''.join((build/('main'+e)).read_bytes() if (build/('main'+e)).exists() else b'' for e in ('.aux','.toc','.out','.bbl')))
             if previous==digest and i>=2:stable=True;break
             previous=digest
-        log=(build/'main.log').read_text(errors='replace');issues=log_issues(log)
+        log=(build/'main.log').read_text(encoding='utf-8',errors='replace');issues=log_issues(log)
         if layout:
             effective=re.search(r'PMS-EMERGENCY-STRETCH-PT:\s*([0-9.]+)pt',log)
             if effective is None:raise RuntimeError('Explicit emergency stretch was not observed in the TeX log')

@@ -47,6 +47,8 @@ def build_output(root:Path,output_id:str,emergency_stretch_em:float|None=None)->
     load_project(root)
     tex_argument,layout=emergency_stretch_argument(emergency_stretch_em)
     out=safe(root,'outputs/'+output_id);plan=load_plan(out/'plan.json');verify_generated(root,plan)
+    from .knowledge import inventory,write_run
+    knowledge=inventory(root)
     structure=validate_structure(root,output_id)
     require(not structure['errors'],'BUILD_FAILED','Structural input errors: '+str(structure['errors']),'manuscript/main.tex')
     sources=file_inventory(out,sorted(output_inputs(out)))
@@ -54,7 +56,7 @@ def build_output(root:Path,output_id:str,emergency_stretch_em:float|None=None)->
     with writer(root):
         archive_current(out, 'previous-build')
         stage=Path(tempfile.mkdtemp(prefix='.tex-build-',dir=out));compiled=stage/'compiled';compiled.mkdir()
-        report={'built_at':now(),'output_id':output_id,'snapshot_id':plan['snapshot_id'],'source_inputs':sources,
+        report={'built_at':now(),'output_id':output_id,'input_hash':read_json(out/'generated/manifest.json')['input_hash'],'source_inputs':sources,
                 'commands':[],'tools':{},'layout':layout,'status':'FAILED','stability_reached':False,'warnings':[],
                 'acceptance':'Build does not perform mathematical, exposition or page review.'}
         try:
@@ -70,7 +72,7 @@ def build_output(root:Path,output_id:str,emergency_stretch_em:float|None=None)->
                 proc=run_command(cmd,stage/'manuscript',env=env);report['commands'].append(proc)
                 atomic_bytes(compiled/f'pass-{turn}.txt',(proc['stdout']+proc['stderr']).encode())
                 require(proc['returncode']==0,'BUILD_FAILED',f'TeX pass {turn} failed; actual logs retained','build')
-                aux=(compiled/'main.aux').read_text(errors='replace')
+                aux=(compiled/'main.aux').read_text(encoding='utf-8',errors='replace')
                 if '\\bibdata' in aux and '\\citation' in aux and not bib_done:
                     p=run_command([bib,'main'],compiled,env=env);report['commands'].append(p)
                     require(p['returncode']==0,'BUILD_FAILED','BibTeX failed; inspect build report','build')
@@ -79,7 +81,7 @@ def build_output(root:Path,output_id:str,emergency_stretch_em:float|None=None)->
                 if turn>=2 and digest==previous:report['stability_reached']=True;break
                 previous=digest
             from build_checks import log_issues,log_warnings
-            log=(compiled/'main.log').read_text(errors='replace');issues=log_issues(log)
+            log=(compiled/'main.log').read_text(encoding='utf-8',errors='replace');issues=log_issues(log)
             if layout:
                 effective=re.search(r'PMS-EMERGENCY-STRETCH-PT:\s*([0-9.]+)pt',log)
                 require(effective is not None,'BUILD_FAILED','Explicit emergency stretch was not observed in the TeX log','build/main.log')
@@ -102,6 +104,7 @@ def build_output(root:Path,output_id:str,emergency_stretch_em:float|None=None)->
             dest=out/'build'
             if dest.exists():shutil.rmtree(dest)
             compiled.rename(dest);shutil.rmtree(stage,ignore_errors=True)
+            write_run(root,knowledge,[f'outputs/{output_id}'],'built' if report['status']=='BUILT' else 'failed',report.get('pages'))
     return result('output.build','BUILT',{'pdf':f'outputs/{output_id}/build/main.pdf','report':f'outputs/{output_id}/build/build-report.json','pages':report['pages'],'tools':report['tools'],'layout':report['layout']})
 
 def check_build(out:Path)->tuple[dict,list[dict]]:

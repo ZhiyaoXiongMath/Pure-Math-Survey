@@ -1,10 +1,10 @@
-"""Minimal-only transition policy; schema 3 and v22 layout follow in later stages."""
+"""Minimal-only transition policy; schema 3 shared knowledge; v22 layout follows in PR04."""
 from __future__ import annotations
 import re
 from .common import RUNTIME_CONTRACT, diagnostic, require
 
-OUTPUT_SCHEMA = '2.2.0'
-POLICY = 'minimal-transition-pr02'
+OUTPUT_SCHEMA = '3.0.0'
+POLICY = 'minimal-transition-pr03'
 POLICIES = {OUTPUT_SCHEMA: (POLICY,)}
 SUPPORTED_CONTRACTS = {(OUTPUT_SCHEMA, POLICY)}
 PROFILES = {'minimal'}
@@ -33,7 +33,7 @@ def validate_plan_contract(plan: dict) -> None:
     require(plan.get('schema_version') == OUTPUT_SCHEMA, 'SCHEMA_UNSUPPORTED', 'Unsupported output schema', 'plan.json')
     require(supported_contract(plan.get('schema_version'), plan.get('editorial_policy')), 'EDITORIAL_POLICY_UNSUPPORTED',
             'Unsupported output policy; no automatic migration', 'plan.json')
-    retired = {'draft', 'proof_obligations', 'contributions', 'comparison_group'} & plan.keys()
+    retired = {'snapshot_id','question_ids','prerequisites','omissions','reader_goals','draft', 'proof_obligations', 'contributions', 'comparison_group'} & plan.keys()
     require(not retired, 'CONTRACT_INVALID', 'Retired plan fields: ' + ', '.join(sorted(retired)), 'plan.json')
     for selection in plan.get('selections', []):
         require(isinstance(selection, dict) and 'proof_treatment' not in selection,
@@ -73,7 +73,7 @@ def structure_errors(inv, plan: dict, nodes: dict, expanded: str) -> tuple[list[
         add('PROFILE_PRESECTION_TEXT_FORBIDDEN', 'Begin Main Results directly after the title')
     from .tex import visible_source
     for selection in plan['selections']:
-        if selection['role'] != 'principal_answer': continue
+        if selection['role'] != 'principal': continue
         key=selection['node_id']; statement=visible_source(nodes[key].statement.decode('utf-8')).strip()
         found=[r for r in inv['results'] if statement and statement in r['text']]
         if not found:
@@ -84,7 +84,7 @@ def structure_errors(inv, plan: dict, nodes: dict, expanded: str) -> tuple[list[
 
 
 def outline(plan: dict, order: list[str], nodes: dict | None = None) -> str:
-    return '\n'.join(['# Minimal writing notes', '', 'Snapshot: '+plan['snapshot_id'],
+    return '\n'.join(['# Minimal writing notes', '', 'Live canonical knowledge; preparation records automatic input hashes.',
         'Policy: '+POLICY+' (transition template; final v22 layout is not implemented yet).',
         '', 'Use canonical statements from generated/. Explain only selected modules and their actual combinations.',
         'Keep conditions and source version/locator adjacent to each borrowed claim. Record limits honestly.',

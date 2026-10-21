@@ -48,6 +48,14 @@ class MinimalRuntime(unittest.TestCase):
             self.assertTrue(z.read('mini/build/main.pdf').startswith(b'%PDF-'))
             self.assertEqual(z.read('mini/generated/statements/N-main.tex'),load_node(self.root/'knowledge/nodes/N-main.md').statement)
             self.assertFalse(any(n.endswith('/knowledge/material.txt') for n in names))
+            z.extractall(self.base/'extracted')
+        packaged=self.base/'extracted/mini'
+        rebuilt=self.base/'rebuilt'
+        proc=subprocess.run([sys.executable,'-I',str(packaged/'rebuild.py'),'--output',str(rebuilt)],cwd=packaged,capture_output=True,text=True,encoding='utf-8')
+        self.assertEqual(proc.returncode,0,proc.stdout+proc.stderr)
+        report=read_json(rebuilt/'rebuild-report.json')
+        self.assertEqual(report['status'],'BUILT');self.assertEqual(report['input_hash'],read_json(path.parent/'generated/manifest.json')['input_hash'])
+        self.assertTrue((rebuilt/'build/main.pdf').read_bytes().startswith(b'%PDF-'))
         # The build remains input-bound; no approval credential can repair stale bytes.
         main=path.parent/'manuscript/main.tex';main.write_bytes(main.read_bytes()+b'\n% Changed after build\n')
         self.assertIn('BUILD_STALE',{e['code'] for e in assess_release(self.root,'mini')['errors']})
@@ -56,11 +64,11 @@ class MinimalRuntime(unittest.TestCase):
     def test_all_unsupported_modes_and_views_preserve_bytes(self):
         sid=freeze_snapshot(self.root)['artifacts']['snapshot_id'];before=tree(self.root)
         for profile in ('thematic','lecture','paper'):
-            self.code('PROFILE_UNSUPPORTED',create_plan,self.root,'bad',sid,profile=profile)
-            proc,report=self.cli('output','plan',self.root,'--output','bad','--snapshot',sid,'--profile',profile)
+            self.code('PROFILE_UNSUPPORTED',create_plan,self.root,'bad',profile=profile)
+            proc,report=self.cli('output','plan',self.root,'--output','bad','--profile',profile)
             self.assertEqual(proc.returncode,2);self.assertEqual(report['errors'][0]['code'],'PROFILE_UNSUPPORTED')
         for view in ('foundations','results','methods','boundaries'):
-            self.code('VIEW_UNSUPPORTED',create_plan,self.root,'bad',sid,view=view)
+            self.code('VIEW_UNSUPPORTED',create_plan,self.root,'bad',view=view)
         self.assertEqual(tree(self.root),before)
 
     def test_old_commands_and_draft_option_are_explicitly_retired(self):
@@ -75,7 +83,7 @@ class MinimalRuntime(unittest.TestCase):
         path=plan(self.root);prepare_output(self.root,path);obj=read_json(self.root/'project.json');obj.pop('runtime_contract');write_json(self.root/'project.json',obj)
         before=tree(self.root)
         actions=[lambda:freeze_snapshot(self.root),lambda:prepare_output(self.root,path),lambda:build_output(self.root,'mini'),
-                 lambda:package_output(self.root,'mini',self.base/'never.zip'),lambda:create_plan(self.root,'other',load_plan(path)['snapshot_id'])]
+                 lambda:package_output(self.root,'mini',self.base/'never.zip'),lambda:create_plan(self.root,'other')]
         for action in actions:
             with patch('os.open',side_effect=AssertionError('A legacy project attempted a write')):
                 self.code('LEGACY_PROJECT_UNSUPPORTED',action)
@@ -92,7 +100,7 @@ class MinimalRuntime(unittest.TestCase):
 
     def test_invalid_plan_and_tex_paths_preserve_original_bytes(self):
         sid=freeze_snapshot(self.root)['artifacts']['snapshot_id'];before=tree(self.root)
-        self.code('CONTRACT_INVALID',create_plan,self.root,'../outside',sid)
+        self.code('CONTRACT_INVALID',create_plan,self.root,'../outside')
         self.assertEqual(tree(self.root),before)
         path=plan(self.root);authored_toy(self.root);main=path.parent/'manuscript/main.tex'
         main.write_text(main.read_text(encoding='utf-8').replace(r'\end{document}',r'\input{../../scope.md}\end{document}'),encoding='utf-8')
@@ -117,13 +125,14 @@ class MinimalRuntime(unittest.TestCase):
                 if isinstance(node,ast.ImportFrom):
                     self.assertNotIn((node.module or '').split('.')[-1],{'reviews','readiness','dispatch_ledger'})
         proc,r=self.cli('--version');self.assertEqual(proc.returncode,0)
-        self.assertEqual(r['artifacts']['version'],'2.4.1-dev.2')
+        self.assertEqual(r['artifacts']['version'],'2.4.1-dev.3')
         self.assertEqual(r['artifacts']['runtime_contract'],RUNTIME_CONTRACT)
         self.assertEqual(r['artifacts']['supported_profiles'],['minimal'])
 
     def test_source_original_permission_and_alias_protections_remain(self):
         path=self.root/'knowledge/sources/S-test.json';obj=read_json(path);obj['access']['material_visibility']='private';write_json(path,obj)
         self.code('SOURCE_PRIVATE_ORIGINAL',freeze_snapshot,self.root)
+        (self.root/'evidence/source-checks/test.md').write_bytes((self.root/'knowledge/material.txt').read_bytes())
         obj['access']['local_path']=None;write_json(path,obj)
         self.code('SOURCE_ORIGINAL_ALIAS_UNSAFE',freeze_snapshot,self.root)
 
@@ -141,32 +150,14 @@ class MinimalRuntime(unittest.TestCase):
         self.assertEqual(tree(self.root),before)
         self.assertFalse((self.root/'outputs').exists())
 
-    def test_preexisting_bad_source_snapshot_rejects_output_operations_without_mutation(self):
-        from survey_core.common import canonical,sha
-        from survey_core.snapshots import payload,verify_snapshot
+    def test_changed_original_rejects_all_output_operations_without_mutation(self):
         path=plan(self.root);authored_toy(self.root)
-        # Reproduce a pre-fix snapshot: its manifest is byte-consistent, but the
-        # source record still declares the older original's hash.
-        old_manifest,frozen=load_snapshot(self.root,load_plan(path)['snapshot_id'])
-        contents={row['path']:safe(frozen,row['path'],True).read_bytes() for row in old_manifest['files']}
-        contents['knowledge/material.txt']+=b'Changed original bytes.\n'
-        contents['evidence/source-checks/test.md']=contents['knowledge/material.txt']
-        records=[{'path':name,'sha256':sha(data),'bytes':len(data)} for name,data in sorted(contents.items())]
-        value=payload(old_manifest['project_id'],records);sid='KB-'+sha(canonical(value))
-        folder=self.root/'snapshots'/sid
-        for name,data in contents.items():atomic_bytes(folder/'files'/name,data)
-        write_json(folder/'manifest.json',{**value,'snapshot_id':sid})
-        obj=load_plan(path);obj['snapshot_id']=sid;write_json(path,obj)
+        raw=self.root/'knowledge/material.txt';raw.write_bytes(raw.read_bytes()+b'changed')
         before=tree(self.root)
-        operations=[lambda:verify_snapshot(self.root,sid),
-                    lambda:create_plan(self.root,'other',sid),
-                    lambda:prepare_output(self.root,path),
-                    lambda:build_output(self.root,'mini'),
-                    lambda:package_output(self.root,'mini',self.base/'must-not-exist.zip')]
-        for operation in operations:
-            self.code('SOURCE_MATERIAL_MISMATCH',operation)
-            self.assertEqual(tree(self.root),before)
-        self.assertFalse((self.base/'must-not-exist.zip').exists())
+        for operation in [lambda:create_plan(self.root,'other'),lambda:prepare_output(self.root,path),
+                          lambda:build_output(self.root,'mini'),lambda:package_output(self.root,'mini',self.base/'never.zip')]:
+            self.code('SOURCE_MATERIAL_MISMATCH',operation);self.assertEqual(tree(self.root),before)
+        self.assertFalse((self.base/'never.zip').exists())
 
     def test_actual_original_aliases_are_omitted_without_review_or_declared_hash(self):
         from survey_core.common import sha
@@ -196,29 +187,23 @@ class MinimalRuntime(unittest.TestCase):
                     self.code('SOURCE_ORIGINAL_NOT_PACKAGED',package_output,root,'mini',self.base/'alias.zip')
                     self.assertEqual(tree(root),before);self.assertFalse((self.base/'alias.zip').exists())
 
-    def test_prepare_preserves_authoring_and_changed_canonical_uses_new_snapshot(self):
+    def test_prepare_preserves_authoring_and_changed_canonical_updates_live(self):
         path=plan(self.root);authored_toy(self.root);main=path.parent/'manuscript/main.tex';old_main=main.read_bytes()
+        old_statement=(path.parent/'generated/statements/N-main.tex').read_bytes()
         outline=path.parent/'outline.md';outline.write_bytes(b'Author connection notes.\n')
-        old_sid=load_plan(path)['snapshot_id'];node=self.root/'knowledge/nodes/N-main.md';node.write_bytes(node.read_bytes().replace(b'x^2=0',b'x x=0'))
-        new_sid=freeze_snapshot(self.root)['artifacts']['snapshot_id'];obj=load_plan(path);obj['snapshot_id']=new_sid;write_json(path,obj)
+        node=self.root/'knowledge/nodes/N-main.md';node.write_bytes(node.read_bytes().replace(b'x^2=0',b'x x=0'))
         prepare_output(self.root,path)
         self.assertEqual(main.read_bytes(),old_main);self.assertEqual(outline.read_bytes(),b'Author connection notes.\n')
         self.assertIn(b'x x=0',(path.parent/'generated/statements/N-main.tex').read_bytes())
-        self.assertIn(b'x^2=0',(self.root/'snapshots'/old_sid/'files/knowledge/nodes/N-main.md').read_bytes())
+        old=list((path.parent/'history/preparation').glob('H-*/files/generated/statements/N-main.tex'))
+        self.assertEqual(len(old),1);self.assertEqual(old[0].read_bytes(),old_statement)
+        self.assertFalse((self.root/'snapshots').exists())
 
-    def test_selection_closure_retains_main_module_without_inventing_dependency_explanation(self):
-        from survey_core.models import node_bytes
-        putnode(self.root,'N-method','mechanism',links=[('N-main','explains')])
-        putnode(self.root,'N-extra','mechanism')
-        main=self.root/'knowledge/nodes/N-main.md';node=load_node(main)
-        node.meta['links'].append({'target':'N-method','relation':'explained_by'})
-        main.write_bytes(node_bytes(node.meta,node.body))
-        definition=self.root/'knowledge/nodes/N-def.md';node=load_node(definition)
-        node.meta['links'].append({'target':'N-extra','relation':'explained_by'})
-        definition.write_bytes(node_bytes(node.meta,node.body))
+    def test_definition_closure_is_automatic_but_unrelated_method_is_not_consumed(self):
+        putnode(self.root,'N-method','method')
         path=plan(self.root);prepare_output(self.root,path)
         consumed=verify_generated(self.root,load_plan(path))['consumed_nodes']
-        self.assertIn('N-method',consumed);self.assertNotIn('N-extra',consumed)
+        self.assertEqual(set(consumed),{'N-main','N-def'})
 
     def test_interrupted_atomic_write_keeps_previous_bytes(self):
         path=self.root/'scope.md';before=path.read_bytes()

@@ -17,7 +17,7 @@ def source_facts(inv, sid):
     if raw and digest: bytes_status='VERIFIED' if file_hash(inv.root,raw)==digest else 'REJECTED'
     return {'source_id':sid, 'controlling_version':source['version'],
             'access':fact(access.get('availability'), {'accessible','unavailable','unknown'}),
-            'reading_declared':access['state'], 'bytes':bytes_status, 'recorded_sha256':digest,
+            'reading_declared':access.get('state','not_declared'), 'bytes':bytes_status, 'recorded_sha256':digest,
             'redistribution':fact(access.get('redistribution'), {'granted','denied','unknown'}),
             'material_visibility':access.get('material_visibility','unknown'),
             'meaning':'Source declarations and rehashed bytes only; no automated reading or license determination.'}

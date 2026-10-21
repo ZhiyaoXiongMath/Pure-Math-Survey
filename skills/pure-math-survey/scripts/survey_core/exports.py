@@ -1,4 +1,4 @@
-"""Exact snapshot fragments and bounded writing materials; not automatic math prose."""
+"""Exact canonical fragments and bounded writing materials; not automatic math prose."""
 from __future__ import annotations
 from pathlib import Path
 import re
@@ -19,13 +19,13 @@ def extract_statements(inv,ids:set[str])->dict[str,bytes]:
     return {f'statements/{k}.tex':inv.nodes[k].statement for k in sorted(ids) if inv.nodes[k].statement is not None}
 
 def export_bibliography(inv,ids:set[str])->bytes:
-    sources=sorted({s['source_id'] for k in ids for s in inv.nodes[k].meta['sources']})
+    sources=sorted({s['source_id'] for k in ids for s in inv.nodes[k].meta['sources']} | {r['source_locator']['source_id'] for r in inv.routes if r['target'] in ids and r['source_locator']})
     entries=[]
     for key in sources:
-        s=inv.sources[key]; identity=s['identifiers']
+        s=inv.sources[key]
         fields={'title':tex_text(s['title']),'author':' and '.join(tex_text(a) for a in s['authors']),
-                'note':tex_text(f"{s['publication_status']}; controlling version: {s['version'] or 'unverified'}."),
-                'howpublished':tex_text(identity.get('doi') or identity.get('arxiv') or identity.get('journal_reference') or identity.get('user_file') or identity.get('url',''))}
+                'note':tex_text(f"Controlling version: {s['version'] or 'unverified'}."),
+                'howpublished':tex_text(s.get('url') or '')}
         # A modern arXiv prefix such as 1904 is not the year 1904.
         # Prefer an explicit citation year, otherwise accept only a separated
         # calendar year in the controlling-version text (never an identifier).
@@ -36,13 +36,29 @@ def export_bibliography(inv,ids:set[str])->bytes:
         else:
             year=re.search(r'(?<![\d:/])(?:19|20)\d{2}(?![\d.])',str(s['version'] or ''))
             if year:fields['year']=year.group()
-        entries.append('@misc{'+key+',\n'+',\n'.join(f'  {k} = {{{v}}}' for k,v in fields.items() if v)+'\n}')
+        entries.append('@misc{'+s['citation_key']+',\n'+',\n'.join(f'  {k} = {{{v}}}' for k,v in fields.items() if v)+'\n}')
     return ('% Generated from fixed source records; edit the knowledge records, not this file.\n\n'+'\n\n'.join(entries)+'\n').encode('utf-8')
 
 def expected_generated(inv,plan:dict)->dict[str,bytes]:
     ids=consumption(inv,plan)
     return {**extract_statements(inv,ids),'conventions.tex':safe(inv.root,inv.project['knowledge_root']+'/conventions.tex',True).read_bytes(),
-            'references.bib':export_bibliography(inv,ids)}
+            'references.bib':export_bibliography(inv,ids), **route_fragments(inv,plan)}
+
+def route_fragments(inv,plan:dict)->dict[str,bytes]:
+    routes=[r for r in inv.routes if r['id'] in plan['route_ids']]
+    lines=['% Derived relationship data. Author graph layout remains in manuscript/.']
+    for route in routes:
+        groups=[]
+        for group in route['premise_sets']:
+            nodes=', '.join(key+(' (method description; no formal conclusion)' if inv.nodes[key].meta['kind']=='method' and inv.nodes[key].statement is None else '') for key in group['nodes'])
+            extra='; additional inputs: '+ '; '.join(group['additional_inputs']) if group['additional_inputs'] else ''
+            groups.append('jointly {'+nodes+'}'+extra)
+        description=route['id']+': '+ ' OR '.join(groups)+'; target '+route['target']+'. '+route['mapping']
+        description+=' [unresolved: no asserted implication]' if route['status']=='unresolved' else ' [source-reported; not certified]'
+        lines.append(tex_text(description)+r'\par')
+    return {'routes.json':canonical({'schema_version':VERSION,'routes':routes})+b'\n',
+            'routes.tex':('\n'.join(lines)+'\n').encode('utf-8')}
+
 
 def authoring_input_paths(inv, plan: dict) -> set[str]:
     return consumed_paths(inv, plan)
@@ -65,23 +81,42 @@ def prepare_output(root:Path,plan_path:Path)->dict:
     data=expected_generated(inv,plan); ids=consumption(inv,plan);inputs=authoring_input_paths(inv,plan)
     materials=expected_materials(inv,plan)
     from .sources import original_input_paths
-    manifest={'schema_version':VERSION,'snapshot_id':plan['snapshot_id'],'output_id':plan['output_id'],
+    manifest={'schema_version':VERSION,'input_hash':sha(canonical(file_inventory(inv.root,sorted(inputs)))),'output_id':plan['output_id'],
               'plan_sha256':sha(canonical(plan)),'consumed_nodes':sorted(ids),
               'consumed_inputs':file_inventory(inv.root,sorted(inputs)),
               'generated_files':[{'path':'generated/'+p,'sha256':sha(b),'bytes':len(b)} for p,b in sorted(data.items())],
               'raw_sources_omitted':sorted(original_input_paths(inv,inputs)),
               'meaning':'Exact stored bytes are reused; mechanical checks do not certify mathematics.'}
     with writer(root):
+        from .knowledge import inventory
+        current=inventory(root)
+        require(expected_generated(current,plan)==data and expected_materials(current,plan)==materials,'PREPARE_INPUT_CHANGED','Knowledge changed before preparation; retry')
+        require(file_inventory(inv.root,sorted(inputs))==manifest['consumed_inputs'],'PREPARE_INPUT_CHANGED','Knowledge changed before preparation; retry')
         stage=Path(tempfile.mkdtemp(prefix='.prepare-',dir=native_path(out, extended=True)))
         try:
             for p,b in data.items():atomic_bytes(stage/'generated'/p,b)
             write_json(stage/'generated/manifest.json',manifest)
             for p,b in materials.items():atomic_bytes(stage/'materials'/p,b)
             write_json(stage/'materials/materials-manifest.json',manifest)
-            for folder in ('generated','materials'):
-                target=out/folder
-                if target.exists():shutil.rmtree(target)
-                (stage/folder).rename(target)
+            current=inventory(root)
+            require(expected_generated(current,plan)==data and expected_materials(current,plan)==materials and file_inventory(inv.root,sorted(inputs))==manifest['consumed_inputs'],'PREPARE_INPUT_CHANGED','Knowledge changed while preparing; retry')
+            if (out/'generated/manifest.json').exists():
+                from .history import save_record
+                previous={p:safe(out,p,True).read_bytes() for p in all_files(out) if not p.startswith(('history/','.prepare-'))}
+                save_record(out,'preparation',previous)
+            moved=[]
+            try:
+                for folder in ('generated','materials'):
+                    target=out/folder; backup=stage/('old-'+folder)
+                    if target.exists():target.rename(backup)
+                    moved.append(folder)
+                    (stage/folder).rename(target)
+            except Exception:
+                for folder in reversed(moved):
+                    target=out/folder;backup=stage/('old-'+folder)
+                    if target.exists():shutil.rmtree(target)
+                    if backup.exists():backup.rename(target)
+                raise
         finally:shutil.rmtree(native_path(stage, extended=True),ignore_errors=True)
         if not (out/'outline.md').exists():
             order=topological(inv.nodes,ids)
@@ -92,44 +127,49 @@ def prepare_output(root:Path,plan_path:Path)->dict:
         if not (out/'manuscript/main.tex').exists():
             from .profiles import VIEW_TASKS
             template=(SKILL_ROOT/'assets/templates'/f"profile-{plan['profile']}.tex").read_text(encoding='utf-8')
-            snippets=[]; principals=[]; ingredients=[]; by_node={}
-            for s in plan['selections']:
+            snippets=[]; principals=[]; ingredients=[]
+            selections={s['node_id']:dict(s) for s in plan['selections']}
+            for key in topological(inv.nodes,ids):
+                if key not in selections:
+                    node=inv.nodes[key];selections[key]={'node_id':key,'role':node.meta['role'],'statement_treatment':'full' if node.statement is not None else 'explained_reference'}
+            for s in selections.values():
+                if inv.nodes[s['node_id']].meta['kind']=='definition':s['statement_treatment']='full'
                 if s['statement_treatment']=='full':
                     key=s['node_id']; kind=inv.nodes[key].meta['kind']
-                    env={'definition':'definition','question':'problem','example':'example'}.get(kind,'theorem')
-                    if s['role']=='frontier' and kind!='question': env='conjecture'
+                    env=inv.nodes[key].meta.get('statement_kind',{'definition':'definition','example':'example'}.get(kind,'theorem'))
                     snippet = f'\\begin{{{env}}}\\label{{node:{key}}}\n\\input{{../generated/statements/{key}.tex}}\n\\end{{{env}}}\n'
                     snippets.append(snippet)
-                    by_node[key]=snippet
-                    (principals if s['role']=='principal_answer' else ingredients).append(snippet)
+                    (principals if s['role']=='principal' else ingredients).append(snippet)
             task='\\placeholder{'+tex_text(VIEW_TASKS[plan['view']])+'}'
             text=template.replace('@@TITLE@@',tex_text(plan['title'])).replace('@@STATEMENTS@@','\n'.join(snippets)).replace('@@PRINCIPALS@@','\n'.join(principals)).replace('@@INGREDIENTS@@','\n'.join(ingredients)).replace('@@VIEW_TASK@@',task)
             atomic_bytes(out/'manuscript/main.tex',text.encode())
-    return result('output.prepare','PREPARED',{'output':relpath(root, out),'snapshot_id':plan['snapshot_id'],
+        from .knowledge import write_run
+        write_run(root,inv,[relpath(root,out)],'not_built')
+    return result('output.prepare','PREPARED',{'output':relpath(root, out),'input_hash':manifest['input_hash'],
         'main_preserved':True,'authorship':'SCAFFOLD: preparation is not completed writing or mathematical certification.'})
 
 def verify_generated(root:Path,plan:dict)->dict:
     inv=validate_plan(root,plan);out=safe(root,'outputs/'+plan['output_id']);expected=expected_generated(inv,plan)
     manifest=read_json(safe(out,'generated/manifest.json',True))
-    require(manifest.get('snapshot_id')==plan['snapshot_id'] and manifest.get('plan_sha256')==sha(canonical(plan)),'GENERATED_INPUT_STALE','Plan changed; explicitly prepare again before use','generated/manifest.json')
+    require(manifest.get('plan_sha256')==sha(canonical(plan)),'GENERATED_INPUT_STALE','Plan changed; explicitly prepare again before use','generated/manifest.json')
     actual=set(all_files(out,'generated'))
     require(actual=={'generated/'+p for p in expected}|{'generated/manifest.json'},'CANONICAL_STATEMENT_CHANGED','Generated files have extra or missing content','generated')
     for p,b in expected.items():
-        require(safe(out,'generated/'+p,True).read_bytes()==b,'CANONICAL_STATEMENT_CHANGED','Generated content differs from fixed snapshot','generated/'+p)
+        require(safe(out,'generated/'+p,True).read_bytes()==b,'CANONICAL_STATEMENT_CHANGED','Generated content differs from prepared knowledge','generated/'+p)
     expected_records=[{'path':'generated/'+p,'sha256':sha(b),'bytes':len(b)} for p,b in sorted(expected.items())]
-    require(manifest.get('generated_files')==expected_records and manifest.get('consumed_inputs')==file_inventory(inv.root,sorted(authoring_input_paths(inv,plan))),
+    require(manifest.get('generated_files')==expected_records and manifest.get('consumed_inputs')==file_inventory(inv.root,sorted(authoring_input_paths(inv,plan))) and manifest.get('input_hash')==sha(canonical(manifest['consumed_inputs'])),
             'GENERATED_INPUT_STALE','Generated manifest does not bind actual fixed inputs','generated/manifest.json')
     # The generated theorem alone is insufficient: prose is written using all
-    # supplied materials, which must retain the same snapshot authority.
+    # supplied materials, which must retain the same recorded canonical inputs.
     materials=expected_materials(inv,plan)
     expected_members={'materials/'+p for p in materials}|{'materials/materials-manifest.json'}
     actual_members=set(all_files(out,'materials'))
     mismatch=sorted(expected_members ^ actual_members)
-    require(not mismatch,'MATERIALS_CHANGED','Authoring materials gained or lost snapshot inputs; explicitly prepare again',
+    require(not mismatch,'MATERIALS_CHANGED','Authoring materials gained or lost canonical inputs; explicitly prepare again',
             mismatch[0] if mismatch else 'materials')
     for p,b in materials.items():
         require(safe(out,'materials/'+p,True).read_bytes()==b,'MATERIALS_CHANGED',
-                'Authoring material differs from the fixed snapshot; edit knowledge and freeze, or prepare again','materials/'+p)
+                'Authoring material differs from the prepared knowledge; edit canonical knowledge and explicitly prepare again','materials/'+p)
     require(safe(out,'materials/materials-manifest.json',True).read_bytes()==safe(out,'generated/manifest.json',True).read_bytes(),
             'MATERIALS_CHANGED','Material manifest differs from the verified generation manifest','materials/materials-manifest.json')
     return manifest
@@ -159,9 +199,12 @@ def validate_structure(root:Path,output_id:str)->dict:
     labels=inv['labels']
     if len(labels)!=len(set(labels)):errors.append(diagnostic('DUPLICATE_LABEL','Repeated TeX labels','manuscript/main.tex'))
     if inv['has_placeholder']:errors.append(diagnostic('MANUSCRIPT_INCOMPLETE','Visible scaffold placeholders remain','manuscript/main.tex'))
-    for s in plan['selections']:
+    knowledge=validate_plan(root,plan)
+    selected={s['node_id']:s for s in plan['selections']}
+    for key in consumption(knowledge,plan):
+        s=selected.get(key,{'node_id':key,'statement_treatment':'full' if knowledge.nodes[key].statement is not None else 'explained_reference'})
         path=f"generated/statements/{s['node_id']}.tex"
-        if s['statement_treatment']=='full' and path not in scan.body_inputs:
+        if (s['statement_treatment']=='full' or knowledge.nodes[key].meta['kind']=='definition') and path not in scan.body_inputs:
             errors.append(diagnostic('CANONICAL_STATEMENT_MISSING','Full selected statement is not literally included in the visible manuscript body',path,s['node_id']))
     from .profiles import structure_errors
     profile_errors, profile_warnings = structure_errors(inv, plan, validate_plan(root, plan).nodes, text)
@@ -177,3 +220,41 @@ def validate_structure(root:Path,output_id:str)->dict:
     from .profiles import policy
     return result('output.structure','NEEDS_WORK' if errors else 'STRUCTURALLY_VALID',{'tex_inventory':public_inventory(inv),'actual_literal_inputs':sorted(used),'body_inputs':sorted(scan.body_inputs),'canonical_locations':scan.locations,
         'editorial_policy':policy(plan)},errors,warnings)
+
+
+def export_unit(root:Path,node_id:str,destination:Path)->dict:
+    """Standalone concept closure with exact canonical bytes and source locators."""
+    from .knowledge import inventory
+    from .dependencies import required_closure
+    inv=inventory(root)
+    ids=required_closure(inv.nodes,{node_id})
+    plan={'selections':[{'node_id':k} for k in ids],'route_ids':[]}
+    data={'generated/'+p:b for p,b in expected_generated(inv,plan).items()}
+    data.update({'materials/'+p:b for p,b in expected_materials(inv,plan).items()})
+    lines=[r'\input{generated/conventions.tex}']
+    for key in topological(inv.nodes,ids):
+        node=inv.nodes[key]
+        if node.statement is not None:
+            env=node.meta.get('statement_kind',{'definition':'definition','example':'example'}.get(node.meta['kind'],'theorem'))
+            lines.append(r'\begin{'+env+'}'+r'\label{node:'+key+'}'+r'\input{generated/statements/'+key+'.tex}'+r'\end{'+env+'}')
+        for ref in node.meta['sources']:
+            source=inv.sources[ref['source_id']]
+            lines.append(r'\par Source: '+tex_text(ref['source_id']+'; '+ref['locator']+'; version '+str(source['version']))+r'~\cite{'+source['citation_key']+'}.')
+    data['unit.tex']=('\n'.join(lines)+'\n').encode('utf-8')
+    data['math-review.sty']=(SKILL_ROOT/'assets/templates/math-review.sty').read_bytes()
+    data['main.tex']=(r'\documentclass[12pt]{amsart}'+'\n'+r'\usepackage{math-review}'+'\n'+r'\begin{document}\input{unit.tex}'+ '\n'+r'\bibliographystyle{plain}\bibliography{generated/references}\end{document}'+'\n').encode('utf-8')
+    data['manifest.json']=canonical({'schema_version':VERSION,'node_id':node_id,'included_nodes':sorted(ids),
+        'files':[{'path':p,'sha256':sha(v),'bytes':len(v)} for p,v in sorted(data.items())]})+b'\n'
+    require(not destination.is_symlink(),'UNSAFE_PATH','Unit export destination is a symlink',str(destination))
+    require(not destination.exists(),'DESTINATION_EXISTS','Unit export requires a new destination',str(destination))
+    # Reject symlinked parent components and keep export away from canonical input paths.
+    parent=destination.parent.absolute()
+    for part in (parent,*parent.parents):require(not part.is_symlink(),'UNSAFE_PATH','Export parent is a symlink',str(part))
+    require(resolved_path(root) not in resolved_path(destination).parents,'UNSAFE_PATH','Export outside the project to preserve canonical inputs',str(destination))
+    parent.mkdir(parents=True,exist_ok=True);stage=Path(tempfile.mkdtemp(prefix='.unit-',dir=parent))
+    try:
+        for path,body in data.items():atomic_bytes(stage/path,body)
+        require(not destination.exists(),'DESTINATION_EXISTS','Unit export destination exists',str(destination));stage.rename(destination)
+    finally:
+        if stage.exists():shutil.rmtree(stage)
+    return result('kb.export','EXPORTED',{'destination':str(destination),'included_nodes':sorted(ids)})

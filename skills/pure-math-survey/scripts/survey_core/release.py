@@ -4,7 +4,7 @@ from pathlib import Path
 import json
 import tempfile
 import zipfile
-from .common import FONT_SUFFIXES,SKILL_ROOT,all_files,diagnostic,require,result,safe,sha,writer
+from .common import FONT_SUFFIXES,SKILL_ROOT,VERSION,all_files,read_json,diagnostic,require,result,safe,sha,writer
 from .models import load_plan, load_project
 from .exports import output_inputs,validate_structure
 from .build import check_build
@@ -19,7 +19,7 @@ def assess_release(root:Path,output_id:str)->dict:
     if built.get('pages') and maximum is not None and built['pages']>maximum:
         errors.append(diagnostic('MAX_PAGES_EXCEEDED','Actual PDF exceeds explicit max_pages','build/main.pdf'))
     return result('output.package-check','NEEDS_WORK' if errors else 'PACKAGEABLE',
-                  {'output_id':output_id,'snapshot_id':plan['snapshot_id'],
+                  {'output_id':output_id,'input_hash':read_json(out/'generated/manifest.json')['input_hash'],
                    'meaning':'Mechanical package checks only; no mathematical or visual certification.'},errors)
 
 
@@ -42,7 +42,7 @@ def package_output(root:Path,output_id:str,destination:Path)->dict:
     data['rebuild.py']=(SKILL_ROOT/'assets/rebuild/rebuild.py').read_bytes()
     data['runtime/build_checks.py']=(SKILL_ROOT/'scripts/build_checks.py').read_bytes()
     data['release-check.json']=(json.dumps(check,ensure_ascii=False,indent=2)+'\n').encode()
-    data['README.md']=(f'# {output_id}\n\nFixed Survey output package; inspect plan.json for profile and snapshot ID.\n\n'
+    data['README.md']=(f'# {output_id}\n\nFixed Survey output package; inspect plan.json for profile and prepared input hash.\n\n'
                        'Run `python3 -I rebuild.py --output ../rebuilt-output` in this extracted folder. The target must not exist and must lie outside this package.\n'
                        'Python 3.10+, pdfLaTeX, BibTeX (or the recorded fallback), and Poppler are required. No pip packages are needed.\n'
                        'The included PDF was built from the recorded inputs. A new build is reproducibility evidence; neither build certifies mathematics or visual quality.\n'
@@ -50,8 +50,8 @@ def package_output(root:Path,output_id:str,destination:Path)->dict:
                        'A nullable raw-source hash is an explicit access limitation, not a PDF byte certificate.\n'
                        'TeX is trusted code. Shell escape is disabled, but this is not a security sandbox for hostile TeX.\n').encode()
     for path in data:require(Path(path).suffix.lower() not in FONT_SUFFIXES,'FONT_NOT_DISTRIBUTABLE','Never distribute font files',path)
-    manifest={'files':[{'path':p,'sha256':sha(b),'bytes':len(b)} for p,b in sorted(data.items())],
-              'snapshot_id':check['artifacts']['snapshot_id'],'original_pdf_sha256':sha(data['build/main.pdf'])}
+    manifest={'schema_version':VERSION,'files':[{'path':p,'sha256':sha(b),'bytes':len(b)} for p,b in sorted(data.items())],
+              'input_hash':check['artifacts']['input_hash'],'original_pdf_sha256':sha(data['build/main.pdf'])}
     data['package-manifest.json']=(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n').encode()
     destination.parent.mkdir(parents=True,exist_ok=True)
     with writer(root):
@@ -64,4 +64,4 @@ def package_output(root:Path,output_id:str,destination:Path)->dict:
                 for path,b in data.items():require(z.read(output_id+'/'+path)==b,'PACKAGE_INVALID','Archive verification failed',path)
             temp.rename(destination)
         finally:temp.unlink(missing_ok=True)
-    return result('output.package','PACKAGED',{'archive':str(destination),'sha256':sha(destination.read_bytes()),'members':len(data),'snapshot_id':manifest['snapshot_id']},warnings=check['warnings'])
+    return result('output.package','PACKAGED',{'archive':str(destination),'sha256':sha(destination.read_bytes()),'members':len(data),'input_hash':manifest['input_hash']},warnings=check['warnings'])
