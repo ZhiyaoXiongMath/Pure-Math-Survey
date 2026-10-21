@@ -395,9 +395,16 @@ def inspect_tex(out: Path) -> Inspection:
         not recall_replacements.intersection(definitions) and all(len(definitions.get(name,[])) == 1 and
         definitions[name][0][0] == 'manuscript/math-review.sty' and
         definitions[name][0][2] == expected_recall.get(name) for name in recall_names))
+    trusted_layout=set()
+    layout_names={'pmsmainend','pmslayout','pmsattribution'}
+    expected_layout={name:body for _,name,body in _lex(shipped_style.decode('utf-8'))[1] if name in layout_names}
+    for name in layout_names:
+        found=definitions.get(name,[])
+        if len(found)==1 and found[0][0]=='manuscript/math-review.sty' and found[0][2]==expected_layout.get(name):trusted_layout.add(name)
     # Ordinary mathematical notation aliases are allowed. Resolve only risk,
     # not TeX expansion: an indirect call into empty/control code is uncertified.
     def risky(name: str, visiting: frozenset[str] = frozenset()) -> bool:
+        if name in trusted_layout:return False
         if name == 'environment:theoremrecall' and trusted_recall:
             return False
         if name in visiting:

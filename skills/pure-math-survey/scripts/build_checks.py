@@ -41,6 +41,31 @@ def log_warnings(text: str) -> dict[str, list[str]]:
             if (found := [line for line in text.splitlines() if re.search(pattern, line)])}
 
 
+def layout_measurements(log: str, total_pages: int, maximum: int = 6) -> tuple[dict, list[str]]:
+    """Actual TeX dimensions and main/reference boundary, paired with PDF page count."""
+    metrics={'main_pages':None,'total_pages':total_pages,'body_font_pt':None,'baseline_pt':None,'margins_pt':{}}
+    errors=[]
+    def observed(name):
+        values=re.findall(r'^'+name+r':\s*([0-9.]+)(?:pt)?\s*$',log,re.M)
+        if len(values)!=1:
+            errors.append('Expected one actual '+name+' measurement');return None
+        return float(values[0])
+    pages=observed('PMS-MAIN-PAGES')
+    if pages is not None:
+        if not pages.is_integer() or not 1<=pages<total_pages:errors.append('Main pages must precede separate reference pages')
+        else:metrics['main_pages']=int(pages)
+        if pages>min(6,maximum):errors.append('Actual main pages exceed the allowed maximum '+str(min(6,maximum)))
+    font=observed('PMS-BODY-FONT-PT');baseline=observed('PMS-BASELINE-PT')
+    metrics.update(body_font_pt=font,baseline_pt=baseline)
+    # LaTeX's nominal 11pt size is 10.95pt in standard classes.
+    if font is not None and not 10.9<=font<=11.1:errors.append('Body must use nominal 11pt type')
+    if baseline is not None and font is not None and baseline<1.15*font:errors.append('Normal body leading is required')
+    for side in ('LEFT','RIGHT','TOP','BOTTOM'):
+        value=observed('PMS-'+side+'-MARGIN-PT');metrics['margins_pt'][side.lower()]=value
+        if value is not None and value<20*72.27/25.4-0.01:errors.append(side+' margin is below 20mm')
+    return metrics,errors
+
+
 def auxiliary_digest(folder: Path, stem: str) -> str:
     h = hashlib.sha256()
     for suffix in (".aux", ".toc", ".out"):
@@ -78,6 +103,14 @@ def compile_one(folder: Path, entrypoint: str, engine: str, timeout: int = 120) 
     if not pdf.is_file() or not pdf.read_bytes().startswith(b"%PDF-"):
         issues["missing_pdf"] = [str(pdf)]
     pages = re.search(r"Output written on .*?\((\d+) pages?", log, re.S)
+    metrics={}
+    if r'\pmsmainend' in path.read_text(encoding='utf-8'):
+        info=subprocess.run(['pdfinfo',pdf.name],cwd=folder,capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=30)
+        actual=re.search(r'^Pages:\s+(\d+)',info.stdout,re.M)
+        if info.returncode or not actual:issues['layout']=['Actual PDF page count unavailable']
+        else:
+            metrics,layout_errors=layout_measurements(log,int(actual[1]))
+            if layout_errors:issues['layout']=layout_errors
     recalls = {}
     for key in ("PMS-RECALL", "PMS-GRADIENT-RECALL"):
         before = re.findall(re.escape(key) + r"-BEFORE=(\d+)", log)
@@ -86,7 +119,7 @@ def compile_one(folder: Path, entrypoint: str, engine: str, timeout: int = 120) 
             recalls[key] = {"before": before, "after": after}
             if before != after:
                 issues.setdefault("recall_counter", []).append(key + " changed its theorem counter")
-    return {"entrypoint": entrypoint, "passes": passes, "auxiliary_stable": stable,
+    return {"layout_measurements":metrics,"entrypoint": entrypoint, "passes": passes, "auxiliary_stable": stable,
             "pages_from_log": int(pages.group(1)) if pages else None,
             "pdf": str(pdf), "pdf_sha256": hashlib.sha256(pdf.read_bytes()).hexdigest() if pdf.exists() else None,
             "blocking_log_issues": issues,
@@ -135,11 +168,12 @@ def run_checks(output: Path, engine: str = "pdflatex") -> dict:
     tasks: list[tuple[Path, str]] = []
     folder = output / "minimal-smoke"
     folder.mkdir()
-    (folder / "minimal-smoke.tex").write_text(r"""\documentclass[12pt,reqno]{amsart}
+    (folder / "minimal-smoke.tex").write_text(r"""\documentclass[11pt,reqno]{amsart}
 \usepackage{math-review}
 \title{Neutral Minimal build fixture}
 \date{}
 \begin{document}
+\pmslayout
 \maketitle
 \section{Main Results}
 This elementary fixture checks compilation and references only.
@@ -154,6 +188,17 @@ The identity $x^2=x\cdot x$ fixes the notation used here.
 \section{Connecting the Ingredients}
 Lemma~\ref{lem:zero} gives the product equality under the hypothesis of
 Theorem~\ref{thm:square}; the displayed identity then gives its conclusion.
+\begin{center}
+\begin{tikzpicture}[pmsgraph]
+\node[pmsresult] (ingredient) at (0,2) {Lemma~\ref{lem:zero}};
+\node[pmsresult] (result) at (0,0) {Theorem~\ref{thm:square}};
+\draw[pmsedge] (ingredient) -- (result);
+\end{tikzpicture}
+\end{center}
+\pmsmainend
+\begin{thebibliography}{1}
+\bibitem{fixture} Synthetic test fixture. No research-source claim.
+\end{thebibliography}
 \end{document}
 """, encoding="utf-8")
     shutil.copy2(style, folder / style.name)

@@ -154,4 +154,42 @@ class LeanKnowledge(unittest.TestCase):
         path=self.root/'knowledge/nodes/N-main.md';node=load_node(path);node.meta['links']=[];path.write_bytes(node_bytes(node.meta,node.body))
         before=tree(self.root);self.code('CONTRACT_INVALID',index_knowledge,self.root);self.assertEqual(tree(self.root),before)
 
+
+
+class EditableArchitecture(unittest.TestCase):
+    def test_same_formal_nodes_joint_alternatives_unresolved_and_owned_method_notes(self):
+        from survey_core.graphs import graph_map,graph_tex,graph_errors
+        with tempfile.TemporaryDirectory() as temp:
+            root=lean_fixture(Path(temp)/'project')
+            putnode(root,'N-method','method',role='bridge')
+            routes=read_json(root/'knowledge/routes.json')
+            routes['routes'][0]['premise_sets'][0]['nodes'].append('N-method')
+            routes['routes'][0]['status']='unresolved'
+            write_json(root/'knowledge/routes.json',routes)
+            p=plan(root);inv=inventory(root);value=read_json(p);data=graph_map(inv,value)
+            self.assertEqual(len(data['groups']),2)
+            self.assertEqual(data['groups'][0]['nodes'],['N-a','N-b','N-method'])
+            self.assertEqual(data['groups'][1]['nodes'],['N-c'])
+            self.assertNotIn('N-method',{n['id'] for n in data['nodes']})
+            raw=graph_tex(inv,value).decode('utf-8')
+            self.assertEqual(graph_errors(inv,value,raw),[])
+            for broken in (raw.replace(r'\draw[pmsunresolved] (N-a) -- (R-combine-1);',''),
+                           raw.replace('[pmsunresolved]','[pmsedge]'),
+                           raw.replace('% note-owner: method-0-N-method R-combine-1',''),
+                           raw.replace(r'\ref{node:N-main}',r'\ref{node:N-c}')):
+                self.assertTrue(graph_errors(inv,value,broken))
+            # A required note cannot evade visible ownership by changing its style.
+            for name in ('method-0-N-method','inputs-R-combine-1'):
+                detached=raw.replace(r'\node[pmsannotation] ('+name+')',r'\node[draw] ('+name+')')
+                detached=detached.replace(r'\draw[pmsattachment] ('+name+') -- (R-combine-1);','')
+                self.assertIn('% note-owner: '+name+' R-combine-1',detached)
+                self.assertTrue(graph_errors(inv,value,detached),name)
+            # The author's anchors/bends remain editable without changing dependencies.
+            edited=raw.replace('(N-a) -- (R-combine-1);','(N-a.south) to[bend right=15] (R-combine-1.west);')
+            self.assertEqual(graph_errors(inv,value,edited),[])
+            # Semicolons inside balanced labels are ordinary visible punctuation.
+            punctuated=edited.replace(r'{Theorem~\ref{node:N-main}};',r'{Main output; {nested; label};\\Theorem~\ref{node:N-main}};')
+            self.assertEqual(graph_errors(inv,value,punctuated),[])
+            self.assertTrue(graph_errors(inv,value,punctuated.replace(r'\ref{node:N-main}',r'\ref{node:N-c}')))
+
 if __name__=='__main__':unittest.main()

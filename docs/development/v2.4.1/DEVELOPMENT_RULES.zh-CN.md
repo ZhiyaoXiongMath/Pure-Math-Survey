@@ -78,7 +78,7 @@ STATE 允许暂时保留 ready_for_review，而 GitHub 实际已 merged；新会
 
 开发文档、完整转写、聊天记录、开发 STATE 与真实私有数学材料不在安装资源 allowlist。公开仓库只提交本任务需要的中性设计摘要；完整私人讨论不随本包分发，也不额外公开提交。
 
-rules 原文在 PR-01 暂存于本开发目录，PR-04 移到最终 references 路径，保持一份权威副本。安装只包含当前模式、简短 KB/运行合同、原始 rules 和实际依赖脚本/样式。
+rules 原文在 PR-01 曾暂存于本开发目录；PR-04 起唯一权威文件为 [references/rules.v22.txt](../../../skills/pure-math-survey/references/rules.v22.txt)，保持原始字节。安装只包含当前模式、简短 KB/运行合同、原始 rules 和实际依赖脚本/样式。
 
 数学来源可读取不等于可以随安装包再分发。保留来源定位即可，不新增长许可审核表。已有旧项目和历史证据不改写。
 

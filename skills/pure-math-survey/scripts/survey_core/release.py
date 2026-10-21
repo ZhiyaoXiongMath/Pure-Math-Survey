@@ -16,8 +16,8 @@ def assess_release(root:Path,output_id:str)->dict:
     structure=validate_structure(root,output_id)
     built,errors=check_build(out);errors=structure['errors']+errors
     maximum=plan['limits'].get('max_pages')
-    if built.get('pages') and maximum is not None and built['pages']>maximum:
-        errors.append(diagnostic('MAX_PAGES_EXCEEDED','Actual PDF exceeds explicit max_pages','build/main.pdf'))
+    if built.get('main_pages') is not None and maximum is not None and built['main_pages']>maximum:
+        errors.append(diagnostic('MAX_PAGES_EXCEEDED','Actual main pages exceed explicit max_pages; references are excluded','build/main.pdf'))
     return result('output.package-check','NEEDS_WORK' if errors else 'PACKAGEABLE',
                   {'output_id':output_id,'input_hash':read_json(out/'generated/manifest.json')['input_hash'],
                    'meaning':'Mechanical package checks only; no mathematical or visual certification.'},errors)

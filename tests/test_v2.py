@@ -53,21 +53,22 @@ def fixture(root,second=False):
 
 def authored_toy(root,oid='mini',two_pages=False):
     p=root/f'outputs/{oid}/plan.json';prepare_output(root,p)
-    text=r'''\documentclass[12pt,reqno]{amsart}
+    text=r'''\documentclass[11pt,reqno]{amsart}
 \usepackage{math-review}
 \input{../generated/conventions.tex}
 \title{Synthetic build fixture}\date{}
-\begin{document}\maketitle
+\begin{document}\pmslayout\maketitle
 \section{Main Results}
-\begin{theorem}\label{thm:x}\input{../generated/statements/N-main.tex}\end{theorem}
+\begin{definition}\label{node:N-def}\label{def:x}\input{../generated/statements/N-def.tex}\end{definition}
+\pmsattribution{Source: synthetic fixture paragraph 1; version Fixture v1~\cite{S-test}.}
+\begin{theorem}\label{node:N-main}\label{thm:x}\input{../generated/statements/N-main.tex}\end{theorem}
 \section{Key Mathematical Ingredients}
 Let $x$ be real.
-\begin{definition}\label{def:x}\input{../generated/statements/N-def.tex}\end{definition}
 \section{Connecting the Ingredients}
 \begin{proof}Multiplication gives $0\cdot0=0$.\end{proof}
 '''
     if two_pages:text+='\\newpage\nThis second page exists to test the actual PDF page count, not a length quota.\n'
-    text+='\\end{document}\n';(p.parent/'manuscript/main.tex').write_text(text,encoding='utf-8')
+    text+=r'\begin{center}\input{architecture_graph.tex}\end{center}'+ '\n'+r'\pmsmainend\bibliographystyle{plain}\bibliography{../generated/references}\end{document}'+ '\n';(p.parent/'manuscript/main.tex').write_text(text,encoding='utf-8')
 
 def plan(root,oid='mini',profile='minimal',question='N-q',principal='N-main'):
     create_plan(root,oid,profile=profile,principals=[principal])

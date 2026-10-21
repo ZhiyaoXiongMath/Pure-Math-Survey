@@ -1,8 +1,8 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{math-review}[2026/09/29 v2.0.4 Pure Math Survey style]
+\ProvidesPackage{math-review}[2026/10/21 v2.4.1 Pure Math Survey style]
 
-% The shared presentation profile is documented in references/layout-and-build.md.
-% Use with \documentclass[12pt,reqno]{amsart}. Keep this file beside the TeX.
+% rules.v22 with the minimal-runtime adaptation.
+% Use with \documentclass[11pt,reqno]{amsart}. Keep this file beside the TeX.
 \RequirePackage[T1]{fontenc}
 \RequirePackage{amsmath,amssymb,amsthm,mathtools}
 \IfFileExists{stix2.sty}{\RequirePackage{stix2}}{%
@@ -22,7 +22,7 @@
 \RequirePackage{hyperref}
 \hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue,
   linktocpage=true,bookmarksnumbered=true,bookmarksdepth=2}
-\linespread{1.1}
+\linespread{1}
 \emergencystretch=1.2em
 \widowpenalty=10000
 \clubpenalty=10000
@@ -61,3 +61,24 @@
   cited in this part. Give exact versions when a result or proof depends on
   them. Use real citation keys and verified bibliographic data.}%
 }
+
+% Normal substantive graph type; coordinates and labels remain editable.
+\RequirePackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric}
+\tikzset{pmsgraph/.style={font=\fontsize{10.5}{13}\selectfont},
+ pmsresult/.style={draw,rounded corners,align=center,text width=3.8cm,inner sep=5pt},
+ pmsjoin/.style={draw,ellipse,align=center,inner sep=4pt},
+ pmsedge/.style={-{Stealth},line width=0.5pt},
+ pmsunresolved/.style={dashed,line width=0.5pt},
+ pmsannotation/.style={align=left,text width=3.5cm,inner sep=3pt},
+ pmsattachment/.style={dotted,line width=0.5pt}}
+\newcommand{\pmsattribution}[1]{\par\Needspace{5\baselineskip}\noindent #1\par\nobreak}
+% Flush all body floats before observing the last main page. Do not reset page counters.
+\newcommand{\pmsmainend}{\clearpage\typeout{PMS-MAIN-PAGES: \number\numexpr\value{page}-1\relax}}
+\newcommand{\pmslayout}{%
+ \typeout{PMS-BODY-FONT-PT: \f@size}%
+ \typeout{PMS-BASELINE-PT: \the\baselineskip}%
+ \typeout{PMS-LEFT-MARGIN-PT: \the\dimexpr1in+\hoffset+\oddsidemargin\relax}%
+ \typeout{PMS-RIGHT-MARGIN-PT: \the\dimexpr\paperwidth-1in-\hoffset-\oddsidemargin-\textwidth\relax}%
+ \typeout{PMS-TOP-MARGIN-PT: \the\dimexpr1in+\voffset+\topmargin+\headheight+\headsep\relax}%
+ \typeout{PMS-BOTTOM-MARGIN-PT: \the\dimexpr\paperheight-1in-\voffset-\topmargin-\headheight-\headsep-\textheight\relax}}

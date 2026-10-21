@@ -1,4 +1,4 @@
 interface:
   display_name: "Pure Math Survey"
   short_description: "Source-grounded knowledge and Minimal writing"
-  default_prompt: "Use $pure-math-survey in this session to read my fixed mathematical sources, build reusable schema 3.0.0 knowledge units and routes, and produce only my requested Minimal or knowledge-only output directly from that KB. Preserve actual source versions, hypotheses and limitations; use the same statements in the KB and manuscript."
+  default_prompt: "Use $pure-math-survey in this session to read my fixed mathematical sources, build reusable schema 3.0.0 knowledge units and routes, and produce only my requested Minimal or knowledge-only output directly from that KB. For Minimal, read the short runtime adaptation before the original rules.v22, preserve source versions and full interfaces, and compose the shared KB content into the six-main-page article and editable graph. Knowledge-only work stops at the KB."

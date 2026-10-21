@@ -3,6 +3,7 @@
 from __future__ import annotations
 import argparse
 import ast
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -15,13 +16,18 @@ from survey_core.common import VERSION, SurveyError, write_json
 from survey_core.knowledge import init_project, inventory, index_knowledge
 from survey_core.plans import create_plan
 from survey_core.exports import prepare_output, verify_generated
+from survey_core.graphs import graph_errors
 from survey_core.models import load_plan, node_bytes
 
 ROOT = Path(__file__).resolve().parents[1]
+RULES_SHA256 = '452a4d7548c23bc75fe8fec6299ae9777a3e6763eb5f955063d938c2f3b6b2c7'
 
 
 def check() -> dict:
     files = selected_files(ROOT)
+    rules = files['references/rules.v22.txt']
+    if len(rules) != 22806 or hashlib.sha256(rules).hexdigest() != RULES_SHA256:
+        raise ValueError('Original rules.v22 bytes changed; the runtime adaptation must not rewrite them')
     for name, data in files.items():
         if name.endswith('.py'):
             ast.parse(data.decode('utf-8'), filename=name, feature_version=(3, 10))
@@ -82,7 +88,14 @@ def check() -> dict:
                     principals=['N-square'])
         path = project / 'outputs/minimal-integrated/plan.json'
         prepared = prepare_output(project, path)
-        verify_generated(project, load_plan(path))
+        plan = load_plan(path)
+        verify_generated(project, plan)
+        graph = (path.parent / 'manuscript/architecture_graph.tex').read_text(encoding='utf-8')
+        graph_map = json.loads((path.parent / 'generated/graph-map.json').read_text(encoding='utf-8'))
+        if ({n['id'] for n in graph_map['nodes']} != {'N-zero', 'N-square'} or
+                {g['route_id'] for g in graph_map['groups']} != {'R-square'} or
+                graph_errors(inv, plan, graph)):
+            raise AssertionError('Prepared graph does not preserve the fixture units and route')
         if (path.parent / 'generated/statements/N-zero.tex').read_bytes() != inv.nodes['N-zero'].statement:
             raise AssertionError('Concept dependency was not exported byte for byte')
         if (project / 'snapshots').exists():
@@ -115,6 +128,8 @@ def check() -> dict:
             'profile_view_preparations_executed': ['minimal-integrated'],
             'unsupported_requests_rejected': rejected,
             'knowledge_schema': VERSION, 'forced_snapshots': False,
+            'editable_graph_identity': 'checked against fixture units and route',
+            'rules_sha256': RULES_SHA256, 'rules_bytes': len(rules),
             'python_3_10_grammar': 'parsed; not a Python 3.10 runtime test',
             'mathematical_certification': False}
 
