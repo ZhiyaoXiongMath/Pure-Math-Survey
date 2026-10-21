@@ -1,3 +1,37 @@
+# Pure Math Survey 2.4.1 — release candidate, not published
+
+Software **2.4.1** uses KB/output schema **3.0.0**, runtime contract
+`minimal-lean-2.4.1`, and policy `minimal-rules-v22-lean-2.4.1`.
+This entry describes the candidate; it does not announce a formal tag, GitHub
+Release or uploaded installation assets. The candidate installer is
+`pure-math-survey-2.4.1.zip` with its adjacent `.zip.sha256`.
+
+- Support only Minimal writing and knowledge-only work in the current session.
+  Remove runtime reviewer roles, approval records, dispatch requirements and
+  paired fast/slow manuscripts; unsupported profiles and views reject clearly.
+- Share sources, conventions, canonical units, explicit routes and a short index
+  between knowledge-only work and manuscripts. Plans use the current KB without
+  a mandatory snapshot; repeat preparation retains prior bytes and authored text.
+  Export an individual unit with its definition dependencies and source locators.
+- Preserve the original rules.v22 bytes with a short runtime adaptation. Use the
+  three-section 11pt template, margins of at least 20mm, substantive graph text
+  of at least 10.5pt, and at most six main pages with references starting separately.
+  Editable TikZ and the body share unit/route identities; actual builds and
+  standalone rebuilds record main and total pages. TeX-only leaves them unmeasured.
+- Keep the installer limited to active resources, retaining path, source-byte,
+  canonical export, build and archive checks. Mechanical success does not certify
+  mathematical correctness. The scoped PR04 content sample remains development
+  evidence; this entry claims no new mathematical extraction or review.
+- Reject incompatible schema 2.x projects before mutation; no automatic migration
+  is provided. Historical records and original user projects retain their status.
+
+The removed workflows and excluded resources describe scope changes, not measured
+cost savings. Per-article model identity, token usage and complete elapsed time
+are null or unavailable without independent records. No token or percentage
+improvement is claimed; build/test durations are not end-to-end article timings.
+
+Earlier entries below retain the facts and limits of their own versions.
+
 # Pure Math Survey 2.1.0 (2026-10-16)
 
 Release preparation for software **2.1.0**, KB/snapshot schema **2.0.0**,

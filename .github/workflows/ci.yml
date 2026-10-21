@@ -32,9 +32,9 @@ jobs:
       - name: Validate installed resources and create archive
         run: |
           python skills/pure-math-survey/scripts/validate_assets.py --json
-          python skills/pure-math-survey/scripts/package_release.py --output "$RUNNER_TEMP/pure-math-survey-2.4.1-dev.4.zip"
+          python skills/pure-math-survey/scripts/package_release.py --output "$RUNNER_TEMP/pure-math-survey-2.4.1.zip"
       - name: Verify isolated installation and neutral TeX smoke
-        run: python tools/verify_release.py "$RUNNER_TEMP/pure-math-survey-2.4.1-dev.4.zip" --report "$RUNNER_TEMP/clean-install.json" --keep-work-directory --work-directory "$RUNNER_TEMP/pms-work"
+        run: python tools/verify_release.py "$RUNNER_TEMP/pure-math-survey-2.4.1.zip" --report "$RUNNER_TEMP/clean-install.json" --keep-work-directory --work-directory "$RUNNER_TEMP/pms-work"
       - name: Retain actual smoke build evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -52,8 +52,8 @@ jobs:
         with:
           name: validation-python-${{ matrix.python }}-${{ github.sha }}
           path: |
-            ${{ runner.temp }}/pure-math-survey-2.4.1-dev.4.zip
-            ${{ runner.temp }}/pure-math-survey-2.4.1-dev.4.zip.sha256
+            ${{ runner.temp }}/pure-math-survey-2.4.1.zip
+            ${{ runner.temp }}/pure-math-survey-2.4.1.zip.sha256
             ${{ runner.temp }}/clean-install.json
             ${{ runner.temp }}/tests.log
           if-no-files-found: error
@@ -95,12 +95,12 @@ jobs:
         run: |
           python skills/pure-math-survey/scripts/validate_assets.py --json
           if ($LASTEXITCODE -ne 0) { throw 'Windows asset validation failed' }
-          python skills/pure-math-survey/scripts/package_release.py --output "$env:RUNNER_TEMP\pure-math-survey-2.4.1-dev.4.zip"
+          python skills/pure-math-survey/scripts/package_release.py --output "$env:RUNNER_TEMP\pure-math-survey-2.4.1.zip"
           if ($LASTEXITCODE -ne 0) { throw 'Windows archive packaging failed' }
       - name: Verify Windows isolated installation and neutral TeX smoke
         shell: pwsh
         run: |
-          python tools/verify_release.py "$env:RUNNER_TEMP\pure-math-survey-2.4.1-dev.4.zip" --report "$env:RUNNER_TEMP\clean-install.json" --keep-work-directory --work-directory "$env:RUNNER_TEMP\pms-work"
+          python tools/verify_release.py "$env:RUNNER_TEMP\pure-math-survey-2.4.1.zip" --report "$env:RUNNER_TEMP\clean-install.json" --keep-work-directory --work-directory "$env:RUNNER_TEMP\pms-work"
           if ($LASTEXITCODE -ne 0) { throw 'Windows isolated installed verification failed or is INCOMPLETE' }
       - name: Require complete Windows success artifacts
         shell: pwsh
@@ -108,8 +108,8 @@ jobs:
           $required = @(
             (Join-Path $env:RUNNER_TEMP 'tests.log'),
             (Join-Path $env:RUNNER_TEMP 'clean-install.json'),
-            (Join-Path $env:RUNNER_TEMP 'pure-math-survey-2.4.1-dev.4.zip'),
-            (Join-Path $env:RUNNER_TEMP 'pure-math-survey-2.4.1-dev.4.zip.sha256')
+            (Join-Path $env:RUNNER_TEMP 'pure-math-survey-2.4.1.zip'),
+            (Join-Path $env:RUNNER_TEMP 'pure-math-survey-2.4.1.zip.sha256')
           )
           $workRoot = Join-Path $env:RUNNER_TEMP 'pms-work'
           if (-not (Test-Path -LiteralPath $workRoot -PathType Container)) {
@@ -150,8 +150,8 @@ jobs:
         with:
           name: windows-validation-python-3.12-${{ github.sha }}
           path: |
-            ${{ runner.temp }}/pure-math-survey-2.4.1-dev.4.zip
-            ${{ runner.temp }}/pure-math-survey-2.4.1-dev.4.zip.sha256
+            ${{ runner.temp }}/pure-math-survey-2.4.1.zip
+            ${{ runner.temp }}/pure-math-survey-2.4.1.zip.sha256
             ${{ runner.temp }}/clean-install.json
             ${{ runner.temp }}/tests.log
           if-no-files-found: error
@@ -165,7 +165,7 @@ jobs:
           path: |
             ${{ runner.temp }}/tests.log
             ${{ runner.temp }}/clean-install.json
-            ${{ runner.temp }}/pure-math-survey-2.4.1-dev.4.zip.sha256
+            ${{ runner.temp }}/pure-math-survey-2.4.1.zip.sha256
             ${{ runner.temp }}/pms-work/pms-*/tex-smoke/build-report.json
             ${{ runner.temp }}/pms-work/pms-*/tex-smoke/**/*.log
           if-no-files-found: warn
