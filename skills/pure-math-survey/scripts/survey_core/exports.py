@@ -236,7 +236,7 @@ def export_unit(root:Path,node_id:str,destination:Path)->dict:
         node=inv.nodes[key]
         if node.statement is not None:
             env=node.meta.get('statement_kind',{'definition':'definition','example':'example'}.get(node.meta['kind'],'theorem'))
-            lines.append(r'\begin{'+env+'}'+r'\input{generated/statements/'+key+'.tex}'+r'\end{'+env+'}')
+            lines.append(r'\begin{'+env+'}'+r'\label{node:'+key+'}'+r'\input{generated/statements/'+key+'.tex}'+r'\end{'+env+'}')
         for ref in node.meta['sources']:
             source=inv.sources[ref['source_id']]
             lines.append(r'\par Source: '+tex_text(ref['source_id']+'; '+ref['locator']+'; version '+str(source['version']))+r'~\cite{'+source['citation_key']+'}.')

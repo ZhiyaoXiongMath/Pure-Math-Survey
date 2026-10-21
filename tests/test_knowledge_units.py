@@ -1,5 +1,6 @@
 """Reusable lean fixture: concept closure, joint/alternative routes and live updates."""
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import tempfile
@@ -61,6 +62,8 @@ class LeanKnowledge(unittest.TestCase):
         self.assertNotIn('N-independent',verify_generated(self.root,value)['consumed_nodes'])
 
     def test_standalone_export_includes_recursive_definitions_conventions_sources_and_exact_bytes(self):
+        putnode(self.root,'N-main','result',r'For $x$ as in Definition~\ref{node:N-def}, $x=0$ implies $x^2=0$.',
+                definitions=['N-def'],source=True)
         destination=self.base/'unit';report=export_unit(self.root,'N-main',destination)
         self.assertEqual(set(report['artifacts']['included_nodes']),{'N-main','N-def','N-notation'})
         for key in ('N-main','N-def','N-notation'):
@@ -69,11 +72,24 @@ class LeanKnowledge(unittest.TestCase):
         self.assertTrue((destination/'materials/knowledge/sources/S-test.json').is_file())
         self.assertIn('Synthetic fixture paragraph 1',(destination/'unit.tex').read_text(encoding='utf-8'))
         self.assertFalse((destination/'materials/knowledge/material.txt').exists())
-        # Verify the independently usable unit actually compiles, with bibliography.
+        # Resolve the definition cross-reference through real stable TeX/BibTeX passes.
+        auxiliary=[]
         for command in (['pdflatex','-halt-on-error','-interaction=nonstopmode','-no-shell-escape','main.tex'],['bibtex','main'],
+                        ['pdflatex','-halt-on-error','-interaction=nonstopmode','-no-shell-escape','main.tex'],
                         ['pdflatex','-halt-on-error','-interaction=nonstopmode','-no-shell-escape','main.tex']):
             proc=subprocess.run(command,cwd=destination,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
             self.assertEqual(proc.returncode,0,proc.stdout.decode('utf-8',errors='replace')[-3000:])
+            if command[0]=='pdflatex':auxiliary.append((destination/'main.aux').read_bytes())
+        self.assertEqual(auxiliary[-2],auxiliary[-1],'Cross-references did not stabilize')
+        from build_checks import log_issues
+        self.assertEqual(log_issues((destination/'main.log').read_text(encoding='utf-8',errors='replace')),{})
+        pdf_text=subprocess.run(['pdftotext','-layout','main.pdf','-'],cwd=destination,capture_output=True,text=True,encoding='utf-8')
+        self.assertEqual(pdf_text.returncode,0,pdf_text.stderr)
+        visible=' '.join(pdf_text.stdout.split())
+        definition=re.search(r'Definition (\d+(?:\.\d+)*)\. Let x',visible)
+        self.assertIsNotNone(definition,visible)
+        self.assertIn('For x as in Definition '+definition[1]+',',visible)
+        self.assertNotIn('??',visible)
         self.assertTrue((destination/'main.pdf').read_bytes().startswith(b'%PDF-'))
         before=tree(self.root)
         self.code('DESTINATION_EXISTS',export_unit,self.root,'N-main',destination)
