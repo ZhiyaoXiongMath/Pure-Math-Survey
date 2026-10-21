@@ -30,8 +30,8 @@ authorization_snapshot:
 current_stage: PR-04
 status: ready_for_review
 active_branch: codex/v2.4.1-pr04-rules
-active_pr_number: null
-active_pr_url: null
+active_pr_number: 13
+active_pr_url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/13
 base_sha_at_stage_start: 52778c01121c513f86f805eddf044a7d064ebef2
 last_confirmed_241_merge: 52778c01121c513f86f805eddf044a7d064ebef2
 stages:
@@ -127,7 +127,7 @@ stages:
     depends_on:
     - PR-03
     status: ready_for_review
-    pr_url: null
+    pr_url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/13
     merge_sha: null
     candidate_version: 2.4.1-dev.4
     kb_schema: 3.0.0
@@ -157,6 +157,10 @@ implemented_changes:
   repaired it without changing source mathematics. Normal raggedbottom prevents flushbottom spacing inflation.
 - Updated bilingual installed/root documentation, allowlist, resource checksums, validator/verifier and
   three-platform CI candidate paths.
+- Fixed explicit max_pages packaging to use verified main_pages, excluding separate references; over-limit
+  builds and packages still refuse and retain actual failure/previous-output evidence.
+- Required method/input graph notes now always require the semantic annotation style and a visible attachment
+  to their recorded premise-set join; changing style cannot bypass ownership checks.
 implementation_checks:
 - name: existing_behavior_suite
   command: python3 -m unittest discover -s tests -v
@@ -182,17 +186,50 @@ implementation_checks:
     Windows-only N/A; actual neutral TeX 1 main page / 2 total pages
   external_receipt_id: verification.json
   external_receipt_sha256: bcdfe2e8616d4d8db95cf16a220a301557a38cfe767e30e016d42b81ac570c89
+  boundary: Preserved original candidate evidence before the two PR review fixes; the affected installed
+    checks and new byte binding below cover the changed candidate.
 - name: final_source_binding
   result: PASS; 31 runtime resources plus checksum, 13 test files and 1 verifier tool byte-match archive/unpacked/isolated
     suite; source unchanged
   archive_sha256: 92241b21681d59a0330f0c754af7e635a4b1d11a94ca8565bf6ccff3ac4191d3
   external_receipt_id: source-match.json
   external_receipt_sha256: eaa7a205489e5c10999382607e0f9545d8620395c34ec1b5c7ee28402e41485b
+  boundary: Preserved original candidate evidence before the two PR review fixes; the affected installed
+    checks and new byte binding below cover the changed candidate.
 - name: frozen_rules
   result: 22806 bytes; SHA256 unchanged; old authority path removed
   sha256: 452a4d7548c23bc75fe8fec6299ae9777a3e6763eb5f955063d938c2f3b6b2c7
+- name: review_findings_reproduced
+  result: 'Both confirmed P2 findings reproduced before repair: 2 main + 1 reference pages incorrectly
+    blocked packaging; changing a required note style and deleting its visible attachment incorrectly
+    passed graph checks.'
+  initial_review_url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/13#pullrequestreview-5601748463
+  preserved_failure_receipts:
+    before-fix.log: 92898af246c5c6d2e9e1e6d117a850e2629ddac845e5cdb74a7fa9237e6234f5
+    note-owner-before-fix.log: bb57a0d9b8ca44f9ecc7ac13aadc2ef49dcd6d527fa778b6253d89959bd978c4
+- name: affected_installed_repairs
+  result: PASS; eight affected tests passed locally and in a no-pip isolated installation. Actual 2-main/3-total
+    PDF packages with max_pages=2; 3-main/4-total refuses with logs and prior PDF/archive preserved. Required
+    method and input note style/attachment bypasses reject.
+  command: python3 <external affected-install harness>; installed commands use the isolated venv Python with -I
+  external_receipt_id: pr04-main-limit-fix/verification.json
+  external_receipt_sha256: 7bec83731458fb747a4ca5fb2c06fe470ffb007c4e8ee88bcdcae290f4f92e1b
+  archive_sha256: 9d295c48483bc266b03a57679d23839e62133000a962c9a78c0d022b9b3f4424
+  source_binding: All 31 runtime resources plus checksum, 13 test files and one verifier tool match source/archive/isolated
+    copies; source unchanged.
+  changed_files_since_original_verification:
+    runtime:
+    - artifact-checksums.txt
+    - scripts/survey_core/graphs.py
+    - scripts/survey_core/release.py
+    tests:
+    - test_build_layout.py
+    - test_knowledge_units.py
+    tools: []
+  boundary: Original 98-test report retained; no new complete-suite, neutral-style or mathematical-sample
+    rerun. Actual new PR CI and affected independent review remain required.
 remaining_work:
-- Controller publishes the exact staged candidate on the current stage branch and opens its PR.
+- Controller updates the existing PR13 with the exact staged repair candidate; no new same-stage PR.
 - Complete finite independent code/content/PDF review and actual three-platform PR CI; resolve only concrete
   affected findings.
 - After actual PR04 merge, continue PR05 from its merge state, reusing this representative source and

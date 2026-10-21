@@ -143,8 +143,10 @@ def graph_errors(inv,plan,raw):
         index=m['groups'].index(group)
         note_names += ['method-'+str(index)+'-'+token(k) for k in group['nodes'] if k not in nodes]
         for name in note_names:
-            if name not in declarations or owners.get(name)!=group['join']:
-                add('Missing required input/method note attached to its premise set: '+name)
+            owner=group['join']
+            if (name not in declarations or 'pmsannotation' not in [v.strip() for v in declarations[name].split(',')]
+                    or owners.get(name)!=owner or not (connection(name,owner,'pmsattachment') or connection(owner,name,'pmsattachment'))):
+                add('Required input/method note needs its semantic style and visible attachment to its premise set: '+name)
     for name,options in declarations.items():
         if 'pmsannotation' in [v.strip() for v in options.split(',')]:
             owner=owners.get(name)

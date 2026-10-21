@@ -178,6 +178,12 @@ class EditableArchitecture(unittest.TestCase):
                            raw.replace('% note-owner: method-0-N-method R-combine-1',''),
                            raw.replace(r'\ref{node:N-main}',r'\ref{node:N-c}')):
                 self.assertTrue(graph_errors(inv,value,broken))
+            # A required note cannot evade visible ownership by changing its style.
+            for name in ('method-0-N-method','inputs-R-combine-1'):
+                detached=raw.replace(r'\node[pmsannotation] ('+name+')',r'\node[draw] ('+name+')')
+                detached=detached.replace(r'\draw[pmsattachment] ('+name+') -- (R-combine-1);','')
+                self.assertIn('% note-owner: '+name+' R-combine-1',detached)
+                self.assertTrue(graph_errors(inv,value,detached),name)
             # The author's anchors/bends remain editable without changing dependencies.
             edited=raw.replace('(N-a) -- (R-combine-1);','(N-a.south) to[bend right=15] (R-combine-1.west);')
             self.assertEqual(graph_errors(inv,value,edited),[])

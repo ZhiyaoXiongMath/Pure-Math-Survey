@@ -61,6 +61,27 @@ class MinimalLayout(unittest.TestCase):
         self.assertEqual(read_json(self.root/'run.json')['status'],'failed')
         self.assertTrue(any(p.read_bytes()==previous for p in (self.out/'history').rglob('main.pdf')))
 
+    def test_explicit_limit_counts_main_pages_for_build_and_package(self):
+        from test_v2 import build_output,read_json,write_json,prepare_output,package_output,assess_release
+        plan=read_json(self.plan);plan['limits']['max_pages']=2;write_json(self.plan,plan)
+        prepare_output(self.root,self.plan)
+        built=build_output(self.root,'mini')
+        self.assertEqual((built['artifacts']['main_pages'],built['artifacts']['total_pages']),(2,3))
+        self.assertEqual(assess_release(self.root,'mini')['status'],'PACKAGEABLE')
+        archive=self.base/'within-limit.zip'
+        self.assertEqual(package_output(self.root,'mini',archive)['status'],'PACKAGED')
+        previous_pdf=(self.out/'build/main.pdf').read_bytes();previous_archive=archive.read_bytes()
+        text=self.main.read_text(encoding='utf-8')
+        self.main.write_text(text.replace(r'\pmsmainend',r'\newpage Extra main page.\pmsmainend'),encoding='utf-8')
+        with self.assertRaises(SurveyError):build_output(self.root,'mini')
+        failed=read_json(self.out/'build/build-report.json')
+        self.assertEqual((failed['status'],failed['main_pages'],failed['total_pages']),('FAILED',3,4))
+        self.assertTrue(failed['layout_errors']);self.assertTrue((self.out/'build/main.log').is_file())
+        self.assertIn('MAX_PAGES_EXCEEDED',{e['code'] for e in assess_release(self.root,'mini')['errors']})
+        with self.assertRaises(SurveyError):package_output(self.root,'mini',self.base/'over-limit.zip')
+        self.assertFalse((self.base/'over-limit.zip').exists());self.assertEqual(archive.read_bytes(),previous_archive)
+        self.assertTrue(any(p.read_bytes()==previous_pdf for p in (self.out/'history').rglob('main.pdf')))
+
     def test_compression_and_false_boundary_reject_before_build_writes(self):
         from test_v2 import build_output
         from test_minimal_runtime import tree
