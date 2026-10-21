@@ -5,6 +5,7 @@ import shutil
 import subprocess
 import tempfile
 import unittest
+import unicodedata
 from unittest.mock import patch
 from test_v2 import fixture,putnode,plan,authored_toy,load_node,node_bytes,read_json,write_json,SurveyError
 from survey_core.common import VERSION,all_files,safe
@@ -85,7 +86,7 @@ class LeanKnowledge(unittest.TestCase):
         self.assertEqual(log_issues((destination/'main.log').read_text(encoding='utf-8',errors='replace')),{})
         pdf_text=subprocess.run(['pdftotext','-layout','main.pdf','-'],cwd=destination,capture_output=True,text=True,encoding='utf-8')
         self.assertEqual(pdf_text.returncode,0,pdf_text.stderr)
-        visible=' '.join(pdf_text.stdout.split())
+        visible=' '.join(unicodedata.normalize('NFKC',pdf_text.stdout).split())
         definition=re.search(r'Definition (\d+(?:\.\d+)*)\. Let x',visible)
         self.assertIsNotNone(definition,visible)
         self.assertIn('For x as in Definition '+definition[1]+',',visible)
