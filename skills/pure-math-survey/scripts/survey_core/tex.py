@@ -3,7 +3,7 @@
 Inputs are resolved from the manuscript compiler working directory. The scanner
 supports balanced literal iftrue/iffalse branches and literal input/include;
 comments, unused definitions and nonexecuted branches retain their source lines
-but cannot supply review evidence. Unsupported execution is diagnosed, never
+but cannot supply visible canonical content. Unsupported execution is diagnosed, never
 asserted visible. Body reachability does not establish pixel visibility or proof.
 """
 from __future__ import annotations
@@ -416,47 +416,3 @@ def inspect_tex(out: Path) -> Inspection:
         if name in definitions and risky(name):
             issue(rel, raw, pos, f'Cannot certify expansion of \\{name}; use literal decisive content')
     return scan
-
-
-def validate_locations(out: Path, locations: object, *, node_id: str | None = None,
-                       canonical: bool = False, inspection: Inspection | None = None) -> list[dict]:
-    """Validate EVERY range against one ephemeral scan shared by the caller."""
-    errors = []
-    if not isinstance(locations, list) or not locations:
-        return [diagnostic('REVIEW_LOCATION_INVALID', 'Supply nonempty structured path/line_start/line_end locations', 'evidence', node_id)]
-    scan = inspection
-    for loc in locations:
-        if not isinstance(loc, dict) or not {'path', 'line_start', 'line_end'} <= loc.keys():
-            errors.append(diagnostic('REVIEW_LOCATION_INVALID', 'Expected a structured authored location', 'evidence', node_id)); continue
-        rel = loc['path']
-        try:
-            require(isinstance(rel,str) and rel.startswith('manuscript/') and rel.endswith('.tex'),
-                    'REVIEW_LOCATION_INVALID', 'Location must be an authored manuscript TeX file', str(rel))
-            path = safe(out, rel, True); lines = path.read_text(encoding='utf-8').splitlines()
-            lo, hi = loc['line_start'], loc['line_end']
-            require(type(lo) is int and type(hi) is int and 1 <= lo <= hi <= len(lines),
-                    'REVIEW_LOCATION_INVALID', 'Location line range does not exist', rel)
-        except (SurveyError, OSError, ValueError) as exc:
-            errors.append(diagnostic('REVIEW_LOCATION_INVALID', str(exc), str(rel), node_id)); continue
-        try:
-            if scan is None:
-                scan = inspect_tex(out)
-        except (SurveyError, OSError, ValueError) as exc:
-            errors.append(diagnostic('REVIEW_LOCATION_UNVERIFIABLE', str(exc), rel, node_id)); continue
-        prefix = f'Lines {lo}-{hi}: '
-        code = None; message = ''
-        if scan.errors:
-            code = 'REVIEW_LOCATION_UNVERIFIABLE'
-            message = '; '.join(f'{e["path"]}: {e["message"]}' for e in scan.errors)
-        elif rel not in scan.inputs:
-            code = 'REVIEW_LOCATION_UNREACHABLE'; message = 'File is not reachable through an executed literal input from main.tex'
-        elif not any(lo <= line <= hi for line in scan.body_lines.get(rel, set())):
-            code = 'REVIEW_LOCATION_NOT_IN_BODY'; message = 'Range is in the preamble, after document end, or outside the input body context'
-        elif not any(lo <= line <= hi for line in scan.content_lines.get(rel, set())):
-            code = 'REVIEW_LOCATION_EMPTY'; message = 'No substantive unmasked body content in this range'
-        elif canonical and not any(x['path'] == rel and lo <= x['line_start'] <= hi
-                and x['input'] == f'generated/statements/{node_id}.tex' for x in scan.locations):
-            code = 'REVIEW_LOCATION_INVALID'; message = 'Range does not contain this actual canonical body input'
-        if code:
-            errors.append(diagnostic(code, prefix + message, rel, node_id))
-    return errors

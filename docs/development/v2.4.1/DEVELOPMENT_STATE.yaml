@@ -1,25 +1,22 @@
-# The only persisted current development state for target 2.4.1.
-# This is a recorded snapshot. Query GitHub before acting.
-# Do not place the final SHA of the commit containing this file inside this file.
+# The only persisted current development state. GitHub owns live checks/review/merge facts.
+# Never record this commit own final SHA.
 state_schema_version: 1
 project: Pure-Math-Survey
-target_version: "2.4.1"
-recorded_date: "2026-10-21"
+target_version: 2.4.1
+recorded_date: '2026-10-21'
 timezone: Asia/Shanghai
-
 repository:
   url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey
   default_branch_observed: main
-  main_sha_observed: 3db6cdd53b524698053de4aa98603e7a9ed9742b
-  software_version_observed: "2.1.0"
-  kb_schema_observed: "2.0.0"
-  output_schema_observed: "2.2.0"
+  main_sha_observed: def354702887ec9150426316ad9568a127239bbd
+  software_version_observed: 2.1.0
+  kb_schema_observed: 2.0.0
+  output_schema_observed: 2.2.0
   editorial_policy_observed: four-modes-2026-10-15-r5
   latest_release_observed: v2.1.0
   observation_method: github_connector_and_full_main_checkout
-
 design:
-  status: contract_installed_for_pr01
+  status: pr02_minimal_transition_implemented
   rules_file: rules.v22.txt
   rules_sha256: 452a4d7548c23bc75fe8fec6299ae9777a3e6763eb5f955063d938c2f3b6b2c7
   transcript_sha256: f6e59d20ee4793c9346d057f3de1a25ebd3507d94d76b00a8a78240771eef8f7
@@ -27,99 +24,152 @@ design:
   workflow: docs/development/v2.4.1/PR_WORKFLOW.zh-CN.md
   development_rules: docs/development/v2.4.1/DEVELOPMENT_RULES.zh-CN.md
   baseline: docs/development/v2.4.1/BASELINE_AND_SOURCES.zh-CN.md
-
 authorization_snapshot:
-  observed_user_request: implement_pr01_and_create_reviewable_pull_request
-  repository_write: authorized_for_pr01
-  create_pull_request: authorized_for_pr01
-  merge: prohibited_in_this_chat
-  publish_release: prohibited_in_this_chat
-  note: "User explicitly authorized the PR-01 branch, required files, commit, push and one PR; no merge, tag/Release or PR-02 in this chat."
-
-current_stage: PR-01
+  observed_user_request: active_goal_pr01_through_pr05_sequential_implementation_review_merge
+  repository_write: authorized_for_pr01_through_pr05
+  create_pull_request: authorized_for_pr01_through_pr05
+  merge: authorized_after_finite_checks_and_independent_review
+  publish_release: not_authorized
+  note: Active user Goal supersedes prior PR01-only snapshot. No formal tag, Release
+    or asset upload. Controller owns GitHub operations; implementation agent edits
+    isolated worktree only.
+current_stage: PR-02
 status: ready_for_review
-active_branch: codex/v2.4.1-pr01-contract
+active_branch: codex/v2.4.1-pr02-minimal
 active_pr_number: null
 active_pr_url: null
-base_sha_at_stage_start: 3db6cdd53b524698053de4aa98603e7a9ed9742b
-last_confirmed_241_merge: null
-
+base_sha_at_stage_start: def354702887ec9150426316ad9568a127239bbd
+last_confirmed_241_merge: def354702887ec9150426316ad9568a127239bbd
 stages:
   PR-01:
     name: contract_and_persistent_handoff
     depends_on: []
+    status: merged
+    pr_url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/10
+    merge_sha: def354702887ec9150426316ad9568a127239bbd
+    review_url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/10#pullrequestreview-5599715698
+    ci_pr_head:
+      run_id: 39598563246
+      result: pass
+    ci_merge_sha:
+      run_id: 39601398593
+      result: in_progress_at_snapshot
+  PR-02:
+    name: minimal_only_and_no_runtime_reviews
+    depends_on:
+    - PR-01
     status: ready_for_review
     pr_url: null
     merge_sha: null
-  PR-02:
-    name: minimal_only_and_no_runtime_reviews
-    depends_on: [PR-01]
-    status: not_started
-    pr_url: null
-    merge_sha: null
+    candidate_version: 2.4.1-dev.2
+    runtime_contract: minimal-lean-2.4.1
+    editorial_policy: minimal-transition-pr02
   PR-03:
     name: shared_lean_knowledge_units
-    depends_on: [PR-02]
+    depends_on:
+    - PR-02
     status: not_started
     pr_url: null
     merge_sha: null
   PR-04:
     name: rules_v22_writing_and_layout
-    depends_on: [PR-03]
+    depends_on:
+    - PR-03
     status: not_started
     pr_url: null
     merge_sha: null
   PR-05:
     name: integration_installation_release_candidate
-    depends_on: [PR-04]
+    depends_on:
+    - PR-04
     status: not_started
     pr_url: null
     merge_sha: null
-
 completed_work:
-  - "Initial design package records reading its two sources; this PR reads the package, not the unavailable private transcript."
-  - "Read START-HERE and the complete guide, workflow, development rules, initial state, source summary and handoff prompts."
-  - "Rechecked GitHub main, all branch pages, open PRs and all-state 2.4.1 PR search; no existing same-stage work found."
-  - "Verified latest Release remains v2.1.0; no publication change is authorized."
+- 'Reconciled Controller live GitHub observations: PR01 merged; PR-head three-platform
+  CI passed and independent review approved. Local branch starts from actual PR01
+  merge.'
+- Implemented the complete PR02 minimal-only path in the isolated candidate worktree;
+  original checkout and previous user projects were not edited.
+- Finite author engineering checks and an exact-resource isolated installation completed;
+  independent review and PR02 remote CI have not yet run.
 implemented_changes:
-  - "Installed the supplied v2.4.1 development documents and byte-identical rules.v22.txt."
-  - "Created root AGENTS.md from the supplied fragment; no prior root AGENTS existed."
-  - "Prepended historical pointers to old CONTRACT/STATUS; retained all original bytes below the notices."
-  - "Added bilingual README development links while retaining current 2.1.0 functionality."
-  - "Marked design-time observations as historical and updated only this state for current authorization/progress."
+- Only minimal and the fixed integrated compatibility view are accepted; other modes/views,
+  review/readiness commands and draft bypasses return explicit errors.
+- Deleted active review/readiness/exposition/dispatch implementations and removed
+  credential dependencies from project inventory, snapshots, plans, prepare, generated-material
+  verification and packaging.
+- Every project mutation rejects a missing runtime_contract before writer locks or
+  writes; legacy bytes are preserved. Existing temporary schema numbers use a distinct
+  transition policy.
+- Preserved canonical-byte export, source identity and original-byte restrictions,
+  path/symlink containment, atomic snapshot and file writes, material hashes, TeX
+  input checks, actual build logs, history and package/rebuild behavior.
+- Updated current skill, metadata, both repository and installed README languages,
+  minimal-runtime instructions and transition template; active installer has 29 resources
+  and excludes old modes/audit instructions/development documents.
+- Replaced obsolete audit/four-mode positive tests with explicit rejections and retained
+  safety, snapshot, source, materials, literal TeX, real build and installer/process
+  tests; CI still requests Linux Python 3.10/3.12 and Windows Python 3.12.
 implementation_checks:
-  - check: supplied_package_integrity
-    result: pass
-    evidence: "All 9 SHA256SUMS entries match the extracted input package."
-  - check: rules_original_bytes_and_single_copy
-    result: pass
-    evidence: "22,806 bytes; matches the supplied file byte for byte and design.rules_sha256; one rules.v22.txt in the repository."
-  - check: local_navigation_and_state
-    result: pass
-    evidence: "56 relative Markdown links/anchors resolve; YAML parses with unique keys; stage, authorization, paths and next-action invariants checked."
-  - check: stage_scope_and_history_preservation
-    result: pass
-    evidence: "Only 12 allowlisted documentation/navigation files changed; 114 other base files are byte-identical; old CONTRACT/STATUS bodies are preserved."
-  - check: runtime_and_installation_boundary
-    result: pass
-    evidence: "All 69 selected installation resources match base bytes; development documents/rules are excluded; CLI version remains 2.1.0 / 2.0.0 / 2.2.0 / four-modes-2026-10-15-r5."
-  - check: documentation_consistency_and_publication_scope
-    result: pass
-    evidence: "Compared package contract terms and bilingual navigation; checked the full final text tree and new public content; no private transcript, backup, local report or credential is added."
-  - check: git_diff_whitespace
-    result: pass
-    evidence: "git diff --cached --check passes."
-  - check: independent_review
-    result: not_run
-    evidence: "To be performed in a separate review chat against the actual PR HEAD."
-  - check: github_ci
-    result: not_run_at_snapshot
-    evidence: "PR creation follows this commit; query live Actions/checks, do not infer success from local checks."
+- check: author_regression_suite
+  result: pass
+  initial_result: fail_in_synthetic_verifier_log_fixture
+  evidence: 'Final python3 -m unittest discover -s tests -v: 84 tests, 81 pass, 3
+    declared Windows-only skips on Linux/Python 3.14.4. Initial partial-log fixture
+    expectation was corrected for the current suite; no runtime test was skipped to
+    pass.'
+- check: actual_synthetic_kb_prepare_build_package
+  result: pass
+  evidence: 'Synthetic unassessed project: KB freeze, PREPARED, STRUCTURALLY_VALID,
+    actual BUILT PDF and PACKAGED archive without a reviews directory or accepted
+    record. Snapshot KB-442d646423bab6d8929440b2d3c4efdc66c5b0d47ad4b8e88c6d6a2efeb26fa3.
+    Real build and package files retained externally.'
+- check: standalone_output_rebuild
+  result: pass
+  evidence: Extracted synthetic output ZIP; python3 -I rebuild.py --output <new external
+    directory> produced a one-page PDF in two stable passes with no blocking TeX log
+    issues.
+- check: unsupported_legacy_and_unsafe_input_preservation
+  result: pass
+  evidence: Modes/views/retired commands, legacy project and plan contracts, unsafe
+    plan/TeX paths reject with byte-identical original project trees; direct legacy
+    mutation calls fail before mocked os.open can run.
+- check: active_runtime_reachability
+  result: pass
+  evidence: AST and installed module imports find no review/readiness/dispatch imports;
+    those active modules are deleted. Malformed unrelated historical review JSON is
+    neither loaded nor frozen.
+- check: validate_assets
+  result: pass
+  evidence: 29 active resources; 9 installed Markdown links; minimal-integrated preparation;
+    7 unsupported mode/view requests rejected without writes; Python 3.10 grammar
+    parsed (not a 3.10 runtime execution).
+- check: final_exact_resource_isolated_installation
+  result: pass
+  evidence: 'Final candidate ZIP da682540b95eeb9d7efa7b278cd4f5ae27680141e4adc2e05ecdf5d8ae9c5546
+    verified in a clean no-pip venv. 84 installed tests: 81 passed, 3 declared Windows
+    N/A, zero unexpected/capability skips. KB-only created no outputs; actual neutral
+    TeX smoke passed; every installed resource matches current source bytes.'
+- check: resource_checksums_and_whitespace
+  result: pass
+  evidence: Source artifact-checksums.txt agrees with the 29-resource archive list;
+    git diff --check passes.
+- check: independent_review
+  result: not_run
+  evidence: Controller will request independent review of the actual PR02 commit/PR.
+- check: pr02_github_ci
+  result: not_run
+  evidence: PR02 has not yet been pushed; Linux 3.10/3.12 and Windows 3.12 execution
+    is not claimed by local 3.14.4 tests.
 real_paper_runs: []
 token_measurements: []
 blockers: []
-scope_adjustments: []
-
+scope_adjustments:
+- PR02 necessarily removes review-specific plan proof_obligations, proof_treatment,
+  contributions and draft fields now; their generated promises otherwise keep removed
+  runtime review responsibilities in the prepare chain. Transitional KB containers
+  and schema numbers remain until PR03.
 release:
   status: not_started
   tag: null
@@ -127,21 +177,26 @@ release:
   source_commit: null
   installer: null
   checksum: null
-
 next_action:
-  kind: independent_review_of_current_pr
-  stage: PR-01
-  first: query_github_for_active_branch_pr_and_actual_head_checks_reviews
-  task: review_pr01_contract_navigation_and_state_from_actual_pr_head
-  stop_after: report_independent_review_without_merge_release_or_pr02
-  if_existing_pr_open: review_current_head_or_fix_concrete_findings_in_same_pr_under_actual_authorization
-  if_existing_pr_merged: confirm_actual_merge_and_wait_for_next_stage_authorization
-  if_existing_pr_closed_unmerged: diagnose_without_skipping_stage
-
+  kind: controller_create_pr_and_independent_review
+  stage: PR-02
+  first: Query actual branch HEAD and GitHub to avoid duplicate PR; create current
+    PR02, then run finite independent review and CI.
+  task: Resolve concrete findings in this stage, then merge only after current checks/review
+    satisfy the active Goal. Begin PR03 only after actual PR02 merge.
+  stop_after: No formal tag, GitHub Release or installer upload; those are outside
+    the active authorization.
 handoff_notes:
-  - "PR-01 changes development documents and navigation only; runtime, installer resources and versions remain 2.1.0."
-  - "The PR is created after this snapshot; null PR identity fields require branch-based GitHub lookup, not a duplicate PR."
-  - "Independent review and CI are not claimed by author checks; read their live GitHub evidence."
-  - "Stage IDs PR-01 through PR-05 are not GitHub pull request numbers."
-  - "GitHub owns live HEAD, checks, review, merge and publication facts; do not commit merely to echo the final HEAD."
-  - "Original transcript is not distributed in this package and was not added to the repository."
+- PR02 candidate remains on transitional KB 2.0.0/output 2.2.0; final schema 3.0.0
+  and routes/unit exports belong to PR03.
+- The current minimal template is explicitly transitional; original rules.v22 stays
+  frozen in development docs until PR04, which will implement final six-page layout.
+- No real-paper source/mathematical/reader/PDF-page acceptance or token savings is
+  claimed in PR02.
+- Final exact-resource installation evidence is external under pr02-final-installed-check-v2;
+  the Controller keeps its logs, package, source hashes and receipts, which are not
+  installer resources.
+- Only this state file tracks current development; final commit SHA and current remote
+  checks/review/merge are queried from GitHub. No own final SHA is embedded.
+- PR01 PR-head CI passed; its separately started merge-SHA CI remains in_progress_at_snapshot
+  until Controller records a newer live result.

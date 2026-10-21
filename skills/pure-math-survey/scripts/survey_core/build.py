@@ -10,7 +10,7 @@ import subprocess
 import tempfile
 from .common import all_files, atomic_bytes, diagnostic, file_hash, file_inventory, now, read_json, require, result, safe, sha, write_json, writer
 from .exports import output_inputs,validate_structure,verify_generated
-from .models import load_plan
+from .models import load_plan, load_project
 from .history import archive_current, save_record
 
 def executable(names:list[str])->str:
@@ -44,14 +44,11 @@ def emergency_stretch_argument(value:float|None)->tuple[str,dict]:
 
 
 def build_output(root:Path,output_id:str,emergency_stretch_em:float|None=None)->dict:
+    load_project(root)
     tex_argument,layout=emergency_stretch_argument(emergency_stretch_em)
     out=safe(root,'outputs/'+output_id);plan=load_plan(out/'plan.json');verify_generated(root,plan)
-    # Exact fragments and literal input safety are checked even for drafts.
     structure=validate_structure(root,output_id)
-    from .exposition import PREVIEW_DESIGN_CODES
-    allowed=PREVIEW_DESIGN_CODES | {'MANUSCRIPT_INCOMPLETE'} if plan['draft'] else set()
-    hard=[e for e in structure['errors'] if e['code'] not in allowed]
-    require(not hard,'BUILD_FAILED','Structural input errors: '+str(hard),'manuscript/main.tex')
+    require(not structure['errors'],'BUILD_FAILED','Structural input errors: '+str(structure['errors']),'manuscript/main.tex')
     sources=file_inventory(out,sorted(output_inputs(out)))
     engine=executable(['pdflatex']);bib=executable(['bibtex','bibtex.original','bibtex8'])
     with writer(root):
@@ -59,7 +56,6 @@ def build_output(root:Path,output_id:str,emergency_stretch_em:float|None=None)->
         stage=Path(tempfile.mkdtemp(prefix='.tex-build-',dir=out));compiled=stage/'compiled';compiled.mkdir()
         report={'built_at':now(),'output_id':output_id,'snapshot_id':plan['snapshot_id'],'source_inputs':sources,
                 'commands':[],'tools':{},'layout':layout,'status':'FAILED','stability_reached':False,'warnings':[],
-                'draft_preview':plan['draft'],'preview_limitations':[e for e in structure['errors'] if e['code'] in allowed],
                 'acceptance':'Build does not perform mathematical, exposition or page review.'}
         try:
             for row in sources:
@@ -102,7 +98,7 @@ def build_output(root:Path,output_id:str,emergency_stretch_em:float|None=None)->
             history_data={'inputs/'+row['path']:safe(stage,row['path'],True).read_bytes() for row in sources if safe(stage,row['path']).is_file()}
             history_data.update({'compiled/'+p:safe(compiled,p,True).read_bytes() for p in all_files(compiled)})
             record=save_record(out,'build',history_data)
-            write_json(out/'history/latest-build.json',{'history_id':record['history_id'],'status':report['status'],'new_visual_review':'NOT_PERFORMED'})
+            write_json(out/'history/latest-build.json',{'history_id':record['history_id'],'status':report['status'],'meaning':'Actual build history only'})
             dest=out/'build'
             if dest.exists():shutil.rmtree(dest)
             compiled.rename(dest);shutil.rmtree(stage,ignore_errors=True)
@@ -124,6 +120,7 @@ def check_build(out:Path)->tuple[dict,list[dict]]:
     return b,errors
 
 def render_output(root:Path,output_id:str,dpi:int=120)->dict:
+    load_project(root)
     require(type(dpi) is int and 72<=dpi<=300,'CONTRACT_INVALID','Render DPI must be 72..300')
     out=safe(root,'outputs/'+output_id);b,errors=check_build(out)
     require(not errors,'BUILD_STALE','Rebuild current sources before rendering: '+str(errors))
@@ -151,6 +148,7 @@ def render_output(root:Path,output_id:str,dpi:int=120)->dict:
 
 def reading_budget(root:Path,output_id:str)->dict:
     """Only explicit max_pages blocks this separate, actual-PDF reading-budget check."""
+    load_project(root)
     out=safe(root,'outputs/'+output_id);plan=load_plan(out/'plan.json');pages=pdf_pages(safe(out,'build/main.pdf',True));errors=[];warnings=[]
     maximum=plan['limits'].get('max_pages');threshold=plan['limits'].get('page_review_threshold')
     if maximum is not None and pages>maximum:errors.append(diagnostic('MAX_PAGES_EXCEEDED',f'{pages} actual pages exceed explicit maximum {maximum}','build/main.pdf'))

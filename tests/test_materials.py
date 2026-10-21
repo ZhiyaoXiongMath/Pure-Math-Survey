@@ -12,7 +12,7 @@ class AuthoringMaterials(unittest.TestCase):
     def setUp(self):
         self.tmp=tempfile.TemporaryDirectory()
         self.base=Path(self.tmp.name)
-        self.root=fixture(self.base/'project',reviewed=True)
+        self.root=fixture(self.base/'project')
         self.plan_path=plan(self.root)
         value=read_json(self.plan_path)
         value['audience']='Synthetic reader can substitute a real number and multiply zero.'
@@ -55,12 +55,6 @@ class AuthoringMaterials(unittest.TestCase):
     def test_M05_stale_material_manifest_is_rejected(self):
         manifest=self.out/'materials/materials-manifest.json'
         manifest.write_text('{}\n',encoding='utf-8')
-        self.refused()
-
-    def test_M06_copied_review_must_match_its_frozen_original(self):
-        review=self.out/'materials/evidence/reviews/mathematical-N-main.json'
-        self.assertTrue(review.is_file())
-        review.write_bytes(review.read_bytes()+b'\nChanged review.')
         self.refused()
 
     def test_M07_source_and_reading_note_are_bound(self):

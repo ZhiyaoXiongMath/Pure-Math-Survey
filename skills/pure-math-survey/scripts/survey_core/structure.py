@@ -44,8 +44,8 @@ def statement_title_errors(inspection) -> list[dict]:
         env = body[start+1:end-1]
         if env in inspection.custom_environment_heads:
             location = inspection.custom_environment_heads[env]
-            errors.append(diagnostic('STATEMENT_HEADING_REVIEW_REQUIRED',
-                f'Line {location["line"]}: called custom environment {env} has a nonliteral heading/body wrapper; inspect its actual PDF for statement names and numbering or simplify it.', location['path']))
+            errors.append(diagnostic('STATEMENT_HEADING_UNSUPPORTED',
+                f'Line {location["line"]}: called custom environment {env} has a nonliteral heading/body wrapper; use a literal statement heading.', location['path']))
         if env not in environments:
             continue
         used.add(env)
@@ -61,14 +61,14 @@ def statement_title_errors(inspection) -> list[dict]:
             errors.append(diagnostic('STATEMENT_DESCRIPTIVE_TITLE',
                 f'{env}: literal declaration embeds a parenthesized/bracketed descriptive heading. Retain only its statement type.', 'manuscript/main.tex'))
         elif heading.lower() not in STATEMENTS | {'fact', 'result', 'assertion'}:
-            errors.append(diagnostic('STATEMENT_HEADING_REVIEW_REQUIRED',
-                f'{env}: custom heading cannot be certified by the literal scanner; inspect its actual numbered PDF heading and remove any descriptive name.', 'manuscript/main.tex'))
+            errors.append(diagnostic('STATEMENT_HEADING_UNSUPPORTED',
+                f'{env}: custom heading cannot be certified by the literal scanner; use a literal statement type.', 'manuscript/main.tex'))
     if used:
         for location in inspection.heading_customizations:
             if location['style'] is not None and not any(inspection.statement_styles.get(env) == location['style'] for env in used):
                 continue
-            errors.append(diagnostic('STATEMENT_HEADING_REVIEW_REQUIRED',
-                f'Line {location["line"]}: custom theorem heading/style requires actual PDF inspection for numbering and absence of descriptive names; simplify to a literal type for automatic validation.', location['path']))
+            errors.append(diagnostic('STATEMENT_HEADING_UNSUPPORTED',
+                f'Line {location["line"]}: custom theorem heading/style is unsupported by this literal scanner; use a literal numbered statement type.', location['path']))
     return errors
 
 def strip_comments(text: str) -> str:
@@ -153,7 +153,7 @@ def shape_issues(inv: dict) -> list[str]:
     introductory = [r for r in inv['results'] if r['section_index']==first]
     body = [r for r in inv['results'] if r['section_index'] > first]
     if introductory and not body:
-        return ['BODY_RESULTS_ABSENT: introductory results exist, but the substantive body has no explicit result; a context-only or proof-only exception requires a located review.']
+        return ['BODY_RESULTS_ABSENT: introductory results exist, but the substantive body has no explicit result; check whether the intended reading structure is represented.']
     return []
 
 def public_inventory(inv: dict) -> dict:

@@ -5,7 +5,8 @@ import copy
 import errno
 import json
 import hashlib
-import base64
+import stat
+import zipfile
 import time
 import os
 import re
@@ -62,10 +63,11 @@ class ReleaseVerifierEvidence(unittest.TestCase):
             self.assertEqual(row['timeout_seconds'],3)
 
 
-class R4VerifierContracts(unittest.TestCase):
-    """Synthetic verifier orchestration only; no accepted mathematics is created."""
+class MinimalVerifierContracts(unittest.TestCase):
+    """Candidate identity, test evidence and process containment checks."""
     def valid_version(self):
-        return {'version':'2.1.0','schema_version':'2.0.0','output_schema_version':'2.2.0',
+        return {'version':'2.4.1-dev.2','schema_version':'2.0.0','output_schema_version':'2.2.0',
+                'runtime_contract':verifier.EXPECTED_RUNTIME,
                 'editorial_policy':verifier.EXPECTED_POLICY,
                 'supported_output_contracts':[{'schema_version':s,'editorial_policy':p}
                                               for s,p in sorted(verifier.EXPECTED_CONTRACTS)]}
@@ -74,6 +76,7 @@ class R4VerifierContracts(unittest.TestCase):
         actual=self.valid_version()
         verifier.assert_installed_contract(actual)
         for key,value in (('editorial_policy','four-modes-2026-10-12-rc2'),
+                          ('runtime_contract','legacy'),
                           ('version','2.2.0'),('schema_version','2.1.0'),
                           ('supported_output_contracts',[]),
                           ('supported_output_contracts',actual['supported_output_contracts']+[
@@ -120,8 +123,8 @@ class R4VerifierContracts(unittest.TestCase):
                 for outcome in ("skipped 'unavailable'",'FAIL','ERROR'):
                     bad=lines.copy();bad[index]=bad[index].replace('... ok',f'... {outcome}')
                     with self.subTest(suite=name,outcome=outcome):
-                        if outcome.startswith('skipped ') and name=='test_workflow_bindings':
-                            # This suite still executes its real symlink test.
+                        if outcome.startswith('skipped ') and name in {'test_v2', 'test_minimal_runtime'}:
+                            # These suites still have other required test cases.
                             # A skipped companion must be INCOMPLETE, not an
                             # exception or a PASS, despite other tests being ok.
                             result=verifier.installed_regression_summary(self.installed_log(bad))
@@ -167,7 +170,7 @@ class R4VerifierContracts(unittest.TestCase):
                         self.assertEqual(len(report['unverified_capability_tests']),1)
     def test_windows_symlink_permission_skip_is_incomplete_never_pass(self):
         lines=self.installed_lines('nt')
-        identity='test_workflow_bindings.WorkflowBindings.test_native_identity_still_rejects_symlink_escape'
+        identity='test_v2.Contracts.test_H21_actual_symlink_rejected_when_available'
         index=next(i for i,line in enumerate(lines) if f'({identity})' in line)
         unavailable=(lines[index].replace('... ok',
             '... skipped "OS did not authorize directory symlink creation: [WinError 1314] denied"'))
@@ -249,159 +252,37 @@ class R4VerifierContracts(unittest.TestCase):
                         good.replace('OK (skipped=3)','OK (skipped=2)'),
                         good.replace('OK (skipped=3)','FAILED (failures=1)'),
                         self.installed_log(lines+[lines[0]]),
-                        good.replace(lines[0],lines[0].replace(
-                            '(test_current_policy.Current.', '(test_other.Current.'))):
+                        good.replace('(test_build_layout.Current.', '(test_other.Current.')):
                 with self.subTest(log=log[-100:]),self.assertRaises(AssertionError):
                     verifier.installed_regression_summary(log)
 
-    def test_nonvisual_current_semantic_failure_cannot_hide_behind_new_pdf_work(self):
-        result={'artifacts':{'editorial_policy':verifier.EXPECTED_POLICY,'readiness':'READY',
-                            'used_output_review_ids':['synthetic-semantic']},
-                'errors':[{'code':'VISUAL_REVIEW_INCOMPLETE','path':'evidence'},
-                          {'code':'REVIEW_STALE','message':'Review old-visual no longer matches this input','path':'build/main.pdf'}]}
-        verifier.require_current_semantics(result)
-        for error in ({'code':'OUTPUT_SEMANTIC_REVIEW_PENDING','path':'evidence'},
-                      {'code':'REVIEW_STALE','path':'manuscript/main.tex'},
-                      {'code':'MODE_SEMANTIC_REVIEW_PENDING','path':'evidence'},
-                      {'code':'REVIEW_STALE','message':'Rendered image bytes have changed','path':'evidence/pages/page-1.png'},
-                      {'code':'DRAFT_NOT_RELEASABLE','path':'plan.json'}):
-            bad=copy.deepcopy(result);bad['errors'].append(error)
-            with self.subTest(error=error),self.assertRaises(AssertionError):verifier.require_current_semantics(bad)
+    def test_omitted_build_is_incomplete(self):
+        self.assertEqual(verifier.verification_completion(True)[0], 'INCOMPLETE')
+        self.assertEqual(verifier.verification_completion(False), ('PASS', []))
 
-    def test_missing_current_inputs_or_skipped_builds_remain_incomplete(self):
-        for has_inputs,no_build in ((False,False),(True,True),(False,True)):
-            self.assertEqual(verifier.verification_completion(has_inputs,no_build)[0],'INCOMPLETE')
-        self.assertEqual(verifier.verification_completion(True,False),('PASS',[]))
-
-    def test_default_manifest_is_discovered_but_explicit_path_takes_precedence(self):
+    def test_historical_manifest_is_never_discovered(self):
         with tempfile.TemporaryDirectory() as td:
-            root=Path(td)
-            self.assertIsNone(verifier.resolve_output_manifest(None,root))
-            default=root/'examples/r4/verification-manifest.json';default.parent.mkdir(parents=True);default.write_text('{}')
-            self.assertEqual(verifier.resolve_output_manifest(None,root),default)
-            explicit=root/'requested.json'
-            self.assertEqual(verifier.resolve_output_manifest(explicit,root),explicit)
+            root = Path(td)
+            manifest = root / 'examples/r4/verification-manifest.json'
+            manifest.parent.mkdir(parents=True)
+            manifest.write_text('Deliberately unreadable historical input')
+            stdout = StringIO()
+            with patch.object(verifier, 'ROOT', root), patch.object(sys, 'argv',
+                    ['verify_release', 'missing.zip']), redirect_stdout(stdout):
+                self.assertEqual(verifier.main(), 1)
+            report = json.loads(stdout.getvalue())
+            self.assertNotIn('manifest', report)
+            self.assertNotIn('outputs', report)
+            self.assertNotIn('manifest', report['failure'])
 
-    def test_engineering_only_does_not_discover_or_execute_default_outputs(self):
-        with tempfile.TemporaryDirectory() as td:
-            root=Path(td);manifest=root/'examples/r4/verification-manifest.json'
-            manifest.parent.mkdir(parents=True);manifest.write_text('Deliberately unreadable output manifest')
-            stdout=StringIO()
-            with patch.object(verifier,'ROOT',root), patch.object(sys,'argv',['verify_release','missing.zip','--engineering-only']), redirect_stdout(stdout):
-                self.assertEqual(verifier.main(),1)  # The missing archive is the actual failure.
-            report=json.loads(stdout.getvalue())
-            self.assertIsNone(report['manifest'])
-            self.assertNotIn('outputs',report)
-            self.assertNotIn('output manifest',report['failure'])
-
-    def test_engineering_only_and_explicit_full_manifest_conflict(self):
-        # argparse correctly emits an error here. Capture it so unittest -v
-        # retains one complete test result line for the installed verifier.
-        stderr=StringIO()
-        with patch.object(sys,'argv',['verify_release','missing.zip','--engineering-only','--manifest','explicit.json']), redirect_stderr(stderr):
-            with self.assertRaises(SystemExit) as caught:verifier.main()
-            self.assertEqual(caught.exception.code,2)
-        self.assertIn('Choose engineering-only or the full five-output manifest',
-                      stderr.getvalue())
-
-    def test_example_failure_records_keep_progress_and_actual_log_location(self):
-        with tempfile.TemporaryDirectory() as td:
-            destination=Path(td);build=destination/'project/outputs/thematic/build';build.mkdir(parents=True)
-            (build/'build-report.json').write_text(json.dumps({'status':'FAILED','blocking_log_issues':{'overflow':['11.1444pt']}}))
-            (build/'main.log').write_text('Actual overflow diagnostic')
-            for name in ('verify_release',):
-                spec=importlib.util.spec_from_file_location(name,ROOT/'tools'/f'{name}.py')
-                module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
-                report={'outputs':[{'output_id':'previous','build':'BUILT'},{'output_id':'thematic','build':'RUNNING'}]}
-                module.record_failure_artifacts(destination,report)
-                self.assertEqual(report['outputs'][0]['build'],'BUILT')
-                self.assertEqual(report['outputs'][1]['build'],'FAILED')
-                self.assertEqual(report['failure_artifacts'][0]['log'],str(build/'main.log'))
-                self.assertEqual(report['failure_artifacts'][0]['blocking_log_issues'],{'overflow':['11.1444pt']})
-
-    def synthetic_project(self,base):
-        project=base/'source';project.mkdir();(project/'project.json').write_text('{}')
-        specs=(('minimal','minimal','integrated'),('second','minimal','integrated'),
-               ('thematic','thematic','integrated'),('lecture','lecture','integrated'),
-               ('paper','paper','integrated'))
-        for oid,profile,view in specs:
-            out=project/'outputs'/oid;(out/'manuscript').mkdir(parents=True)
-            plan={'output_id':oid,'schema_version':'2.2.0','editorial_policy':verifier.EXPECTED_POLICY,
-                  'profile':profile,'view':view,'snapshot_id':'KB-synthetic','draft':profile=='paper',
-                  'comparison_group':'synthetic-comparison','question_ids':['N-q'],
-                  'selections':[{'node_id':'N-main','role':'principal_answer'}]}
-            (out/'generated/statements').mkdir(parents=True)
-            (out/'generated/statements/N-main.tex').write_text('Synthetic canonical bytes; not mathematics.')
-            (out/'plan.json').write_text(json.dumps(plan))
-            (out/'outline.md').write_text('Synthetic orchestration fixture, not a mathematical design.')
-            (out/'manuscript/main.tex').write_text('% Synthetic orchestration fixture, no mathematical acceptance.')
-        return project,[x[0] for x in specs]
-
-    def test_manifest_resolves_relative_projects_and_rejects_duplicates_and_paths(self):
-        with tempfile.TemporaryDirectory() as td:
-            base=Path(td);project,outputs=self.synthetic_project(base);manifest=base/'manifest.json'
-            for selected in (outputs,['../paper'],['paper','paper'],[]):
-                manifest.write_text(json.dumps({'projects':[{'path':'source','outputs':selected}]}))
-                if selected==outputs:
-                    self.assertEqual(verifier.load_output_manifest(manifest)[0]['path'],project.resolve())
-                else:
-                    with self.assertRaises(ValueError):verifier.load_output_manifest(manifest)
-
-    def synthetic_entries(self,base):
-        import shutil
-        project,outputs=self.synthetic_project(base)
-        single=base/'single';paper=base/'draft'
-        for dest,ids in ((single,['second']),(paper,['paper'])):
-            dest.mkdir();(dest/'project.json').write_text('{}')
-            for oid in ids:shutil.copytree(project/'outputs'/oid,dest/'outputs'/oid)
-        return [{'path':single,'outputs':['second']},
-                {'path':project,'outputs':['minimal','thematic','lecture']},
-                {'path':paper,'outputs':['paper']}]
-
-    def test_synthetic_orchestration_copies_sources_and_checks_paper_barrier(self):
-        with tempfile.TemporaryDirectory() as td:
-            base=Path(td);entries=self.synthetic_entries(base);project=entries[1]['path']
-            before={p:p.read_bytes() for p in project.rglob('*') if p.is_file()};calls=[]
-            def fake_check(command,cwd,env,**kwargs):
-                calls.append((command,kwargs))
-                if 'package' in command or ('release' in command and command[command.index('--output')+1]=='paper'):
-                    self.assertEqual(kwargs['allowed_returncodes'],(3,))
-                    return {'errors':[{'code':'DRAFT_NOT_RELEASABLE'}]}
-                if 'release' in command:
-                    return {'artifacts':{'output_id':command[command.index('--output')+1],'pages':1,'editorial_policy':verifier.EXPECTED_POLICY,'readiness':'READY','used_output_review_ids':['synthetic']},'errors':[{'code':'VISUAL_REVIEW_INCOMPLETE','path':'evidence'}]}
-                if 'build' in command:return {'status':'BUILT','artifacts':{'pages':1}}
-                if 'render' in command:
-                    output=Path(command[command.index('--output')-1])/'outputs'/command[command.index('--output')+1]
-                    CurrentVisualScope.write_artifacts(output,pages=1)
-                    return {'status':'RENDERED_NOT_REVIEWED'}
-                return {'status':'CHECKED'}
-            result=verifier.verify_outputs(entries,base/'work',fake_check,
-                Path(sys.executable),Path('synthetic-entry.py'),{},900,True)
-            self.assertEqual(len(result['outputs']),5)
-            self.assertEqual(before,{p:p.read_bytes() for p in before})
-            self.assertEqual(sum('build' in cmd for cmd,_ in calls),5)
-            self.assertEqual(sum('render' in cmd for cmd,_ in calls),5)
-            self.assertEqual(result['outputs'][-1]['formal_package'],'BLOCKED: no archive created')
-
-    def test_mismatched_comparison_snapshots_or_principals_are_rejected(self):
-        with tempfile.TemporaryDirectory() as td:
-            base=Path(td);entries=self.synthetic_entries(base)
-            path=entries[1]['path']/'outputs/thematic/generated/statements/N-main.tex'
-            path.write_text('Different synthetic canonical')
-            def check(command,*args,**kwargs):
-                return {'errors':[{'code':'DRAFT_NOT_RELEASABLE'}]}
-            with self.assertRaises(AssertionError):
-                verifier.verify_outputs(entries,base/'work',check,
-                    Path(sys.executable),Path('synthetic-entry.py'),{},900,False)
-
-    def test_paper_nondraft_cannot_enter_current_draft_verification(self):
-        with tempfile.TemporaryDirectory() as td:
-            base=Path(td);project,outputs=self.synthetic_project(base)
-            path=project/'outputs/paper/plan.json';plan=json.loads(path.read_text());plan['draft']=False
-            path.write_text(json.dumps(plan))
-            with self.assertRaises(AssertionError):
-                verifier.verify_outputs([{'path':project,'outputs':['paper']}],base/'work',lambda *a,**k:{},
-                    Path(sys.executable),Path('unused'),{},900,False)
+    def test_explicit_historical_manifest_is_rejected(self):
+        stderr = StringIO()
+        with patch.object(sys, 'argv', ['verify_release', 'missing.zip',
+                '--manifest', 'explicit.json']), redirect_stderr(stderr):
+            with self.assertRaises(SystemExit) as caught:
+                verifier.main()
+        self.assertEqual(caught.exception.code, 2)
+        self.assertIn('Historical output manifests are unsupported', stderr.getvalue())
 
     def _assert_posix_process_terminated(self,pid):
         try:
@@ -527,107 +408,72 @@ class R4VerifierContracts(unittest.TestCase):
                 unrelated.terminate();unrelated.wait(timeout=10)
 
 
-class CurrentVisualScope(unittest.TestCase):
-    """Synthetic byte-binding fixtures only, never page/mathematical acceptance."""
-    @staticmethod
-    def write_artifacts(out,pages=8):
-        (out/'build').mkdir(parents=True,exist_ok=True)
-        (out/'evidence/pages').mkdir(parents=True,exist_ok=True)
-        pdf=b'%PDF-1.4\nSynthetic artifact identity fixture, not a manuscript.\n'
-        (out/'build/main.pdf').write_bytes(pdf)
-        digest=hashlib.sha256(pdf).hexdigest()
-        (out/'build/build-report.json').write_text(json.dumps({'status':'BUILT','pages':pages,'pdf_sha256':digest}))
-        png=base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl6S1cAAAAASUVORK5CYII=')
-        rows=[]
-        for number in range(1,pages+1):
-            path=f'evidence/pages/page-{number}.png';(out/path).write_bytes(png)
-            rows.append({'page':number,'path':path,'sha256':hashlib.sha256(png).hexdigest()})
-        (out/'evidence/render-manifest.json').write_text(json.dumps({'pdf_sha256':digest,'pages':rows}))
-
+class InstallerArchiveSafety(unittest.TestCase):
     def setUp(self):
-        self.temp=tempfile.TemporaryDirectory();self.out=Path(self.temp.name)
-        self.write_artifacts(self.out)
-        self.review={'review_id':'old-visual','kind':'visual','scope':{'output_ids':['example']},
-                     'inputs':[{'path':p} for p in ['build/main.pdf','build/build-report.json','evidence/render-manifest.json']+
-                               [f'evidence/pages/page-{n}.png' for n in range(1,8)]]}
-        (self.out/'evidence/old-visual.json').write_text(json.dumps(self.review))
-        self.result={'artifacts':{'output_id':'example','pages':8,'editorial_policy':verifier.EXPECTED_POLICY,
-                                 'readiness':'READY','used_output_review_ids':['synthetic-semantic']},
-                     'errors':[{'code':'REVIEW_SCOPE_INSUFFICIENT','path':'',
-                                'message':'Review old-visual omits necessary inputs: evidence/pages/page-8.png'},
-                               {'code':'VISUAL_REVIEW_INCOMPLETE','path':'evidence'}]}
+        from package_release import REQUIRED_FILES
+        self.temp = tempfile.TemporaryDirectory()
+        self.base = Path(self.temp.name)
+        self.skill = self.base / 'skill'
+        for name in REQUIRED_FILES:
+            path = self.skill / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(b'Isolated package safety fixture.\n')
 
-    def tearDown(self):self.temp.cleanup()
+    def tearDown(self):
+        self.temp.cleanup()
 
-    def test_new_page_from_old_visual_scope_requires_actual_new_review(self):
-        before={p:p.read_bytes() for p in self.out.rglob('*') if p.is_file()}
-        checked=verifier.require_current_semantics(self.result,self.out)
-        self.assertEqual(checked['visual_review_status'],'NEW_VISUAL_REVIEW_REQUIRED')
-        self.assertFalse(checked['formal_release_authorized'])
-        self.assertEqual(len(checked['new_pdf_visual_findings_pending']),2)
-        self.assertEqual(before,{p:p.read_bytes() for p in before})
+    def test_historical_source_is_excluded_and_unknown_source_is_rejected(self):
+        from package_release import package, selected_files
+        for name in ('references/dispatch.md', 'references/output-review.md',
+                     'assets/templates/profile-paper.tex', 'scripts/dispatch_ledger.py'):
+            path = self.skill / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text('Historical instructions must not ship.')
+        archive = self.base / 'skill.zip'
+        package(self.skill, archive)
+        with zipfile.ZipFile(archive) as z:
+            self.assertIn('pure-math-survey/references/minimal-runtime.md', z.namelist())
+            self.assertFalse(any('dispatch' in name or 'output-review' in name or
+                                 'profile-paper' in name for name in z.namelist()))
+        (self.skill / 'unexpected.txt').write_text('Do not silently distribute.')
+        with self.assertRaisesRegex(ValueError, 'Unsupported file'):
+            selected_files(self.skill)
+        (self.skill / 'unexpected.txt').unlink()
+        (self.skill / 'font.ttf').write_bytes(b'Not a redistributable font.')
+        with self.assertRaisesRegex(ValueError, 'Font file'):
+            selected_files(self.skill)
 
-    def test_insufficient_semantic_or_unknown_review_never_becomes_visual(self):
-        for message in ('Review synthetic-semantic omits necessary inputs: evidence/pages/page-8.png',
-                        'Review old-visual omits necessary inputs: manuscript/main.tex',
-                        'Semantic review omits consumed nodes: N-missing',
-                        'Review old-visual omits necessary inputs: evidence/pages/page-9.png'):
-            bad=copy.deepcopy(self.result);bad['errors'][0]['message']=message
-            with self.subTest(message=message),self.assertRaises(AssertionError):
-                verifier.require_current_semantics(bad,self.out)
-
-    def test_missing_or_corrupt_current_png_cannot_hide_behind_old_visual_scope(self):
-        image=self.out/'evidence/pages/page-8.png';original=image.read_bytes()
-        for operation in ('missing','changed'):
-            if operation=='missing':image.unlink()
-            else:image.write_bytes(b'corrupt')
-            with self.subTest(operation=operation),self.assertRaises(AssertionError):
-                verifier.require_current_semantics(self.result,self.out)
-            image.write_bytes(original)
-
-    def test_missing_invalid_or_stale_manifest_is_a_hard_failure(self):
-        manifest=self.out/'evidence/render-manifest.json';original=manifest.read_bytes()
-        for variant in (None,b'{',b'[]',json.dumps({'pdf_sha256':'wrong','pages':[]}).encode(),
-                        json.dumps({'pdf_sha256':hashlib.sha256((self.out/'build/main.pdf').read_bytes()).hexdigest(),'pages':[]}).encode()):
-            if variant is None:manifest.unlink()
-            else:manifest.write_bytes(variant)
-            with self.subTest(variant=variant),self.assertRaises((OSError,ValueError,AssertionError)):
-                verifier.require_current_semantics(self.result,self.out)
-            manifest.write_bytes(original)
-
-    def test_missing_or_changed_pdf_cannot_be_waived_as_visual_reading(self):
-        pdf=self.out/'build/main.pdf';original=pdf.read_bytes()
-        for operation in ('missing','changed'):
-            if operation=='missing':pdf.unlink()
-            else:pdf.write_bytes(b'%PDF-corrupt')
-            with self.subTest(operation=operation),self.assertRaises(AssertionError):
-                verifier.require_current_semantics(self.result,self.out)
-            pdf.write_bytes(original)
-
-    def test_poppler_zero_padded_page_names_remain_valid(self):
-        manifest=self.out/'evidence/render-manifest.json';data=json.loads(manifest.read_text())
-        for row in data['pages']:
-            target=f"evidence/pages/page-{row['page']:02d}.png"
-            (self.out/row['path']).rename(self.out/target);row['path']=target
-        manifest.write_text(json.dumps(data))
-        self.review['inputs']=[{'path':p} for p in ['build/main.pdf','build/build-report.json','evidence/render-manifest.json']+
-                              [f'evidence/pages/page-{n:02d}.png' for n in range(1,8)]]
-        (self.out/'evidence/old-visual.json').write_text(json.dumps(self.review))
-        self.result['errors'][0]['message']='Review old-visual omits necessary inputs: evidence/pages/page-08.png'
-        self.assertEqual(verifier.require_current_semantics(self.result,self.out)['visual_review_status'],
-                         'NEW_VISUAL_REVIEW_REQUIRED')
-
-    def test_known_old_visual_stale_is_pending_but_unknown_or_corruption_is_blocking(self):
-        for message,allowed in (('Review old-visual no longer matches this input',True),
-                                ('Review synthetic-semantic no longer matches this input',False),
-                                ('Rendered image bytes have changed',False)):
-            changed=copy.deepcopy(self.result)
-            changed['errors'].append({'code':'REVIEW_STALE','path':'evidence/pages/page-1.png','message':message})
-            if allowed:
-                self.assertEqual(verifier.require_current_semantics(changed,self.out)['visual_review_status'],
-                                 'NEW_VISUAL_REVIEW_REQUIRED')
-            else:
-                with self.assertRaises(AssertionError):verifier.require_current_semantics(changed,self.out)
+    def test_archive_rejects_traversal_symlink_tamper_and_historical_injection(self):
+        from package_release import package, verify_archive
+        good = self.base / 'good.zip'
+        package(self.skill, good)
+        with zipfile.ZipFile(good) as z:
+            original = {name: z.read(name) for name in z.namelist()}
+        for kind in ('traversal', 'symlink', 'tamper', 'historical'):
+            members = original.copy()
+            if kind == 'traversal':
+                members['pure-math-survey/../escape.txt'] = b'outside'
+            elif kind == 'tamper':
+                members['pure-math-survey/SKILL.md'] += b'changed'
+            elif kind == 'historical':
+                relative = 'references/dispatch.md'
+                content = b'Old runtime dispatch instructions'
+                members['pure-math-survey/' + relative] = content
+                members['pure-math-survey/artifact-checksums.txt'] += (
+                    hashlib.sha256(content).hexdigest() + '  ' + relative + '\n').encode()
+            damaged = self.base / (kind + '.zip')
+            with zipfile.ZipFile(damaged, 'w') as z:
+                for name, data in members.items():
+                    if kind == 'symlink' and name == 'pure-math-survey/SKILL.md':
+                        info = zipfile.ZipInfo(name)
+                        info.create_system = 3
+                        info.external_attr = (stat.S_IFLNK | 0o777) << 16
+                        z.writestr(info, data)
+                    else:
+                        z.writestr(name, data)
+            with self.subTest(kind=kind), self.assertRaises(ValueError):
+                verify_archive(damaged)
 
 
-if __name__=='__main__':unittest.main()
+if __name__ == '__main__':
+    unittest.main()
