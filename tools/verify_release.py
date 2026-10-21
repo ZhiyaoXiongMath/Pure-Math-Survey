@@ -39,7 +39,7 @@ def verification_workspace(report:dict,parent:Path|None=None,keep:bool=False):
         if not workspace['retained']:shutil.rmtree(base)
 
 
-EXPECTED_POLICY = 'minimal-transition-pr03'
+EXPECTED_POLICY = 'minimal-rules-v22-lean-2.4.1'
 EXPECTED_RUNTIME = 'minimal-lean-2.4.1'
 EXPECTED_CONTRACTS = {('3.0.0', EXPECTED_POLICY)}
 REQUIRED_SUITES = ('test_knowledge_units', 'test_minimal_runtime', 'test_v2', 'test_materials',
@@ -52,8 +52,8 @@ def assert_installed_contract(artifacts:dict)->dict:
     if (artifacts.get('version'), artifacts.get('schema_version'),
             artifacts.get('output_schema_version'), artifacts.get('editorial_policy'),
             artifacts.get('runtime_contract')) != (
-            '2.4.1-dev.3', '3.0.0', '3.0.0', EXPECTED_POLICY, EXPECTED_RUNTIME):
-        raise AssertionError('Installed runtime does not match the PR03 candidate version, schemas, policy and runtime contract')
+            '2.4.1-dev.4', '3.0.0', '3.0.0', EXPECTED_POLICY, EXPECTED_RUNTIME):
+        raise AssertionError('Installed runtime does not match the PR04 candidate version, schemas, policy and runtime contract')
     contracts=artifacts.get('supported_output_contracts')
     if not isinstance(contracts,list) or len(contracts)!=1 or any(
             not isinstance(x,dict) or not isinstance(x.get('schema_version'),str) or
@@ -283,6 +283,7 @@ def main()->int:
             assets=check([str(exe),'-I',str(skill/'scripts/validate_assets.py'),'--json'],base,env)
             if assets['profile_preparations_executed']!=['minimal']:raise AssertionError('Installed preparation did not exercise only Minimal')
             if assets['profile_view_preparations_executed']!=['minimal-integrated']:raise AssertionError('Installed preparation did not exercise the fixed integrated view')
+            report['installed_assets']=assets
             # Reuse the real regression suite, but replace its entire runtime
             # tree with the verified archive. No import can fall back to the
             # development skill; -I also removes user/site/PYTHONPATH leakage.

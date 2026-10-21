@@ -1,5 +1,4 @@
-# The only persisted current development state. GitHub owns live PR/check/review facts.
-# Never record this commit's own final SHA.
+# The sole persisted development state; never record this commit own final SHA.
 state_schema_version: 1
 project: Pure-Math-Survey
 target_version: 2.4.1
@@ -8,12 +7,12 @@ timezone: Asia/Shanghai
 repository:
   url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey
   default_branch_observed: main
-  main_sha_observed: 8f79ff04d00c2fca016a88d7b74dda6329975565
+  main_sha_observed: 52778c01121c513f86f805eddf044a7d064ebef2
   observation_method: Controller_reconciled_GitHub_merge_tree_and_CI_receipts
   latest_formal_release_observed: v2.1.0
 design:
-  status: pr03_shared_knowledge_implemented
-  rules_file: rules.v22.txt
+  status: pr04_ready_for_review
+  rules_file: skills/pure-math-survey/references/rules.v22.txt
   rules_sha256: 452a4d7548c23bc75fe8fec6299ae9777a3e6763eb5f955063d938c2f3b6b2c7
   transcript_sha256: f6e59d20ee4793c9346d057f3de1a25ebd3507d94d76b00a8a78240771eef8f7
   guide: docs/development/v2.4.1/DEVELOPMENT_GUIDE.zh-CN.md
@@ -26,16 +25,15 @@ authorization_snapshot:
   create_pull_request: authorized_for_pr01_through_pr05
   merge: authorized_after_finite_checks_and_independent_review
   publish_release: not_authorized
-  note: Active Goal supersedes earlier PR01-only and paused snapshots. Controller
-    owns GitHub operations. Author works only in the isolated worktree; no formal
-    tag, Release or asset upload is authorized.
-current_stage: PR-03
-status: ready_for_independent_review
-active_branch: codex/v2.4.1-pr03-knowledge
+  note: Active Goal supersedes earlier PR01-only and paused snapshots. Controller owns GitHub operations.
+    Author works only in the isolated worktree; no formal tag, Release or asset upload is authorized.
+current_stage: PR-04
+status: ready_for_review
+active_branch: codex/v2.4.1-pr04-rules
 active_pr_number: null
 active_pr_url: null
-base_sha_at_stage_start: 8f79ff04d00c2fca016a88d7b74dda6329975565
-last_confirmed_241_merge: 8f79ff04d00c2fca016a88d7b74dda6329975565
+base_sha_at_stage_start: 52778c01121c513f86f805eddf044a7d064ebef2
+last_confirmed_241_merge: 52778c01121c513f86f805eddf044a7d064ebef2
 stages:
   PR-01:
     name: contract_and_persistent_handoff
@@ -44,11 +42,16 @@ stages:
     pr_url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/10
     merge_sha: def354702887ec9150426316ad9568a127239bbd
     review_url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/10#pullrequestreview-5599715698
-    ci_pr_head: {run_id: 39598563246, result: pass}
-    ci_merge_sha: {run_id: 39601398593, result: pass}
+    ci_pr_head:
+      run_id: 39598563246
+      result: pass
+    ci_merge_sha:
+      run_id: 39601398593
+      result: pass
   PR-02:
     name: minimal_only_and_no_runtime_reviews
-    depends_on: [PR-01]
+    depends_on:
+    - PR-01
     status: merged
     pr_url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/11
     merge_sha: 8f79ff04d00c2fca016a88d7b74dda6329975565
@@ -59,119 +62,205 @@ stages:
       head_sha: a6385ecfd5fed34e2db62a337dc996d2ab49c8ff
       url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/11#pullrequestreview-5600356336
       result: changes_requested
-      findings: [retained_source_hash_and_original_alias_protection, Windows_default_encoding]
+      findings:
+      - retained_source_hash_and_original_alias_protection
+      - Windows_default_encoding
     final_review:
       url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/11#pullrequestreview-5600535365
       result: no_blocking_findings_after_repair
-    ci_pr_head: {run_id: 39608495422, result: pass, platforms: [linux_python_310, linux_python_312, windows_python_312]}
-    ci_merge_sha: {run_id: 39609654965, result: pass, platforms: [linux_python_310, linux_python_312, windows_python_312]}
+    ci_pr_head:
+      run_id: 39608495422
+      result: pass
+      platforms:
+      - linux_python_310
+      - linux_python_312
+      - windows_python_312
+    ci_merge_sha:
+      run_id: 39609654965
+      result: pass
+      platforms:
+      - linux_python_310
+      - linux_python_312
+      - windows_python_312
   PR-03:
     name: shared_lean_knowledge_units
-    depends_on: [PR-02]
-    status: ready_for_independent_review
-    pr_url: null
-    merge_sha: null
+    depends_on:
+    - PR-02
+    status: merged
+    pr_url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/12
+    merge_sha: 52778c01121c513f86f805eddf044a7d064ebef2
     candidate_version: 2.4.1-dev.3
     kb_schema: 3.0.0
     output_schema: 3.0.0
     runtime_contract: minimal-lean-2.4.1
     editorial_policy: minimal-transition-pr03
+    merge_tree: d46553c1942477cba6bdbe9b341d2ef715c11279
+    reviewed_head_sha: 33f929404685a83b41582adb1ef9d65a6220a715
+    merged_at: '2026-10-21T14:29:02Z'
+    initial_review:
+      url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/12#pullrequestreview-5601049153
+      finding: Standalone export omitted stable labels; actual PDF reference unresolved.
+    followup_reviews:
+    - https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/12#pullrequestreview-5601120376
+    - https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/12#pullrequestreview-5601208509
+    repair_history:
+    - Added stable labels and actual cross-reference compilation/PDF test.
+    - Windows STIX2 mathematical italic Unicode caused a test mismatch; NFKC normalization repaired test
+      without changing runtime.
+    final_review_result: no_blocking_findings
+    ci_pr_head:
+      run_id: 39615617535
+      result: pass
+      platforms:
+      - linux_python_310
+      - linux_python_312
+      - windows_python_312
+    ci_merge_sha:
+      run_id: 39617179110
+      result: pass
+      platforms:
+      - linux_python_310
+      - linux_python_312
+      - windows_python_312
   PR-04:
     name: rules_v22_writing_and_layout
-    depends_on: [PR-03]
-    status: not_started
+    depends_on:
+    - PR-03
+    status: ready_for_review
     pr_url: null
     merge_sha: null
+    candidate_version: 2.4.1-dev.4
+    kb_schema: 3.0.0
+    output_schema: 3.0.0
+    runtime_contract: minimal-lean-2.4.1
+    editorial_policy: minimal-rules-v22-lean-2.4.1
   PR-05:
     name: integration_installation_release_candidate
-    depends_on: [PR-04]
+    depends_on:
+    - PR-04
     status: not_started
     pr_url: null
     merge_sha: null
 implemented_changes:
-- Schema 3 uses sources, conventions, Markdown units with JSON frontmatter, grouped
-  routes and a short generated index. Init creates no output or required snapshot,
-  overview, discovery, coverage, review or paired-proof containers.
-- Stable N-/S- IDs identify units and sources. Kind, role and nullable importance
-  are independent. definition_refs adds actual concept closure to exports and
-  prepares exact canonical bytes; source version and locator remain available.
-- Routes retain jointly required nodes within each premise set, alternatives
-  between sets, separate additional inputs, mapping and source/status facts.
-  Missing references and cycles are mechanical diagnostics. Unresolved routes
-  stay explicit; independent principal results need no invented route.
-- Methods may have a formal canonical interface. A method without one remains
-  a method description and cannot supply an asserted route conclusion or full
-  principal statement. Route exports label nonformal method premises explicitly.
-- Output plans read the live KB. Prepare records automatic input hashes, derives
-  canonical/conventions/bibliography/route fragments and bounded materials, and
-  preserves author main text, graph layout, style and outline. Refresh saves old
-  output inputs and build bytes in content-addressed preparation history.
-- Standalone unit export includes recursive definitions, shared notation and
-  source locators with a compilable TeX entry. It refuses existing destinations,
-  project-contained exports and symlink destinations before writing.
-- Supplied retained-original hashes remain enforced; actual original-byte aliases
-  are excluded from authoring exports and refused by output packaging. Legacy
-  schemas and old containers are rejected without automatic string-only migration.
-- Build, output package and independent rebuild now use the same schema-3 input
-  hash identity. run.json records actual build state and total pages; unavailable
-  body-page, time and token measurements remain null.
-- Installed docs, metadata, active resource validation, verifier and three-platform
-  CI reflect the intermediate dev.3 candidate. Final v22 layout is still PR04 work.
+- Moved the exact 22806-byte rules.v22 authority into installed references; adaptation loads before rules
+  for writing and KB-only skips full layout rules.
+- Installed candidate dev.4/final minimal-rules-v22-lean-2.4.1 policy; schemas remain 3.0.0; no runtime
+  review or dispatch requirement.
+- Three-section 11pt template includes definitions, adjacent source attribution, canonical byte inputs,
+  stable numbered references and editable same-source architecture graph.
+- Graph map preserves joint premise sets, alternatives, independent formal nodes and explicitly attached
+  method/input notes; unresolved connections remain distinct. Reprepare preserves author text and graph
+  layout.
+- Actual build and standalone rebuild observe main/total PDF pages, normal leading and margins; six-main-page
+  cap preserves failed logs and prior outputs. TeX-only has no invented counts.
+- Real-source authoring exposed a graph-label semicolon parser false positive; balanced-brace termination
+  repaired it without changing source mathematics. Normal raggedbottom prevents flushbottom spacing inflation.
+- Updated bilingual installed/root documentation, allowlist, resource checksums, validator/verifier and
+  three-platform CI candidate paths.
 implementation_checks:
-- check: full_local_author_regressions
-  result: pass
-  evidence: pr03-tests.log records 95 tests, 92 executed passes and 3 Windows-only
-    N/A on Linux. Later directly affected knowledge-unit, literal-TeX and legacy
-    safety suites passed; final repaired runtime suite passed all 16 including
-    actual independent output-package rebuild.
-- check: reusable_lean_fixture
-  result: pass
-  evidence: pr03-knowledge-tests.log records 8 checks covering joint and alternative
-    premises, independent branch, recursive concept export and actual standalone
-    TeX/BibTeX compilation, nullable importance and KB-only behavior, missing
-    references/cycles, formal versus nonformal methods, canonical refresh, author
-    graph/text preservation, prior output bytes, and interrupted-prepare rollback.
-- check: real_synthetic_generation_and_rebuild
-  result: pass_after_repair
-  initial_failure: Independent rebuild still indexed snapshot_id after the output
-    package switched to input_hash. The first external smoke failed with KeyError;
-    this was repaired in the shipped rebuild resource and covered by regression.
-  evidence: pr03-synthetic-final/receipt.json binds the actual CLI commands for
-    KB-only, independent export, plan/prepare/build/package, a canonical update,
-    repeat prepare/history, second build/package and successful independent rebuild.
-    pr03-synthetic-smoke.log retains the initial failure; this is synthetic engineering
-    evidence, not mathematical or visual acceptance.
-- check: active_identity_reference_scan
-  result: pass
-  evidence: pr03-identity-reference-scan.json scans the 29 selected runtime resources.
-    snapshot_id remains only in optional snapshot tools and explicit legacy-plan
-    rejection; active prepare/build/package/rebuild use input_hash.
-- check: exact_isolated_candidate
-  result: pass
-  archive_sha256: cc972caef53c902ddf8dad40e003ac64a32eae3cb868242bab7e31836c2beb7a
-  evidence: The final repaired ZIP passed a clean no-pip isolated installation,
-    exact runtime/version checks, 29 resources and 9 installed links, all 95 tests
-    (92 executed passes and 3 exact Windows N/A), actual standalone package rebuild,
-    and neutral TeX smoke. pr03-installed-check/verification.json and source-match.json
-    bind final runtime, checksum, tests and verifier bytes. Earlier package/report
-    bytes remain separately preserved and are not used as final candidate evidence.
+- name: existing_behavior_suite
+  command: python3 -m unittest discover -s tests -v
+  result: 95 tests; 92 executed passed, 3 Windows-only N/A
+  boundary: Before the three new PR04 regression tests and final graph-label fix.
+  external_receipt_id: pr04-tests-initial.log
+  external_receipt_sha256: a93d97faa4f9eddc63be08c992677cefc31ac4f68c65f8d0e64c8fc11af55dcb
+- name: targeted_layout_graph
+  command: PYTHONPATH=tests python3 -m unittest test_build_layout test_knowledge_units.EditableArchitecture
+    -v
+  result: 6 passed, including actual 2-main/3-total and failed 7-main/8-total PDF retention
+  external_receipt_id: pr04-layout-tests-initial.log
+  external_receipt_sha256: 02cd0406ef29f65d6930148de20f5f96e5614af8a3a4f11f622f9812d433b59c
+- name: literal_label_punctuation_fix
+  result: 1 targeted test passed; nested braces/semicolons/line breaks accepted and wrong formal reference
+    rejected
+  external_receipt_id: pr04-label-punctuation-tests.log
+  external_receipt_sha256: 668e02899d52155bf1095239fcdc7595b688d1737894464b1161de403002bed8
+- name: final_installed_verification
+  command: python3 tools/verify_release.py <dev.4 archive> --report <external verification.json> --keep-work-directory
+    --work-directory <external work>
+  result: PASS; Linux Python 3.14.4 isolated no-pip environment, 98 tests / 95 executed passed / 3 exact
+    Windows-only N/A; actual neutral TeX 1 main page / 2 total pages
+  external_receipt_id: verification.json
+  external_receipt_sha256: bcdfe2e8616d4d8db95cf16a220a301557a38cfe767e30e016d42b81ac570c89
+- name: final_source_binding
+  result: PASS; 31 runtime resources plus checksum, 13 test files and 1 verifier tool byte-match archive/unpacked/isolated
+    suite; source unchanged
+  archive_sha256: 92241b21681d59a0330f0c754af7e635a4b1d11a94ca8565bf6ccff3ac4191d3
+  external_receipt_id: source-match.json
+  external_receipt_sha256: eaa7a205489e5c10999382607e0f9545d8620395c34ec1b5c7ee28402e41485b
+- name: frozen_rules
+  result: 22806 bytes; SHA256 unchanged; old authority path removed
+  sha256: 452a4d7548c23bc75fe8fec6299ae9777a3e6763eb5f955063d938c2f3b6b2c7
 remaining_work:
-- Controller creates the PR from the frozen staged tree, obtains independent
-  review and actual three-platform CI, and merges only after those pass.
-- PR04 implements the final writing/layout contract and bounded real examples;
-  PR05 performs final integration and release-candidate preparation.
+- Controller publishes the exact staged candidate on the current stage branch and opens its PR.
+- Complete finite independent code/content/PDF review and actual three-platform PR CI; resolve only concrete
+  affected findings.
+- After actual PR04 merge, continue PR05 from its merge state, reusing this representative source and
+  measured installation evidence.
 limitations:
-- Local execution is Linux with Python 3.14.4; this stage has no observed remote
-  PR-head or merge-SHA CI yet. Python 3.10 grammar parsing is not runtime execution.
-- This stage does not certify mathematical correctness, source reading, visual
-  page quality, originality or contribution coverage.
-- The installed minimal template remains the transition template. No final 11pt,
-  six-body-page or separate-reference-page acceptance is claimed.
-- Existing user projects and the original checkout are not modified. Unsupported
-  old schemas require a separately created new project; no migrator is provided.
+- Local checks ran Linux Python 3.14.4; Python 3.10/3.12 and Windows runtime CI for this candidate remains
+  unobserved.
+- Mechanical typography/graph checks are bounded literal checks, not mathematical correctness or universal
+  TikZ interpretation.
+- Representative real-source content acceptance belongs to finite independent PR review; source/PDF materials
+  remain external.
+- No PR04 merge, formal 2.4.1 release, tag or asset upload is claimed.
 resume_instructions:
 - Read this state and reconcile actual GitHub branch/PR/head/check/review/merge facts.
-- Continue the existing stage and isolated branch; do not start the unrelated
-  historical codex/pr03-source-eligibility branch.
-- Do not record this commit's own final SHA. Record a completed merge in the next
-  normal stage commit. Keep progress only in this state file and external receipts.
+- Continue the existing stage and isolated branch; do not start the unrelated historical codex/pr03-source-eligibility
+  branch.
+- Do not record this commit's own final SHA. Record a completed merge in the next normal stage commit.
+  Keep progress only in this state file and external receipts.
+representative_source_sample:
+  title: An easily verifiable proof of the Brouwer fixed point theorem
+  authors:
+  - Takeuchi
+  - Suzuki
+  source_url: https://arxiv.org/pdf/1109.4604v1
+  source_version: arXiv:1109.4604v1, 17 September 2011
+  source_sha256: 4c62d7ed213944c0f94fe0a9cb213ff5b5abc0c1fdef14f05764adf9df7f8e24
+  scope: Both named theorems and complete main proof architecture of the four-page note; internal extension
+    cases encapsulated
+  nodes: 8
+  routes: 3
+  knowledge_only: Actual init/validate/index produced KB and run.json without outputs or snapshots.
+  canonical_statements_reused_byte_for_byte: 8
+  initial_build:
+    status: BUILT
+    main_pages: 4
+    total_pages: 5
+    pdf_sha256: af4edb073c9728b9b8f6960467900508bf1314ef886a3a9a946253edff7fa3b2
+  local_layout_repair_rounds: 1
+  repair_history: Natural vertical spacing via raggedbottom and clearer graph line breaks; canonical KB
+    unchanged. The same repair first hit a graph parser false positive for a semicolon inside a node label;
+    product parser fixed and identical author text rebuilt successfully. Failure log retained.
+  final_build:
+    status: BUILT
+    main_pages: 4
+    total_pages: 5
+    pdf_sha256: 3aba88bd7edfd0be557ba83da463c34dfcbad85c88a12e47049ede30f9dcbff4
+    layout_measurements:
+      main_pages: 4
+      total_pages: 5
+      body_font_pt: 10.95
+      baseline_pt: 13.0
+      margins_pt:
+        left: 62.66415
+        right: 93.99629
+        top: 86.72377
+        bottom: 86.72377
+    blocking_log_issues: []
+  author_page_inspection: All five final pages inspected; graph 10.5 TeX pt, standard 11pt body, no clipping
+    or overlap observed. This is author evidence, not independent acceptance.
+  package_sha256: c3e9bf7a72810b507cfc8732fa110ed621a7e3bb6b1ec4f4caf99e2bafccc2a7
+  standalone_rebuild:
+    status: BUILT
+    main_pages: 4
+    total_pages: 5
+    all_five_rendered_pages_identical_to_inspected_final: true
+  independent_acceptance: pending nonauthor PR review
+  external_receipt_sha256: b0cb6c671960f1c401a14bd684a38fb0218358b5793c5eefb90054ee9eab4f82
+  original_source_included_in_repository_or_installer: false
+  limitations:
+  - One fixed source; no universal mathematical certification.
+  - Local STIX2 unavailable; actual installed Latin Modern fallback used.

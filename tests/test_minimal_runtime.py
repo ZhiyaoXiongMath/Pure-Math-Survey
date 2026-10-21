@@ -125,7 +125,7 @@ class MinimalRuntime(unittest.TestCase):
                 if isinstance(node,ast.ImportFrom):
                     self.assertNotIn((node.module or '').split('.')[-1],{'reviews','readiness','dispatch_ledger'})
         proc,r=self.cli('--version');self.assertEqual(proc.returncode,0)
-        self.assertEqual(r['artifacts']['version'],'2.4.1-dev.3')
+        self.assertEqual(r['artifacts']['version'],'2.4.1-dev.4')
         self.assertEqual(r['artifacts']['runtime_contract'],RUNTIME_CONTRACT)
         self.assertEqual(r['artifacts']['supported_profiles'],['minimal'])
 

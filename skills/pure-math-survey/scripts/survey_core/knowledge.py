@@ -88,15 +88,15 @@ def limitations(inv: Inventory) -> list[str]:
     return notes
 
 
-def write_run(root: Path, inv: Inventory, output_paths=None, build_state='not_requested', pages=None) -> None:
+def write_run(root: Path, inv: Inventory, output_paths=None, build_state='not_requested', pages=None, main_pages=None) -> None:
     notes=limitations(inv)
     if build_state=='not_built':notes.append('Prepared scaffold: authoring and build are not complete.')
     write_json(safe(root,'run.json'),{'software_version':SOFTWARE_VERSION,'runtime_contract':RUNTIME_CONTRACT,
         'source_versions':{k:s['version'] for k,s in sorted(inv.sources.items())},
         'input_hash':sha(canonical(file_inventory(inv.root,inv.files))), 'output_paths':output_paths or [],
         'status':'failed' if build_state=='failed' else ('incomplete' if len(notes)>1 else 'complete'),'known_limitations':notes,'build_state':build_state,
-        'main_pages':None,'total_pages':pages,'elapsed_seconds':None,'tokens':None,
-        'unavailable':['main_pages','elapsed_seconds','tokens']+(['total_pages'] if pages is None else [])})
+        'main_pages':main_pages,'total_pages':pages,'elapsed_seconds':None,'tokens':None,
+        'unavailable':['elapsed_seconds','tokens']+(['main_pages'] if main_pages is None else [])+(['total_pages'] if pages is None else [])})
 
 
 def validate_knowledge(root: Path) -> dict:

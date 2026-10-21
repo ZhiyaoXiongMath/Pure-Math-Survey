@@ -15,6 +15,16 @@ def tex_text(value:str)->str:
              '–':'--','—':'---','’':"'",'“':'``','”':"''",'ä':r'\"a','ö':r'\"o','ü':r'\"u','é':r"\'e",'è':r'\`e','Ä':r'\"A','Ö':r'\"O','Ü':r'\"U'}
     return ''.join(special.get(c,c) for c in value)
 
+def source_attribution(inv,key):
+    node=inv.nodes[key];parts=[]
+    for ref in node.meta['sources']:
+        source=inv.sources[ref['source_id']]
+        description=ref['locator']+'; version '+str(source['version'] or 'unavailable')
+        parts.append(tex_text(description)+r'~\cite{'+source['citation_key']+'}')
+    if not parts:return ''
+    return r'\pmsattribution{Source: '+'; '.join(parts)+'.}'+ '\n'
+
+
 def extract_statements(inv,ids:set[str])->dict[str,bytes]:
     return {f'statements/{k}.tex':inv.nodes[k].statement for k in sorted(ids) if inv.nodes[k].statement is not None}
 
@@ -40,9 +50,10 @@ def export_bibliography(inv,ids:set[str])->bytes:
     return ('% Generated from fixed source records; edit the knowledge records, not this file.\n\n'+'\n\n'.join(entries)+'\n').encode('utf-8')
 
 def expected_generated(inv,plan:dict)->dict[str,bytes]:
+    from .graphs import graph_map
     ids=consumption(inv,plan)
     return {**extract_statements(inv,ids),'conventions.tex':safe(inv.root,inv.project['knowledge_root']+'/conventions.tex',True).read_bytes(),
-            'references.bib':export_bibliography(inv,ids), **route_fragments(inv,plan)}
+            'references.bib':export_bibliography(inv,ids), **route_fragments(inv,plan), 'graph-map.json':canonical(graph_map(inv,plan))+b'\n'}
 
 def route_fragments(inv,plan:dict)->dict[str,bytes]:
     routes=[r for r in inv.routes if r['id'] in plan['route_ids']]
@@ -124,10 +135,13 @@ def prepare_output(root:Path,plan_path:Path)->dict:
             atomic_bytes(out/'outline.md', outline(plan, order, inv.nodes).encode('utf-8'))
         if not (out/'manuscript/math-review.sty').exists():
             atomic_bytes(out/'manuscript/math-review.sty',(SKILL_ROOT/'assets/templates/math-review.sty').read_bytes())
+        if not (out/'manuscript/architecture_graph.tex').exists():
+            from .graphs import graph_tex
+            atomic_bytes(out/'manuscript/architecture_graph.tex',graph_tex(inv,plan))
         if not (out/'manuscript/main.tex').exists():
             from .profiles import VIEW_TASKS
             template=(SKILL_ROOT/'assets/templates'/f"profile-{plan['profile']}.tex").read_text(encoding='utf-8')
-            snippets=[]; principals=[]; ingredients=[]
+            snippets=[]; principals=[]; ingredients=[]; definitions=[]
             selections={s['node_id']:dict(s) for s in plan['selections']}
             for key in topological(inv.nodes,ids):
                 if key not in selections:
@@ -137,11 +151,12 @@ def prepare_output(root:Path,plan_path:Path)->dict:
                 if s['statement_treatment']=='full':
                     key=s['node_id']; kind=inv.nodes[key].meta['kind']
                     env=inv.nodes[key].meta.get('statement_kind',{'definition':'definition','example':'example'}.get(kind,'theorem'))
-                    snippet = f'\\begin{{{env}}}\\label{{node:{key}}}\n\\input{{../generated/statements/{key}.tex}}\n\\end{{{env}}}\n'
+                    attribution=source_attribution(inv,key)
+                    snippet = attribution+f'\\begin{{{env}}}\\label{{node:{key}}}\n\\input{{../generated/statements/{key}.tex}}\n\\end{{{env}}}\n'
                     snippets.append(snippet)
-                    (principals if s['role']=='principal' else ingredients).append(snippet)
+                    (definitions if kind=='definition' else principals if s['role']=='principal' else ingredients).append(snippet)
             task='\\placeholder{'+tex_text(VIEW_TASKS[plan['view']])+'}'
-            text=template.replace('@@TITLE@@',tex_text(plan['title'])).replace('@@STATEMENTS@@','\n'.join(snippets)).replace('@@PRINCIPALS@@','\n'.join(principals)).replace('@@INGREDIENTS@@','\n'.join(ingredients)).replace('@@VIEW_TASK@@',task)
+            text=template.replace('@@TITLE@@',tex_text(plan['title'])).replace('@@STATEMENTS@@','\n'.join(snippets)).replace('@@DEFINITIONS@@','\n'.join(definitions)).replace('@@PRINCIPALS@@','\n'.join(principals)).replace('@@INGREDIENTS@@','\n'.join(ingredients)).replace('@@VIEW_TASK@@',task)
             atomic_bytes(out/'manuscript/main.tex',text.encode())
         from .knowledge import write_run
         write_run(root,inv,[relpath(root,out)],'not_built')
@@ -217,6 +232,13 @@ def validate_structure(root:Path,output_id:str)->dict:
                 raw=strip_comments(safe(out,path,True).read_text(encoding='utf-8'))
                 if re.search(r'\\(?:re)?newcommand\s*(?:\{)?\\thesection\b|\\def\s*\\thesection\b',raw):
                     errors.append(diagnostic('MINIMAL_NUMBERING_UNSUPPORTED','Custom main-section numbering is not supported by the strict three-section contract.',path))
+    from .profiles import layout_errors
+    errors += layout_errors(out,scan)
+    from .graphs import graph_errors
+    if 'manuscript/architecture_graph.tex' not in scan.body_inputs:
+        errors.append(diagnostic('GRAPH_MISSING','Include editable architecture_graph.tex literally in the body','manuscript/main.tex'))
+    else:
+        errors += graph_errors(knowledge,plan,safe(out,'manuscript/architecture_graph.tex',True).read_text(encoding='utf-8'))
     from .profiles import policy
     return result('output.structure','NEEDS_WORK' if errors else 'STRUCTURALLY_VALID',{'tex_inventory':public_inventory(inv),'actual_literal_inputs':sorted(used),'body_inputs':sorted(scan.body_inputs),'canonical_locations':scan.locations,
         'editorial_policy':policy(plan)},errors,warnings)
@@ -242,7 +264,7 @@ def export_unit(root:Path,node_id:str,destination:Path)->dict:
             lines.append(r'\par Source: '+tex_text(ref['source_id']+'; '+ref['locator']+'; version '+str(source['version']))+r'~\cite{'+source['citation_key']+'}.')
     data['unit.tex']=('\n'.join(lines)+'\n').encode('utf-8')
     data['math-review.sty']=(SKILL_ROOT/'assets/templates/math-review.sty').read_bytes()
-    data['main.tex']=(r'\documentclass[12pt]{amsart}'+'\n'+r'\usepackage{math-review}'+'\n'+r'\begin{document}\input{unit.tex}'+ '\n'+r'\bibliographystyle{plain}\bibliography{generated/references}\end{document}'+'\n').encode('utf-8')
+    data['main.tex']=(r'\documentclass[11pt]{amsart}'+'\n'+r'\usepackage{math-review}'+'\n'+r'\begin{document}\input{unit.tex}'+ '\n'+r'\bibliographystyle{plain}\bibliography{generated/references}\end{document}'+'\n').encode('utf-8')
     data['manifest.json']=canonical({'schema_version':VERSION,'node_id':node_id,'included_nodes':sorted(ids),
         'files':[{'path':p,'sha256':sha(v),'bytes':len(v)} for p,v in sorted(data.items())]})+b'\n'
     require(not destination.is_symlink(),'UNSAFE_PATH','Unit export destination is a symlink',str(destination))

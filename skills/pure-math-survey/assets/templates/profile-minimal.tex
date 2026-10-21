@@ -1,21 +1,26 @@
-% Pure Math Survey 2.4.1-dev.2: minimal transition template.
-% Final rules.v22 layout is implemented in PR-04, not claimed here.
-\documentclass[12pt,reqno]{amsart}
+% Minimal rules.v22 with the lean runtime adaptation.
+\documentclass[11pt,reqno]{amsart}
 \usepackage{math-review}
 \input{../generated/conventions.tex}
 \title{@@TITLE@@}
 \date{}
 \begin{document}
+\raggedbottom
+\pmslayout
 \maketitle
 \section{Main Results}
-\placeholder{State the question, necessary local concepts and complete principal results. Place each borrowed result's source version and locator nearby; preserve all conditions.}
+\placeholder{Introduce the actual scope and use the following core concepts before presenting all selected principal contributions.}
+@@DEFINITIONS@@
 @@PRINCIPALS@@
 \section{Key Mathematical Ingredients}
-\placeholder{Define and introduce only the concepts and modules used in the selected argument. Explain each module's inputs, output and brief method without duplicating its canonical statement.}
+\placeholder{Give each selected module's brief method, precise usable output and next use; retain its complete canonical interface.}
 @@INGREDIENTS@@
 \section{Connecting the Ingredients}
-@@VIEW_TASK@@
-\placeholder{Explain the actual combination of modules and the conditions connecting each output to the next input. Distinguish joint premises, alternatives and independent branches; state remaining limitations honestly.}
+\placeholder{Explain how each actual output supplies the next input, including remaining conditions, joint premises and alternatives.}
+\begin{center}
+\input{architecture_graph.tex}
+\end{center}
+\pmsmainend
 \bibliographystyle{plain}
 \bibliography{../generated/references}
 \end{document}

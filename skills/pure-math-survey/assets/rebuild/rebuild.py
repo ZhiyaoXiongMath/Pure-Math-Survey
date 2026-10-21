@@ -55,7 +55,7 @@ def main()->int:
         f=root.joinpath(*p.parts)
         if any(x.is_symlink() for x in (f,*f.parents)) or sha(f.read_bytes())!=r['sha256']:raise ValueError('Changed package member: '+str(p))
     sys.path.insert(0,str(root/'runtime'))
-    from build_checks import log_issues,log_warnings
+    from build_checks import log_issues,log_warnings,layout_measurements
     dest.mkdir(parents=True);build=dest/'build';build.mkdir()
     for folder in ('manuscript','generated'):shutil.copytree(root/folder,dest/folder)
     report={'status':'FAILED','input_hash':m['input_hash'],'commands':[],'layout':layout,'meaning':'Actual build only; mathematics is not certified','source_package_verified':True}
@@ -82,6 +82,10 @@ def main()->int:
         info=command([tool('pdfinfo'),'main.pdf'],build);report['commands'].append(info)
         page=re.search(r'^Pages:\s*(\d+)',info['stdout'],re.M)
         if info['returncode'] or not page:raise RuntimeError('Actual PDF unreadable')
+        plan=json.loads((root/'plan.json').read_text(encoding='utf-8'))
+        metrics,layout_errors=layout_measurements(log,int(page[1]),plan['limits'].get('max_pages') or 6)
+        report.update(main_pages=metrics['main_pages'],total_pages=int(page[1]),layout_measurements=metrics,layout_errors=layout_errors)
+        if layout_errors:raise RuntimeError('Layout/page constraints: '+'; '.join(layout_errors))
         report.update({'status':'BUILT','pages':int(page[1]),'pdf_sha256':sha((build/'main.pdf').read_bytes()),'passes':i,
                        'auxiliary_stable':stable,'blocking_log_issues':issues,'warnings':log_warnings(log)})
     except Exception as e:report['failure']=str(e)

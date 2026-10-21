@@ -80,7 +80,7 @@ def build_output(root:Path,output_id:str,emergency_stretch_em:float|None=None)->
                 digest=sha(b''.join((compiled/('main'+ext)).read_bytes() if (compiled/('main'+ext)).exists() else b'' for ext in ('.aux','.toc','.out','.bbl')))
                 if turn>=2 and digest==previous:report['stability_reached']=True;break
                 previous=digest
-            from build_checks import log_issues,log_warnings
+            from build_checks import log_issues,log_warnings,layout_measurements
             log=(compiled/'main.log').read_text(encoding='utf-8',errors='replace');issues=log_issues(log)
             if layout:
                 effective=re.search(r'PMS-EMERGENCY-STRETCH-PT:\s*([0-9.]+)pt',log)
@@ -90,8 +90,12 @@ def build_output(root:Path,output_id:str,emergency_stretch_em:float|None=None)->
             report['blocking_log_issues']=issues;report['nonblocking_log_warnings']=log_warnings(log)
             require(not issues,'BUILD_FAILED','Blocking TeX log diagnostics: '+', '.join(issues),'build/main.log')
             pdf=compiled/'main.pdf';require(pdf.is_file() and pdf.read_bytes().startswith(b'%PDF-'),'BUILD_FAILED','Actual PDF missing','build/main.pdf')
-            report.update({'status':'BUILT','pdf_sha256':sha(pdf.read_bytes()),'pages':pdf_pages(pdf),'passes':turn})
+            pages=pdf_pages(pdf)
+            metrics,layout_errors=layout_measurements(log,pages,plan['limits'].get('max_pages') or 6)
+            report.update({'pdf_sha256':sha(pdf.read_bytes()),'pages':pages,'main_pages':metrics['main_pages'],'total_pages':pages,'layout_measurements':metrics,'layout_errors':layout_errors,'passes':turn})
+            require(not layout_errors,'BUILD_FAILED','Layout/page constraints: '+'; '.join(layout_errors),'build/main.log')
             require(file_inventory(out,sorted(output_inputs(out)))==sources,'BUILD_INPUT_CHANGED','Inputs changed while compiling; do not accept this build')
+            report['status']='BUILT'
         except Exception as e:
             report['failure']=str(e)
             raise
@@ -104,8 +108,8 @@ def build_output(root:Path,output_id:str,emergency_stretch_em:float|None=None)->
             dest=out/'build'
             if dest.exists():shutil.rmtree(dest)
             compiled.rename(dest);shutil.rmtree(stage,ignore_errors=True)
-            write_run(root,knowledge,[f'outputs/{output_id}'],'built' if report['status']=='BUILT' else 'failed',report.get('pages'))
-    return result('output.build','BUILT',{'pdf':f'outputs/{output_id}/build/main.pdf','report':f'outputs/{output_id}/build/build-report.json','pages':report['pages'],'tools':report['tools'],'layout':report['layout']})
+            write_run(root,knowledge,[f'outputs/{output_id}'],'built' if report['status']=='BUILT' else 'failed',report.get('pages'),report.get('main_pages'))
+    return result('output.build','BUILT',{'pdf':f'outputs/{output_id}/build/main.pdf','report':f'outputs/{output_id}/build/build-report.json','pages':report['pages'],'main_pages':report['main_pages'],'total_pages':report['total_pages'],'tools':report['tools'],'layout':report['layout']})
 
 def check_build(out:Path)->tuple[dict,list[dict]]:
     errors=[];path=out/'build/build-report.json'
@@ -120,6 +124,13 @@ def check_build(out:Path)->tuple[dict,list[dict]]:
         errors.append(diagnostic('BUILD_STALE','Actual PDF differs from built PDF','build/main.pdf'))
     elif pdf_pages(pdf)!=b.get('pages'):
         errors.append(diagnostic('BUILD_STALE','Actual PDF page count differs from report','build/main.pdf'))
+    log=out/'build/main.log'
+    if log.is_file() and pdf.is_file():
+        from build_checks import layout_measurements
+        metrics,layout_errors=layout_measurements(log.read_text(encoding='utf-8',errors='replace'),pdf_pages(pdf),load_plan(out/'plan.json')['limits'].get('max_pages') or 6)
+        if layout_errors or metrics!=b.get('layout_measurements') or metrics['main_pages']!=b.get('main_pages') or metrics['total_pages']!=b.get('total_pages'):
+            errors.append(diagnostic('BUILD_STALE','Actual layout measurements fail or differ from the report','build/build-report.json'))
+    else:errors.append(diagnostic('BUILD_FAILED','Actual layout log/PDF missing','build/main.log'))
     return b,errors
 
 def render_output(root:Path,output_id:str,dpi:int=120)->dict:
@@ -150,10 +161,9 @@ def render_output(root:Path,output_id:str,dpi:int=120)->dict:
     return result('output.render','RENDERED_NOT_REVIEWED',{'manifest':f'outputs/{output_id}/evidence/render-manifest.json','pages':len(pages)})
 
 def reading_budget(root:Path,output_id:str)->dict:
-    """Only explicit max_pages blocks this separate, actual-PDF reading-budget check."""
+    """Measured main pages; references remain separate and excluded from the limit."""
     load_project(root)
-    out=safe(root,'outputs/'+output_id);plan=load_plan(out/'plan.json');pages=pdf_pages(safe(out,'build/main.pdf',True));errors=[];warnings=[]
-    maximum=plan['limits'].get('max_pages');threshold=plan['limits'].get('page_review_threshold')
-    if maximum is not None and pages>maximum:errors.append(diagnostic('MAX_PAGES_EXCEEDED',f'{pages} actual pages exceed explicit maximum {maximum}','build/main.pdf'))
-    if threshold is not None and pages>threshold:warnings.append(diagnostic('READING_LENGTH_ADVISORY',f'{pages} actual pages exceed nonblocking editorial suggestion {threshold}; preserve typography and scope','build/main.pdf'))
-    return result('output.reading-budget','NEEDS_WORK' if errors else 'CHECKED',{'pages':pages,'profile':plan['profile'],'max_pages':maximum},errors,warnings)
+    out=safe(root,'outputs/'+output_id);plan=load_plan(out/'plan.json');b,errors=check_build(out)
+    maximum=min(6,plan['limits'].get('max_pages') or 6)
+    return result('output.reading-budget','NEEDS_WORK' if errors else 'CHECKED',
+        {'main_pages':b.get('main_pages'),'total_pages':b.get('total_pages'),'profile':plan['profile'],'max_pages':maximum},errors)
