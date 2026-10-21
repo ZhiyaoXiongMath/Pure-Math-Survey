@@ -2,7 +2,7 @@
 
 [简体中文](README.zh-CN.md) | **English**
 
-Current development candidate: **2.4.1-dev.4**, policy `minimal-rules-v22-lean-2.4.1`, runtime contract `minimal-lean-2.4.1`. This PR04 candidate supports **Minimal writing and knowledge-only work in the current session**. It is not a 2.4.1 release. KB and output schemas are 3.0.0. The lean KB provides shared units, routes and a short index. Minimal uses the rules.v22 content and layout contract with explicit runtime adaptations.
+Current release candidate: **2.4.1**, policy `minimal-rules-v22-lean-2.4.1`, runtime contract `minimal-lean-2.4.1`. This candidate supports **Minimal writing and knowledge-only work in the current session**. Version 2.4.1 identifies this candidate; no formal tag or Release is announced here. KB and output schemas are 3.0.0. The lean KB provides shared units, routes and a short index. Minimal uses the rules.v22 content and layout contract with explicit runtime adaptations.
 
 Use fixed mathematical sources to build canonical knowledge and reuse those exact statements in an English Minimal. The supported structure is Main Results, Key Mathematical Ingredients, and Connecting the Ingredients. Keep complete assumptions and conclusions, define core concepts, attribute borrowed content accurately and explain the decisive connections briefly. No particular model, child chats, reviewer roles, review records or paired fast/slow manuscripts are required. Knowledge-only work ends with sources, conventions, units, routes and an index. Plans use the current KB; snapshots are optional. Repeated preparation updates derived inputs while preserving authored manuscript, outline and style. A unit can be exported with its referenced definitions, conventions and source locators. For Minimal, read the short runtime adaptation first and the original rules.v22 once; knowledge-only work skips the layout rules. The article uses 11pt body text, margins of at least 20mm and substantive diagram text of at least 10.5pt, with at most six main pages including title and graph and a separately started bibliography. Actual builds record main and total pages; TeX-only does not claim measured page counts.
 
@@ -11,7 +11,9 @@ Use $pure-math-survey in this session. Read [fixed source/version], study [scope
 for [reader], and write one English Minimal from the same canonical KB statements.
 ```
 
-For knowledge-only, say “Build the KB only; do not create a manuscript or PDF.” For TeX-only, request editable TeX and state that PDF/page counts are unmeasured. Thematic, Lecture, Paper and non-integrated views are explicitly unsupported. Existing schema 2.x projects remain unchanged; the runtime contract alone does not make them schema 3.0.0 projects. Automatic migration is not provided.
+For knowledge-only, say “Build the KB only; do not create a manuscript or PDF.” For TeX-only, request editable TeX and state that PDF/page counts are unmeasured. Thematic, Lecture, Paper and non-integrated views are explicitly unsupported. Schema 2.x projects are incompatible and remain unchanged when rejected; adding the runtime contract does not convert them to schema 3.0.0. Automatic migration is not provided.
+
+This version removes runtime review/dispatch workflows and excludes retired modes and their resources from the installer. These are workflow and resource changes, not measured token or percentage savings. Without independent records, per-article model identity, token usage and complete elapsed time are null or unavailable; build/test timings do not measure the whole article workflow.
 
 ## Candidate installation
 

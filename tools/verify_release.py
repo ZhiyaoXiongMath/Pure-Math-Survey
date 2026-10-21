@@ -52,8 +52,8 @@ def assert_installed_contract(artifacts:dict)->dict:
     if (artifacts.get('version'), artifacts.get('schema_version'),
             artifacts.get('output_schema_version'), artifacts.get('editorial_policy'),
             artifacts.get('runtime_contract')) != (
-            '2.4.1-dev.4', '3.0.0', '3.0.0', EXPECTED_POLICY, EXPECTED_RUNTIME):
-        raise AssertionError('Installed runtime does not match the PR04 candidate version, schemas, policy and runtime contract')
+            '2.4.1', '3.0.0', '3.0.0', EXPECTED_POLICY, EXPECTED_RUNTIME):
+        raise AssertionError('Installed runtime does not match the PR05 candidate version, schemas, policy and runtime contract')
     contracts=artifacts.get('supported_output_contracts')
     if not isinstance(contracts,list) or len(contracts)!=1 or any(
             not isinstance(x,dict) or not isinstance(x.get('schema_version'),str) or
