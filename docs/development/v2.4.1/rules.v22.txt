@@ -1,0 +1,131 @@
+MATHEMATICAL PAPER FRAMEWORK — rules.v22
+
+Purpose: Introduce source-grounded core concepts and principal results, then explain selected second-layer modules, their methods and composition in a concise article and editable diagram.
+
+Authority: The fixed primary source governs mathematics; the user fixes coverage and deliverable constraints; reference articles provide organizational inspiration only.
+
+Priority: Tier I concepts, conditions, conclusions and core steps jointly > Tier II reading architecture > Tier III selective depth and composition > Tier IV implementation and verification; success in one content obligation cannot compensate for another omission.
+
+Planning order: Identify concepts, results and methods, select necessary first- and second-layer content, verify composition, then write and arrange the page.
+
+Tier I — Concepts, results and core composition (5 rules)
+
+001. Deliver the mathematical framework within six main pages excluding a separately started bibliography, preserving fixed-source mathematics, agreed principal results and developed branches without inventing claims, weakening essential hypotheses or silently reducing scope.
+002. Identify and define the source's core mathematical concepts, then use their established names in the hypotheses, conclusions and branches they organize, treating concepts, conditions, principal results and essential modules as equally necessary content.
+003. Make each theorem, proposition and lemma complete in its own objects, hypotheses, governing relations, data and conclusion relative to explicitly declared notation and precisely defined mathematical concepts, without importing unstated assumptions through a shared setup.
+004. Show how actual upstream outputs, together with explicit remaining inputs, satisfy the hypotheses of each downstream result rather than treating citations or arrows as sufficient connections.
+005. Organize the article around first-layer recognition of concepts and results and second-layer understanding of a few usable modules, their method identities and their composition.
+
+Tier II — Article architecture (10 rules)
+
+006. After introducing the core concepts and notation, use the opening section to make all independent principal contributions within scope visible with their distinguishing hypotheses and outcomes, rather than presenting one central theorem as a substitute for the whole contribution.
+007. Let the opening span pages when needed, group compatible principal results under explicit shared assumptions, and avoid restating them later in full merely to organize their supporting modules.
+008. Organize sections and graph layers by actual mathematical dependencies rather than source numbering, statement type or proof difficulty.
+009. State a selected cross-module bridge output as a complete lemma, proposition or explicit part of a formal module, especially when the graph advertises that intermediate output, while keeping its internal supporting facts combined.
+010. Keep a selected shared bridge in one formal statement where possible and identify its consequential applications, without printing routine internal calls.
+011. Organize compound statements with distinct mathematical tasks as a common local setup followed by clearly labelled parts, each pairing its own additional hypotheses with its conclusion.
+012. Identify core concepts and principal contributions from the source title, abstract, introduction and named statements, verify their roles against the body, and do not select them by frequency, result numbering or a fixed theorem quota.
+013. Let definitions establish recognition, formal statements carry selected mathematical facts, short connections explain methods and composition, and the diagram summarize the same second-layer structure.
+014. Start the bibliography separately and omit unnecessary front matter, appendices, process commentary and internal-code dictionaries from the reader article.
+015. Meet the six-main-page cap including title and figures with eleven-point body text, substantive graph text of at least ten and a half points and normal layout, adjusting selection and encapsulation rather than sacrificing mathematics.
+
+Tier III — Selection, encapsulation and dependencies (30 rules)
+
+016. Judge importance, dependency position and internal expansion depth separately, treating complex core definitions as first-layer content and difficult complete modules as possible second-layer content.
+017. Distinguish principal contributions, necessary concepts, decisive bridges and internal supporting facts by their role in the reader's understanding, not only by source labels or independent callability.
+018. Select a candidate bridge when it crosses a main obstacle, connects major modules, is shared across main routes or explains a branch, rather than because it can be stated independently.
+019. Distinguish the necessary precision of a selected mathematical statement from its internal proof details, keeping essential conditions and quantitative outputs without expanding the proof merely because the result is important.
+020. Use roughly five to ten major reasoning stages only as a backbone scale guide, never as a quota on total statements or dependency depth.
+021. Encapsulate each selected second-layer module around a clear mathematical task with identifiable objects, conditions, usable output, principal method and downstream purpose.
+022. Split a bundled statement only when separate presentation is necessary to understand a main result, cross-module bridge, shared input or branch distinction, not merely because an internal fact is independently callable or used once.
+023. Merge or internalize source-supported facts that serve one second-layer task when their separate display adds no needed recognition, preserving the resulting module's actual conditions and strength.
+024. Stop expansion when the reader knows a module's objects, conditions, output, main method role and subsequent use, unless hiding a particular internal fact would misrepresent the route, scope or essential mechanism.
+025. Extract an unnumbered intermediate result from a source proof only when needed at the chosen display depth, retaining its actual applicability and source location without strengthening the argument.
+026. Prefer an accurately callable standard result to a reproof, while stating the assumptions and output needed for its present use.
+027. State each selected module as an accurate usable mathematical fact and add only the brief method identity and input-output connection needed for its role, not a condensed reproduction of its internal proof.
+028. Place independent results on parallel branches when neither is an input to the other, even if the source discusses them consecutively.
+029. Mark genuinely joint premises at an intelligible join and identify which output each premise supplies.
+030. Show consequential second-layer uses of a shared result while distinguishing separate applications and their remaining inputs, without treating independent routes as joint premises or exposing all internal calls.
+031. Preserve differing hypotheses when similar conclusions hold in distinct regimes and avoid merging their interfaces into a stronger unsupported assertion.
+032. Distinguish alternative sufficient routes from simultaneous requirements in both prose and the diagram.
+033. For each consequential edge, identify the relevant upstream output, the downstream hypothesis it satisfies and any additional common data still needed.
+034. Supply a genuinely missing cross-module conversion as a precise bridge or encapsulate it within a source-supported complete module, rather than automatically recursing into every internal sublemma.
+035. Keep internal identifiers and selection classifications in private records while using automatic result numbers and meaningful mathematics in the article.
+036. Make mathematical result nodes correspond to selected formal body statements or explicit parts, while putting method identities on connections or brief notes when they need no separate result node.
+037. Preserve a core method's established identity and any defining formula necessary to recognize it, but distinguish these from parameterized witnesses or auxiliary constructions used only to establish a module's output, preferring a complete existence-and-output interface with a concise mechanism when later calls do not need those witnesses.
+038. Derive the dependency hierarchy from verified input-output relations rather than copying section order or stacking Theorem, Lemma and Technique categories.
+039. Prefer one readable main-structure diagram, adding a local panel only when it clarifies a necessary branch or composition without duplicating the article.
+040. Record source support for selected statements and nontrivial edges in a compact private node-and-edge map.
+041. Mark unverified implications as unresolved and do not pass them off as established dependencies in the reader graph.
+042. Check the type, regularity, domain, quantifiers and uniformity of an output against the actual requirements at its next use.
+043. Separate finite, local, uniform and limiting assertions whenever their distinction changes a later use, keeping additional assumptions local to the parts that require them rather than silently carrying them into an independently sufficient consequence.
+044. Trace the distinct conclusions of each principal result to sufficient source-supported modules, preserving a necessary separate input without requiring every internal contributor to become its own statement.
+045. Trace each main route using core concepts, selected complete modules and short connections alone, making necessary cross-module assumptions visible while leaving internal proofs encapsulated.
+
+Tier IV — Implementation and verification (55 rules)
+
+046. Fix an explicit source version before extracting or presenting any mathematical claim.
+047. Read the source introduction, named definitions and relevant statements and proofs to identify the concepts, principal results and methods before selecting second-layer modules independently.
+048. Verify the type and printed number of every cited source result against its rendered heading or resolved source counters, not inferred environment counts, and retain exact section, equation or page locators where useful.
+049. Save a compact pre-draft map of core names with definitions and uses, principal contributions with their opening presentation, selected supporting modules and withheld internal details, citing source locations without building another database.
+050. Check the pre-draft map for concept omissions, missing cross-module inputs and excessive fragmentation before drafting, preserve its first version and update the same record for the delivered article.
+051. Allow third-layer internal structure only for an explicit reader need concerning route, scope or mechanism, normally omit fourth-layer technical implementation, and never aim at fifth-layer complete verification in the short article.
+052. Define stable notation, object types, operator conventions and core mathematical predicates once near the beginning, and reuse their established names naturally in later statements rather than repeatedly replacing those names by expanded definitions.
+053. Define new or changed symbols and meanings locally, distinguish a genuine defined mathematical concept from an editorial assumption code, and add a short reminder only when it prevents a real ambiguity.
+054. Attribute imported theorems as external inputs rather than presenting them as newly proved results of the target paper.
+055. Do not claim novelty, universal superiority, author endorsement, completeness beyond the agreed scope or generality beyond the original source.
+056. State each result's ambient setting, objects, quantifiers, data and actual hypotheses locally, allowing the direct use of precisely defined concept names while never silently importing an earlier compactness, regularity, positivity or other assumption.
+057. Preserve the source's domain, regularity, boundary, time, compactness, and geometric assumptions whenever they are relevant.
+058. Preserve all mathematically important quantifiers and distinctions between arbitrary, fixed, and specially chosen data.
+059. Preserve substantive signs, ranges, constant dependencies and meaningful constants, and check that every displayed construction belongs to its declared domain for every parameter value or sequence index claimed, not merely eventually or in a limit, summarizing nonessential coefficients only when meaning remains unchanged.
+060. Distinguish existence, uniqueness, bounds, compactness, full convergence, subsequential convergence and rates without silently upgrading one interface to another.
+061. Keep a local applicability criterion explicit when its meaning or scope is new or variable, but do not mechanically re-expand a previously defined core predicate whenever that predicate is explicitly asserted of the relevant object.
+062. Use standard theorem environments with automatic section-based numbering and shared counters where appropriate, without manually assigned letter names.
+063. Display the governing equation, initial or boundary data, or defining mathematical relation when it identifies the subject of a selected result, using established notation rather than repeatedly expanding the same operators.
+064. Use normal automatic theorem headings without invented result names, and keep source attribution adjacent to the corresponding heading and opening on the same page.
+065. Use accurate source attribution for ownership and verification, retaining established wording when adequate rather than repeatedly restyling citations, and never let a citation replace local mathematical content.
+066. Give selected imported tools their actual conditions and usable outputs, making a formal interface when needed for a decisive second-layer bridge rather than for every internal standard invocation.
+067. Do not replace substantive assumptions or problem-defining equations by setup codes, citations or previous result numbers, while allowing accurately defined mathematical terms to state those assumptions concisely.
+068. Give the central problem-defining relation and decisive later-used inequalities, identities and outputs their own displays wherever they carry a new statement, allowing compatible formulas together but keeping routine mentions inline and avoiding decorative boxes.
+069. Design the diagram from the verified selected modules to show second-layer mathematical inputs, outputs, joint premises, parallel routes and alternatives, not a full internal dependency inventory.
+070. Orient visible connections consistently from substantive hypotheses and intermediate outputs toward conclusions, with arrowheads outside text and box interiors.
+071. Use a brief mathematical input or output phrase, an essential formula where useful and the corresponding ordinary formal result number as the usual content of a node.
+072. Keep full hypotheses in the formal statement, retain branch-defining conditions in the graph, and check each shortened label as a mathematical claim whose subject, property and scope agree with that statement.
+073. Give parallel branches sufficient horizontal separation to make independence visible.
+074. Keep conjunctions and forks visually traceable through meaningful labels and visible junctions, leaving the attachment to the upstream node unobscured and placing labels beside the connector or in an explicit node when an opaque background would hide that connection.
+075. Put the distinguishing inequalities, parameter regimes, geometric conditions or precisely defined core predicates on the relevant branches, using mathematical meaning rather than arbitrary assumption-package names.
+076. Explain prerequisite, conjunction and alternative conventions briefly in the caption without turning it into a code dictionary or a second continuous argument.
+077. Avoid placing an arrow where a result is only thematically related to another result.
+078. Preserve the actual logical direction of comparison, regularity, compactness, existence, and limiting arguments when those notions occur.
+079. Pair result nodes with ordinary formal numbers or explicit parts and give every substantive method note, edge label and annotation an explicit node, connector, region or whole-figure scope, without using mere proximity, inventing a dependency arrow or splitting commentary into extra mathematical nodes.
+080. Keep graph labels to a few semantically complete lines with natural interword and mathematical spacing rather than stretching formulas to fill boxes, avoid preventable mid-word breaks in core terms, move paragraph-length explanations to the body, and adjust wrapping or node dimensions instead of shrinking type.
+081. Generate the figure in editable vector form, preferably as a separate TikZ file included by the main LaTeX document.
+082. Place the overview after its core concepts have been introduced and where it supports orientation or synthesis, with displayed results directly locatable in the body.
+083. Use short connections to name the main method's role, match preceding outputs to next conditions and identify other necessary inputs without narrating internal proof steps.
+084. Remove repeated notation expansions and unnecessary internal detail while retaining complete local assumptions, core concept identities and the short mathematical connections needed at the chosen depth.
+085. Before printing an internal construction, test whether its parameters and verification can be omitted while the reader still understands the module's objects, conditions, usable output, method role and next call, and retain deeper detail only for a briefly recorded specific need.
+086. Use one-column mathematical typography with a consistent spacing hierarchy for paragraphs, formal statements, their parts, headings and displayed mathematics, giving run-in topic headings visible separation above while keeping each heading attached to its explanatory text rather than relying on bold type alone or adding blank lines everywhere.
+087. Set body and formal statements in eleven-point type and substantive diagram labels in base type of at least ten and a half points, with normal leading and margins of at least twenty millimeters, no global resizebox or scalebox scaling and no negative layout spacing used to force fit, while preserving ordinary mathematical scripts and kerning.
+088. Use concise genuine notation with explicit article-wide or local scope, and reintroduce or rename it only when its meaning, background or convention actually changes rather than as a mechanical self-containment ritual.
+089. State each necessary local hypothesis, datum and governing relation even when used elsewhere, but express an unchanged named property by its defined term instead of repeatedly spelling out the same definition.
+090. Avoid node quotas, ornamental graphics and a flat sequence of equal-weight statements, using mathematical task and result prominence to guide fast reading.
+091. Resolve excessive length or uneven page density by removing redundant presentation, withholding unnecessary internal detail and reflowing at meaningful boundaries, keeping headings and defining relations with their text and allowing a formal statement to continue naturally across pages with uninterrupted numbering, without repeating its title or adding a continuation label merely because it crosses a page, losing mathematics or shrinking type.
+092. Report an unmet contract if accurate complete interfaces, essential intermediate knowledge, fixed coverage and normal typography cannot all fit the cap, rather than passing a narrower or visually compressed substitute.
+093. Generate LaTeX with a literal-text method that preserves backslashes, inspect the saved file for escape and environment errors before building, prefer automatic wrapping over unnecessary manual title breaks, and actually compile while retaining the source and all failed and successful build logs.
+094. Verify the number of main-matter pages separately from the bibliography and record the observed count.
+095. Inspect every final PDF page after the last build for paragraph and display spacing, natural mathematical spacing, attached scripts, statement boundaries, isolated headings, awkward page breaks, annotation ownership and avoidable density imbalance, and verify body and figure sizes from both TeX and PDF font evidence while preserving legitimate whitespace and ordinary mathematical scripts.
+096. Check each formal environment with the declared notation and core definitions available but no earlier hypotheses or conclusions, verifying local conditions, named-predicate usage, compound parts and core displays before source agreement.
+097. On an article-first review, check whether the opening identifies the principal contributions and whether core concepts are both defined and used, then trace the selected modules and connections without supplying missing content from the source or private notes.
+098. Treat missing or misidentified core concepts, lost conditions or conclusions, missing essential bridges, excessive internal expansion, false graph claims and layout violations as defects that other strengths cannot offset.
+099. Report one to three priority improvements with artifact and source locations and a concrete prospective rule change, while disclosing all additional mathematical errors and avoiding scores or unperformed validation claims.
+100. Freeze each tested rule version, change a small evidenced structural ambiguity at a time, and reconsider recurring defects as possible priority or encapsulation failures instead of repeatedly blaming execution.
+
+Deliverables and boundaries
+
+The run contains main.tex, main.pdf, architecture_graph.tex, node_edge_map.md, qa.md and an actual receipt; the existing private map starts as the pre-draft knowledge plan and ends as the source-located statement/dependency map.
+
+Paper-specific scope belongs in the assignment, never in these generic rules; no prescribed target-paper node list, theorem identifiers, expert answer or standard graph is supplied here.
+
+Reference articles may inform the organization of reusable propositions and the connection from one stage's output to another stage's input, but their mathematical content and proof expansion are not transferred into the target article.
+
+Reading contract: The article may define stable notation and core mathematical concepts once; each result explicitly asserts its own hypotheses, using those defined terms where appropriate, and states its governing relation and conclusion; a separately exported result must include the necessary definitions.

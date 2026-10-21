@@ -1,5 +1,7 @@
 # Pure Math Survey 2.1.0
 
+**2.4.1 development:** [Guide](docs/development/v2.4.1/DEVELOPMENT_GUIDE.zh-CN.md), [staged workflow](docs/development/v2.4.1/PR_WORKFLOW.zh-CN.md), and [sole development state](docs/development/v2.4.1/DEVELOPMENT_STATE.yaml). PR-01 establishes the development contract and navigation only; the functionality below remains 2.1.0 and does not imply that 2.4.1 is implemented or released.
+
 [简体中文](README.md) | **English**
 
 Software is **2.1.0**, knowledge/snapshot schema **2.0.0**, output/review schema **2.2.0**, and the current editorial policy is **four-modes-2026-10-15-r5**. The four development stages and CI race fix are merged; completed comparison-theorem mathematical acceptance is reused within its verified scope. See [release notes and validation limits](docs/releases/v2.1.0.md) and [stage status](docs/development/STATUS.md). [GitHub Releases](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases) determines publication status; release-preparation documentation or RELEASE_READY does not mean publication has occurred. [Historical preview notes](docs/r4/development-status.md) preserve the earlier scope.

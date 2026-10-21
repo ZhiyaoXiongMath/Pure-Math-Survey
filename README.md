@@ -1,5 +1,7 @@
 # Pure Math Survey 2.1.0
 
+**2.4.1 开发入口：** [开发指南](docs/development/v2.4.1/DEVELOPMENT_GUIDE.zh-CN.md)、[分阶段流程](docs/development/v2.4.1/PR_WORKFLOW.zh-CN.md)与[唯一开发状态](docs/development/v2.4.1/DEVELOPMENT_STATE.yaml)。PR-01 仅固定开发合同与导航；以下仍描述 2.1.0 的实际功能，不表示 2.4.1 已实现或发布。
+
 **简体中文** | [English](README.en.md)
 
 软件版本 **2.1.0**，知识／快照 schema **2.0.0**，输出／审阅 schema **2.2.0**，当前写作政策 **four-modes-2026-10-15-r5**。四阶段开发及 CI 竞态修复已合并，已完成的比较定理数学验收按其限定范围复用。见[发行说明与验证边界](docs/releases/v2.1.0.md)和[阶段状态](docs/development/STATUS.md)。正式发布状态以 [GitHub Releases](https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/releases) 为准；发行准备文档或 RELEASE_READY 不表示已经发布。[历史预览记录](docs/r4/development-status.md)保留此前范围。

@@ -1,3 +1,7 @@
+> **Historical — 2.1.0 / 历史资料**
+> The content below preserves the 2.1.0 development record. For work targeting 2.4.1, read the [development guide](v2.4.1/DEVELOPMENT_GUIDE.zh-CN.md), [workflow](v2.4.1/PR_WORKFLOW.zh-CN.md), and the sole current [DEVELOPMENT_STATE.yaml](v2.4.1/DEVELOPMENT_STATE.yaml). This file is no longer updated as current progress.
+> 以下保留 2.1.0 历史合同与事实；2.4.1 以新指南、流程和唯一 STATE 为准，不在本文件维护第二份当前进度。运行软件仍为 2.1.0，PR-01 仅建立开发合同与导航。
+
 # Verified development status / 已核实开发状态
 
 **Observed:** 2026-10-16. **Live authority:** GitHub `main`, PRs, commits and Actions; this file is a compact **handoff snapshot**, not an approval or continuous monitor.
