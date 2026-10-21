@@ -39,10 +39,10 @@ def verification_workspace(report:dict,parent:Path|None=None,keep:bool=False):
         if not workspace['retained']:shutil.rmtree(base)
 
 
-EXPECTED_POLICY = 'minimal-transition-pr02'
+EXPECTED_POLICY = 'minimal-transition-pr03'
 EXPECTED_RUNTIME = 'minimal-lean-2.4.1'
-EXPECTED_CONTRACTS = {('2.2.0', EXPECTED_POLICY)}
-REQUIRED_SUITES = ('test_minimal_runtime', 'test_v2', 'test_materials',
+EXPECTED_CONTRACTS = {('3.0.0', EXPECTED_POLICY)}
+REQUIRED_SUITES = ('test_knowledge_units', 'test_minimal_runtime', 'test_v2', 'test_materials',
                    'test_build_layout', 'test_history_longpath', 'test_tex_safety',
                    'test_release_verifier')
 
@@ -52,8 +52,8 @@ def assert_installed_contract(artifacts:dict)->dict:
     if (artifacts.get('version'), artifacts.get('schema_version'),
             artifacts.get('output_schema_version'), artifacts.get('editorial_policy'),
             artifacts.get('runtime_contract')) != (
-            '2.4.1-dev.2', '2.0.0', '2.2.0', EXPECTED_POLICY, EXPECTED_RUNTIME):
-        raise AssertionError('Installed runtime does not match the PR02 candidate version, schemas, policy and runtime contract')
+            '2.4.1-dev.3', '3.0.0', '3.0.0', EXPECTED_POLICY, EXPECTED_RUNTIME):
+        raise AssertionError('Installed runtime does not match the PR03 candidate version, schemas, policy and runtime contract')
     contracts=artifacts.get('supported_output_contracts')
     if not isinstance(contracts,list) or len(contracts)!=1 or any(
             not isinstance(x,dict) or not isinstance(x.get('schema_version'),str) or
@@ -298,8 +298,8 @@ def main()->int:
             project=base/'notebook'
             check([str(exe),'-I',str(entry),'--json','init','--output',str(project),'--topic','clean-install','--scope',str(base/'scope.md')],base,env)
             check([str(exe),'-I',str(entry),'--json','kb','validate',str(project)],base,env)
-            f=check([str(exe),'-I',str(entry),'--json','kb','freeze',str(project)],base,env)
-            check([str(exe),'-I',str(entry),'--json','kb','verify',str(project),'--snapshot',f['artifacts']['snapshot_id']],base,env)
+            check([str(exe),'-I',str(entry),'--json','kb','index',str(project)],base,env)
+            if (project/'snapshots').exists():raise AssertionError('Knowledge-only smoke created a forced snapshot')
             if list((project/'outputs').glob('*/plan.json')):raise AssertionError('Knowledge initialization generated a manuscript')
             report['clean_environment']={'venv_with_pip':False,'system_site_packages':False,'isolated_python':True,'runtime_modules_imported':len(loaded['modules']),'knowledge_only_outputs':0}
             if not args.no_build:

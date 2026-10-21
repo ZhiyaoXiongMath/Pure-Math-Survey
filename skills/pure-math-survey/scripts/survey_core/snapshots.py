@@ -91,15 +91,14 @@ def diff_snapshots(root: Path, old_id: str, new_id: str) -> dict:
     for inv in (a,b):
         for k,n in inv.nodes.items():
             if any(s['source_id'] in source_changes for s in n.meta['sources']): changed_seeds.add(k)
-    deps = affected_dependents(a.nodes, changed_seeds) | affected_dependents(b.nodes, changed_seeds)
+    deps = affected_dependents(a.nodes, changed_seeds,a.routes) | affected_dependents(b.nodes, changed_seeds,b.routes)
     outputs = []
     from .models import load_plan
     from .plans import consumed_paths, validate_plan, consumption
     for file in sorted((root / 'outputs').glob('*/plan.json')):
         plan = load_plan(file)
-        if plan['snapshot_id'] != old_id:
-            continue
-        validate_plan(root, plan)
+        if not {s['node_id'] for s in plan['selections']} <= a.nodes.keys() or not set(plan['route_ids']) <= {r['id'] for r in a.routes}:continue
+        validate_plan(root, plan,inv=a)
         consumed = consumed_paths(a, plan)
         selected_nodes=consumption(a,plan)
         hits = sorted(consumed & changed_files)
@@ -112,7 +111,7 @@ def diff_snapshots(root: Path, old_id: str, new_id: str) -> dict:
                 found = [i+1 for i,line in enumerate(lines) if key and key in line]
                 locations.append({'changed_input': p, 'node_id': key, 'manuscript_lines': found,
                                   'location': relpath(root, file) if not found else relpath(root, file.parent/'manuscript/main.tex'),
-                                  'action': 'Reassess consumed input, dependent proof and surrounding prose before adopting new snapshot.'})
+                                  'action': 'Reassess consumed input, dependent statements and surrounding prose before preparing live knowledge.'})
             # B-inspired impact precision: inspect all literal body sections and
             # locate affected dependent statements, not only IDs in main.tex.
             from .tex import inspect_tex
@@ -134,4 +133,4 @@ def diff_snapshots(root: Path, old_id: str, new_id: str) -> dict:
                             'affected_nodes':sorted(nodes_affected),'authored_locations':precise})
     return result('kb.diff', 'COMPARED', {'from': old_id, 'to': new_id, 'added': added, 'removed': removed, 'changed': changed,
                   'source_changes': source_changes, 'affected_dependents': sorted(deps), 'changed_files': sorted(changed_files), 'affected_outputs': outputs,
-                  'historical_outputs': 'Remain bound to their original snapshot.'})
+                  'historical_outputs': 'Previously prepared bytes remain available in output preparation history.'})

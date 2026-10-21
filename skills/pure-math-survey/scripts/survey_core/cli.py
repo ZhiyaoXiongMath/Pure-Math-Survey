@@ -18,8 +18,9 @@ def parser()->Parser:
     i=sub.add_parser('init');i.add_argument('--output',type=Path,required=True);i.add_argument('--topic',required=True)
     i.add_argument('--scope',type=Path,required=True);i.add_argument('--title');i.add_argument('--language',default='en')
     k=sub.add_parser('kb');ks=k.add_subparsers(dest='action',required=True)
-    for name in ('validate','index','freeze','verify','diff'):
+    for name in ('validate','index','freeze','verify','diff','export'):
         x=ks.add_parser(name);x.add_argument('project',type=Path)
+        if name=='export':x.add_argument('--node',required=True);x.add_argument('--to',type=Path,required=True)
         if name=='verify': x.add_argument('--snapshot',required=True)
         if name=='diff': x.add_argument('--from',dest='old',required=True);x.add_argument('--to',dest='new',required=True)
     o=sub.add_parser('output');os=o.add_subparsers(dest='action',required=True)
@@ -27,10 +28,10 @@ def parser()->Parser:
         x=os.add_parser(name);x.add_argument('project',type=Path)
         if name=='prepare':x.add_argument('--plan',required=True)
         elif name=='plan':
-            x.add_argument('--output',required=True);x.add_argument('--snapshot',required=True)
+            x.add_argument('--output',required=True)
             x.add_argument('--profile',default='minimal',help='Only minimal is supported')
             x.add_argument('--view',default='integrated',help=argparse.SUPPRESS)
-            x.add_argument('--question',action='append');x.add_argument('--principal',action='append')
+            x.add_argument('--principal',action='append')
             x.add_argument('--title');x.add_argument('--max-pages',type=int)
         else:x.add_argument('--output',required=True)
         if name=='validate':x.add_argument('--stage',choices=['plan','structure','package'],default='plan')
@@ -56,6 +57,9 @@ def execute(a)->dict:
     if a.command=='kb':
         from .knowledge import validate_knowledge,index_knowledge
         from .snapshots import freeze_snapshot,verify_snapshot,diff_snapshots
+        if a.action=='export':
+            from .exports import export_unit
+            return export_unit(root,a.node,a.to)
         if a.action=='validate':return validate_knowledge(root)
         if a.action=='index':return index_knowledge(root)
         if a.action=='freeze':return freeze_snapshot(root)
@@ -67,7 +71,7 @@ def execute(a)->dict:
         from .exports import prepare_output,validate_structure
         from .build import build_output,render_output,reading_budget
         from .release import assess_release,package_output
-        if a.action=='plan':return create_plan(root,a.output,a.snapshot,a.profile,a.view,a.question,a.principal,a.title,a.max_pages)
+        if a.action=='plan':return create_plan(root,a.output,a.profile,a.view,a.principal,a.title,a.max_pages)
         if a.action=='prepare':return prepare_output(root,safe(root,relpath(root,a.plan),True))
         out=safe(root,'outputs/'+a.output)
         if a.action=='history':

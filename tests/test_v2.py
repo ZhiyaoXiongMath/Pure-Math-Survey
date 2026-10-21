@@ -24,38 +24,31 @@ from survey_core.build import build_output,render_output,reading_budget
 from package_release import package,verify_archive
 
 
-def putnode(root,key,kind,statement=None,links=(),questions=('N-q',),source=False,status='unassessed'):
-    meta={'schema_version':VERSION,'id':key,'kind':kind,'title':'Synthetic software fixture '+key,'facets':['foundations','results'] if kind=='result' else ['foundations'],
-          'question_ids':list(questions) if kind!='question' else [],'mathematical_status':status,'origin':'local_derivation',
-          'sources':[{'source_id':'S-test','locator':'Synthetic fixture paragraph 1','role':'support'}] if source else [],'links':[{'target':k,'relation':r} for k,r in links]}
+def putnode(root,key,kind,statement=None,links=(),questions=(),source=False,status='unresolved',role=None,definitions=None):
+    meta={'schema_version':VERSION,'id':key,'kind':kind,'title':'Synthetic software fixture '+key,
+          'role':role or ('principal' if key=='N-main' else 'ingredient'),
+          'importance':{'level':None,'status':'unassigned','reason':''},'source_status':status,
+          'sources':[{'source_id':'S-test','locator':'Synthetic fixture paragraph 1'}] if source else [],
+          'definition_refs':list(definitions) if definitions is not None else [k for k,r in links]}
     body='# Software fixture\n\n'
-    if statement is not None:body+='## Canonical statement\n\n```latex\n'+statement+'\n```\n\n## Local argument\n\n'
+    if statement is not None:body+='## Canonical statement\n\n```latex\n'+statement+'\n```\n\n## Method and use\n\n'
     body+='Synthetic test data, not a real research-source or semantic review. For $x=0$, multiplication gives $x^2=0$.\n'
     path=root/f'knowledge/nodes/{key}.md';path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(node_bytes(meta,body));return path
 
+
 def fixture(root,second=False):
-    scope=root.parent/(root.name+'-scope.md');scope.write_text('# Synthetic scope\n\nFor real x, verify x=0 implies x squared=0. No claim about mathematical survey quality.\n')
+    scope=root.parent/(root.name+'-scope.md');scope.write_text('# Synthetic scope\n\nReal multiplication. Software testing only.\n',encoding='utf-8')
     init_project(root,'test-project',scope)
-    state='unassessed'
-    putnode(root,'N-q','question',questions=(),status=state)
-    putnode(root,'N-def','definition',r'Let $x\in\mathbb R$.',status=state)
-    putnode(root,'N-main','result',r'For $x\in\mathbb R$, $x=0$ implies $x^2=0$.',[('N-def','uses_definition')],source=True,status=state)
+    putnode(root,'N-def','definition',r'Let $x\in\mathbb R$.')
+    putnode(root,'N-main','result',r'For $x\in\mathbb R$, $x=0$ implies $x^2=0$.',[('N-def','uses_definition')],source=True)
     (root/'evidence/source-checks').mkdir(parents=True)
-    (root/'evidence/source-checks/test.md').write_text('# Synthetic source record\n\nA test harness material, not a literature-reading report.\n')
-    (root/'knowledge/material.txt').write_text('Synthetic primary test material. For real x=0, x*x=0.\n')
-    write_json(root/'knowledge/sources/S-test.json',{'schema_version':VERSION,'id':'S-test','kind':'primary','title':'Synthetic software fixture','authors':['Test harness'],
-               'publication_status':'unpublished','identifiers':{'user_file':'Synthetic software test material'},'version':'Fixture v1',
-               'access':{'state':'metadata_only','checked_at':None,
-                         'material_sha256':file_hash(root,'knowledge/material.txt'),'local_path':'knowledge/material.txt','reading_note':'evidence/source-checks/test.md', 'material_visibility':'public',
-                         'availability':dict(status='accessible',checked_at=now(),basis='Synthetic fixture bytes accessible to test harness.'),
-                         'redistribution':dict(status='granted',checked_at=now(),basis='Synthetic test material authored by this fixture; no external license claim.')}})
-    qs=[{'question_id':'N-q','answer_nodes':['N-main'],'mechanism_nodes':[],'boundary_nodes':[],'gaps':[],
-         'assessment':'pending','rationale':'A bounded synthetic software test; not a literature completeness claim.'}]
-    if second:
-        putnode(root,'N-q2','question',questions=(),status=state);putnode(root,'N-other','result',r'For $y\in\mathbb R$, $y^2\geq0$.',questions=('N-q2',),status=state)
-        qs.append({'question_id':'N-q2','answer_nodes':['N-other'],'mechanism_nodes':[],'boundary_nodes':[],'gaps':[],
-                   'assessment':'pending','rationale':'Independent synthetic branch.'})
-    write_json(root/'knowledge/coverage.json',{'schema_version':VERSION,'questions':qs})
+    (root/'evidence/source-checks/test.md').write_text('# Synthetic source record\n\nTest harness note, not a reading report.\n',encoding='utf-8')
+    (root/'knowledge/material.txt').write_text('Synthetic primary test material. For real x=0, x*x=0.\n',encoding='utf-8')
+    write_json(root/'knowledge/sources/S-test.json',{'schema_version':VERSION,'id':'S-test','title':'Synthetic software fixture','authors':['Test harness'],
+               'citation_key':'S-test','version':'Fixture v1','url':None,
+               'access':{'material_sha256':file_hash(root,'knowledge/material.txt'),'local_path':'knowledge/material.txt','reading_note':'evidence/source-checks/test.md','material_visibility':'public',
+                         'redistribution':dict(status='granted',checked_at=now(),basis='Synthetic test material authored by this fixture.')}})
+    if second:putnode(root,'N-other','result',r'For $y\in\mathbb R$, $y^2\geq0$.',role='context')
     return root
 
 def authored_toy(root,oid='mini',two_pages=False):
@@ -74,11 +67,10 @@ Let $x$ be real.
 \begin{proof}Multiplication gives $0\cdot0=0$.\end{proof}
 '''
     if two_pages:text+='\\newpage\nThis second page exists to test the actual PDF page count, not a length quota.\n'
-    text+='\\end{document}\n';(p.parent/'manuscript/main.tex').write_text(text)
+    text+='\\end{document}\n';(p.parent/'manuscript/main.tex').write_text(text,encoding='utf-8')
 
 def plan(root,oid='mini',profile='minimal',question='N-q',principal='N-main'):
-    sid=freeze_snapshot(root)['artifacts']['snapshot_id']
-    create_plan(root,oid,sid,profile=profile,questions=[question],principals=[principal])
+    create_plan(root,oid,profile=profile,principals=[principal])
     return root/f'outputs/{oid}/plan.json'
 
 
@@ -103,7 +95,7 @@ class Contracts(unittest.TestCase):
     def test_T01_zero_outputs(self):
         self.assertEqual(validate_knowledge(self.root)['status'],'VALID');self.assertFalse((self.root/'outputs').exists())
     def test_T02_unused_nodes(self):
-        putnode(self.root,'N-unused','example',questions=());self.assertEqual(len(inventory(self.root).nodes),4)
+        putnode(self.root,'N-unused','example',questions=());self.assertEqual(len(inventory(self.root).nodes),3)
     def test_T03_identical_freeze_reuse(self):
         a=freeze_snapshot(self.root);p=self.root/a['artifacts']['manifest'];stamp=p.stat().st_mtime_ns
         b=freeze_snapshot(self.root);self.assertEqual(a['artifacts']['snapshot_id'],b['artifacts']['snapshot_id']);self.assertEqual(b['status'],'REUSED');self.assertEqual(stamp,p.stat().st_mtime_ns)
@@ -117,12 +109,14 @@ class Contracts(unittest.TestCase):
         p=self.root/'knowledge/nodes/N-main.md';old=p.read_bytes();p.write_bytes(old.replace(b'N-def',b'N-missing'));self.code('UNKNOWN_REFERENCE',inventory,self.root)
         p.write_bytes(old.replace(b'S-test',b'S-missing'));self.code('UNKNOWN_REFERENCE',inventory,self.root)
     def test_T07_dependency_cycle_path(self):
-        putnode(self.root,'N-def','definition',r'$x\in\mathbb R$.',[('N-main','proof_input')])
+        putnode(self.root,'N-def','definition',r'$x\in\mathbb R$.',definitions=['N-def2'])
+        putnode(self.root,'N-def2','definition',r'$x$ is real.',definitions=['N-def'])
         with self.assertRaises(SurveyError) as c:inventory(self.root)
-        self.assertEqual(c.exception.diagnostic['code'],'DEPENDENCY_CYCLE');self.assertIn('N-main',str(c.exception));self.assertIn('N-def',str(c.exception))
+        self.assertEqual(c.exception.diagnostic['code'],'DEPENDENCY_CYCLE');self.assertIn('N-def',str(c.exception))
     def test_T08_navigation_loop_allowed(self):
-        p=self.root/'knowledge/nodes/N-main.md';n=load_node(p);n.meta['links'].append({'target':'N-method','relation':'explained_by'});p.write_bytes(node_bytes(n.meta,n.body))
-        putnode(self.root,'N-method','mechanism',links=[('N-main','explains')]);self.assertEqual(len(inventory(self.root).nodes),4)
+        for key in ('N-def','N-main'):
+            p=self.root/f'knowledge/nodes/{key}.md';p.write_bytes(p.read_bytes()+b'\n[[N-main]] [[N-def]]\n')
+        self.assertEqual(len(inventory(self.root).nodes),2)
     def test_T10_generated_condition_tamper(self):
         p=plan(self.root);prepare_output(self.root,p);f=p.parent/'generated/statements/N-main.tex';f.write_bytes(f.read_bytes().replace(b'x=0',b'x=1'));self.code('CANONICAL_STATEMENT_CHANGED',verify_generated,self.root,load_plan(p))
     def test_T12_locator_version_conflict(self):
@@ -140,13 +134,13 @@ class Contracts(unittest.TestCase):
         self.assertEqual(list((self.root/'snapshots').glob('KB-*')),[]);self.assertEqual(list((self.root/'snapshots').glob('.pending-*')),[])
         self.assertEqual(freeze_snapshot(self.root)['status'],'FROZEN')
     def test_T24_cache_delete_and_relocation(self):
-        sid=freeze_snapshot(self.root)['artifacts']['snapshot_id'];index_knowledge(self.root);shutil.rmtree(self.root/'.cache');moved=self.base/'moved';self.root.rename(moved);index_knowledge(moved)
+        sid=freeze_snapshot(self.root)['artifacts']['snapshot_id'];index_knowledge(self.root);(self.root/'knowledge/index.md').unlink();moved=self.base/'moved';self.root.rename(moved);index_knowledge(moved)
         self.assertEqual(freeze_snapshot(moved)['artifacts']['snapshot_id'],sid);self.assertEqual(verify_snapshot(moved,sid)['status'],'VERIFIED')
     def test_H01_default_minimal_integrated(self):
         p=load_plan(plan(self.root));self.assertEqual((p['profile'],p['view']),('minimal','integrated'))
     def test_H03_duplicate_json_and_unknown_schema(self):
-        p=self.root/'project.json';raw=p.read_text();p.write_text(raw.replace('"schema_version": "2.0.0"','"schema_version": "2.0.0", "schema_version": "2.0.0"'));self.code('DUPLICATE_JSON_KEY',inventory,self.root)
-        p.write_text(raw.replace('2.0.0','99.0.0'));self.code('SCHEMA_UNSUPPORTED',inventory,self.root)
+        p=self.root/'project.json';raw=p.read_text(encoding='utf-8');p.write_text(raw.replace('"schema_version": "3.0.0"','"schema_version": "3.0.0", "schema_version": "3.0.0"'),encoding='utf-8');self.code('DUPLICATE_JSON_KEY',inventory,self.root)
+        p.write_text(raw.replace('3.0.0','99.0.0'),encoding='utf-8');self.code('LEGACY_PROJECT_UNSUPPORTED',inventory,self.root)
     def test_H04_unsafe_relative_and_symlink(self):
         p=self.root/'project.json';s=read_json(p);s['scope_file']='../outside.md';write_json(p,s);self.code('UNSAFE_PATH',inventory,self.root)
     def test_H21_actual_symlink_rejected_when_available(self):
@@ -167,7 +161,7 @@ class Contracts(unittest.TestCase):
     def test_H10_foreign_snapshot_not_accepted(self):
         sid=freeze_snapshot(self.root)['artifacts']['snapshot_id'];v=read_json(self.root/'project.json');v['project_id']='foreign';write_json(self.root/'project.json',v);self.code('SNAPSHOT_PROJECT_MISMATCH',load_snapshot,self.root,sid)
     def test_H15_extra_frozen_file_is_tampering(self):
-        sid=freeze_snapshot(self.root)['artifacts']['snapshot_id'];(self.root/f'snapshots/{sid}/files/extra.txt').write_text('x');self.code('SNAPSHOT_TAMPERED',load_snapshot,self.root,sid)
+        sid=freeze_snapshot(self.root)['artifacts']['snapshot_id'];(self.root/f'snapshots/{sid}/files/extra.txt').write_text('x',encoding='utf-8');self.code('SNAPSHOT_TAMPERED',load_snapshot,self.root,sid)
     def test_H19_bibliography_does_not_treat_arxiv_prefix_as_year(self):
         from survey_core.exports import export_bibliography
         p=self.root/'knowledge/sources/S-test.json';v=read_json(p)
@@ -178,10 +172,10 @@ class Contracts(unittest.TestCase):
         self.assertNotIn('year = ',export_bibliography(inventory(self.root),{'N-main'}).decode())
     def test_H20_pending_boundary_is_not_a_scaffold(self):
         p=plan(self.root);authored_toy(self.root)
-        main=p.parent/'manuscript/main.tex';raw=main.read_text()
-        main.write_text(raw.replace(r'\end{document}',r'The broader proof remains pending and is not used here.\end{document}'))
+        main=p.parent/'manuscript/main.tex';raw=main.read_text(encoding='utf-8')
+        main.write_text(raw.replace(r'\end{document}',r'The broader proof remains pending and is not used here.\end{document}'),encoding='utf-8')
         self.assertNotIn('MANUSCRIPT_INCOMPLETE',{e['code'] for e in validate_structure(self.root,'mini')['errors']})
-        main.write_text(raw.replace(r'\end{document}',r'TODO: write this proof.\end{document}'))
+        main.write_text(raw.replace(r'\end{document}',r'TODO: write this proof.\end{document}'),encoding='utf-8')
         self.assertIn('MANUSCRIPT_INCOMPLETE',{e['code'] for e in validate_structure(self.root,'mini')['errors']})
 
 if __name__=="__main__":unittest.main()

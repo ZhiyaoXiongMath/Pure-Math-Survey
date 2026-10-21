@@ -50,7 +50,7 @@ def verify_record(folder: Path) -> dict:
 def save_record(out: Path, kind: str, data: dict[str, bytes]) -> dict:
     """Caller holds the project writer lock. Never overwrite an existing record."""
     out = _history_path(out)
-    require(kind in {'build', 'render', 'previous-build'}, 'CONTRACT_INVALID', 'Invalid history kind')
+    require(kind in {'build', 'render', 'previous-build','preparation'}, 'CONTRACT_INVALID', 'Invalid history kind')
     rows = [{'path': p, 'sha256': sha(b), 'bytes': len(b)} for p, b in sorted(data.items())]
     payload = {'format': 'survey-artifact-history-1', 'kind': kind, 'files': rows}
     identity = 'H-' + sha(canonical(payload))

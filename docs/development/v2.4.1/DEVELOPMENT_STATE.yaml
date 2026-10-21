@@ -1,5 +1,5 @@
-# The only persisted current development state. GitHub owns live checks/review/merge facts.
-# Never record this commit own final SHA.
+# The only persisted current development state. GitHub owns live PR/check/review facts.
+# Never record this commit's own final SHA.
 state_schema_version: 1
 project: Pure-Math-Survey
 target_version: 2.4.1
@@ -8,15 +8,11 @@ timezone: Asia/Shanghai
 repository:
   url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey
   default_branch_observed: main
-  main_sha_observed: def354702887ec9150426316ad9568a127239bbd
-  software_version_observed: 2.1.0
-  kb_schema_observed: 2.0.0
-  output_schema_observed: 2.2.0
-  editorial_policy_observed: four-modes-2026-10-15-r5
-  latest_release_observed: v2.1.0
-  observation_method: github_connector_and_full_main_checkout
+  main_sha_observed: 8f79ff04d00c2fca016a88d7b74dda6329975565
+  observation_method: Controller_reconciled_GitHub_merge_tree_and_CI_receipts
+  latest_formal_release_observed: v2.1.0
 design:
-  status: pr02_minimal_transition_implemented
+  status: pr03_shared_knowledge_implemented
   rules_file: rules.v22.txt
   rules_sha256: 452a4d7548c23bc75fe8fec6299ae9777a3e6763eb5f955063d938c2f3b6b2c7
   transcript_sha256: f6e59d20ee4793c9346d057f3de1a25ebd3507d94d76b00a8a78240771eef8f7
@@ -30,16 +26,16 @@ authorization_snapshot:
   create_pull_request: authorized_for_pr01_through_pr05
   merge: authorized_after_finite_checks_and_independent_review
   publish_release: not_authorized
-  note: Active user Goal supersedes prior PR01-only snapshot. No formal tag, Release
-    or asset upload. Controller owns GitHub operations; implementation agent edits
-    isolated worktree only.
-current_stage: PR-02
-status: ready_for_followup_review
-active_branch: codex/v2.4.1-pr02-minimal
-active_pr_number: 11
-active_pr_url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/11
-base_sha_at_stage_start: def354702887ec9150426316ad9568a127239bbd
-last_confirmed_241_merge: def354702887ec9150426316ad9568a127239bbd
+  note: Active Goal supersedes earlier PR01-only and paused snapshots. Controller
+    owns GitHub operations. Author works only in the isolated worktree; no formal
+    tag, Release or asset upload is authorized.
+current_stage: PR-03
+status: ready_for_independent_review
+active_branch: codex/v2.4.1-pr03-knowledge
+active_pr_number: null
+active_pr_url: null
+base_sha_at_stage_start: 8f79ff04d00c2fca016a88d7b74dda6329975565
+last_confirmed_241_merge: 8f79ff04d00c2fca016a88d7b74dda6329975565
 stages:
   PR-01:
     name: contract_and_persistent_handoff
@@ -48,187 +44,134 @@ stages:
     pr_url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/10
     merge_sha: def354702887ec9150426316ad9568a127239bbd
     review_url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/10#pullrequestreview-5599715698
-    ci_pr_head:
-      run_id: 39598563246
-      result: pass
-    ci_merge_sha:
-      run_id: 39601398593
-      result: pass
+    ci_pr_head: {run_id: 39598563246, result: pass}
+    ci_merge_sha: {run_id: 39601398593, result: pass}
   PR-02:
     name: minimal_only_and_no_runtime_reviews
-    depends_on:
-    - PR-01
-    status: ready_for_followup_review
+    depends_on: [PR-01]
+    status: merged
     pr_url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/11
-    merge_sha: null
+    merge_sha: 8f79ff04d00c2fca016a88d7b74dda6329975565
+    merge_tree: f4369b92c6745f71b07d31e286563c40e25fd1b1
+    reviewed_head_sha: 9f17c7f41bd0412c1869a9d0adc617b69928c151
     candidate_version: 2.4.1-dev.2
-    runtime_contract: minimal-lean-2.4.1
-    editorial_policy: minimal-transition-pr02
     initial_review:
       head_sha: a6385ecfd5fed34e2db62a337dc996d2ab49c8ff
       url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/11#pullrequestreview-5600356336
       result: changes_requested
-      findings:
-      - Retained source hash mismatch was not enforced and original-byte aliases could
-        enter output packages.
-      - Runtime AST test used default text encoding and failed on Windows cp1252.
-    repair_status: author_checks_passed_independent_followup_pending
+      findings: [retained_source_hash_and_original_alias_protection, Windows_default_encoding]
+    final_review:
+      url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey/pull/11#pullrequestreview-5600535365
+      result: no_blocking_findings_after_repair
+    ci_pr_head: {run_id: 39608495422, result: pass, platforms: [linux_python_310, linux_python_312, windows_python_312]}
+    ci_merge_sha: {run_id: 39609654965, result: pass, platforms: [linux_python_310, linux_python_312, windows_python_312]}
   PR-03:
     name: shared_lean_knowledge_units
-    depends_on:
-    - PR-02
-    status: not_started
+    depends_on: [PR-02]
+    status: ready_for_independent_review
     pr_url: null
     merge_sha: null
+    candidate_version: 2.4.1-dev.3
+    kb_schema: 3.0.0
+    output_schema: 3.0.0
+    runtime_contract: minimal-lean-2.4.1
+    editorial_policy: minimal-transition-pr03
   PR-04:
     name: rules_v22_writing_and_layout
-    depends_on:
-    - PR-03
+    depends_on: [PR-03]
     status: not_started
     pr_url: null
     merge_sha: null
   PR-05:
     name: integration_installation_release_candidate
-    depends_on:
-    - PR-04
+    depends_on: [PR-04]
     status: not_started
     pr_url: null
     merge_sha: null
-completed_work:
-- 'Reconciled Controller live GitHub observations: PR01 merged; PR-head three-platform
-  CI passed and independent review approved. Local branch starts from actual PR01
-  merge.'
-- Implemented the complete PR02 minimal-only path in the isolated candidate worktree;
-  original checkout and previous user projects were not edited.
-- PR11 initial independent review requested two repairs at a6385ecfd5fed34e2db62a337dc996d2ab49c8ff;
-  both are implemented with targeted checks and a rebuilt isolated candidate. Repaired-head
-  review and CI remain pending.
 implemented_changes:
-- Only minimal and the fixed integrated compatibility view are accepted; other modes/views,
-  review/readiness commands and draft bypasses return explicit errors.
-- Deleted active review/readiness/exposition/dispatch implementations and removed
-  credential dependencies from project inventory, snapshots, plans, prepare, generated-material
-  verification and packaging.
-- Every project mutation rejects a missing runtime_contract before writer locks or
-  writes; legacy bytes are preserved. Existing temporary schema numbers use a distinct
-  transition policy.
-- Preserved canonical-byte export, source identity and original-byte restrictions,
-  path/symlink containment, atomic snapshot and file writes, material hashes, TeX
-  input checks, actual build logs, history and package/rebuild behavior.
-- Updated current skill, metadata, both repository and installed README languages,
-  minimal-runtime instructions and transition template; active installer has 29 resources
-  and excludes old modes/audit instructions/development documents.
-- Replaced obsolete audit/four-mode positive tests with explicit rejections and retained
-  safety, snapshot, source, materials, literal TeX, real build and installer/process
-  tests; CI still requests Linux Python 3.10/3.12 and Windows Python 3.12.
-- 'Repair: inventory rejects retained originals whose bytes disagree with a supplied
-  material_sha256; the same validation applies to KB-only and frozen output inputs
-  without reviewer credentials.'
-- 'Repair: original-byte alias exclusion and package refusal use actual retained-file
-  hashes as well as declared hashes, including the honest nullable-hash case. Rejected
-  operations preserve existing project bytes.'
-- 'Repair: new runtime-AST and literal-TeX tests use explicit UTF-8 for text reads
-  and writes, addressing the observed Windows cp1252 decoding failure.'
+- Schema 3 uses sources, conventions, Markdown units with JSON frontmatter, grouped
+  routes and a short generated index. Init creates no output or required snapshot,
+  overview, discovery, coverage, review or paired-proof containers.
+- Stable N-/S- IDs identify units and sources. Kind, role and nullable importance
+  are independent. definition_refs adds actual concept closure to exports and
+  prepares exact canonical bytes; source version and locator remain available.
+- Routes retain jointly required nodes within each premise set, alternatives
+  between sets, separate additional inputs, mapping and source/status facts.
+  Missing references and cycles are mechanical diagnostics. Unresolved routes
+  stay explicit; independent principal results need no invented route.
+- Methods may have a formal canonical interface. A method without one remains
+  a method description and cannot supply an asserted route conclusion or full
+  principal statement. Route exports label nonformal method premises explicitly.
+- Output plans read the live KB. Prepare records automatic input hashes, derives
+  canonical/conventions/bibliography/route fragments and bounded materials, and
+  preserves author main text, graph layout, style and outline. Refresh saves old
+  output inputs and build bytes in content-addressed preparation history.
+- Standalone unit export includes recursive definitions, shared notation and
+  source locators with a compilable TeX entry. It refuses existing destinations,
+  project-contained exports and symlink destinations before writing.
+- Supplied retained-original hashes remain enforced; actual original-byte aliases
+  are excluded from authoring exports and refused by output packaging. Legacy
+  schemas and old containers are rejected without automatic string-only migration.
+- Build, output package and independent rebuild now use the same schema-3 input
+  hash identity. run.json records actual build state and total pages; unavailable
+  body-page, time and token measurements remain null.
+- Installed docs, metadata, active resource validation, verifier and three-platform
+  CI reflect the intermediate dev.3 candidate. Final v22 layout is still PR04 work.
 implementation_checks:
-- check: author_regression_suite
+- check: full_local_author_regressions
   result: pass
-  initial_result: fail_in_synthetic_verifier_log_fixture
-  evidence: 'Repair targeted runtime suite: 16 tests passed; literal-TeX suite: 6
-    passed. Runtime suite also passed all 16 with LC_ALL=C, PYTHONCOERCECLOCALE=0
-    and PYTHONUTF8=0 (actual ANSI_X3.4-1968 default encoding). Final full suite ran
-    against the rebuilt isolated installation: 87 total, 84 executed passes, 3 exact
-    Windows-only N/A.'
-- check: actual_synthetic_kb_prepare_build_package
+  evidence: pr03-tests.log records 95 tests, 92 executed passes and 3 Windows-only
+    N/A on Linux. Later directly affected knowledge-unit, literal-TeX and legacy
+    safety suites passed; final repaired runtime suite passed all 16 including
+    actual independent output-package rebuild.
+- check: reusable_lean_fixture
   result: pass
-  evidence: 'Synthetic unassessed project: KB freeze, PREPARED, STRUCTURALLY_VALID,
-    actual BUILT PDF and PACKAGED archive without a reviews directory or accepted
-    record. Snapshot KB-442d646423bab6d8929440b2d3c4efdc66c5b0d47ad4b8e88c6d6a2efeb26fa3.
-    Real build and package files retained externally.'
-- check: standalone_output_rebuild
+  evidence: pr03-knowledge-tests.log records 8 checks covering joint and alternative
+    premises, independent branch, recursive concept export and actual standalone
+    TeX/BibTeX compilation, nullable importance and KB-only behavior, missing
+    references/cycles, formal versus nonformal methods, canonical refresh, author
+    graph/text preservation, prior output bytes, and interrupted-prepare rollback.
+- check: real_synthetic_generation_and_rebuild
+  result: pass_after_repair
+  initial_failure: Independent rebuild still indexed snapshot_id after the output
+    package switched to input_hash. The first external smoke failed with KeyError;
+    this was repaired in the shipped rebuild resource and covered by regression.
+  evidence: pr03-synthetic-final/receipt.json binds the actual CLI commands for
+    KB-only, independent export, plan/prepare/build/package, a canonical update,
+    repeat prepare/history, second build/package and successful independent rebuild.
+    pr03-synthetic-smoke.log retains the initial failure; this is synthetic engineering
+    evidence, not mathematical or visual acceptance.
+- check: active_identity_reference_scan
   result: pass
-  evidence: Extracted synthetic output ZIP; python3 -I rebuild.py --output <new external
-    directory> produced a one-page PDF in two stable passes with no blocking TeX log
-    issues.
-- check: unsupported_legacy_and_unsafe_input_preservation
+  evidence: pr03-identity-reference-scan.json scans the 29 selected runtime resources.
+    snapshot_id remains only in optional snapshot tools and explicit legacy-plan
+    rejection; active prepare/build/package/rebuild use input_hash.
+- check: exact_isolated_candidate
   result: pass
-  evidence: Modes/views/retired commands, legacy project and plan contracts, unsafe
-    plan/TeX paths reject with byte-identical original project trees; direct legacy
-    mutation calls fail before mocked os.open can run.
-- check: active_runtime_reachability
-  result: pass
-  evidence: AST and installed module imports find no review/readiness/dispatch imports;
-    those active modules are deleted. Malformed unrelated historical review JSON is
-    neither loaded nor frozen.
-- check: validate_assets
-  result: pass
-  evidence: 29 active resources; 9 installed Markdown links; minimal-integrated preparation;
-    7 unsupported mode/view requests rejected without writes; Python 3.10 grammar
-    parsed (not a 3.10 runtime execution).
-- check: final_exact_resource_isolated_installation
-  result: pass
-  evidence: 'Repair candidate ZIP 202a809b4ee60a8b8b404b897bf58d24ffa4f600c537314f2a6314131b36e87e
-    passed clean no-pip isolated verification: 87 tests, 84 executed passes, 3 declared
-    Windows N/A, zero unexpected/capability skips; neutral TeX smoke passed and all
-    29 runtime resources plus checksum agree with current source bytes.'
-- check: resource_checksums_and_whitespace
-  result: pass
-  evidence: Source artifact-checksums.txt agrees with the 29-resource archive list;
-    git diff --check passes.
-- check: independent_review
-  result: changes_requested_on_prior_head
-  evidence: PR11 review 5600356336 at a6385ecfd5fed34e2db62a337dc996d2ab49c8ff identified
-    retained-source hash/alias enforcement and Windows UTF-8 test decoding defects.
-    Author repairs have passed local checks; independent follow-up has not run.
-- check: pr02_github_ci
-  result: failed_on_prior_head
-  evidence: Run 39604437763, Windows job 119236893327, failed at test_minimal_runtime.py:116
-    with cp1252 UnicodeDecodeError for 0x9d. Repair explicitly reads UTF-8; repaired-head
-    Windows/Python 3.10/3.12 CI remains unverified locally.
-- check: source_hash_and_actual_original_alias_repair
-  result: pass
-  evidence: Provided source-hash mismatch rejects KB validate/index/freeze without
-    changing files; a pre-fix byte-consistent snapshot with incorrect source metadata
-    rejects verify/plan/prepare/build/package. Correct-hash and absent-hash original
-    aliases are omitted from materials and actual built packages; an output-local
-    original copy is refused without creating an archive. Legal unassessed sources
-    still build/package without reviews.
-real_paper_runs: []
-token_measurements: []
-blockers:
-- No remaining local implementation blocker; repaired-head independent follow-up and
-  remote CI are pending.
-scope_adjustments:
-- PR02 necessarily removes review-specific plan proof_obligations, proof_treatment,
-  contributions and draft fields now; their generated promises otherwise keep removed
-  runtime review responsibilities in the prepare chain. Transitional KB containers
-  and schema numbers remain until PR03.
-release:
-  status: not_started
-  tag: null
-  url: null
-  source_commit: null
-  installer: null
-  checksum: null
-next_action:
-  kind: controller_commit_existing_pr_and_followup_review
-  stage: PR-02
-  first: Compare the frozen staged tree and current PR11 head, then commit the narrow
-    repair through the Controller without duplicating the PR.
-  task: Request independent review of these repairs and verify CI on the repaired
-    head before authorized merge; do not begin PR03 before actual PR02 merge.
-  stop_after: Implementation agent leaves exact files staged and frozen; no local
-    commit, push, merge, tag, Release or upload.
-handoff_notes:
-- PR02 candidate remains on transitional KB 2.0.0/output 2.2.0; final schema 3.0.0
-  and routes/unit exports belong to PR03.
-- The current minimal template is explicitly transitional; original rules.v22 stays
-  frozen in development docs until PR04, which will implement final six-page layout.
-- No real-paper source/mathematical/reader/PDF-page acceptance or token savings is
-  claimed in PR02.
-- Final exact-resource installation evidence is external under pr02-repair; the Controller
-  keeps its logs, package, source hashes and receipts, which are not installer resources.
-- Only this state file tracks current development; final commit SHA and current remote
-  checks/review/merge are queried from GitHub. No own final SHA is embedded.
-- PR01 merge-SHA CI run39601398593 passed all three platforms, independently rechecked
-  by the Controller. PR11 initial review/CI defects and their repaired-head verification
-  remain distinct.
+  archive_sha256: cc972caef53c902ddf8dad40e003ac64a32eae3cb868242bab7e31836c2beb7a
+  evidence: The final repaired ZIP passed a clean no-pip isolated installation,
+    exact runtime/version checks, 29 resources and 9 installed links, all 95 tests
+    (92 executed passes and 3 exact Windows N/A), actual standalone package rebuild,
+    and neutral TeX smoke. pr03-installed-check/verification.json and source-match.json
+    bind final runtime, checksum, tests and verifier bytes. Earlier package/report
+    bytes remain separately preserved and are not used as final candidate evidence.
+remaining_work:
+- Controller creates the PR from the frozen staged tree, obtains independent
+  review and actual three-platform CI, and merges only after those pass.
+- PR04 implements the final writing/layout contract and bounded real examples;
+  PR05 performs final integration and release-candidate preparation.
+limitations:
+- Local execution is Linux with Python 3.14.4; this stage has no observed remote
+  PR-head or merge-SHA CI yet. Python 3.10 grammar parsing is not runtime execution.
+- This stage does not certify mathematical correctness, source reading, visual
+  page quality, originality or contribution coverage.
+- The installed minimal template remains the transition template. No final 11pt,
+  six-body-page or separate-reference-page acceptance is claimed.
+- Existing user projects and the original checkout are not modified. Unsupported
+  old schemas require a separately created new project; no migrator is provided.
+resume_instructions:
+- Read this state and reconcile actual GitHub branch/PR/head/check/review/merge facts.
+- Continue the existing stage and isolated branch; do not start the unrelated
+  historical codex/pr03-source-eligibility branch.
+- Do not record this commit's own final SHA. Record a completed merge in the next
+  normal stage commit. Keep progress only in this state file and external receipts.
