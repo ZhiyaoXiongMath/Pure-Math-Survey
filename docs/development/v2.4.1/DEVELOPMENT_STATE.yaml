@@ -1,0 +1,147 @@
+# The only persisted current development state for target 2.4.1.
+# This is a recorded snapshot. Query GitHub before acting.
+# Do not place the final SHA of the commit containing this file inside this file.
+state_schema_version: 1
+project: Pure-Math-Survey
+target_version: "2.4.1"
+recorded_date: "2026-10-21"
+timezone: Asia/Shanghai
+
+repository:
+  url: https://github.com/ZhiyaoXiongMath/Pure-Math-Survey
+  default_branch_observed: main
+  main_sha_observed: 3db6cdd53b524698053de4aa98603e7a9ed9742b
+  software_version_observed: "2.1.0"
+  kb_schema_observed: "2.0.0"
+  output_schema_observed: "2.2.0"
+  editorial_policy_observed: four-modes-2026-10-15-r5
+  latest_release_observed: v2.1.0
+  observation_method: github_connector_and_full_main_checkout
+
+design:
+  status: contract_installed_for_pr01
+  rules_file: rules.v22.txt
+  rules_sha256: 452a4d7548c23bc75fe8fec6299ae9777a3e6763eb5f955063d938c2f3b6b2c7
+  transcript_sha256: f6e59d20ee4793c9346d057f3de1a25ebd3507d94d76b00a8a78240771eef8f7
+  guide: docs/development/v2.4.1/DEVELOPMENT_GUIDE.zh-CN.md
+  workflow: docs/development/v2.4.1/PR_WORKFLOW.zh-CN.md
+  development_rules: docs/development/v2.4.1/DEVELOPMENT_RULES.zh-CN.md
+  baseline: docs/development/v2.4.1/BASELINE_AND_SOURCES.zh-CN.md
+
+authorization_snapshot:
+  observed_user_request: implement_pr01_and_create_reviewable_pull_request
+  repository_write: authorized_for_pr01
+  create_pull_request: authorized_for_pr01
+  merge: prohibited_in_this_chat
+  publish_release: prohibited_in_this_chat
+  note: "User explicitly authorized the PR-01 branch, required files, commit, push and one PR; no merge, tag/Release or PR-02 in this chat."
+
+current_stage: PR-01
+status: ready_for_review
+active_branch: codex/v2.4.1-pr01-contract
+active_pr_number: null
+active_pr_url: null
+base_sha_at_stage_start: 3db6cdd53b524698053de4aa98603e7a9ed9742b
+last_confirmed_241_merge: null
+
+stages:
+  PR-01:
+    name: contract_and_persistent_handoff
+    depends_on: []
+    status: ready_for_review
+    pr_url: null
+    merge_sha: null
+  PR-02:
+    name: minimal_only_and_no_runtime_reviews
+    depends_on: [PR-01]
+    status: not_started
+    pr_url: null
+    merge_sha: null
+  PR-03:
+    name: shared_lean_knowledge_units
+    depends_on: [PR-02]
+    status: not_started
+    pr_url: null
+    merge_sha: null
+  PR-04:
+    name: rules_v22_writing_and_layout
+    depends_on: [PR-03]
+    status: not_started
+    pr_url: null
+    merge_sha: null
+  PR-05:
+    name: integration_installation_release_candidate
+    depends_on: [PR-04]
+    status: not_started
+    pr_url: null
+    merge_sha: null
+
+completed_work:
+  - "Initial design package records reading its two sources; this PR reads the package, not the unavailable private transcript."
+  - "Read START-HERE and the complete guide, workflow, development rules, initial state, source summary and handoff prompts."
+  - "Rechecked GitHub main, all branch pages, open PRs and all-state 2.4.1 PR search; no existing same-stage work found."
+  - "Verified latest Release remains v2.1.0; no publication change is authorized."
+implemented_changes:
+  - "Installed the supplied v2.4.1 development documents and byte-identical rules.v22.txt."
+  - "Created root AGENTS.md from the supplied fragment; no prior root AGENTS existed."
+  - "Prepended historical pointers to old CONTRACT/STATUS; retained all original bytes below the notices."
+  - "Added bilingual README development links while retaining current 2.1.0 functionality."
+  - "Marked design-time observations as historical and updated only this state for current authorization/progress."
+implementation_checks:
+  - check: supplied_package_integrity
+    result: pass
+    evidence: "All 9 SHA256SUMS entries match the extracted input package."
+  - check: rules_original_bytes_and_single_copy
+    result: pass
+    evidence: "22,806 bytes; matches the supplied file byte for byte and design.rules_sha256; one rules.v22.txt in the repository."
+  - check: local_navigation_and_state
+    result: pass
+    evidence: "56 relative Markdown links/anchors resolve; YAML parses with unique keys; stage, authorization, paths and next-action invariants checked."
+  - check: stage_scope_and_history_preservation
+    result: pass
+    evidence: "Only 12 allowlisted documentation/navigation files changed; 114 other base files are byte-identical; old CONTRACT/STATUS bodies are preserved."
+  - check: runtime_and_installation_boundary
+    result: pass
+    evidence: "All 69 selected installation resources match base bytes; development documents/rules are excluded; CLI version remains 2.1.0 / 2.0.0 / 2.2.0 / four-modes-2026-10-15-r5."
+  - check: documentation_consistency_and_publication_scope
+    result: pass
+    evidence: "Compared package contract terms and bilingual navigation; checked the full final text tree and new public content; no private transcript, backup, local report or credential is added."
+  - check: git_diff_whitespace
+    result: pass
+    evidence: "git diff --cached --check passes."
+  - check: independent_review
+    result: not_run
+    evidence: "To be performed in a separate review chat against the actual PR HEAD."
+  - check: github_ci
+    result: not_run_at_snapshot
+    evidence: "PR creation follows this commit; query live Actions/checks, do not infer success from local checks."
+real_paper_runs: []
+token_measurements: []
+blockers: []
+scope_adjustments: []
+
+release:
+  status: not_started
+  tag: null
+  url: null
+  source_commit: null
+  installer: null
+  checksum: null
+
+next_action:
+  kind: independent_review_of_current_pr
+  stage: PR-01
+  first: query_github_for_active_branch_pr_and_actual_head_checks_reviews
+  task: review_pr01_contract_navigation_and_state_from_actual_pr_head
+  stop_after: report_independent_review_without_merge_release_or_pr02
+  if_existing_pr_open: review_current_head_or_fix_concrete_findings_in_same_pr_under_actual_authorization
+  if_existing_pr_merged: confirm_actual_merge_and_wait_for_next_stage_authorization
+  if_existing_pr_closed_unmerged: diagnose_without_skipping_stage
+
+handoff_notes:
+  - "PR-01 changes development documents and navigation only; runtime, installer resources and versions remain 2.1.0."
+  - "The PR is created after this snapshot; null PR identity fields require branch-based GitHub lookup, not a duplicate PR."
+  - "Independent review and CI are not claimed by author checks; read their live GitHub evidence."
+  - "Stage IDs PR-01 through PR-05 are not GitHub pull request numbers."
+  - "GitHub owns live HEAD, checks, review, merge and publication facts; do not commit merely to echo the final HEAD."
+  - "Original transcript is not distributed in this package and was not added to the repository."
