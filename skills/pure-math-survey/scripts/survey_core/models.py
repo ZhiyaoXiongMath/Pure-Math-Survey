@@ -44,18 +44,13 @@ def node_bytes(meta:dict,body:str)->bytes:
     return ('---\n'+json.dumps(meta,ensure_ascii=False,indent=2)+'\n---\n\n'+body.rstrip()+'\n').encode('utf-8')
 
 
-def load_project(root: Path, *, check_reviews: bool = True) -> dict:
-    require(not (root / 'project-manifest.json').exists(), 'SCHEMA_UNSUPPORTED',
-            'Only the current project.json contract is supported', 'project-manifest.json')
-    candidates = list((root / 'evidence/reviews').glob('*.json'))
-    candidates += list((root / 'outputs').glob('*/evidence/reviews/*.json'))
-    candidates += list((root / 'outputs').glob('*/evidence/*review*.json'))
-    for path in candidates if check_reviews else []:
-        review = read_json(safe(root, relpath(root, path), True))
-        if isinstance(review, dict) and 'review_id' in review:
-            require(isinstance(review.get('scope'), dict), 'REVIEW_FORMAT_UNSUPPORTED',
-                    'Reviews must use the current scoped evidence contract', relpath(root, path))
-    obj = read_json(root / 'project.json')
+def load_project(root: Path) -> dict:
+    from .common import RUNTIME_CONTRACT
+    require(not (root / 'project-manifest.json').exists(), 'LEGACY_PROJECT_UNSUPPORTED',
+            'Use the previous installation for old projects or extract into a new directory', 'project-manifest.json')
+    obj = read_json(safe(root, 'project.json', True))
+    require(isinstance(obj, dict) and obj.get('runtime_contract') == RUNTIME_CONTRACT,
+            'LEGACY_PROJECT_UNSUPPORTED', 'This candidate requires a new minimal-lean-2.4.1 project; no automatic migration', 'project.json')
     fields(obj, {'schema_version': str, 'project_id': str, 'title': str, 'language': str, 'scope_file': str, 'knowledge_root': str}, 'project.json')
     require(identifier(obj['project_id']), 'CONTRACT_INVALID', 'Invalid stable project ID', 'project.json')
     for f in ('title', 'language'):
@@ -134,15 +129,15 @@ def load_plan(path: Path) -> dict:
     validate_plan_contract(obj)
     fields(obj, {'output_id': str, 'snapshot_id': str, 'profile': str, 'view': str, 'language': str,
                  'title': str, 'audience': str, 'reader_goals': list, 'question_ids': list, 'prerequisites': list,
-                 'selections': list, 'omissions': list, 'proof_obligations': list, 'limits': dict, 'draft': bool}, loc)
+                 'selections': list, 'omissions': list, 'limits': dict}, loc)
     require(identifier(obj['output_id']) and re.fullmatch('KB-[a-f0-9]{64}', obj['snapshot_id']), 'CONTRACT_INVALID', 'Invalid output/snapshot ID', loc)
-    require(obj['profile'] in PROFILES and obj['view'] in FACETS | {'integrated'}, 'CONTRACT_INVALID', 'Invalid profile/view', loc)
+    require(obj['profile'] in PROFILES and obj['view'] == 'integrated', 'CONTRACT_INVALID', 'Invalid profile/view', loc)
     for key in ('title', 'audience', 'language'):
         text(obj[key], loc, key)
     require(obj['question_ids'] and all(identifier(x, 'N-') for x in obj['question_ids']) and obj['reader_goals'] and all(isinstance(g, str) and g.strip() for g in obj['reader_goals']), 'CONTRACT_INVALID', 'Specify questions and reader goals', loc)
     for s in obj['selections']:
-        fields(s, {'node_id': str, 'role': str, 'statement_treatment': str, 'proof_treatment': str, 'reason': str}, loc)
-        require(s['role'] in {'principal_answer', 'essential_bridge', 'boundary', 'background', 'frontier'} and s['statement_treatment'] in {'full', 'explained_reference'} and s['proof_treatment'] in {'complete', 'sketch', 'mechanism', 'citation', 'none'}, 'CONTRACT_INVALID', 'Invalid selection treatment', loc)
+        fields(s, {'node_id': str, 'role': str, 'statement_treatment': str, 'reason': str}, loc)
+        require(s['role'] in {'principal_answer', 'essential_bridge', 'boundary', 'background', 'frontier'} and s['statement_treatment'] in {'full', 'explained_reference'}, 'CONTRACT_INVALID', 'Invalid selection treatment', loc)
         text(s['reason'], loc, 'selection.reason')
     for o in obj['omissions']:
         fields(o, {'node_id': str, 'reason': str}, loc); text(o['reason'], loc, 'omission.reason')
@@ -151,13 +146,8 @@ def load_plan(path: Path) -> dict:
         if isinstance(p, dict):
             fields(p, {'node_id': str, 'scope': str, 'reason': str}, loc)
             text(p['scope'], loc, 'prerequisite.scope'); text(p['reason'], loc, 'prerequisite.reason')
-    for o in obj['proof_obligations']:
-        fields(o, {'node_id': str, 'treatment': str, 'required_steps': list, 'imported_inputs': list}, loc)
-        require(o['treatment'] in {'complete', 'sketch', 'mechanism'} and o['required_steps'] and all(isinstance(s, str) and s.strip() for s in o['required_steps']), 'PROOF_OBLIGATION_UNMET', 'Record actual promised steps', loc)
     require('max_pages' in obj['limits'], 'CONTRACT_INVALID', 'Explicit max_pages or null required', loc)
     for k in ('max_pages', 'page_review_threshold'):
         value = obj['limits'].get(k)
         require(value is None or (type(value) is int and value > 0), 'CONTRACT_INVALID', f'{k}: positive integer or null', loc)
-    if obj.get('comparison_group') is not None:
-        text(obj['comparison_group'], loc, 'comparison_group')
     return obj

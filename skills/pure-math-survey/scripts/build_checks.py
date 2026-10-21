@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compile supplied templates and retained examples; not a survey-quality grader.
+"""Compile a neutral Minimal style fixture; not a mathematical certification.
 
 Requires pdfLaTeX and its document packages. Uses no shell escape, works only on
 copied inputs, and reports final log problems separately from PDF rendering.
@@ -127,18 +127,37 @@ def run_checks(output: Path, engine: str = "pdflatex") -> dict:
     output.mkdir(parents=True, exist_ok=True)
     version = subprocess.run([engine_path, "--version"], capture_output=True, text=True,
                              check=True, timeout=20).stdout.splitlines()[0]
-    report = {"scope": "maintenance builds; not new research-survey generation or mathematical review",
+    report = {"scope": "neutral Minimal style build; no mathematical certification",
               "engine": version, "command_flags": ["-no-shell-escape", "-interaction=nonstopmode",
                                                     "-halt-on-error", "-file-line-error"],
-              "visual_review": "NOT_PERFORMED_BY_THIS_SCRIPT", "builds": []}
+              "page_inspection": "NOT_PERFORMED_BY_THIS_SCRIPT", "builds": []}
     style = ROOT / "assets/templates/math-review.sty"
     tasks: list[tuple[Path, str]] = []
-    folder = output / "exposition-smoke"
+    folder = output / "minimal-smoke"
     folder.mkdir()
-    for fixture in (ROOT / "assets/exposition-examples").glob("*.tex"):
-        shutil.copy2(fixture, folder / fixture.name)
+    (folder / "minimal-smoke.tex").write_text(r"""\documentclass[12pt,reqno]{amsart}
+\usepackage{math-review}
+\title{Neutral Minimal build fixture}
+\date{}
+\begin{document}
+\maketitle
+\section{Main Results}
+This elementary fixture checks compilation and references only.
+\begin{theorem}\label{thm:square}
+For every real number $x$, if $x=0$, then $x^2=0$.
+\end{theorem}
+\section{Key Mathematical Ingredients}
+\begin{lemma}\label{lem:zero}
+For every real number $x$, the equality $x=0$ implies $x\cdot x=0$.
+\end{lemma}
+The identity $x^2=x\cdot x$ fixes the notation used here.
+\section{Connecting the Ingredients}
+Lemma~\ref{lem:zero} gives the product equality under the hypothesis of
+Theorem~\ref{thm:square}; the displayed identity then gives its conclusion.
+\end{document}
+""", encoding="utf-8")
     shutil.copy2(style, folder / style.name)
-    tasks.append((folder, "exposition-smoke.tex"))
+    tasks.append((folder, "minimal-smoke.tex"))
     for folder, entry in tasks:
         print(f"Building {entry}", flush=True, file=sys.stderr)
         try:
@@ -147,7 +166,7 @@ def run_checks(output: Path, engine: str = "pdflatex") -> dict:
             result = {"entrypoint": entry, "status": "FAIL", "error": str(exc)}
         result["artifact_kind"] = "elementary_style_regression"
         result["target"] = folder.name
-        # Findings are reader-review pointers, not a mathematical build verdict.
+        # Findings describe source syntax, not mathematical correctness.
         # Use the same literal-input expansion path as project validation.
         try:
             from survey_core import structure
@@ -155,7 +174,7 @@ def run_checks(output: Path, engine: str = "pdflatex") -> dict:
             expanded, _ = structure.expand_tex(folder / entry, folder, input_errors)
             inv = structure.inventory(expanded)
             result["source_structure_screen"] = {
-                "scope": "syntax and reference sites only; whole-body reader review remains necessary",
+                "scope": "syntax and reference sites only; no mathematical certification",
                 "input_errors": input_errors,
                 "findings": structure.shape_issues(inv),
                 "statement_reference_sites": inv["statement_reference_sites"],

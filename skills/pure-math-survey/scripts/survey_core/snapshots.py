@@ -12,6 +12,8 @@ def payload(project_id: str, files: list[dict]) -> dict:
     return {'schema_version': VERSION, 'project_id': project_id, 'files': files}
 
 def load_snapshot(root: Path, snapshot_id: str) -> tuple[dict, Path]:
+    from .models import load_project
+    load_project(root)
     require(bool(re.fullmatch('KB-[a-f0-9]{64}', snapshot_id)), 'SNAPSHOT_INVALID', 'Expected full SHA-256 snapshot ID')
     folder = safe(root, f'snapshots/{snapshot_id}')
     require(folder.is_dir(), 'UNKNOWN_REFERENCE', 'Snapshot is missing', f'snapshots/{snapshot_id}')
@@ -39,15 +41,13 @@ def verify_snapshot(root: Path, snapshot_id: str) -> dict:
     return result('kb.verify', 'VERIFIED', {'snapshot_id': snapshot_id, 'files': len(m['files']), 'meaning': 'byte identity only'})
 
 def freeze_snapshot(root: Path) -> dict:
+    from .models import load_project
+    load_project(root)  # Reject legacy projects before even creating a writer lock.
     with writer(root):
         inv = inventory(root)
         from .sources import require_public_originals
         require_public_originals(inv)
         contents = {p: safe(root, p, True).read_bytes() for p in inv.files}
-        from .reviews import reviews_in
-        matching_bindings = [(b['path'], b['sha256']) for _, r in reviews_in(root)
-                             for b in r['inputs'] if b['path'] in contents
-                             and sha(contents[b['path']]) == b['sha256']]
         records = [{'path': p, 'sha256': sha(b), 'bytes': len(b)} for p, b in sorted(contents.items())]
         value = payload(inv.project['project_id'], records); sid = 'KB-' + sha(canonical(value))
         snapshots = safe(root, 'snapshots'); snapshots.mkdir(exist_ok=True)
@@ -63,9 +63,6 @@ def freeze_snapshot(root: Path) -> dict:
             # Verify staged bytes and reject concurrent changes even under the advisory lock.
             require(file_inventory(stage / 'files', inv.files) == records and file_inventory(root, inv.files) == records,
                     'SNAPSHOT_INPUT_CHANGED', 'Input changed while freezing; retry')
-            require(all(sha(safe(stage / 'files', p, True).read_bytes()) == digest
-                        for p, digest in matching_bindings), 'SNAPSHOT_INPUT_CHANGED',
-                    'A valid review input binding was lost while staging; retry')
             # The initial inventory can predate captured metadata. Authorize
             # the actual staged byte view before publishing a named snapshot.
             require_public_originals(inventory(stage / 'files'))
@@ -105,19 +102,7 @@ def diff_snapshots(root: Path, old_id: str, new_id: str) -> dict:
         validate_plan(root, plan)
         consumed = consumed_paths(a, plan)
         selected_nodes=consumption(a,plan)
-        selected_sources={ref['source_id'] for key in selected_nodes for ref in a.nodes[key].meta['sources']}
-        review_hits=set()
-        for rel in changed_files:
-            if not rel.startswith('evidence/reviews/') or not rel.endswith('.json'):continue
-            for frozen in (oldroot,newroot):
-                rp=safe(frozen,rel)
-                if not rp.is_file():continue
-                review=read_json(rp);scope=review.get('scope',{})
-                if (set(scope.get('node_ids',[])) & selected_nodes or
-                    set(scope.get('source_ids',[])) & selected_sources or
-                    set(scope.get('question_ids',[])) & set(plan['question_ids'])):
-                    review_hits.add(rel)
-        hits = sorted((consumed & changed_files) | review_hits)
+        hits = sorted(consumed & changed_files)
         if hits:
             locations = []
             main = file.parent / 'manuscript/main.tex'
@@ -146,7 +131,7 @@ def diff_snapshots(root: Path, old_id: str, new_id: str) -> dict:
                     # A missing/unfinished manuscript does not prevent KB diff.
                     pass
             outputs.append({'output_id': plan['output_id'], 'consumed_changes': hits, 'locations': locations,
-                            'affected_nodes':sorted(nodes_affected),'authored_locations':precise,'review_changes':sorted(review_hits)})
+                            'affected_nodes':sorted(nodes_affected),'authored_locations':precise})
     return result('kb.diff', 'COMPARED', {'from': old_id, 'to': new_id, 'added': added, 'removed': removed, 'changed': changed,
                   'source_changes': source_changes, 'affected_dependents': sorted(deps), 'changed_files': sorted(changed_files), 'affected_outputs': outputs,
-                  'historical_outputs': 'Remain bound to old snapshot; no review record was rewritten.'})
+                  'historical_outputs': 'Remain bound to their original snapshot.'})

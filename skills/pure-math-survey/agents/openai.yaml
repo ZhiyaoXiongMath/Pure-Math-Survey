@@ -1,4 +1,4 @@
 interface:
   display_name: "Pure Math Survey"
-  short_description: "Reviewed fast/slow knowledge and four writing modes"
-  default_prompt: "Use $pure-math-survey for my mathematical task with current r4; this chat is the controller. I authorize necessary project-scoped Codex worker chats using gpt-6-astra / ultra for sources, paired fast/slow knowledge, writing and non-author review, and task/continuation/revision/stop messages to them; carry my exact read/write boundaries, coordinate each requested output's reader/proof promises, and deliver only my requested outputs."
+  short_description: "Source-grounded knowledge and Minimal writing"
+  default_prompt: "Use $pure-math-survey in this session to read my fixed mathematical sources, build reusable canonical knowledge, and produce only my requested Minimal or knowledge-only output. Preserve actual source versions, hypotheses and limitations; use the same statements in the KB and manuscript."

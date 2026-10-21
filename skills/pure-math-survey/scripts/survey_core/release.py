@@ -1,132 +1,57 @@
-"""Release re-reads evidence and actual artifacts. No historical PASS inheritance."""
+"""Mechanical output packaging: exact inputs, successful build and safe members."""
 from __future__ import annotations
 from pathlib import Path
 import json
-import re
-import shutil
 import tempfile
 import zipfile
-from .common import FONT_SUFFIXES,SKILL_ROOT,all_files,diagnostic,file_hash,file_inventory,read_json,require,result,safe,sha,write_json,writer
-from .models import load_plan
+from .common import FONT_SUFFIXES,SKILL_ROOT,all_files,diagnostic,require,result,safe,sha,writer
+from .models import load_plan, load_project
 from .exports import output_inputs,validate_structure
-from .readiness import assess_readiness,assess_eligibility
-from .reviews import check_review_bindings,blocking_unchecked,reviews_in
 from .build import check_build
-from .tex import validate_locations
 
-def semantic_scope_errors(out:Path,plan:dict,consumed_nodes:list[str],review:dict)->list[dict]:
-    """Check a candidate in full before selecting it; invalid historical records
-    cannot shadow a later, valid reread of the same manuscript bytes."""
-    scope=review.get('scope',{}); errors=[]
-    from .tex import inspect_tex
-    inspection=inspect_tex(out)
-    required={'whole_manuscript','canonical_use','conditions_quantifiers','selection',
-              'attribution','proof_obligations','readability'}
-    if scope.get('whole_manuscript') is not True or not required <= set(scope.get('checks',[])):
-        errors.append(diagnostic('REVIEW_SCOPE_INSUFFICIENT','An explicit whole-manuscript review with all seven reading checks is required','evidence'))
-    missing=set(consumed_nodes)-set(scope.get('node_ids',[]))
-    if missing:
-        errors.append(diagnostic('REVIEW_SCOPE_INSUFFICIENT','Semantic review omits consumed nodes: '+', '.join(sorted(missing)),'evidence'))
-    if scope.get('profile')!=plan['profile']:
-        errors.append(diagnostic('REVIEW_SCOPE_INSUFFICIENT','Semantic review must evaluate this actual reading profile','evidence'))
-    for obligation in plan['proof_obligations']:
-        key=obligation['node_id']
-        if set(obligation['required_steps'])-set(scope.get('proof_steps',{}).get(key,[])):
-            errors.append(diagnostic('PROOF_OBLIGATION_UNMET','Output semantic review has not checked all promised steps','evidence',key))
-        errors.extend(validate_locations(out,scope.get('proof_locations',{}).get(key),node_id=key,inspection=inspection))
-    for key in sorted({s['node_id'] for s in plan['selections'] if s['role']=='principal_answer'}):
-        errors.extend(validate_locations(out,scope.get('principal_locations',{}).get(key),node_id=key,canonical=True,inspection=inspection))
-    from .profiles import semantic_profile_errors
-    errors += semantic_profile_errors(out, plan, review, inspection=inspection)
-    return errors
 
 def assess_release(root:Path,output_id:str)->dict:
+    load_project(root)
     out=safe(root,'outputs/'+output_id);plan=load_plan(out/'plan.json')
-    ready=assess_readiness(root,plan);eligibility=assess_eligibility(root,plan)
-    errors=list(ready['errors'])+eligibility['errors'];warnings=list(ready['warnings']);used=[]
-    from .profiles import POLICY, current, policy
-    if plan['draft']:errors.append(diagnostic('DRAFT_NOT_RELEASABLE','Internal unverified drafts cannot be packaged as formal output','plan.json'))
-    structure=validate_structure(root,output_id);errors+=structure['errors'];warnings+=structure['warnings']
-    records=reviews_in(out,'evidence')
-    # render-manifest and structure reports are not review records; reviews_in filters them below.
-    inputs=output_inputs(out); sem=None;vis=None;sem_errors=[]
-    for path,r in records:
-        if r['kind']!='output_semantic' or output_id not in r.get('scope',{}).get('output_ids',[]):continue
-        candidate_errors=check_review_bindings(out,r,inputs)
-        candidate_errors+=semantic_scope_errors(out,plan,ready['artifacts']['consumed_nodes'],r)
-        if r['disposition']=='accepted' and not blocking_unchecked(r) and not candidate_errors:
-            sem=r;used.append(r['review_id']);break
-        sem_errors+=candidate_errors
-    if sem is None:
-        errors+=sem_errors
-        errors.append(diagnostic('OUTPUT_SEMANTIC_REVIEW_PENDING','Read this manuscript against the fixed nodes and promised proof depth; explicitly record reviewer mode','evidence'))
-    built,b_errors=check_build(out);errors+=b_errors
-    if built.get('status')=='BUILT' and not b_errors:
-        pages=built['pages'];limit=plan['limits'].get('max_pages');threshold=plan['limits'].get('page_review_threshold')
-        if limit is not None and pages>limit:errors.append(diagnostic('MAX_PAGES_EXCEEDED',f'Actual {pages} pages exceed explicit user limit {limit}','build/main.pdf'))
-        if threshold is not None and pages>threshold:warnings.append(diagnostic('READING_LENGTH_ADVISORY',f'Actual {pages} pages exceed editorial suggestion {threshold}; do not shrink typography or remove conditions','build/main.pdf'))
-        render_path=out/'evidence/render-manifest.json'
-        render=read_json(render_path) if render_path.is_file() else {}
-        rows=render.get('pages',[]);expected=list(range(1,pages+1))
-        if render.get('pdf_sha256')!=built['pdf_sha256'] or [r.get('page') for r in rows]!=expected:
-            errors.append(diagnostic('VISUAL_REVIEW_INCOMPLETE','Need render manifest for the actual entire PDF','evidence/render-manifest.json'))
-        else:
-            visual_inputs={'build/main.pdf','build/build-report.json','evidence/render-manifest.json'}|{r['path'] for r in rows}
-            image_errors=[]
-            for row in rows:
-                p=safe(out,row['path'])
-                if not p.is_file() or file_hash(out,row['path'])!=row.get('sha256'):
-                    image_errors.append(diagnostic('REVIEW_STALE','Rendered image bytes have changed',row['path']))
-            errors+=image_errors
-            vis_stale=[]
-            for path,r in records:
-                if r['kind']!='visual' or output_id not in r.get('scope',{}).get('output_ids',[]):continue
-                stale=check_review_bindings(out,r,visual_inputs)
-                scope=r.get('scope',{});observations=scope.get('page_findings',[])
-                valid=(scope.get('pdf_sha256')==built['pdf_sha256'] and scope.get('pages')==expected and
-                       [x.get('page') for x in observations]==expected and all(isinstance(x.get('observation'),str) and len(x['observation'].strip())>=12 for x in observations))
-                if valid and r['disposition']=='accepted' and not blocking_unchecked(r) and not stale and not image_errors:
-                    vis=r;used.append(r['review_id']);break
-                vis_stale+=stale
-            if vis is None:errors+=vis_stale
-            if vis is None:errors.append(diagnostic('VISUAL_REVIEW_INCOMPLETE','Actual full-page observations and PDF/image-bound evidence are required; identify the reviewer and actual inspection method honestly','evidence'))
-    if sem is None or sem['reviewer_mode']!='independent_review':
-        warnings.append(diagnostic('NO_INDEPENDENT_REVIEW','No scoped independent mathematical reading of this manuscript is claimed. Author reread is not independent review.'))
-    status='NEEDS_WORK' if errors else 'RELEASABLE'
-    return result('output.release',status,{'output_id':output_id,'snapshot_id':plan['snapshot_id'],
-                  'pages':built.get('pages'),'editorial_policy':policy(plan),
-                  'evaluated_policy':POLICY,
-                  'release_authorized':status=='RELEASABLE','used_output_review_ids':used,'readiness':ready['status'],'research_eligibility':eligibility['status'],'source_facts':ready['artifacts']['source_facts']},errors,warnings)
+    structure=validate_structure(root,output_id)
+    built,errors=check_build(out);errors=structure['errors']+errors
+    maximum=plan['limits'].get('max_pages')
+    if built.get('pages') and maximum is not None and built['pages']>maximum:
+        errors.append(diagnostic('MAX_PAGES_EXCEEDED','Actual PDF exceeds explicit max_pages','build/main.pdf'))
+    return result('output.package-check','NEEDS_WORK' if errors else 'PACKAGEABLE',
+                  {'output_id':output_id,'snapshot_id':plan['snapshot_id'],
+                   'meaning':'Mechanical package checks only; no mathematical or visual certification.'},errors)
+
 
 def package_output(root:Path,output_id:str,destination:Path)->dict:
     check=assess_release(root,output_id)
     if check['errors']:
         from .common import SurveyError
-        code='DRAFT_NOT_RELEASABLE' if any(x['code']=='DRAFT_NOT_RELEASABLE' for x in check['errors']) else 'RELEASE_NOT_READY'
-        raise SurveyError(code,'Release blocked; run output validate --stage release for individual findings',exit_code=3)
+        raise SurveyError('PACKAGE_NOT_READY','Package blocked; run output validate --stage package for individual findings',exit_code=3)
     require(not destination.exists(),'DESTINATION_EXISTS','Package target exists; use a new path',destination.name)
-    out=safe(root,'outputs/'+output_id);paths=set(output_inputs(out))|set(all_files(out,'evidence'))|set(all_files(out,'build'))
+    out=safe(root,'outputs/'+output_id);paths=set(output_inputs(out))|set(all_files(out,'build'))
     # A package contains the writing materials, not the entire knowledge project or external source archive.
     data={p:safe(out,p,True).read_bytes() for p in sorted(paths)}
     from .plans import validate_plan
     inv=validate_plan(root,load_plan(out/'plan.json'))
-    original_hashes={s['access'].get('material_sha256') for s in inv.sources.values()}-{None}
+    from .sources import original_hashes
+    source_hashes=original_hashes(inv)
     for path,b in data.items():
         require(not any(part.casefold() in {'private','.private'} for part in path.split('/'))
-                and sha(b) not in original_hashes,'SOURCE_ORIGINAL_NOT_PACKAGED','Original bytes and private paths cannot enter manuscript packages',path)
+                and sha(b) not in source_hashes,'SOURCE_ORIGINAL_NOT_PACKAGED','Original bytes and private paths cannot enter manuscript packages',path)
     data['rebuild.py']=(SKILL_ROOT/'assets/rebuild/rebuild.py').read_bytes()
     data['runtime/build_checks.py']=(SKILL_ROOT/'scripts/build_checks.py').read_bytes()
     data['release-check.json']=(json.dumps(check,ensure_ascii=False,indent=2)+'\n').encode()
     data['README.md']=(f'# {output_id}\n\nFixed Survey output package; inspect plan.json for profile and snapshot ID.\n\n'
-                       'Run `python -I rebuild.py --output ../rebuilt-output` in this extracted folder. The target must not exist and must lie outside this package.\n'
+                       'Run `python3 -I rebuild.py --output ../rebuilt-output` in this extracted folder. The target must not exist and must lie outside this package.\n'
                        'Python 3.10+, pdfLaTeX, BibTeX (or the recorded fallback), and Poppler are required. No pip packages are needed.\n'
-                       'The included PDF has the original scoped review. A new build is reproducibility evidence, not a new semantic or visual review.\n'
+                       'The included PDF was built from the recorded inputs. A new build is reproducibility evidence; neither build certifies mathematics or visual quality.\n'
                        'Knowledge source identities and selected readable materials are included; original source PDFs are not automatically redistributed. '
                        'A nullable raw-source hash is an explicit access limitation, not a PDF byte certificate.\n'
                        'TeX is trusted code. Shell escape is disabled, but this is not a security sandbox for hostile TeX.\n').encode()
     for path in data:require(Path(path).suffix.lower() not in FONT_SUFFIXES,'FONT_NOT_DISTRIBUTABLE','Never distribute font files',path)
     manifest={'files':[{'path':p,'sha256':sha(b),'bytes':len(b)} for p,b in sorted(data.items())],
-              'snapshot_id':check['artifacts']['snapshot_id'],'original_reviewed_pdf_sha256':sha(data['build/main.pdf'])}
+              'snapshot_id':check['artifacts']['snapshot_id'],'original_pdf_sha256':sha(data['build/main.pdf'])}
     data['package-manifest.json']=(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n').encode()
     destination.parent.mkdir(parents=True,exist_ok=True)
     with writer(root):

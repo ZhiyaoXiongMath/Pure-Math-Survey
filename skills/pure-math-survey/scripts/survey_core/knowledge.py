@@ -19,8 +19,8 @@ class Inventory:
     coverage: dict
     files: list[str]
 
-def inventory(root: Path, *, review_records: list[tuple[str, dict]] | None = None) -> Inventory:
-    root = root.absolute(); project = load_project(root, check_reviews=review_records is None)
+def inventory(root: Path) -> Inventory:
+    root = root.absolute(); project = load_project(root)
     kr = project['knowledge_root']; scope = project['scope_file']
     require(safe(root, scope, True).read_text(encoding='utf-8').strip(), 'SCOPE_EMPTY', 'Describe objects, quantifiers and exclusions', scope)
     for suffix in ('overview.md', 'conventions.tex', 'discovery.md', 'coverage.json'):
@@ -59,40 +59,32 @@ def inventory(root: Path, *, review_records: list[tuple[str, dict]] | None = Non
         for group in ('answer_nodes', 'mechanism_nodes', 'boundary_nodes'):
             for key in q[group]:
                 require(key in nodes, 'UNKNOWN_REFERENCE', f'coverage.{group}: {key}', kr + '/coverage.json', key)
-    paths = set(['project.json', scope] + all_files(root, kr) + all_files(root, 'evidence'))
+    paths = set(['project.json', scope] + all_files(root, kr))
     for key, src in sources.items():
         for f in ('local_path', 'reading_note', 'permission_note'):
             path = src['access'].get(f)
             if path:
                 safe(root, path, True); paths.add(path)
+    inv=Inventory(root, project, nodes, sources, source_paths, cov, sorted(paths))
+    from .sources import require_source_bytes
+    require_source_bytes(inv)
     # Readable cross references are navigation, not another dependency registry.
     for p in paths:
         if p.endswith('.md'):
             for target in re.findall(r'\[\[([NS]-[A-Za-z0-9._-]+)\]\]', safe(root, p, True).read_text(encoding='utf-8')):
                 require(target in nodes or target in sources, 'UNKNOWN_REFERENCE', f'Broken readable link [[{target}]]', p)
-    from .reviews import load_review, knowledge_review_input_paths
-    # Auxiliary input bytes are opaque dependencies, not navigation registries.
-    # Stale/missing records remain unchanged and are rejected when consumed.
-    records = review_records if review_records is not None else [(p, load_review(safe(root, p, True))) for p in all_files(root, 'evidence/reviews') if p.endswith('.json')]
-    paths |= knowledge_review_input_paths(root, records)
-    return Inventory(root, project, nodes, sources, source_paths, cov, sorted(paths))
+    return inv
 
 def _source_facts(inv):
-    from .sources import source_facts, source_scope_errors
-    from .reviews import find_review, reviews_in, source_inputs
-    records=reviews_in(inv.root); rows=[]
-    for sid in sorted(inv.sources):
-        review,_=find_review(inv.root,records,'source','source_ids',sid,source_inputs(inv,sid),
-                            extra_check=lambda r,sid=sid: source_scope_errors(inv,sid,r,check_access=False))
-        rows.append(source_facts(inv,sid,review))
-    return rows
+    from .sources import source_facts
+    return [source_facts(inv, sid) for sid in sorted(inv.sources)]
 
 
 def validate_knowledge(root: Path) -> dict:
     inv = inventory(root)
     pending = [k for k, n in inv.nodes.items() if n.meta['mathematical_status'] == 'unassessed']
     return result('kb.validate', 'VALID', {'project_id': inv.project['project_id'], 'node_count': len(inv.nodes), 'source_count': len(inv.sources),
-                 'unassessed_nodes': pending, 'outputs_required': False, 'source_facts': _source_facts(inv)}, warnings=[diagnostic('SEMANTIC_NOT_CERTIFIED', 'Structural validity is not mathematical readiness.')])
+                 'unassessed_nodes': pending, 'outputs_required': False, 'source_facts': _source_facts(inv)}, warnings=[diagnostic('SEMANTIC_NOT_CERTIFIED', 'Structural validity does not certify mathematics or source reading.')])
 
 def init_project(destination: Path, topic: str, scope: Path, title: str | None = None, language: str = 'en') -> dict:
     require(identifier(topic), 'CONTRACT_INVALID', 'Invalid topic/project ID')
@@ -101,10 +93,11 @@ def init_project(destination: Path, topic: str, scope: Path, title: str | None =
     destination.parent.mkdir(parents=True, exist_ok=True)
     stage = Path(tempfile.mkdtemp(prefix='.survey-init-', dir=destination.parent))
     try:
-        write_json(stage / 'project.json', {'schema_version': VERSION, 'project_id': topic, 'title': title or topic,
+        from .common import RUNTIME_CONTRACT
+        write_json(stage / 'project.json', {'schema_version': VERSION, 'runtime_contract': RUNTIME_CONTRACT, 'project_id': topic, 'title': title or topic,
                    'language': language, 'scope_file': 'scope.md', 'knowledge_root': 'knowledge', 'literature_cutoff': None})
         atomic_bytes(stage / 'scope.md', body)
-        atomic_bytes(stage / 'knowledge/overview.md', b'# Knowledge overview\n\nPending: write a readable multi-question mathematical map, not a node index or an article section.\nIdentify usable tools for this reader, precise targets, decisive constructions, conditions, branches and exact entrances into detail.\nKeep per-article choices in its outline. New mathematical connections return to reviewed nodes.\nNo mathematical claims have been reviewed.\n')
+        atomic_bytes(stage / 'knowledge/overview.md', b'# Knowledge overview\n\nPending: write a readable multi-question mathematical map, not a node index or an article section.\nIdentify usable tools for this reader, precise targets, decisive constructions, conditions, branches and exact entrances into detail.\nKeep per-article choices in its outline. Record new mathematical connections in their canonical nodes.\n')
         atomic_bytes(stage / 'knowledge/conventions.tex', b'% Project-wide mathematical notation. No claims are certified here.\n')
         atomic_bytes(stage / 'knowledge/discovery.md', b'# Discovery\n\nNo source search or original-text reading has been performed in this new project.\nRecord actual queries, candidates, omissions and stopping reasons here.\n')
         write_json(stage / 'knowledge/coverage.json', {'schema_version': VERSION, 'questions': []})
@@ -112,7 +105,7 @@ def init_project(destination: Path, topic: str, scope: Path, title: str | None =
         stage.rename(destination)
     finally:
         if stage.exists(): shutil.rmtree(stage)
-    return result('init', 'INITIALIZED', {'project': str(destination), 'outputs': [], 'review_status': 'pending'})
+    return result('init', 'INITIALIZED', {'project': str(destination), 'outputs': []})
 
 def index_knowledge(root: Path) -> dict:
     inv = inventory(root)
