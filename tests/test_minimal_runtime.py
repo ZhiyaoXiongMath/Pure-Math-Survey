@@ -95,7 +95,7 @@ class MinimalRuntime(unittest.TestCase):
         self.code('CONTRACT_INVALID',create_plan,self.root,'../outside',sid)
         self.assertEqual(tree(self.root),before)
         path=plan(self.root);authored_toy(self.root);main=path.parent/'manuscript/main.tex'
-        main.write_text(main.read_text().replace(r'\end{document}',r'\input{../../scope.md}\end{document}'))
+        main.write_text(main.read_text(encoding='utf-8').replace(r'\end{document}',r'\input{../../scope.md}\end{document}'),encoding='utf-8')
         before=tree(self.root)
         with self.assertRaises(SurveyError):build_output(self.root,'mini')
         self.assertEqual(tree(self.root),before)
@@ -113,7 +113,7 @@ class MinimalRuntime(unittest.TestCase):
         for name in ('reviews.py','readiness.py','exposition.py'):self.assertFalse((modules/name).exists())
         self.assertFalse((SCRIPTS/'dispatch_ledger.py').exists())
         for path in modules.glob('*.py'):
-            for node in ast.walk(ast.parse(path.read_text())):
+            for node in ast.walk(ast.parse(path.read_text(encoding='utf-8'))):
                 if isinstance(node,ast.ImportFrom):
                     self.assertNotIn((node.module or '').split('.')[-1],{'reviews','readiness','dispatch_ledger'})
         proc,r=self.cli('--version');self.assertEqual(proc.returncode,0)
@@ -126,6 +126,75 @@ class MinimalRuntime(unittest.TestCase):
         self.code('SOURCE_PRIVATE_ORIGINAL',freeze_snapshot,self.root)
         obj['access']['local_path']=None;write_json(path,obj)
         self.code('SOURCE_ORIGINAL_ALIAS_UNSAFE',freeze_snapshot,self.root)
+
+    def test_source_hash_mismatch_rejects_kb_only_and_freeze_without_mutation(self):
+        from survey_core.knowledge import validate_knowledge,index_knowledge
+        raw=self.root/'knowledge/material.txt';raw.write_bytes(raw.read_bytes()+b'Changed original bytes.\n')
+        (self.root/'evidence/source-checks/test.md').write_bytes(raw.read_bytes())
+        before=tree(self.root)
+        for operation in (validate_knowledge,index_knowledge,freeze_snapshot):
+            self.code('SOURCE_MATERIAL_MISMATCH',operation,self.root)
+            self.assertEqual(tree(self.root),before)
+        proc,report=self.cli('kb','validate',self.root)
+        self.assertEqual(proc.returncode,2)
+        self.assertEqual(report['errors'][0]['code'],'SOURCE_MATERIAL_MISMATCH')
+        self.assertEqual(tree(self.root),before)
+        self.assertFalse((self.root/'outputs').exists())
+
+    def test_preexisting_bad_source_snapshot_rejects_output_operations_without_mutation(self):
+        from survey_core.common import canonical,sha
+        from survey_core.snapshots import payload,verify_snapshot
+        path=plan(self.root);authored_toy(self.root)
+        # Reproduce a pre-fix snapshot: its manifest is byte-consistent, but the
+        # source record still declares the older original's hash.
+        old_manifest,frozen=load_snapshot(self.root,load_plan(path)['snapshot_id'])
+        contents={row['path']:safe(frozen,row['path'],True).read_bytes() for row in old_manifest['files']}
+        contents['knowledge/material.txt']+=b'Changed original bytes.\n'
+        contents['evidence/source-checks/test.md']=contents['knowledge/material.txt']
+        records=[{'path':name,'sha256':sha(data),'bytes':len(data)} for name,data in sorted(contents.items())]
+        value=payload(old_manifest['project_id'],records);sid='KB-'+sha(canonical(value))
+        folder=self.root/'snapshots'/sid
+        for name,data in contents.items():atomic_bytes(folder/'files'/name,data)
+        write_json(folder/'manifest.json',{**value,'snapshot_id':sid})
+        obj=load_plan(path);obj['snapshot_id']=sid;write_json(path,obj)
+        before=tree(self.root)
+        operations=[lambda:verify_snapshot(self.root,sid),
+                    lambda:create_plan(self.root,'other',sid),
+                    lambda:prepare_output(self.root,path),
+                    lambda:build_output(self.root,'mini'),
+                    lambda:package_output(self.root,'mini',self.base/'must-not-exist.zip')]
+        for operation in operations:
+            self.code('SOURCE_MATERIAL_MISMATCH',operation)
+            self.assertEqual(tree(self.root),before)
+        self.assertFalse((self.base/'must-not-exist.zip').exists())
+
+    def test_actual_original_aliases_are_omitted_without_review_or_declared_hash(self):
+        from survey_core.common import sha
+        from survey_core.knowledge import validate_knowledge
+        for declared in (True,False):
+            with self.subTest(declared_hash=declared):
+                root=fixture(self.base/('declared' if declared else 'unrecorded'))
+                raw=(root/'knowledge/material.txt').read_bytes();digest=sha(raw)
+                (root/'evidence/source-checks/test.md').write_bytes(raw)
+                source_path=root/'knowledge/sources/S-test.json';source=read_json(source_path)
+                if not declared:
+                    source['access']['material_sha256']=None;write_json(source_path,source)
+                check=validate_knowledge(root)
+                self.assertEqual(check['artifacts']['source_facts'][0]['bytes'],'VERIFIED' if declared else 'UNVERIFIED')
+                path=plan(root);authored_toy(root);out=path.parent
+                self.assertFalse((out/'materials/knowledge/material.txt').exists())
+                self.assertFalse((out/'materials/evidence/source-checks/test.md').exists())
+                build_output(root,'mini');archive=self.base/(root.name+'.zip')
+                self.assertEqual(package_output(root,'mini',archive)['status'],'PACKAGED')
+                with zipfile.ZipFile(archive) as packaged:
+                    self.assertFalse(any(sha(packaged.read(name))==digest for name in packaged.namelist()))
+                self.assertFalse(any('reviews' in name.split('/') for name in all_files(root)))
+                if not declared:
+                    # An output-local alias is also refused at package time.
+                    (out/'manuscript/original-copy.bin').write_bytes(raw)
+                    build_output(root,'mini');before=tree(root)
+                    self.code('SOURCE_ORIGINAL_NOT_PACKAGED',package_output,root,'mini',self.base/'alias.zip')
+                    self.assertEqual(tree(root),before);self.assertFalse((self.base/'alias.zip').exists())
 
     def test_prepare_preserves_authoring_and_changed_canonical_uses_new_snapshot(self):
         path=plan(self.root);authored_toy(self.root);main=path.parent/'manuscript/main.tex';old_main=main.read_bytes()

@@ -34,10 +34,11 @@ def package_output(root:Path,output_id:str,destination:Path)->dict:
     data={p:safe(out,p,True).read_bytes() for p in sorted(paths)}
     from .plans import validate_plan
     inv=validate_plan(root,load_plan(out/'plan.json'))
-    original_hashes={s['access'].get('material_sha256') for s in inv.sources.values()}-{None}
+    from .sources import original_hashes
+    source_hashes=original_hashes(inv)
     for path,b in data.items():
         require(not any(part.casefold() in {'private','.private'} for part in path.split('/'))
-                and sha(b) not in original_hashes,'SOURCE_ORIGINAL_NOT_PACKAGED','Original bytes and private paths cannot enter manuscript packages',path)
+                and sha(b) not in source_hashes,'SOURCE_ORIGINAL_NOT_PACKAGED','Original bytes and private paths cannot enter manuscript packages',path)
     data['rebuild.py']=(SKILL_ROOT/'assets/rebuild/rebuild.py').read_bytes()
     data['runtime/build_checks.py']=(SKILL_ROOT/'scripts/build_checks.py').read_bytes()
     data['release-check.json']=(json.dumps(check,ensure_ascii=False,indent=2)+'\n').encode()

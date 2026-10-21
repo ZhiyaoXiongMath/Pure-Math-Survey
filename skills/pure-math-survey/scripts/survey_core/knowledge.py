@@ -65,12 +65,15 @@ def inventory(root: Path) -> Inventory:
             path = src['access'].get(f)
             if path:
                 safe(root, path, True); paths.add(path)
+    inv=Inventory(root, project, nodes, sources, source_paths, cov, sorted(paths))
+    from .sources import require_source_bytes
+    require_source_bytes(inv)
     # Readable cross references are navigation, not another dependency registry.
     for p in paths:
         if p.endswith('.md'):
             for target in re.findall(r'\[\[([NS]-[A-Za-z0-9._-]+)\]\]', safe(root, p, True).read_text(encoding='utf-8')):
                 require(target in nodes or target in sources, 'UNKNOWN_REFERENCE', f'Broken readable link [[{target}]]', p)
-    return Inventory(root, project, nodes, sources, source_paths, cov, sorted(paths))
+    return inv
 
 def _source_facts(inv):
     from .sources import source_facts

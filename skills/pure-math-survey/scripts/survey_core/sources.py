@@ -23,6 +23,28 @@ def source_facts(inv, sid):
             'meaning':'Source declarations and rehashed bytes only; no automated reading or license determination.'}
 
 
+def require_source_bytes(inv):
+    """A supplied hash must match retained bytes, independently of reading status."""
+    for sid,source in inv.sources.items():
+        access=source['access']; raw=access.get('local_path'); expected=access.get('material_sha256')
+        if raw and expected:
+            require(file_hash(inv.root,raw)==expected, 'SOURCE_MATERIAL_MISMATCH',
+                    'Retained original bytes differ from material_sha256; fix the source identity before use.',
+                    inv.source_paths[sid])
+
+
+def _source_hashes(inv, source):
+    """Track actual retained bytes even when their optional declared hash is absent."""
+    access=source['access']; hashes=set()
+    if access.get('material_sha256'): hashes.add(access['material_sha256'])
+    if access.get('local_path'): hashes.add(file_hash(inv.root,access['local_path']))
+    return hashes
+
+
+def original_hashes(inv):
+    return {digest for source in inv.sources.values() for digest in _source_hashes(inv,source)}
+
+
 def public_original_errors(inv):
     """Never stage public snapshots of private or unlicensed originals."""
     errors=[]
@@ -37,8 +59,8 @@ def public_original_errors(inv):
                 'Public original bytes require explicit dated redistribution permission and its actual basis.',inv.source_paths[sid]))
     original_records={}
     for source in inv.sources.values():
-        digest=source['access'].get('material_sha256')
-        if digest: original_records.setdefault(digest,[]).append(source['access'])
+        for digest in _source_hashes(inv,source):
+            original_records.setdefault(digest,[]).append(source['access'])
     for path in inv.files:
         if any(part.casefold() in {'private','.private'} for part in path.split('/')):
             errors.append(diagnostic('SOURCE_PRIVATE_ORIGINAL','Private paths cannot enter public snapshot or authoring inputs.',path))
@@ -52,7 +74,7 @@ def public_original_errors(inv):
 def original_input_paths(inv, paths):
     """Omit declared originals and their byte-identical aliases from authoring."""
     declared={s['access'].get('local_path') for s in inv.sources.values()}-{None}
-    hashes={s['access'].get('material_sha256') for s in inv.sources.values()}-{None}
+    hashes=original_hashes(inv)
     return {p for p in paths if p in declared or file_hash(inv.root,p) in hashes}
 
 
